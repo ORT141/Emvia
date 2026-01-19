@@ -70,7 +70,7 @@ class PauseOverlay extends StatelessWidget {
                   game.overlays.add('MainMenu');
                 },
                 child: Text(
-                  loc.backToMenu, // Using backToMenu if it exists, or similar
+                  loc.backToMenu,
                   style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
                 ),
               ),
