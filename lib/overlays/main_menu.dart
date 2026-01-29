@@ -131,43 +131,12 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
       body: Stack(
         children: [
           Positioned.fill(
-            child: widget.isDarkMode
-                ? ColorFiltered(
-                    colorFilter: const ColorFilter.matrix(<double>[
-                      -1,
-                      0,
-                      0,
-                      0,
-                      255,
-                      0,
-                      -1,
-                      0,
-                      0,
-                      255,
-                      0,
-                      0,
-                      -1,
-                      0,
-                      255,
-                      0,
-                      0,
-                      0,
-                      1,
-                      0,
-                    ]),
-                    child: Image.asset(
-                      'assets/images/menu.png',
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          Container(color: theme.colorScheme.primaryContainer),
-                    ),
-                  )
-                : Image.asset(
-                    'assets/images/menu.png',
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) =>
-                        Container(color: theme.colorScheme.primaryContainer),
-                  ),
+            child: Image.asset(
+              'assets/images/menu.png',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  Container(color: theme.colorScheme.primaryContainer),
+            ),
           ),
 
           Positioned.fill(
@@ -178,15 +147,15 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                   end: Alignment.centerLeft,
                   colors: widget.isDarkMode
                       ? [
-                          Colors.black.withOpacity(0.0),
-                          Colors.black.withOpacity(0.2),
-                          Colors.black.withOpacity(0.6),
-                          Colors.black.withOpacity(0.9),
+                          Colors.black.withValues(alpha: 0.0),
+                          Colors.black.withValues(alpha: 0.2),
+                          Colors.black.withValues(alpha: 0.6),
+                          Colors.black.withValues(alpha: 0.9),
                         ]
                       : [
-                          Colors.white.withOpacity(0.0),
-                          Colors.white.withOpacity(0.4),
-                          Colors.white.withOpacity(0.9),
+                          Colors.white.withValues(alpha: 0.0),
+                          Colors.white.withValues(alpha: 0.2),
+                          Colors.white.withValues(alpha: 0.2),
                           Colors.white,
                         ],
                   stops: const [0.0, 0.3, 0.7, 1.0],
@@ -239,7 +208,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                               );
                             },
                             child: Text(
-                              '🌈 ${loc.title} 🐣',
+                              '${loc.title}',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.baloo2(
                                 color: theme.colorScheme.primary,
@@ -248,7 +217,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                                 fontWeight: FontWeight.bold,
                                 shadows: [
                                   Shadow(
-                                    color: Colors.black.withOpacity(0.1),
+                                    color: Colors.black.withValues(alpha: 0.1),
                                     offset: const Offset(2, 2),
                                     blurRadius: 4,
                                   ),
@@ -325,8 +294,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                         TextButton(
                           onPressed: _confirmExit,
                           style: TextButton.styleFrom(
-                            foregroundColor: theme.colorScheme.error
-                                .withOpacity(0.7),
+                            foregroundColor: theme.colorScheme.error.withValues(alpha: 0.7),
                             textStyle: const TextStyle(fontSize: 16),
                           ),
                           child: Text(loc.exit),
@@ -368,11 +336,11 @@ class _SmallIconButton extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surface.withOpacity(0.9),
+            color: theme.colorScheme.surface.withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -420,11 +388,11 @@ class _LanguageButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: theme.colorScheme.surface.withOpacity(0.9),
+          color: theme.colorScheme.surface.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -452,7 +420,7 @@ class _LanguageButton extends StatelessWidget {
             Icon(
               Icons.keyboard_arrow_down_rounded,
               size: 18,
-              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
             ),
           ],
         ),
@@ -498,16 +466,18 @@ class _MenuButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        color: enabled ? null : theme.colorScheme.surfaceVariant,
-        gradient: enabled ? LinearGradient(
-          colors: [color.withOpacity(0.8), color],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ) : null,
+        color: enabled ? null : theme.colorScheme.surfaceContainerHighest,
+        gradient: enabled
+            ? LinearGradient(
+                colors: [color.withValues(alpha: 0.8), color],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+            : null,
         boxShadow: enabled
             ? [
                 BoxShadow(
-                  color: color.withOpacity(0.3),
+                  color: color.withValues(alpha: 0.3),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -524,7 +494,11 @@ class _MenuButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, size: 24, color: enabled ? onColor : onColor.withOpacity(0.3)),
+                Icon(
+                  icon,
+                  size: 24,
+                  color: enabled ? onColor : onColor.withValues(alpha: 0.3),
+                ),
                 const SizedBox(width: 8),
                 Text(
                   label.toUpperCase(),
@@ -532,7 +506,7 @@ class _MenuButton extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.2,
-                    color: enabled ? onColor : onColor.withOpacity(0.3),
+                    color: enabled ? onColor : onColor.withValues(alpha: 0.3),
                   ),
                 ),
               ],
