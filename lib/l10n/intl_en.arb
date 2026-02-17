@@ -1,34 +1,207 @@
 {
   "@@locale": "en",
   "title": "Emvia",
+  "@title": {
+    "description": "The main title of the application or game."
+  },
   "play": "Play",
+  "@play": {
+    "description": "Label for the action to start the game or experience."
+  },
   "settings": "Settings",
+  "@settings": {
+    "description": "Label for the settings menu."
+  },
   "exit": "Exit",
+  "@exit": {
+    "description": "Label for the action to quit the application or game."
+  },
   "pause": "Pause",
+  "@pause": {
+    "description": "Label for pausing the current activity."
+  },
   "resume": "Resume",
+  "@resume": {
+    "description": "Label for resuming a paused activity."
+  },
   "teacher_intro": "Teacher: Olya, your turn is in 15 minutes",
+  "@teacher_intro": {
+    "description": "A line spoken by the teacher to Olya, indicating her turn time."
+  },
   "too_loud": "It's too loud... need to calm down",
+  "@too_loud": {
+    "description": "Player's internal thought or statement indicating distress due to high volume and the need to calm down."
+  },
   "calmed": "Phew... it's quieter now. moving on",
+  "@calmed": {
+    "description": "Player's statement after successfully calming down, noting the quieter environment."
+  },
   "inhale": "inhale",
+  "@inhale": {
+    "description": "Instruction or label for the breathing in action."
+  },
   "exhale": "exhale",
+  "@exhale": {
+    "description": "Instruction or label for the breathing out action."
+  },
   "i_calm_down": "I calmed down",
+  "@i_calm_down": {
+    "description": "Confirmation that the player has successfully managed to calm down."
+  },
   "subtitle": "Find calm. Find courage.",
+  "@subtitle": {
+    "description": "A tagline or subtitle for the experience, emphasizing the themes of calm and courage."
+  },
   "continueLabel": "Continue",
+  "@continueLabel": {
+    "description": "General label for proceeding to the next step or screen."
+  },
   "headphones": "Headphones",
+  "@headphones": {
+    "description": "Label related to headphone settings or an instruction to use them."
+  },
   "headphonesOff": "Calm",
+  "@headphonesOff": {
+    "description": "Potentially a state or alternative setting when headphones are off, linked to the 'Calm' theme."
+  },
   "breathing": "Breathing",
+  "@breathing": {
+    "description": "Label for the breathing exercise section or setting."
+  },
   "credits": "Credits",
+  "@credits": {
+    "description": "Label for the credits screen."
+  },
   "exitConfirm": "Do you want to quit?",
+  "@exitConfirm": {
+    "description": "Confirmation prompt message before exiting."
+  },
   "cancel": "Cancel",
+  "@cancel": {
+    "description": "Label for canceling an action or closing a dialog."
+  },
   "backToMenu": "Main Menu",
+  "@backToMenu": {
+    "description": "Label to return to the main menu screen."
+  },
   "thanksForPlaying": "Thank you for playing",
+  "@thanksForPlaying": {
+    "description": "Closing message after the game or session ends."
+  },
   "leadDeveloper": "Lead Developer",
+  "@leadDeveloper": {
+    "description": "Title for the lead developer in the credits."
+  },
   "artistAndDesigner": "Artist & Designer",
+  "@artistAndDesigner": {
+    "description": "Title for the artist and designer in the credits."
+  },
   "breathingGuide": "Gentle guide for calming",
+  "@breathingGuide": {
+    "description": "Title or description for the breathing guidance feature."
+  },
   "sound": "Sound",
+  "@sound": {
+    "description": "Label for sound settings."
+  },
   "language": "Language",
+  "@language": {
+    "description": "Label for the language selection setting."
+  },
   "done": "Done",
+  "@done": {
+    "description": "Label for confirming changes or completing a task."
+  },
   "theme": "Theme",
+  "@theme": {
+    "description": "Label for theme selection setting."
+  },
   "light": "Light",
-  "dark": "Dark"
+  "@light": {
+    "description": "Option for the light theme."
+  },
+  "dark": "Dark",
+  "@dark": {
+    "description": "Option for the dark theme."
+  },
+  "npc_greeting": "Mysterious Stranger: Hello Olya! Welcome to this peaceful place.",
+  "@npc_greeting": {
+    "description": "Initial greeting from the Mysterious Stranger character to Olya."
+  },
+  "speaker_teacher": "Teacher",
+  "@speaker_teacher": {
+    "description": "Name label for the teacher speaker"
+  },
+  "dialog_teacher_start": "Welcome to the class! Are you ready to begin?",
+  "@dialog_teacher_start": {
+    "description": "Teacher opening line asking if the player is ready"
+  },
+  "dialog_teacher_choice_yes": "Yes, professor",
+  "@dialog_teacher_choice_yes": {
+    "description": "Affirmative response by player"
+  },
+  "dialog_teacher_choice_not_really": "Not really...",
+  "@dialog_teacher_choice_not_really": {
+    "description": "Negative unsure response by player"
+  },
+  "dialog_teacher_ready": "Excellent. Let us start by opening your books to page 42.",
+  "@dialog_teacher_ready": {
+    "description": "Teacher tells students to open books"
+  },
+  "dialog_teacher_not_ready": "Oh? Take your time. Let me know when you are settled.",
+  "@dialog_teacher_not_ready": {
+    "description": "Teacher tells player to take time"
+  },
+  "dialog_teacher_end": "Any questions before we start?",
+  "@dialog_teacher_end": {
+    "description": "Teacher asks for questions"
+  },
+  "dialog_teacher_choice_no_lets_go": "No, let's go!",
+  "@dialog_teacher_choice_no_lets_go": {
+    "description": "Player agrees to start"
+  },
+  "dialog_teacher_choice_what_book": "What book?",
+  "@dialog_teacher_choice_what_book": {
+    "description": "Player asks which book"
+  },
+  "dialog_teacher_what_book": "The history book, of course! Focus, please.",
+  "@dialog_teacher_what_book": {
+    "description": "Teacher answers which book"
+  },
+  "speaker_stranger": "Stranger",
+  "@speaker_stranger": {
+    "description": "Name label for the stranger speaker"
+  },
+  "dialog_stranger_entry": "Hey you. You look like you're from out of town.",
+  "@dialog_stranger_entry": {
+    "description": "Stranger initial greeting"
+  },
+  "dialog_stranger_choice_i_am": "I am.",
+  "@dialog_stranger_choice_i_am": {
+    "description": "Player confirms they're from out of town"
+  },
+  "dialog_stranger_choice_mind_your_business": "Mind your business.",
+  "@dialog_stranger_choice_mind_your_business": {
+    "description": "Player responds rudely"
+  },
+  "dialog_stranger_from_out": "Thought so. Be careful around here after dark.",
+  "@dialog_stranger_from_out": {
+    "description": "Stranger warns player to be careful"
+  },
+  "dialog_stranger_rude": "Suit yourself. Don't say I didn't warn you.",
+  "@dialog_stranger_rude": {
+    "description": "Stranger replies rudely and triggers effect"
+  },
+  "dialog_calmed_you_feel_better": "You feel much better now.",
+  "@dialog_calmed_you_feel_better": {
+    "description": "Line shown after calming down"
+  },
+  "lang_en": "English",
+  "@lang_en": {
+    "description": "English language name"
+  },
+  "lang_uk": "Українська",
+  "@lang_uk": {
+    "description": "Ukrainian language name"
+  }
 }

@@ -1,34 +1,207 @@
 {
   "@@locale": "uk",
   "title": "Emvia",
+  "@title": {
+    "description": "The main title of the application or game."
+  },
   "play": "Грати",
+  "@play": {
+    "description": "Label for the action to start the game or experience."
+  },
   "settings": "Налаштування",
+  "@settings": {
+    "description": "Label for the settings menu."
+  },
   "exit": "Вихід",
+  "@exit": {
+    "description": "Label for the action to quit the application or game."
+  },
   "pause": "Пауза",
+  "@pause": {
+    "description": "Label for pausing the current activity."
+  },
   "resume": "Продовжити",
-  "teacher_intro": "Учитель: Оля, твій вихід через 15 хвилин",
+  "@resume": {
+    "description": "Label for resuming a paused activity."
+  },
+  "teacher_intro": "Вчитель: Оля, твій вихід через 15 хвилин",
+  "@teacher_intro": {
+    "description": "A line spoken by the teacher to Olya, indicating her turn time."
+  },
   "too_loud": "Занадто голосно... треба заспокоїтися",
+  "@too_loud": {
+    "description": "Player's internal thought or statement indicating distress due to high volume and the need to calm down."
+  },
   "calmed": "Фух... стало тихіше. йду далі",
+  "@calmed": {
+    "description": "Player's statement after successfully calming down, noting the quieter environment."
+  },
   "inhale": "вдих",
+  "@inhale": {
+    "description": "Instruction or label for the breathing in action."
+  },
   "exhale": "видих",
+  "@exhale": {
+    "description": "Instruction or label for the breathing out action."
+  },
   "i_calm_down": "Я заспокоїлась",
+  "@i_calm_down": {
+    "description": "Confirmation that the player has successfully managed to calm down."
+  },
   "subtitle": "Знайди спокій. Знайди відвагу.",
+  "@subtitle": {
+    "description": "A tagline or subtitle for the experience, emphasizing the themes of calm and courage."
+  },
   "continueLabel": "Продовжити",
+  "@continueLabel": {
+    "description": "General label for proceeding to the next step or screen."
+  },
   "headphones": "Навушники",
+  "@headphones": {
+    "description": "Label related to headphone settings or an instruction to use them."
+  },
   "headphonesOff": "Заспокоїтись",
+  "@headphonesOff": {
+    "description": "Potentially a state or alternative setting when headphones are off, linked to the 'Calm' theme."
+  },
   "breathing": "Дихання",
+  "@breathing": {
+    "description": "Label for the breathing exercise section or setting."
+  },
   "credits": "Автори",
+  "@credits": {
+    "description": "Label for the credits screen."
+  },
   "exitConfirm": "Ви впевнені, що хочете вийти?",
+  "@exitConfirm": {
+    "description": "Confirmation prompt message before exiting."
+  },
   "cancel": "Скасувати",
+  "@cancel": {
+    "description": "Label for canceling an action or closing a dialog."
+  },
   "backToMenu": "Головне меню",
+  "@backToMenu": {
+    "description": "Label to return to the main menu screen."
+  },
   "thanksForPlaying": "Дякуємо за те, що граєте",
+  "@thanksForPlaying": {
+    "description": "Closing message after the game or session ends."
+  },
   "leadDeveloper": "Головний розробник",
+  "@leadDeveloper": {
+    "description": "Title for the lead developer in the credits."
+  },
   "artistAndDesigner": "Художник і дизайнер",
+  "@artistAndDesigner": {
+    "description": "Title for the artist and designer in the credits."
+  },
   "breathingGuide": "Ніжний гайд для заспокоєння",
+  "@breathingGuide": {
+    "description": "Title or description for the breathing guidance feature."
+  },
   "sound": "Звук",
+  "@sound": {
+    "description": "Label for sound settings."
+  },
   "language": "Мова",
+  "@language": {
+    "description": "Label for the language selection setting."
+  },
   "done": "Готово",
+  "@done": {
+    "description": "Label for confirming changes or completing a task."
+  },
   "theme": "Тема",
+  "@theme": {
+    "description": "Label for theme selection setting."
+  },
   "light": "Світла",
-  "dark": "Темна"
+  "@light": {
+    "description": "Option for the light theme."
+  },
+  "dark": "Темна",
+  "@dark": {
+    "description": "Option for the dark theme."
+  },
+  "npc_greeting": "Таємнича особа: Привіт Олю! Ласкаво просимо до цього спокійного місця.",
+  "@npc_greeting": {
+    "description": "Initial greeting from the Mysterious Stranger character to Olya."
+  },
+  "speaker_teacher": "Вчитель",
+  "@speaker_teacher": {
+    "description": "Name label for the teacher speaker"
+  },
+  "dialog_teacher_start": "Ласкаво просимо на заняття! Ти готова почати?",
+  "@dialog_teacher_start": {
+    "description": "Teacher opening line asking if the player is ready"
+  },
+  "dialog_teacher_choice_yes": "Так, професоре",
+  "@dialog_teacher_choice_yes": {
+    "description": "Affirmative response by player"
+  },
+  "dialog_teacher_choice_not_really": "Не зовсім...",
+  "@dialog_teacher_choice_not_really": {
+    "description": "Negative unsure response by player"
+  },
+  "dialog_teacher_ready": "Чудово. Розкрийте підручники на сторінці 42.",
+  "@dialog_teacher_ready": {
+    "description": "Teacher tells students to open books"
+  },
+  "dialog_teacher_not_ready": "О? Не поспішай. Скажи, коли влаштуєшся.",
+  "@dialog_teacher_not_ready": {
+    "description": "Teacher tells player to take time"
+  },
+  "dialog_teacher_end": "Є запитання перед початком?",
+  "@dialog_teacher_end": {
+    "description": "Teacher asks for questions"
+  },
+  "dialog_teacher_choice_no_lets_go": "Ні, почнемо!",
+  "@dialog_teacher_choice_no_lets_go": {
+    "description": "Player agrees to start"
+  },
+  "dialog_teacher_choice_what_book": "Яка книжка?",
+  "@dialog_teacher_choice_what_book": {
+    "description": "Player asks which book"
+  },
+  "dialog_teacher_what_book": "Звісно, підручник з історії! Зосередься, будь ласка.",
+  "@dialog_teacher_what_book": {
+    "description": "Teacher answers which book"
+  },
+  "speaker_stranger": "Невідомець",
+  "@speaker_stranger": {
+    "description": "Name label for the stranger speaker"
+  },
+  "dialog_stranger_entry": "Гей ти. Схоже, ти не з цих країв.",
+  "@dialog_stranger_entry": {
+    "description": "Stranger initial greeting"
+  },
+  "dialog_stranger_choice_i_am": "Я звідти.",
+  "@dialog_stranger_choice_i_am": {
+    "description": "Player confirms they're from out of town"
+  },
+  "dialog_stranger_choice_mind_your_business": "Не твоя справа.",
+  "@dialog_stranger_choice_mind_your_business": {
+    "description": "Player responds rudely"
+  },
+  "dialog_stranger_from_out": "Так і думав. Остерігайся тут після заходу сонця.",
+  "@dialog_stranger_from_out": {
+    "description": "Stranger warns player to be careful"
+  },
+  "dialog_stranger_rude": "Коли кажу — не говори, що не попереджав.",
+  "@dialog_stranger_rude": {
+    "description": "Stranger replies rudely and triggers effect"
+  },
+  "dialog_calmed_you_feel_better": "Ти почуваєшся набагато краще.",
+  "@dialog_calmed_you_feel_better": {
+    "description": "Line shown after calming down"
+  },
+  "lang_en": "English",
+  "@lang_en": {
+    "description": "English language name"
+  },
+  "lang_uk": "Українська",
+  "@lang_uk": {
+    "description": "Ukrainian language name"
+  }
 }

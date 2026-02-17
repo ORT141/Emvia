@@ -132,35 +132,10 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/menu.png',
+              'assets/images/menu.jpg',
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
                   Container(color: theme.colorScheme.primaryContainer),
-            ),
-          ),
-
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.centerRight,
-                  end: Alignment.centerLeft,
-                  colors: widget.isDarkMode
-                      ? [
-                          Colors.black.withValues(alpha: 0.0),
-                          Colors.black.withValues(alpha: 0.2),
-                          Colors.black.withValues(alpha: 0.6),
-                          Colors.black.withValues(alpha: 0.9),
-                        ]
-                      : [
-                          Colors.white.withValues(alpha: 0.0),
-                          Colors.white.withValues(alpha: 0.2),
-                          Colors.white.withValues(alpha: 0.2),
-                          Colors.white,
-                        ],
-                  stops: const [0.0, 0.3, 0.7, 1.0],
-                ),
-              ),
             ),
           ),
 
@@ -294,7 +269,9 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                         TextButton(
                           onPressed: _confirmExit,
                           style: TextButton.styleFrom(
-                            foregroundColor: theme.colorScheme.error.withValues(alpha: 0.7),
+                            foregroundColor: theme.colorScheme.error.withValues(
+                              alpha: 0.7,
+                            ),
                             textStyle: const TextStyle(fontSize: 16),
                           ),
                           child: Text(loc.exit),

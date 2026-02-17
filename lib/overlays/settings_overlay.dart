@@ -82,15 +82,15 @@ class _SettingsOverlayState extends State<SettingsOverlay>
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(
-                    widget.isDarkMode ? 0.3 : 0.08,
+                  color: Colors.black.withValues(
+                    alpha: widget.isDarkMode ? 0.3 : 0.08,
                   ),
                   blurRadius: 16,
                   offset: const Offset(0, 8),
                 ),
               ],
               border: Border.all(
-                color: theme.colorScheme.outlineVariant.withOpacity(0.5),
+                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
               ),
             ),
             child: SingleChildScrollView(
@@ -141,13 +141,13 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                       runSpacing: 8,
                       children: [
                         _LangChip(
-                          label: 'Українська',
+                          label: loc.lang_uk,
                           code: 'uk',
                           selected: currentLanguage == 'uk',
                           onTap: _setLanguage,
                         ),
                         _LangChip(
-                          label: 'English',
+                          label: loc.lang_en,
                           code: 'en',
                           selected: currentLanguage == 'en',
                           onTap: _setLanguage,
@@ -234,7 +234,7 @@ class _LangChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: selected
               ? theme.colorScheme.primaryContainer
-              : theme.colorScheme.surfaceVariant,
+              : theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: selected
@@ -279,7 +279,7 @@ class _ThemeChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: selected
               ? theme.colorScheme.primaryContainer
-              : theme.colorScheme.surfaceVariant,
+              : theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: selected

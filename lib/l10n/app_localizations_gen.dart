@@ -98,191 +98,311 @@ abstract class AppLocalizationsGen {
     Locale('uk'),
   ];
 
-  /// No description provided for @title.
+  /// The main title of the application or game.
   ///
   /// In en, this message translates to:
   /// **'Emvia'**
   String get title;
 
-  /// No description provided for @play.
+  /// Label for the action to start the game or experience.
   ///
   /// In en, this message translates to:
   /// **'Play'**
   String get play;
 
-  /// No description provided for @settings.
+  /// Label for the settings menu.
   ///
   /// In en, this message translates to:
   /// **'Settings'**
   String get settings;
 
-  /// No description provided for @exit.
+  /// Label for the action to quit the application or game.
   ///
   /// In en, this message translates to:
   /// **'Exit'**
   String get exit;
 
-  /// No description provided for @pause.
+  /// Label for pausing the current activity.
   ///
   /// In en, this message translates to:
   /// **'Pause'**
   String get pause;
 
-  /// No description provided for @resume.
+  /// Label for resuming a paused activity.
   ///
   /// In en, this message translates to:
   /// **'Resume'**
   String get resume;
 
-  /// No description provided for @teacher_intro.
+  /// A line spoken by the teacher to Olya, indicating her turn time.
   ///
   /// In en, this message translates to:
   /// **'Teacher: Olya, your turn is in 15 minutes'**
   String get teacher_intro;
 
-  /// No description provided for @too_loud.
+  /// Player's internal thought or statement indicating distress due to high volume and the need to calm down.
   ///
   /// In en, this message translates to:
   /// **'It\'s too loud... need to calm down'**
   String get too_loud;
 
-  /// No description provided for @calmed.
+  /// Player's statement after successfully calming down, noting the quieter environment.
   ///
   /// In en, this message translates to:
   /// **'Phew... it\'s quieter now. moving on'**
   String get calmed;
 
-  /// No description provided for @inhale.
+  /// Instruction or label for the breathing in action.
   ///
   /// In en, this message translates to:
   /// **'inhale'**
   String get inhale;
 
-  /// No description provided for @exhale.
+  /// Instruction or label for the breathing out action.
   ///
   /// In en, this message translates to:
   /// **'exhale'**
   String get exhale;
 
-  /// No description provided for @i_calm_down.
+  /// Confirmation that the player has successfully managed to calm down.
   ///
   /// In en, this message translates to:
   /// **'I calmed down'**
   String get i_calm_down;
 
-  /// No description provided for @subtitle.
+  /// A tagline or subtitle for the experience, emphasizing the themes of calm and courage.
   ///
   /// In en, this message translates to:
   /// **'Find calm. Find courage.'**
   String get subtitle;
 
-  /// No description provided for @continueLabel.
+  /// General label for proceeding to the next step or screen.
   ///
   /// In en, this message translates to:
   /// **'Continue'**
   String get continueLabel;
 
-  /// No description provided for @headphones.
+  /// Label related to headphone settings or an instruction to use them.
   ///
   /// In en, this message translates to:
   /// **'Headphones'**
   String get headphones;
 
-  /// No description provided for @headphonesOff.
+  /// Potentially a state or alternative setting when headphones are off, linked to the 'Calm' theme.
   ///
   /// In en, this message translates to:
   /// **'Calm'**
   String get headphonesOff;
 
-  /// No description provided for @breathing.
+  /// Label for the breathing exercise section or setting.
   ///
   /// In en, this message translates to:
   /// **'Breathing'**
   String get breathing;
 
-  /// No description provided for @credits.
+  /// Label for the credits screen.
   ///
   /// In en, this message translates to:
   /// **'Credits'**
   String get credits;
 
-  /// No description provided for @exitConfirm.
+  /// Confirmation prompt message before exiting.
   ///
   /// In en, this message translates to:
   /// **'Do you want to quit?'**
   String get exitConfirm;
 
-  /// No description provided for @cancel.
+  /// Label for canceling an action or closing a dialog.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
 
-  /// No description provided for @backToMenu.
+  /// Label to return to the main menu screen.
   ///
   /// In en, this message translates to:
   /// **'Main Menu'**
   String get backToMenu;
 
-  /// No description provided for @thanksForPlaying.
+  /// Closing message after the game or session ends.
   ///
   /// In en, this message translates to:
   /// **'Thank you for playing'**
   String get thanksForPlaying;
 
-  /// No description provided for @leadDeveloper.
+  /// Title for the lead developer in the credits.
   ///
   /// In en, this message translates to:
   /// **'Lead Developer'**
   String get leadDeveloper;
 
-  /// No description provided for @artistAndDesigner.
+  /// Title for the artist and designer in the credits.
   ///
   /// In en, this message translates to:
   /// **'Artist & Designer'**
   String get artistAndDesigner;
 
-  /// No description provided for @breathingGuide.
+  /// Title or description for the breathing guidance feature.
   ///
   /// In en, this message translates to:
   /// **'Gentle guide for calming'**
   String get breathingGuide;
 
-  /// No description provided for @sound.
+  /// Label for sound settings.
   ///
   /// In en, this message translates to:
   /// **'Sound'**
   String get sound;
 
-  /// No description provided for @language.
+  /// Label for the language selection setting.
   ///
   /// In en, this message translates to:
   /// **'Language'**
   String get language;
 
-  /// No description provided for @done.
+  /// Label for confirming changes or completing a task.
   ///
   /// In en, this message translates to:
   /// **'Done'**
   String get done;
 
-  /// No description provided for @theme.
+  /// Label for theme selection setting.
   ///
   /// In en, this message translates to:
   /// **'Theme'**
   String get theme;
 
-  /// No description provided for @light.
+  /// Option for the light theme.
   ///
   /// In en, this message translates to:
   /// **'Light'**
   String get light;
 
-  /// No description provided for @dark.
+  /// Option for the dark theme.
   ///
   /// In en, this message translates to:
   /// **'Dark'**
   String get dark;
+
+  /// Initial greeting from the Mysterious Stranger character to Olya.
+  ///
+  /// In en, this message translates to:
+  /// **'Mysterious Stranger: Hello Olya! Welcome to this peaceful place.'**
+  String get npc_greeting;
+
+  /// Name label for the teacher speaker
+  ///
+  /// In en, this message translates to:
+  /// **'Teacher'**
+  String get speaker_teacher;
+
+  /// Teacher opening line asking if the player is ready
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to the class! Are you ready to begin?'**
+  String get dialog_teacher_start;
+
+  /// Affirmative response by player
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, professor'**
+  String get dialog_teacher_choice_yes;
+
+  /// Negative unsure response by player
+  ///
+  /// In en, this message translates to:
+  /// **'Not really...'**
+  String get dialog_teacher_choice_not_really;
+
+  /// Teacher tells students to open books
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent. Let us start by opening your books to page 42.'**
+  String get dialog_teacher_ready;
+
+  /// Teacher tells player to take time
+  ///
+  /// In en, this message translates to:
+  /// **'Oh? Take your time. Let me know when you are settled.'**
+  String get dialog_teacher_not_ready;
+
+  /// Teacher asks for questions
+  ///
+  /// In en, this message translates to:
+  /// **'Any questions before we start?'**
+  String get dialog_teacher_end;
+
+  /// Player agrees to start
+  ///
+  /// In en, this message translates to:
+  /// **'No, let\'s go!'**
+  String get dialog_teacher_choice_no_lets_go;
+
+  /// Player asks which book
+  ///
+  /// In en, this message translates to:
+  /// **'What book?'**
+  String get dialog_teacher_choice_what_book;
+
+  /// Teacher answers which book
+  ///
+  /// In en, this message translates to:
+  /// **'The history book, of course! Focus, please.'**
+  String get dialog_teacher_what_book;
+
+  /// Name label for the stranger speaker
+  ///
+  /// In en, this message translates to:
+  /// **'Stranger'**
+  String get speaker_stranger;
+
+  /// Stranger initial greeting
+  ///
+  /// In en, this message translates to:
+  /// **'Hey you. You look like you\'re from out of town.'**
+  String get dialog_stranger_entry;
+
+  /// Player confirms they're from out of town
+  ///
+  /// In en, this message translates to:
+  /// **'I am.'**
+  String get dialog_stranger_choice_i_am;
+
+  /// Player responds rudely
+  ///
+  /// In en, this message translates to:
+  /// **'Mind your business.'**
+  String get dialog_stranger_choice_mind_your_business;
+
+  /// Stranger warns player to be careful
+  ///
+  /// In en, this message translates to:
+  /// **'Thought so. Be careful around here after dark.'**
+  String get dialog_stranger_from_out;
+
+  /// Stranger replies rudely and triggers effect
+  ///
+  /// In en, this message translates to:
+  /// **'Suit yourself. Don\'t say I didn\'t warn you.'**
+  String get dialog_stranger_rude;
+
+  /// Line shown after calming down
+  ///
+  /// In en, this message translates to:
+  /// **'You feel much better now.'**
+  String get dialog_calmed_you_feel_better;
+
+  /// English language name
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get lang_en;
+
+  /// Ukrainian language name
+  ///
+  /// In en, this message translates to:
+  /// **'Українська'**
+  String get lang_uk;
 }
 
 class _AppLocalizationsGenDelegate

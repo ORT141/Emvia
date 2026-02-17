@@ -27,7 +27,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get resume => 'Продовжити';
 
   @override
-  String get teacher_intro => 'Учитель: Оля, твій вихід через 15 хвилин';
+  String get teacher_intro => 'Вчитель: Оля, твій вихід через 15 хвилин';
 
   @override
   String get too_loud => 'Занадто голосно... треба заспокоїтися';
@@ -100,4 +100,70 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get dark => 'Темна';
+
+  @override
+  String get npc_greeting =>
+      'Таємнича особа: Привіт Олю! Ласкаво просимо до цього спокійного місця.';
+
+  @override
+  String get speaker_teacher => 'Вчитель';
+
+  @override
+  String get dialog_teacher_start =>
+      'Ласкаво просимо на заняття! Ти готова почати?';
+
+  @override
+  String get dialog_teacher_choice_yes => 'Так, професоре';
+
+  @override
+  String get dialog_teacher_choice_not_really => 'Не зовсім...';
+
+  @override
+  String get dialog_teacher_ready =>
+      'Чудово. Розкрийте підручники на сторінці 42.';
+
+  @override
+  String get dialog_teacher_not_ready =>
+      'О? Не поспішай. Скажи, коли влаштуєшся.';
+
+  @override
+  String get dialog_teacher_end => 'Є запитання перед початком?';
+
+  @override
+  String get dialog_teacher_choice_no_lets_go => 'Ні, почнемо!';
+
+  @override
+  String get dialog_teacher_choice_what_book => 'Яка книжка?';
+
+  @override
+  String get dialog_teacher_what_book =>
+      'Звісно, підручник з історії! Зосередься, будь ласка.';
+
+  @override
+  String get speaker_stranger => 'Невідомець';
+
+  @override
+  String get dialog_stranger_entry => 'Гей ти. Схоже, ти не з цих країв.';
+
+  @override
+  String get dialog_stranger_choice_i_am => 'Я звідти.';
+
+  @override
+  String get dialog_stranger_choice_mind_your_business => 'Не твоя справа.';
+
+  @override
+  String get dialog_stranger_from_out =>
+      'Так і думав. Остерігайся тут після заходу сонця.';
+
+  @override
+  String get dialog_stranger_rude => 'Коли кажу — не говори, що не попереджав.';
+
+  @override
+  String get dialog_calmed_you_feel_better => 'Ти почуваєшся набагато краще.';
+
+  @override
+  String get lang_en => 'English';
+
+  @override
+  String get lang_uk => 'Українська';
 }

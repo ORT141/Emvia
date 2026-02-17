@@ -1,5 +1,4 @@
 import 'package:emvia/game/emvia_game.dart';
-import 'package:emvia/overlays/breathing.dart';
 import 'package:emvia/overlays/credits_overlay.dart';
 import 'package:emvia/overlays/dialog.dart';
 import 'package:emvia/overlays/main_menu.dart';
@@ -88,7 +87,6 @@ class _MyAppState extends State<MyApp> {
       home: GameWidget<EmviaGame>.controlled(
         gameFactory: EmviaGame.new,
         overlayBuilderMap: {
-          'Breathing': (_, game) => BreathingOverlay(game: game),
           'Dialog': (_, game) => DialogOverlay(game: game),
           'MainMenu': (_, game) => MainMenuOverlay(
             game: game,
