@@ -403,6 +403,72 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'Українська'**
   String get lang_uk;
+
+  /// Title for the onboarding survey
+  ///
+  /// In en, this message translates to:
+  /// **'Little Questionnaire'**
+  String get survey_title;
+
+  /// Question about color preference
+  ///
+  /// In en, this message translates to:
+  /// **'What colors do you like more? (I\'ll use it to paint the walls)'**
+  String get survey_question_color;
+
+  /// Question about atmosphere preference
+  ///
+  /// In en, this message translates to:
+  /// **'What atmosphere do you prefer?'**
+  String get survey_question_atmosphere;
+
+  /// Question about brightness preference
+  ///
+  /// In en, this message translates to:
+  /// **'What kind of room lighting do you like?'**
+  String get survey_question_brightness;
+
+  /// Option for blue color
+  ///
+  /// In en, this message translates to:
+  /// **'Blue'**
+  String get survey_option_blue;
+
+  /// Option for green color
+  ///
+  /// In en, this message translates to:
+  /// **'Green'**
+  String get survey_option_green;
+
+  /// Option for warm color
+  ///
+  /// In en, this message translates to:
+  /// **'Warm'**
+  String get survey_option_warm;
+
+  /// Option for calm atmosphere
+  ///
+  /// In en, this message translates to:
+  /// **'Calm'**
+  String get survey_option_calm;
+
+  /// Option for energetic atmosphere
+  ///
+  /// In en, this message translates to:
+  /// **'Energetic'**
+  String get survey_option_energetic;
+
+  /// Option for bright lighting
+  ///
+  /// In en, this message translates to:
+  /// **'Bright'**
+  String get survey_option_bright;
+
+  /// Option for dim lighting
+  ///
+  /// In en, this message translates to:
+  /// **'Dim'**
+  String get survey_option_dim;
 }
 
 class _AppLocalizationsGenDelegate

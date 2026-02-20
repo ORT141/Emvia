@@ -203,5 +203,49 @@
   "lang_uk": "Українська",
   "@lang_uk": {
     "description": "Ukrainian language name"
+  },
+  "survey_title": "Маленьке опитування",
+  "@survey_title": {
+    "description": "Title for the onboarding survey"
+  },
+  "survey_question_color": "Які кольори тобі більше подобаються? (я пофарбую ними стіни)",
+  "@survey_question_color": {
+    "description": "Question about color preference"
+  },
+  "survey_question_atmosphere": "Якій атмосфері ти віддаєш перевагу?",
+  "@survey_question_atmosphere": {
+    "description": "Question about atmosphere preference"
+  },
+  "survey_question_brightness": "Яке освітлення кімнати тобі подобається?",
+  "@survey_question_brightness": {
+    "description": "Question about brightness preference"
+  },
+  "survey_option_blue": "Блакитний",
+  "@survey_option_blue": {
+    "description": "Option for blue color"
+  },
+  "survey_option_green": "Зелений",
+  "@survey_option_green": {
+    "description": "Option for green color"
+  },
+  "survey_option_warm": "Теплий",
+  "@survey_option_warm": {
+    "description": "Option for warm color"
+  },
+  "survey_option_calm": "Спокійна",
+  "@survey_option_calm": {
+    "description": "Option for calm atmosphere"
+  },
+  "survey_option_energetic": "Енергійна",
+  "@survey_option_energetic": {
+    "description": "Option for energetic atmosphere"
+  },
+  "survey_option_bright": "Яскраве",
+  "@survey_option_bright": {
+    "description": "Option for bright lighting"
+  },
+  "survey_option_dim": "Приглушене",
+  "@survey_option_dim": {
+    "description": "Option for dim lighting"
   }
 }

@@ -166,4 +166,40 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get lang_uk => 'Українська';
+
+  @override
+  String get survey_title => 'Маленьке опитування';
+
+  @override
+  String get survey_question_color =>
+      'Які кольори тобі більше подобаються? (я пофарбую ними стіни)';
+
+  @override
+  String get survey_question_atmosphere =>
+      'Якій атмосфері ти віддаєш перевагу?';
+
+  @override
+  String get survey_question_brightness =>
+      'Яке освітлення кімнати тобі подобається?';
+
+  @override
+  String get survey_option_blue => 'Блакитний';
+
+  @override
+  String get survey_option_green => 'Зелений';
+
+  @override
+  String get survey_option_warm => 'Теплий';
+
+  @override
+  String get survey_option_calm => 'Спокійна';
+
+  @override
+  String get survey_option_energetic => 'Енергійна';
+
+  @override
+  String get survey_option_bright => 'Яскраве';
+
+  @override
+  String get survey_option_dim => 'Приглушене';
 }

@@ -17,15 +17,15 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
   @override
   Future<void> onLoad() async {
     _standingAnimation = SpriteAnimation.spriteList([
-      await game.loadSprite('player/standing.png'),
+      await game.loadSprite('images/player/standing.png'),
     ], stepTime: 1);
 
     _walkingAnimation = SpriteAnimation.spriteList([
-      await game.loadSprite('player/walking1.png'),
-      await game.loadSprite('player/walking2.png'),
-      await game.loadSprite('player/walking3.png'),
-      await game.loadSprite('player/walking4.png'),
-      await game.loadSprite('player/walking5.png'),
+      await game.loadSprite('images/player/walking1.png'),
+      await game.loadSprite('images/player/walking2.png'),
+      await game.loadSprite('images/player/walking3.png'),
+      await game.loadSprite('images/player/walking4.png'),
+      await game.loadSprite('images/player/walking5.png'),
     ], stepTime: 0.1);
 
     animations = {
@@ -40,6 +40,10 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
   @override
   void update(double dt) {
     super.update(dt);
+    if (game.freezeForPathChoice) {
+      _velocity.setZero();
+    }
+
     position += _velocity * _speed * dt;
 
     if (_velocity.isZero()) {
@@ -62,6 +66,11 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (game.freezeForPathChoice) {
+      _velocity.setZero();
+      return false;
+    }
+
     _velocity.x = 0;
     _velocity.y = 0;
 

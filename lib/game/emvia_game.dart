@@ -5,11 +5,13 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 
+import 'survey_service.dart';
 import 'components/player.dart';
 import 'scenes/game_scene.dart';
-import 'scenes/blank_room.dart';
+import 'scenes/classroom_scene.dart';
 import 'dialog_model.dart';
-import 'dialog_data.dart';
+
+enum PlayableCharacter { olya, liam, olenka }
 
 class EmviaGame extends FlameGame
     with TapCallbacks, HasKeyboardHandlerComponents {
@@ -29,9 +31,27 @@ class EmviaGame extends FlameGame
   static const double _defaultZoom = 1.4;
 
   GameScene? currentScene;
+  ClassroomScene? _classroomScene;
+
+  bool freezeForPathChoice = false;
 
   int sceneIndex = 0;
   bool isStressMode = false;
+  int stressLevel = 0;
+  int _sessionToken = 0;
+
+  PlayableCharacter selectedCharacter = PlayableCharacter.olya;
+
+  final SurveyService _surveyService = SurveyService();
+  SurveyProfile surveyProfile = SurveyProfile(const {});
+
+  String _storyResultTitle = '';
+  String _storyResultDescription = '';
+  final List<String> _selectedTools = [];
+
+  String get storyResultTitle => _storyResultTitle;
+  String get storyResultDescription => _storyResultDescription;
+  List<String> get selectedTools => List.unmodifiable(_selectedTools);
 
   final currentNodeNotifier = ValueNotifier<DialogNode?>(null);
   DialogNode? get currentNode => currentNodeNotifier.value;
@@ -41,8 +61,10 @@ class EmviaGame extends FlameGame
 
   @override
   Future<void> onLoad() async {
+    images.prefix = '';
+
     noiseEffect = SpriteComponent()
-      ..sprite = await loadSprite('noise.jpg')
+      ..sprite = await loadSprite('images/overlays/noise.jpg')
       ..size = size
       ..opacity = 0.0;
 
@@ -52,11 +74,15 @@ class EmviaGame extends FlameGame
 
     add(worldRoot);
 
-    await loadScene(BlankRoom());
+    await loadScene(ClassroomScene());
 
     add(noiseEffect);
 
-    overlays.add('MainMenu');
+    if (await _surveyService.isSurveyCompleted()) {
+      overlays.add('MainMenu');
+    } else {
+      overlays.add('Survey');
+    }
   }
 
   Future<void> loadScene(GameScene scene) async {
@@ -65,6 +91,11 @@ class EmviaGame extends FlameGame
     }
     currentScene = scene;
     await worldRoot.add(scene);
+    if (scene is ClassroomScene) {
+      _classroomScene = scene;
+    } else {
+      _classroomScene = null;
+    }
 
     if (olya.parent == null) {
       await worldRoot.add(olya);
@@ -78,21 +109,99 @@ class EmviaGame extends FlameGame
   }
 
   void startGame() {
-    sceneIndex = 0;
-    startDialog(DialogData.getTeacherDialog());
+    if (selectedCharacter != PlayableCharacter.olya) return;
+    _startGameFlow();
+  }
+
+  bool isCharacterUnlocked(PlayableCharacter character) {
+    return character == PlayableCharacter.olya;
+  }
+
+  void selectCharacter(PlayableCharacter character) {
+    if (!isCharacterUnlocked(character)) return;
+    selectedCharacter = character;
+  }
+
+  Future<void> _startGameFlow() async {
+    final token = ++_sessionToken;
+
+    surveyProfile = await _surveyService.getProfile();
+    sceneIndex = 1;
+    stressLevel = 0;
+    isStressMode = false;
+    noiseEffect.opacity = 0.0;
+    _selectedTools.clear();
+    _selectedTools.add('Клас');
+
+    overlays.remove('Dialog');
+    overlays.remove('CalmMap');
+    overlays.remove('PathChoice');
+
+    await loadScene(ClassroomScene());
+
+    if (token != _sessionToken) return;
+
+    freezeForPathChoice = true;
+    worldRoot.scale = Vector2.all(1.0);
+    _classroomScene?.showPathImage();
+
+    overlays.add('PathChoice');
+  }
+
+  void showPathBackground() {
+    _classroomScene?.showPathImage();
+  }
+
+  void previewPathOverlay(int index) {
+    final asset = index == 0
+        ? 'images/scenes/classroom/first-path-overlay.png'
+        : 'images/scenes/classroom/second-path-overlay.png';
+    _classroomScene?.showPathOverlay(asset);
+  }
+
+  void clearPathOverlay() {
+    _classroomScene?.clearPathOverlay();
+  }
+
+  void restoreClassroomBackground() {
+    _classroomScene?.showClassroomImage();
+  }
+
+  void chooseFirstPath() {
+    _selectedTools.add('Перший маршрут');
+    _storyResultTitle = 'Мапа спокою: Оля';
+    _storyResultDescription =
+        'Ти обрала перший маршрут і зменшила перевантаження, рухаючись передбачуваним шляхом.';
+    _finishPathChoice();
+  }
+
+  void chooseSecondPath() {
+    _selectedTools.add('Другий маршрут');
+    _storyResultTitle = 'Мапа спокою: Оля';
+    _storyResultDescription =
+        'Ти обрала другий маршрут і зберегла контроль через особисту стратегію навігації.';
+    _finishPathChoice();
+  }
+
+  void _finishPathChoice() {
+    sceneIndex = 2;
+    overlays.remove('PathChoice');
+    freezeForPathChoice = false;
+    worldRoot.scale = Vector2.all(_zoom);
+    _snapCameraToPlayer();
+    overlays.add('CalmMap');
   }
 
   void calmDown() {
     isStressMode = false;
     noiseEffect.opacity = 0.0;
-    overlays.remove('Breathing');
     startDialog(
       DialogTree(
         startNodeId: 'calmed',
         nodes: {
           'calmed': DialogNode(
             id: 'calmed',
-            text: (l) => l.dialog_calmed_you_feel_better,
+            text: (_) => surveyProfile.supportMessageLabel,
           ),
         },
       ),
@@ -153,6 +262,12 @@ class EmviaGame extends FlameGame
     super.update(dt);
 
     if (olya.parent == null) return;
+
+    if (freezeForPathChoice) {
+      worldRoot.scale = Vector2.all(1.0);
+      worldRoot.position = Vector2.zero();
+      return;
+    }
 
     final target = Vector2(olya.position.x, olya.position.y);
 
@@ -236,11 +351,6 @@ class EmviaGame extends FlameGame
 
   @override
   void onTapDown(TapDownEvent event) {
-    if (!isStressMode && overlays.isActive('Dialog')) {
-      nextDialog();
-      return;
-    }
-
     if (!overlays.isActive('Pause') && !overlays.isActive('MainMenu')) {
       final pos = event.localPosition;
       if (pos.x > size.x - 60 && pos.y < 60) {

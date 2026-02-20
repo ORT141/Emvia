@@ -168,4 +168,39 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get lang_uk => 'Українська';
+
+  @override
+  String get survey_title => 'Little Questionnaire';
+
+  @override
+  String get survey_question_color =>
+      'What colors do you like more? (I\'ll use it to paint the walls)';
+
+  @override
+  String get survey_question_atmosphere => 'What atmosphere do you prefer?';
+
+  @override
+  String get survey_question_brightness =>
+      'What kind of room lighting do you like?';
+
+  @override
+  String get survey_option_blue => 'Blue';
+
+  @override
+  String get survey_option_green => 'Green';
+
+  @override
+  String get survey_option_warm => 'Warm';
+
+  @override
+  String get survey_option_calm => 'Calm';
+
+  @override
+  String get survey_option_energetic => 'Energetic';
+
+  @override
+  String get survey_option_bright => 'Bright';
+
+  @override
+  String get survey_option_dim => 'Dim';
 }

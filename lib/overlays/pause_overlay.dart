@@ -15,7 +15,7 @@ class PauseOverlay extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: Colors.black.withOpacity(0.5),
+      backgroundColor: Colors.black.withValues(alpha: 0.5),
       body: Center(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 32),
@@ -24,7 +24,7 @@ class PauseOverlay extends StatelessWidget {
             borderRadius: BorderRadius.circular(32),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.2),
+                color: Colors.black.withValues(alpha: 0.2),
                 blurRadius: 20,
                 offset: const Offset(0, 10),
               ),

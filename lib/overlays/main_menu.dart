@@ -45,6 +45,9 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
   }
 
   void _startNewGame() {
+    if (!widget.game.isCharacterUnlocked(widget.game.selectedCharacter)) {
+      return;
+    }
     widget.game.startGame();
     widget.game.overlays.remove('MainMenu');
   }
@@ -132,7 +135,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
         children: [
           Positioned.fill(
             child: Image.asset(
-              'assets/images/menu.jpg',
+              'images/menu.jpg',
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
                   Container(color: theme.colorScheme.primaryContainer),
@@ -183,7 +186,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                               );
                             },
                             child: Text(
-                              '${loc.title}',
+                              loc.title,
                               textAlign: TextAlign.center,
                               style: GoogleFonts.baloo2(
                                 color: theme.colorScheme.primary,
@@ -215,6 +218,10 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                     ),
 
                     const Spacer(flex: 1),
+
+                    _CharacterSelectBar(game: widget.game),
+
+                    const SizedBox(height: 20),
 
                     _MenuButton(
                       label: loc.play,
@@ -489,6 +496,147 @@ class _MenuButton extends StatelessWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CharacterSelectBar extends StatefulWidget {
+  final EmviaGame game;
+
+  const _CharacterSelectBar({required this.game});
+
+  @override
+  State<_CharacterSelectBar> createState() => _CharacterSelectBarState();
+}
+
+class _CharacterSelectBarState extends State<_CharacterSelectBar> {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: theme.colorScheme.outlineVariant),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Character',
+            style: GoogleFonts.baloo2(
+              fontWeight: FontWeight.w700,
+              color: theme.colorScheme.onSurface,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _CharacterGhost(
+                imagePath: 'images/player-selecting/olya_ghost.png',
+                label: 'Olya',
+                selected:
+                    widget.game.selectedCharacter == PlayableCharacter.olya,
+                locked: false,
+                onTap: () {
+                  setState(() {
+                    widget.game.selectCharacter(PlayableCharacter.olya);
+                  });
+                },
+              ),
+              const SizedBox(width: 10),
+              _CharacterGhost(
+                imagePath: 'images/player-selecting/liam_ghost.png',
+                label: 'Liam',
+                selected:
+                    widget.game.selectedCharacter == PlayableCharacter.liam,
+                locked: true,
+              ),
+              const SizedBox(width: 10),
+              _CharacterGhost(
+                imagePath: 'images/player-selecting/olenka_ghost.png',
+                label: 'Olenka',
+                selected:
+                    widget.game.selectedCharacter == PlayableCharacter.olenka,
+                locked: true,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CharacterGhost extends StatelessWidget {
+  final String imagePath;
+  final String label;
+  final bool selected;
+  final bool locked;
+  final VoidCallback? onTap;
+
+  const _CharacterGhost({
+    required this.imagePath,
+    required this.label,
+    required this.selected,
+    required this.locked,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: locked ? null : onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Ink(
+        width: 84,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: selected
+                ? theme.colorScheme.primary
+                : theme.colorScheme.outlineVariant,
+            width: selected ? 2 : 1,
+          ),
+          color: locked
+              ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
+              : theme.colorScheme.surface,
+        ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 76,
+              child: Stack(
+                children: [
+                  Center(child: Image.asset(imagePath, fit: BoxFit.contain)),
+                  if (locked)
+                    Positioned(
+                      right: 2,
+                      top: 2,
+                      child: Icon(
+                        Icons.lock,
+                        size: 16,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Text(
+              label,
+              style: GoogleFonts.baloo2(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
+          ],
         ),
       ),
     );

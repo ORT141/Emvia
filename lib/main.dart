@@ -1,9 +1,12 @@
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/overlays/credits_overlay.dart';
 import 'package:emvia/overlays/dialog.dart';
+import 'package:emvia/overlays/calm_map_overlay.dart';
 import 'package:emvia/overlays/main_menu.dart';
 import 'package:emvia/overlays/pause_overlay.dart';
+import 'package:emvia/overlays/path_choice_overlay.dart';
 import 'package:emvia/overlays/settings_overlay.dart';
+import 'package:emvia/overlays/survey_overlay.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -102,6 +105,9 @@ class _MyAppState extends State<MyApp> {
           ),
           'Credits': (_, game) => CreditsOverlay(game: game),
           'Pause': (_, game) => PauseOverlay(game: game),
+          'Survey': (_, game) => SurveyOverlay(game: game),
+          'CalmMap': (_, game) => CalmMapOverlay(game: game),
+          'PathChoice': (_, game) => PathChoiceOverlay(game: game),
         },
       ),
     );
