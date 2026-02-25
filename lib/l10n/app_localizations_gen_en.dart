@@ -45,9 +45,6 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get i_calm_down => 'I calmed down';
 
   @override
-  String get subtitle => 'Find calm. Find courage.';
-
-  @override
   String get continueLabel => 'Continue';
 
   @override
@@ -203,4 +200,59 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get survey_option_dim => 'Dim';
+
+  @override
+  String get character_olya_title => 'Olya, 14 years';
+
+  @override
+  String get character_olya_quote => '\"I won\'t speak — I will show\"';
+
+  @override
+  String get character_olya_trait =>
+      'Autistic spectrum (ASD), hypersensitivity to loud sounds, bright light and chaos.';
+
+  @override
+  String get character_olya_superPower =>
+      'Remembers and structures space through visual patterns, drawings and geometry.';
+
+  @override
+  String get character_olya_description =>
+      'For Olya the world often feels like a crowded highway without signs. She creates her own \"Map of Calm\" and turns sensory noise into art.';
+
+  @override
+  String get character_liam_title => 'Liam, 15 years';
+
+  @override
+  String get character_liam_quote =>
+      '\"It\'s not about style. It\'s about level\"';
+
+  @override
+  String get character_liam_trait =>
+      'Uses a wheelchair; the city often becomes an obstacle course.';
+
+  @override
+  String get character_liam_superPower => 'Photography, wit and activism.';
+
+  @override
+  String get character_liam_description =>
+      'Fights for accessibility and shows that access is freedom to choose your route.';
+
+  @override
+  String get character_olenka_title => 'Olenka, 15 years';
+
+  @override
+  String get character_olenka_quote =>
+      '\"Sometimes to see you just need to learn to hear\"';
+
+  @override
+  String get character_olenka_trait =>
+      'Visually impaired, orients through hearing, touch, imagination and logic.';
+
+  @override
+  String get character_olenka_superPower =>
+      'Echolocation and the ability to \"see\" space through a soundscape.';
+
+  @override
+  String get character_olenka_description =>
+      'Navigates complex urban environments and teaches respect for the independence of visually impaired people.';
 }

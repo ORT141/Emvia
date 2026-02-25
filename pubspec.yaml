@@ -28,8 +28,13 @@ dev_dependencies:
 
 flutter:
     generate: true
-
     uses-material-design: true
 
     assets:
         - assets/images/
+        - assets/images/main-menu/
+        - assets/images/overlays/
+        - assets/images/player/
+        - assets/images/player-selecting/
+        - assets/images/scenes/
+        - assets/images/scenes/classroom/

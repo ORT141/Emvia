@@ -41,6 +41,7 @@ class EmviaGame extends FlameGame
   int _sessionToken = 0;
 
   PlayableCharacter selectedCharacter = PlayableCharacter.olya;
+  bool _startGameAfterSurvey = false;
 
   final SurveyService _surveyService = SurveyService();
   SurveyProfile surveyProfile = SurveyProfile(const {});
@@ -61,10 +62,8 @@ class EmviaGame extends FlameGame
 
   @override
   Future<void> onLoad() async {
-    images.prefix = '';
-
     noiseEffect = SpriteComponent()
-      ..sprite = await loadSprite('images/overlays/noise.jpg')
+      ..sprite = await loadSprite('overlays/noise.jpg')
       ..size = size
       ..opacity = 0.0;
 
@@ -78,11 +77,7 @@ class EmviaGame extends FlameGame
 
     add(noiseEffect);
 
-    if (await _surveyService.isSurveyCompleted()) {
-      overlays.add('MainMenu');
-    } else {
-      overlays.add('Survey');
-    }
+    overlays.add('MainMenu');
   }
 
   Future<void> loadScene(GameScene scene) async {
@@ -111,6 +106,18 @@ class EmviaGame extends FlameGame
   void startGame() {
     if (selectedCharacter != PlayableCharacter.olya) return;
     _startGameFlow();
+  }
+
+  void startNewGameSurveyFlow() {
+    _startGameAfterSurvey = true;
+    overlays.remove('MainMenu');
+    overlays.add('Survey');
+  }
+
+  bool consumeStartGameAfterSurvey() {
+    final shouldStart = _startGameAfterSurvey;
+    _startGameAfterSurvey = false;
+    return shouldStart;
   }
 
   bool isCharacterUnlocked(PlayableCharacter character) {
@@ -154,8 +161,8 @@ class EmviaGame extends FlameGame
 
   void previewPathOverlay(int index) {
     final asset = index == 0
-        ? 'images/scenes/classroom/first-path-overlay.png'
-        : 'images/scenes/classroom/second-path-overlay.png';
+        ? 'scenes/classroom/first-path-overlay.png'
+        : 'scenes/classroom/second-path-overlay.png';
     _classroomScene?.showPathOverlay(asset);
   }
 

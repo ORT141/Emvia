@@ -115,16 +115,6 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
                       child: const Text('Зберегти та продовжити'),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Center(
-                    child: TextButton(
-                      onPressed: () {
-                        widget.game.overlays.remove('Survey');
-                        widget.game.overlays.add('MainMenu');
-                      },
-                      child: const Text('Пропустити опитування'),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -138,7 +128,12 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
 
   Future<void> _submit() async {
     await _surveyService.saveSurvey(_answers);
+    final shouldStartGame = widget.game.consumeStartGameAfterSurvey();
     widget.game.overlays.remove('Survey');
-    widget.game.overlays.add('MainMenu');
+    if (shouldStartGame) {
+      widget.game.startGame();
+    } else {
+      widget.game.overlays.add('MainMenu');
+    }
   }
 }

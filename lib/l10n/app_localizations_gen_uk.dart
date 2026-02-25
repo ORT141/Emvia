@@ -45,9 +45,6 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get i_calm_down => 'Я заспокоїлась';
 
   @override
-  String get subtitle => 'Знайди спокій. Знайди відвагу.';
-
-  @override
   String get continueLabel => 'Продовжити';
 
   @override
@@ -202,4 +199,58 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get survey_option_dim => 'Приглушене';
+
+  @override
+  String get character_olya_title => 'Оля, 14 років';
+
+  @override
+  String get character_olya_quote => '\"Я не говоритиму — я покажу\"';
+
+  @override
+  String get character_olya_trait =>
+      'Аутичний спектр (АСД), гіперчутливість до гучних звуків, яскравого світла та хаосу.';
+
+  @override
+  String get character_olya_superPower =>
+      'Запам’ятовує та структурує простір через візуальні патерни, малюнки та геометрію.';
+
+  @override
+  String get character_olya_description =>
+      'Для Олі світ часто нагадує переповнену автостраду без знаків. Вона створює власну \"Мапу спокою\" та перетворює сенсорний шум на мистецтво.';
+
+  @override
+  String get character_liam_title => 'Ліам, 15 років';
+
+  @override
+  String get character_liam_quote => '\"Це не про стиль. Це про рівень\"';
+
+  @override
+  String get character_liam_trait =>
+      'Пересувається на колісному кріслі; місто часто стає смугою перешкод.';
+
+  @override
+  String get character_liam_superPower => 'Фотографія, дотепність та активізм.';
+
+  @override
+  String get character_liam_description =>
+      'Бореться за безбар’єрність і показує, що доступність — це свобода обирати свій маршрут.';
+
+  @override
+  String get character_olenka_title => 'Оленка, 15 років';
+
+  @override
+  String get character_olenka_quote =>
+      '\"Іноді, щоб побачити, треба просто навчитися чути\"';
+
+  @override
+  String get character_olenka_trait =>
+      'Незряча, орієнтується через слух, дотик, уяву та логіку.';
+
+  @override
+  String get character_olenka_superPower =>
+      'Ехолокація та вміння \"бачити\" простір через звуковий ландшафт.';
+
+  @override
+  String get character_olenka_description =>
+      'Навігує у складному міському середовищі та вчить повазі до самостійності незрячих людей.';
 }

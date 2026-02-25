@@ -48,10 +48,6 @@
   "@i_calm_down": {
     "description": "Confirmation that the player has successfully managed to calm down."
   },
-  "subtitle": "Find calm. Find courage.",
-  "@subtitle": {
-    "description": "A tagline or subtitle for the experience, emphasizing the themes of calm and courage."
-  },
   "continueLabel": "Continue",
   "@continueLabel": {
     "description": "General label for proceeding to the next step or screen."
@@ -247,5 +243,65 @@
   "survey_option_dim": "Dim",
   "@survey_option_dim": {
     "description": "Option for dim lighting"
+  },
+  "character_olya_title": "Olya, 14 years",
+  "@character_olya_title": {
+    "description": "Olya name + age"
+  },
+  "character_olya_quote": "\"I won't speak — I will show\"",
+  "@character_olya_quote": {
+    "description": "Olya short quote"
+  },
+  "character_olya_trait": "Autistic spectrum (ASD), hypersensitivity to loud sounds, bright light and chaos.",
+  "@character_olya_trait": {
+    "description": "Olya trait description"
+  },
+  "character_olya_superPower": "Remembers and structures space through visual patterns, drawings and geometry.",
+  "@character_olya_superPower": {
+    "description": "Olya super power"
+  },
+  "character_olya_description": "For Olya the world often feels like a crowded highway without signs. She creates her own \"Map of Calm\" and turns sensory noise into art.",
+  "@character_olya_description": {
+    "description": "Olya long description"
+  },
+  "character_liam_title": "Liam, 15 years",
+  "@character_liam_title": {
+    "description": "Liam name + age"
+  },
+  "character_liam_quote": "\"It's not about style. It's about level\"",
+  "@character_liam_quote": {
+    "description": "Liam short quote"
+  },
+  "character_liam_trait": "Uses a wheelchair; the city often becomes an obstacle course.",
+  "@character_liam_trait": {
+    "description": "Liam trait description"
+  },
+  "character_liam_superPower": "Photography, wit and activism.",
+  "@character_liam_superPower": {
+    "description": "Liam super power"
+  },
+  "character_liam_description": "Fights for accessibility and shows that access is freedom to choose your route.",
+  "@character_liam_description": {
+    "description": "Liam long description"
+  },
+  "character_olenka_title": "Olenka, 15 years",
+  "@character_olenka_title": {
+    "description": "Olenka name + age"
+  },
+  "character_olenka_quote": "\"Sometimes to see you just need to learn to hear\"",
+  "@character_olenka_quote": {
+    "description": "Olenka short quote"
+  },
+  "character_olenka_trait": "Visually impaired, orients through hearing, touch, imagination and logic.",
+  "@character_olenka_trait": {
+    "description": "Olenka trait description"
+  },
+  "character_olenka_superPower": "Echolocation and the ability to \"see\" space through a soundscape.",
+  "@character_olenka_superPower": {
+    "description": "Olenka super power"
+  },
+  "character_olenka_description": "Navigates complex urban environments and teaches respect for the independence of visually impaired people.",
+  "@character_olenka_description": {
+    "description": "Olenka long description"
   }
 }

@@ -170,12 +170,6 @@ abstract class AppLocalizationsGen {
   /// **'I calmed down'**
   String get i_calm_down;
 
-  /// A tagline or subtitle for the experience, emphasizing the themes of calm and courage.
-  ///
-  /// In en, this message translates to:
-  /// **'Find calm. Find courage.'**
-  String get subtitle;
-
   /// General label for proceeding to the next step or screen.
   ///
   /// In en, this message translates to:
@@ -469,6 +463,96 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'Dim'**
   String get survey_option_dim;
+
+  /// Olya name + age
+  ///
+  /// In en, this message translates to:
+  /// **'Olya, 14 years'**
+  String get character_olya_title;
+
+  /// Olya short quote
+  ///
+  /// In en, this message translates to:
+  /// **'\"I won\'t speak — I will show\"'**
+  String get character_olya_quote;
+
+  /// Olya trait description
+  ///
+  /// In en, this message translates to:
+  /// **'Autistic spectrum (ASD), hypersensitivity to loud sounds, bright light and chaos.'**
+  String get character_olya_trait;
+
+  /// Olya super power
+  ///
+  /// In en, this message translates to:
+  /// **'Remembers and structures space through visual patterns, drawings and geometry.'**
+  String get character_olya_superPower;
+
+  /// Olya long description
+  ///
+  /// In en, this message translates to:
+  /// **'For Olya the world often feels like a crowded highway without signs. She creates her own \"Map of Calm\" and turns sensory noise into art.'**
+  String get character_olya_description;
+
+  /// Liam name + age
+  ///
+  /// In en, this message translates to:
+  /// **'Liam, 15 years'**
+  String get character_liam_title;
+
+  /// Liam short quote
+  ///
+  /// In en, this message translates to:
+  /// **'\"It\'s not about style. It\'s about level\"'**
+  String get character_liam_quote;
+
+  /// Liam trait description
+  ///
+  /// In en, this message translates to:
+  /// **'Uses a wheelchair; the city often becomes an obstacle course.'**
+  String get character_liam_trait;
+
+  /// Liam super power
+  ///
+  /// In en, this message translates to:
+  /// **'Photography, wit and activism.'**
+  String get character_liam_superPower;
+
+  /// Liam long description
+  ///
+  /// In en, this message translates to:
+  /// **'Fights for accessibility and shows that access is freedom to choose your route.'**
+  String get character_liam_description;
+
+  /// Olenka name + age
+  ///
+  /// In en, this message translates to:
+  /// **'Olenka, 15 years'**
+  String get character_olenka_title;
+
+  /// Olenka short quote
+  ///
+  /// In en, this message translates to:
+  /// **'\"Sometimes to see you just need to learn to hear\"'**
+  String get character_olenka_quote;
+
+  /// Olenka trait description
+  ///
+  /// In en, this message translates to:
+  /// **'Visually impaired, orients through hearing, touch, imagination and logic.'**
+  String get character_olenka_trait;
+
+  /// Olenka super power
+  ///
+  /// In en, this message translates to:
+  /// **'Echolocation and the ability to \"see\" space through a soundscape.'**
+  String get character_olenka_superPower;
+
+  /// Olenka long description
+  ///
+  /// In en, this message translates to:
+  /// **'Navigates complex urban environments and teaches respect for the independence of visually impaired people.'**
+  String get character_olenka_description;
 }
 
 class _AppLocalizationsGenDelegate

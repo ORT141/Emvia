@@ -48,10 +48,6 @@
   "@i_calm_down": {
     "description": "Confirmation that the player has successfully managed to calm down."
   },
-  "subtitle": "Знайди спокій. Знайди відвагу.",
-  "@subtitle": {
-    "description": "A tagline or subtitle for the experience, emphasizing the themes of calm and courage."
-  },
   "continueLabel": "Продовжити",
   "@continueLabel": {
     "description": "General label for proceeding to the next step or screen."
@@ -247,5 +243,65 @@
   "survey_option_dim": "Приглушене",
   "@survey_option_dim": {
     "description": "Option for dim lighting"
+  },
+  "character_olya_title": "Оля, 14 років",
+  "@character_olya_title": {
+    "description": "Olya name + age"
+  },
+  "character_olya_quote": "\"Я не говоритиму — я покажу\"",
+  "@character_olya_quote": {
+    "description": "Olya short quote"
+  },
+  "character_olya_trait": "Аутичний спектр (АСД), гіперчутливість до гучних звуків, яскравого світла та хаосу.",
+  "@character_olya_trait": {
+    "description": "Olya trait description"
+  },
+  "character_olya_superPower": "Запам’ятовує та структурує простір через візуальні патерни, малюнки та геометрію.",
+  "@character_olya_superPower": {
+    "description": "Olya super power"
+  },
+  "character_olya_description": "Для Олі світ часто нагадує переповнену автостраду без знаків. Вона створює власну \"Мапу спокою\" та перетворює сенсорний шум на мистецтво.",
+  "@character_olya_description": {
+    "description": "Olya long description"
+  },
+  "character_liam_title": "Ліам, 15 років",
+  "@character_liam_title": {
+    "description": "Liam name + age"
+  },
+  "character_liam_quote": "\"Це не про стиль. Це про рівень\"",
+  "@character_liam_quote": {
+    "description": "Liam short quote"
+  },
+  "character_liam_trait": "Пересувається на колісному кріслі; місто часто стає смугою перешкод.",
+  "@character_liam_trait": {
+    "description": "Liam trait description"
+  },
+  "character_liam_superPower": "Фотографія, дотепність та активізм.",
+  "@character_liam_superPower": {
+    "description": "Liam super power"
+  },
+  "character_liam_description": "Бореться за безбар’єрність і показує, що доступність — це свобода обирати свій маршрут.",
+  "@character_liam_description": {
+    "description": "Liam long description"
+  },
+  "character_olenka_title": "Оленка, 15 років",
+  "@character_olenka_title": {
+    "description": "Olenka name + age"
+  },
+  "character_olenka_quote": "\"Іноді, щоб побачити, треба просто навчитися чути\"",
+  "@character_olenka_quote": {
+    "description": "Olenka short quote"
+  },
+  "character_olenka_trait": "Незряча, орієнтується через слух, дотик, уяву та логіку.",
+  "@character_olenka_trait": {
+    "description": "Olenka trait description"
+  },
+  "character_olenka_superPower": "Ехолокація та вміння \"бачити\" простір через звуковий ландшафт.",
+  "@character_olenka_superPower": {
+    "description": "Olenka super power"
+  },
+  "character_olenka_description": "Навігує у складному міському середовищі та вчить повазі до самостійності незрячих людей.",
+  "@character_olenka_description": {
+    "description": "Olenka long description"
   }
 }

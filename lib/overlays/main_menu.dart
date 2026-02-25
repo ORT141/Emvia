@@ -45,11 +45,71 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
   }
 
   void _startNewGame() {
-    if (!widget.game.isCharacterUnlocked(widget.game.selectedCharacter)) {
-      return;
-    }
-    widget.game.startGame();
-    widget.game.overlays.remove('MainMenu');
+    _openNewGameModal();
+  }
+
+  Future<void> _openNewGameModal() async {
+    final loc = AppLocalizationsGen.of(context)!;
+    final theme = Theme.of(context);
+    PlayableCharacter? pendingCharacter;
+
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (context, setModalState) {
+          final bool canStart =
+              pendingCharacter != null &&
+              widget.game.isCharacterUnlocked(pendingCharacter!);
+
+          return AlertDialog(
+            backgroundColor: theme.colorScheme.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: Text(
+              loc.play,
+              style: GoogleFonts.baloo2(
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
+              ),
+            ),
+            content: SizedBox(
+              width: 420,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _CharacterSelectBar(
+                    game: widget.game,
+                    selectedCharacter: pendingCharacter,
+                    onCharacterSelected: (character) {
+                      setModalState(() {
+                        pendingCharacter = character;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: Text(loc.cancel),
+              ),
+              ElevatedButton(
+                onPressed: canStart
+                    ? () {
+                        widget.game.selectCharacter(pendingCharacter!);
+                        Navigator.of(ctx).pop();
+                        widget.game.startNewGameSurveyFlow();
+                      }
+                    : null,
+                child: Text(loc.play),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 
   void _continueGame() {
@@ -125,9 +185,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
     final loc = AppLocalizationsGen.of(context)!;
     final theme = Theme.of(context);
     final canContinue = widget.game.sceneIndex > 0;
-    final currentLocale = Localizations.localeOf(
-      context,
-    ).languageCode.toUpperCase();
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -135,10 +192,26 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
         children: [
           Positioned.fill(
             child: Image.asset(
-              'images/menu.jpg',
+              'assets/images/menu.jpg',
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
                   Container(color: theme.colorScheme.primaryContainer),
+            ),
+          ),
+
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: 400,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [Colors.black.withValues(alpha: 0.8), Colors.transparent],
+                  ),
+                ),
+              ),
             ),
           ),
 
@@ -147,26 +220,30 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
             child: Container(
               width: 400,
               height: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 32),
+              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 32),
               child: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        _SmallIconButton(
+                        const SizedBox(width: 24),
+                        _TopImageButton(
+                          onTap: _openSettings,
+                          assetPath:
+                              'assets/images/main-menu/settings-main-menu.png',
+                          width: 76,
+                        ),
+                        const SizedBox(width: 12),
+                        _TopImageButton(
                           onTap: widget.onThemeToggled,
-                          icon: widget.isDarkMode
-                              ? Icons.light_mode_rounded
-                              : Icons.dark_mode_rounded,
-                          label: widget.isDarkMode ? loc.light : loc.dark,
+                          assetPath:
+                              'assets/images/main-menu/theme-switch-main-menu.png',
+                          width: 96,
                         ),
-                        const SizedBox(width: 8),
-                        _LanguageButton(
-                          currentLocale: currentLocale,
-                          onSelected: _switchLanguage,
-                        ),
+                        const SizedBox(width: 12),
+                        _LanguageButton(onSelected: _switchLanguage),
                       ],
                     ),
 
@@ -185,32 +262,10 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                                 child: child,
                               );
                             },
-                            child: Text(
-                              loc.title,
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.baloo2(
-                                color: theme.colorScheme.primary,
-                                fontSize: 48,
-                                height: 1.1,
-                                fontWeight: FontWeight.bold,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withValues(alpha: 0.1),
-                                    offset: const Offset(2, 2),
-                                    blurRadius: 4,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            loc.subtitle,
-                            textAlign: TextAlign.center,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                              fontSize: 18,
-                              letterSpacing: 0.5,
+                            child: Image.asset(
+                              'assets/images/main-menu/logo-main-menu.png',
+                              width: 260,
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ],
@@ -219,37 +274,20 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
 
                     const Spacer(flex: 1),
 
-                    _CharacterSelectBar(game: widget.game),
-
-                    const SizedBox(height: 20),
-
-                    _MenuButton(
-                      label: loc.play,
-                      color: theme.colorScheme.primaryContainer,
-                      onColor: theme.colorScheme.onPrimaryContainer,
-                      icon: Icons.play_arrow_rounded,
+                    _ImageMenuButton(
+                      assetPath: 'assets/images/main-menu/play-main-menu.png',
                       onPressed: _startNewGame,
                     ),
 
                     const SizedBox(height: 20),
 
-                    _MenuButton(
-                      label: loc.continueLabel,
-                      color: theme.colorScheme.secondaryContainer,
-                      onColor: theme.colorScheme.onSecondaryContainer,
-                      icon: Icons.fast_forward_rounded,
+                    _ImageMenuButton(
+                      assetPath:
+                          'assets/images/main-menu/continue-main-menu.png',
                       onPressed: canContinue ? _continueGame : null,
                     ),
 
                     const SizedBox(height: 20),
-
-                    _MenuButton(
-                      label: loc.settings,
-                      color: theme.colorScheme.tertiaryContainer,
-                      onColor: theme.colorScheme.onTertiaryContainer,
-                      icon: Icons.settings_rounded,
-                      onPressed: _openSettings,
-                    ),
 
                     const SizedBox(height: 40),
 
@@ -298,54 +336,27 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
   }
 }
 
-class _SmallIconButton extends StatelessWidget {
+class _TopImageButton extends StatelessWidget {
   final VoidCallback? onTap;
-  final IconData icon;
-  final String label;
+  final String assetPath;
+  final double width;
 
-  const _SmallIconButton({
+  const _TopImageButton({
     required this.onTap,
-    required this.icon,
-    required this.label,
+    required this.assetPath,
+    this.width = 92,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface.withValues(alpha: 0.9),
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-            border: Border.all(color: theme.colorScheme.outlineVariant),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 20, color: theme.colorScheme.primary),
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: GoogleFonts.baloo2(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            ],
-          ),
+        borderRadius: BorderRadius.circular(24),
+        child: Opacity(
+          opacity: onTap != null ? 1.0 : 0.45,
+          child: Image.asset(assetPath, width: width, fit: BoxFit.contain),
         ),
       ),
     );
@@ -353,61 +364,21 @@ class _SmallIconButton extends StatelessWidget {
 }
 
 class _LanguageButton extends StatelessWidget {
-  final String currentLocale;
   final ValueChanged<String> onSelected;
 
-  const _LanguageButton({
-    required this.currentLocale,
-    required this.onSelected,
-  });
+  const _LanguageButton({required this.onSelected});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return PopupMenuButton<String>(
       onSelected: onSelected,
       offset: const Offset(0, 45),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       position: PopupMenuPosition.under,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface.withValues(alpha: 0.9),
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-          border: Border.all(color: theme.colorScheme.outlineVariant),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.public_rounded,
-              size: 20,
-              color: theme.colorScheme.primary,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              currentLocale,
-              style: GoogleFonts.baloo2(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: theme.colorScheme.primary,
-              ),
-            ),
-            const SizedBox(width: 4),
-            Icon(
-              Icons.keyboard_arrow_down_rounded,
-              size: 18,
-              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-            ),
-          ],
-        ),
+      child: Image.asset(
+        'assets/images/main-menu/lang-switch-main-menu.png',
+        width: 96,
+        fit: BoxFit.contain,
       ),
       itemBuilder: (context) => [
         _buildLanguageItem('en', '🇺🇸 English'),
@@ -427,73 +398,32 @@ class _LanguageButton extends StatelessWidget {
   }
 }
 
-class _MenuButton extends StatelessWidget {
-  final String label;
-  final Color color;
-  final Color onColor;
-  final IconData icon;
+class _ImageMenuButton extends StatelessWidget {
+  final String assetPath;
   final VoidCallback? onPressed;
 
-  const _MenuButton({
-    required this.label,
-    required this.color,
-    required this.onColor,
-    required this.icon,
-    this.onPressed,
-  });
+  const _ImageMenuButton({required this.assetPath, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final bool enabled = onPressed != null;
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        color: enabled ? null : theme.colorScheme.surfaceContainerHighest,
-        gradient: enabled
-            ? LinearGradient(
-                colors: [color.withValues(alpha: 0.8), color],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              )
-            : null,
-        boxShadow: enabled
-            ? [
-                BoxShadow(
-                  color: color.withValues(alpha: 0.3),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ]
-            : null,
-      ),
+    return Opacity(
+      opacity: enabled ? 1.0 : 0.45,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: enabled ? onPressed : null,
-          borderRadius: BorderRadius.circular(24),
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(28),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  icon,
-                  size: 24,
-                  color: enabled ? onColor : onColor.withValues(alpha: 0.3),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  label.toUpperCase(),
-                  style: GoogleFonts.baloo2(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
-                    color: enabled ? onColor : onColor.withValues(alpha: 0.3),
-                  ),
-                ),
-              ],
+            padding: const EdgeInsets.symmetric(vertical: 2),
+            child: Image.asset(
+              assetPath,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) => const SizedBox(
+                height: 72,
+                child: Center(child: Icon(Icons.broken_image_rounded)),
+              ),
             ),
           ),
         ),
@@ -504,17 +434,29 @@ class _MenuButton extends StatelessWidget {
 
 class _CharacterSelectBar extends StatefulWidget {
   final EmviaGame game;
+  final PlayableCharacter? selectedCharacter;
+  final ValueChanged<PlayableCharacter> onCharacterSelected;
 
-  const _CharacterSelectBar({required this.game});
+  const _CharacterSelectBar({
+    required this.game,
+    required this.selectedCharacter,
+    required this.onCharacterSelected,
+  });
 
   @override
   State<_CharacterSelectBar> createState() => _CharacterSelectBarState();
 }
 
 class _CharacterSelectBarState extends State<_CharacterSelectBar> {
+  PlayableCharacter? _hoveredCharacter;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final selectedCharacter = widget.selectedCharacter;
+    final selectedCard = selectedCharacter != null
+        ? _characterCardData(selectedCharacter)
+        : null;
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -526,7 +468,7 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
       child: Column(
         children: [
           Text(
-            'Character',
+            'Герої',
             style: GoogleFonts.baloo2(
               fontWeight: FontWeight.w700,
               color: theme.colorScheme.onSurface,
@@ -537,106 +479,302 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _CharacterGhost(
-                imagePath: 'images/player-selecting/olya_ghost.png',
-                label: 'Olya',
-                selected:
-                    widget.game.selectedCharacter == PlayableCharacter.olya,
+                imagePath: 'player-selecting/olya_ghost.png',
+                realImagePath: 'player/standing.png',
+                label: 'Оля',
+                selected: selectedCharacter == PlayableCharacter.olya,
+                hovered: _hoveredCharacter == PlayableCharacter.olya,
                 locked: false,
-                onTap: () {
+                onHoverChanged: (isHovering) {
                   setState(() {
-                    widget.game.selectCharacter(PlayableCharacter.olya);
+                    _hoveredCharacter = isHovering
+                        ? PlayableCharacter.olya
+                        : (_hoveredCharacter == PlayableCharacter.olya
+                              ? null
+                              : _hoveredCharacter);
+                  });
+                },
+                onTap: () {
+                  widget.onCharacterSelected(PlayableCharacter.olya);
+                },
+              ),
+              const SizedBox(width: 10),
+              _CharacterGhost(
+                imagePath: 'player-selecting/liam_ghost.png',
+                label: 'Ліам',
+                selected: selectedCharacter == PlayableCharacter.liam,
+                hovered: _hoveredCharacter == PlayableCharacter.liam,
+                locked: true,
+                onHoverChanged: (isHovering) {
+                  setState(() {
+                    _hoveredCharacter = isHovering
+                        ? PlayableCharacter.liam
+                        : (_hoveredCharacter == PlayableCharacter.liam
+                              ? null
+                              : _hoveredCharacter);
                   });
                 },
               ),
               const SizedBox(width: 10),
               _CharacterGhost(
-                imagePath: 'images/player-selecting/liam_ghost.png',
-                label: 'Liam',
-                selected:
-                    widget.game.selectedCharacter == PlayableCharacter.liam,
+                imagePath: 'player-selecting/olenka_ghost.png',
+                label: 'Оленка',
+                selected: selectedCharacter == PlayableCharacter.olenka,
+                hovered: _hoveredCharacter == PlayableCharacter.olenka,
                 locked: true,
-              ),
-              const SizedBox(width: 10),
-              _CharacterGhost(
-                imagePath: 'images/player-selecting/olenka_ghost.png',
-                label: 'Olenka',
-                selected:
-                    widget.game.selectedCharacter == PlayableCharacter.olenka,
-                locked: true,
+                onHoverChanged: (isHovering) {
+                  setState(() {
+                    _hoveredCharacter = isHovering
+                        ? PlayableCharacter.olenka
+                        : (_hoveredCharacter == PlayableCharacter.olenka
+                              ? null
+                              : _hoveredCharacter);
+                  });
+                },
               ),
             ],
           ),
+          const SizedBox(height: 12),
+          _CharacterInfoCard(data: selectedCard),
         ],
       ),
+    );
+  }
+
+  _CharacterCardData _characterCardData(PlayableCharacter character) {
+    final loc = AppLocalizationsGen.of(context)!;
+    switch (character) {
+      case PlayableCharacter.olya:
+        return _CharacterCardData(
+          title: loc.character_olya_title,
+          quote: loc.character_olya_quote,
+          trait: loc.character_olya_trait,
+          superPower: loc.character_olya_superPower,
+          description: loc.character_olya_description,
+        );
+      case PlayableCharacter.liam:
+        return _CharacterCardData(
+          title: loc.character_liam_title,
+          quote: loc.character_liam_quote,
+          trait: loc.character_liam_trait,
+          superPower: loc.character_liam_superPower,
+          description: loc.character_liam_description,
+        );
+      case PlayableCharacter.olenka:
+        return _CharacterCardData(
+          title: loc.character_olenka_title,
+          quote: loc.character_olenka_quote,
+          trait: loc.character_olenka_trait,
+          superPower: loc.character_olenka_superPower,
+          description: loc.character_olenka_description,
+        );
+    }
+  }
+}
+
+class _CharacterCardData {
+  final String title;
+  final String quote;
+  final String trait;
+  final String superPower;
+  final String description;
+
+  const _CharacterCardData({
+    required this.title,
+    required this.quote,
+    required this.trait,
+    required this.superPower,
+    required this.description,
+  });
+}
+
+class _CharacterInfoCard extends StatelessWidget {
+  final _CharacterCardData? data;
+
+  const _CharacterInfoCard({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: theme.colorScheme.outlineVariant),
+      ),
+      child: data == null
+          ? Text(
+              'Обери героя, щоб побачити опис',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  data!.title,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  data!.quote,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontStyle: FontStyle.italic,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Особливість: ${data!.trait}',
+                  style: theme.textTheme.bodySmall,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Суперсила: ${data!.superPower}',
+                  style: theme.textTheme.bodySmall,
+                ),
+                const SizedBox(height: 4),
+                Text(data!.description, style: theme.textTheme.bodySmall),
+              ],
+            ),
     );
   }
 }
 
 class _CharacterGhost extends StatelessWidget {
   final String imagePath;
+  final String? realImagePath;
   final String label;
   final bool selected;
+  final bool hovered;
   final bool locked;
+  final ValueChanged<bool>? onHoverChanged;
   final VoidCallback? onTap;
 
   const _CharacterGhost({
     required this.imagePath,
+    this.realImagePath,
     required this.label,
     required this.selected,
+    required this.hovered,
     required this.locked,
+    this.onHoverChanged,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return InkWell(
-      onTap: locked ? null : onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Ink(
-        width: 84,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: selected
-                ? theme.colorScheme.primary
-                : theme.colorScheme.outlineVariant,
-            width: selected ? 2 : 1,
+    final bool showRealSprite =
+        !locked && (selected || hovered) && realImagePath != null;
+    final String displayPath = showRealSprite ? realImagePath! : imagePath;
+
+    return MouseRegion(
+      onEnter: (_) => onHoverChanged?.call(true),
+      onExit: (_) => onHoverChanged?.call(false),
+      child: InkWell(
+        onTap: locked ? null : onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Ink(
+          width: 84,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: selected
+                  ? theme.colorScheme.primary
+                  : theme.colorScheme.outlineVariant,
+              width: selected ? 2 : 1,
+            ),
+            boxShadow: selected
+                ? [
+                    BoxShadow(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.25),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
+            color: locked
+                ? theme.colorScheme.surfaceContainerHighest.withValues(
+                    alpha: 0.5,
+                  )
+                : (selected
+                      ? theme.colorScheme.primaryContainer.withValues(
+                          alpha: 0.3,
+                        )
+                      : theme.colorScheme.surface),
           ),
-          color: locked
-              ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
-              : theme.colorScheme.surface,
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              height: 76,
-              child: Stack(
-                children: [
-                  Center(child: Image.asset(imagePath, fit: BoxFit.contain)),
-                  if (locked)
-                    Positioned(
-                      right: 2,
-                      top: 2,
-                      child: Icon(
-                        Icons.lock,
-                        size: 16,
-                        color: theme.colorScheme.onSurfaceVariant,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 76,
+                child: Stack(
+                  children: [
+                    Center(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 220),
+                        switchInCurve: Curves.easeOutCubic,
+                        switchOutCurve: Curves.easeInCubic,
+                        transitionBuilder: (child, animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: ScaleTransition(
+                              scale: Tween<double>(
+                                begin: 0.92,
+                                end: 1.0,
+                              ).animate(animation),
+                              child: child,
+                            ),
+                          );
+                        },
+                        child: Image.asset(
+                          'assets/images/$displayPath',
+                          key: ValueKey(displayPath),
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
-                ],
+                    if (locked)
+                      Positioned(
+                        right: 2,
+                        top: 2,
+                        child: Icon(
+                          Icons.lock,
+                          size: 16,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    if (selected && !locked)
+                      Positioned(
+                        left: 2,
+                        top: 2,
+                        child: Icon(
+                          Icons.check_circle,
+                          size: 16,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                  ],
+                ),
               ),
-            ),
-            Text(
-              label,
-              style: GoogleFonts.baloo2(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onSurface,
+              Text(
+                label,
+                style: GoogleFonts.baloo2(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -3,13 +3,13 @@ import 'game_scene.dart';
 
 class ClassroomScene extends GameScene {
   ClassroomScene()
-    : super(backgroundPath: 'images/scenes/classroom/classroom.png');
+    : super(backgroundPath: 'scenes/classroom/classroom.png');
 
   SpriteComponent? _pathOverlay;
 
   Future<void> showPathImage() async {
     background.sprite = await game.loadSprite(
-      'images/scenes/classroom/path.png',
+      'scenes/classroom/path.png',
     );
     await clearPathOverlay();
   }
