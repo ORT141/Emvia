@@ -6,7 +6,7 @@ enum PlayerState { standing, walking }
 
 class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
     with HasGameReference<EmviaGame>, KeyboardHandler {
-  OlyaPlayer() : super(size: Vector2(100, 200), anchor: Anchor.center);
+  OlyaPlayer() : super(size: Vector2(130, 260), anchor: Anchor.center);
 
   late final SpriteAnimation _standingAnimation;
   late final SpriteAnimation _walkingAnimation;
@@ -59,9 +59,9 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
 
     position.x = position.x.clamp(
       size.x / 2,
-      EmviaGame.worldWidth - size.x / 2,
+      game.worldRoot.size.x - size.x / 2,
     );
-    position.y = game.worldRoot.size.y / 2;
+    position.y = game.worldRoot.size.y * 0.75;
   }
 
   @override

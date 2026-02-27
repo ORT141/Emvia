@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:emvia/l10n/app_localizations.dart';
 
 import '../game/emvia_game.dart';
 
@@ -11,6 +12,7 @@ class CalmMapOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final profile = game.surveyProfile;
+    final l = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface.withValues(alpha: 0.96),
@@ -27,7 +29,7 @@ class CalmMapOverlay extends StatelessWidget {
                 children: [
                   Text(
                     game.storyResultTitle.isEmpty
-                        ? 'Персональний артефакт'
+                        ? l.calm_map_personal_artifact
                         : game.storyResultTitle,
                     style: theme.textTheme.headlineSmall?.copyWith(
                       color: theme.colorScheme.primary,
@@ -54,21 +56,33 @@ class CalmMapOverlay extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Твоя Мапа спокою',
+                          l.calm_map_title,
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w700,
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Text('• Патерн: ${profile.calmingPatternLabel}'),
-                        Text('• Предмет опори: ${profile.calmingItemLabel}'),
                         Text(
-                          '• Фраза підтримки: ${profile.supportMessageLabel}',
+                          l.calm_map_pattern(
+                            profile.calmingPatternLabel(context),
+                          ),
                         ),
-                        Text('• Символ опори: ${profile.supportSymbolEmoji}'),
+                        Text(
+                          l.calm_map_item(profile.calmingItemLabel(context)),
+                        ),
+                        Text(
+                          l.calm_map_support_message(
+                            profile.supportMessageLabel(context),
+                          ),
+                        ),
+                        Text(
+                          l.calm_map_support_symbol(profile.supportSymbolEmoji),
+                        ),
                         if (game.selectedTools.isNotEmpty)
                           Text(
-                            '• Обрані ресурси: ${game.selectedTools.join(', ')}',
+                            l.calm_map_selected_tools(
+                              game.selectedTools.join(', '),
+                            ),
                           ),
                       ],
                     ),
@@ -82,7 +96,7 @@ class CalmMapOverlay extends StatelessWidget {
                           game.overlays.add('MainMenu');
                         },
                         icon: const Icon(Icons.home_rounded),
-                        label: const Text('У головне меню'),
+                        label: Text(l.backToMenu),
                       ),
                       const SizedBox(width: 10),
                       OutlinedButton.icon(
@@ -91,7 +105,7 @@ class CalmMapOverlay extends StatelessWidget {
                           game.overlays.remove('CalmMap');
                         },
                         icon: const Icon(Icons.replay_rounded),
-                        label: const Text('Зіграти ще раз'),
+                        label: Text(l.play_again),
                       ),
                     ],
                   ),

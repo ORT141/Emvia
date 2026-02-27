@@ -553,6 +553,354 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'Navigates complex urban environments and teaches respect for the independence of visually impaired people.'**
   String get character_olenka_description;
+
+  /// No description provided for @survey_calibration_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Sensory Profile Calibration'**
+  String get survey_calibration_title;
+
+  /// No description provided for @survey_calibration_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Answers will personalize Olya\'s story and the final \"Map of Calm\".'**
+  String get survey_calibration_subtitle;
+
+  /// No description provided for @survey_save_continue.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and Continue'**
+  String get survey_save_continue;
+
+  /// No description provided for @path_choice_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Route'**
+  String get path_choice_title;
+
+  /// No description provided for @path_first.
+  ///
+  /// In en, this message translates to:
+  /// **'First Path'**
+  String get path_first;
+
+  /// No description provided for @path_second.
+  ///
+  /// In en, this message translates to:
+  /// **'Second Path'**
+  String get path_second;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @calm_map_personal_artifact.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Artifact'**
+  String get calm_map_personal_artifact;
+
+  /// No description provided for @calm_map_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Map of Calm'**
+  String get calm_map_title;
+
+  /// No description provided for @calm_map_pattern.
+  ///
+  /// In en, this message translates to:
+  /// **'Pattern: {value}'**
+  String calm_map_pattern(String value);
+
+  /// No description provided for @calm_map_item.
+  ///
+  /// In en, this message translates to:
+  /// **'Safe Object: {value}'**
+  String calm_map_item(String value);
+
+  /// No description provided for @calm_map_support_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Phrase: {value}'**
+  String calm_map_support_message(String value);
+
+  /// No description provided for @calm_map_support_symbol.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Symbol: {value}'**
+  String calm_map_support_symbol(String value);
+
+  /// No description provided for @calm_map_selected_tools.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Resources: {value}'**
+  String calm_map_selected_tools(String value);
+
+  /// No description provided for @play_again.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Again'**
+  String get play_again;
+
+  /// No description provided for @survey_safe_color_title.
+  ///
+  /// In en, this message translates to:
+  /// **'1. What color feels safe for you?'**
+  String get survey_safe_color_title;
+
+  /// No description provided for @survey_mint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint'**
+  String get survey_mint;
+
+  /// No description provided for @survey_lavender.
+  ///
+  /// In en, this message translates to:
+  /// **'Lavender'**
+  String get survey_lavender;
+
+  /// No description provided for @survey_deep_ocean.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep Blue'**
+  String get survey_deep_ocean;
+
+  /// No description provided for @survey_sand.
+  ///
+  /// In en, this message translates to:
+  /// **'Warm Sand'**
+  String get survey_sand;
+
+  /// No description provided for @survey_calming_pattern_title.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Which pattern is calming?'**
+  String get survey_calming_pattern_title;
+
+  /// No description provided for @survey_geometry.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Geometry'**
+  String get survey_geometry;
+
+  /// No description provided for @survey_nature.
+  ///
+  /// In en, this message translates to:
+  /// **'Nature Motifs'**
+  String get survey_nature;
+
+  /// No description provided for @survey_stars.
+  ///
+  /// In en, this message translates to:
+  /// **'Starry Sky'**
+  String get survey_stars;
+
+  /// No description provided for @survey_clouds.
+  ///
+  /// In en, this message translates to:
+  /// **'Soft Clouds'**
+  String get survey_clouds;
+
+  /// No description provided for @survey_calming_item_title.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Which object gives a sense of calm?'**
+  String get survey_calming_item_title;
+
+  /// No description provided for @survey_book.
+  ///
+  /// In en, this message translates to:
+  /// **'Book'**
+  String get survey_book;
+
+  /// No description provided for @survey_stones.
+  ///
+  /// In en, this message translates to:
+  /// **'Pouch with Stones'**
+  String get survey_stones;
+
+  /// No description provided for @survey_toy.
+  ///
+  /// In en, this message translates to:
+  /// **'Calming Toy'**
+  String get survey_toy;
+
+  /// No description provided for @survey_sound_trigger_title.
+  ///
+  /// In en, this message translates to:
+  /// **'4. Which sounds annoy you?'**
+  String get survey_sound_trigger_title;
+
+  /// No description provided for @survey_crowd.
+  ///
+  /// In en, this message translates to:
+  /// **'Loud Crowd'**
+  String get survey_crowd;
+
+  /// No description provided for @survey_mechanical.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharp Mechanical Sounds'**
+  String get survey_mechanical;
+
+  /// No description provided for @survey_high_pitch.
+  ///
+  /// In en, this message translates to:
+  /// **'High Pitch'**
+  String get survey_high_pitch;
+
+  /// No description provided for @survey_chaotic_music.
+  ///
+  /// In en, this message translates to:
+  /// **'Chaotic Loud Music'**
+  String get survey_chaotic_music;
+
+  /// No description provided for @survey_calming_action_title.
+  ///
+  /// In en, this message translates to:
+  /// **'5. Which movements calm you down?'**
+  String get survey_calming_action_title;
+
+  /// No description provided for @survey_squeeze.
+  ///
+  /// In en, this message translates to:
+  /// **'Squeezing a soft object'**
+  String get survey_squeeze;
+
+  /// No description provided for @survey_breathing.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep slow breathing'**
+  String get survey_breathing;
+
+  /// No description provided for @survey_counting.
+  ///
+  /// In en, this message translates to:
+  /// **'Counting objects'**
+  String get survey_counting;
+
+  /// No description provided for @survey_eyes_closed.
+  ///
+  /// In en, this message translates to:
+  /// **'Closing eyes briefly'**
+  String get survey_eyes_closed;
+
+  /// No description provided for @survey_panic_style_title.
+  ///
+  /// In en, this message translates to:
+  /// **'6. What does your \"panic\" look like?'**
+  String get survey_panic_style_title;
+
+  /// No description provided for @survey_shake.
+  ///
+  /// In en, this message translates to:
+  /// **'Screen shakes and pulses'**
+  String get survey_shake;
+
+  /// No description provided for @survey_blur.
+  ///
+  /// In en, this message translates to:
+  /// **'Image is blurred like in fog'**
+  String get survey_blur;
+
+  /// No description provided for @survey_acid.
+  ///
+  /// In en, this message translates to:
+  /// **'Bright \"acid\" colors'**
+  String get survey_acid;
+
+  /// No description provided for @survey_noise.
+  ///
+  /// In en, this message translates to:
+  /// **'Image is noisy and doubled'**
+  String get survey_noise;
+
+  /// No description provided for @survey_support_message_title.
+  ///
+  /// In en, this message translates to:
+  /// **'7. What message would support you?'**
+  String get survey_support_message_title;
+
+  /// No description provided for @survey_safe_breathe.
+  ///
+  /// In en, this message translates to:
+  /// **'You are safe, just breathe'**
+  String get survey_safe_breathe;
+
+  /// No description provided for @survey_not_alone.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not alone, we will get through this together'**
+  String get survey_not_alone;
+
+  /// No description provided for @survey_your_world_strength.
+  ///
+  /// In en, this message translates to:
+  /// **'Your world is your strength, show it'**
+  String get survey_your_world_strength;
+
+  /// No description provided for @survey_all_good_time.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s okay. Give yourself time to recover'**
+  String get survey_all_good_time;
+
+  /// No description provided for @survey_support_symbol_title.
+  ///
+  /// In en, this message translates to:
+  /// **'8. What form of support will you choose?'**
+  String get survey_support_symbol_title;
+
+  /// No description provided for @survey_shield.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield'**
+  String get survey_shield;
+
+  /// No description provided for @survey_cat.
+  ///
+  /// In en, this message translates to:
+  /// **'Cat'**
+  String get survey_cat;
+
+  /// No description provided for @survey_battery.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery'**
+  String get survey_battery;
+
+  /// No description provided for @survey_anchor.
+  ///
+  /// In en, this message translates to:
+  /// **'Anchor'**
+  String get survey_anchor;
+
+  /// No description provided for @classroom.
+  ///
+  /// In en, this message translates to:
+  /// **'Classroom'**
+  String get classroom;
+
+  /// No description provided for @first_path_description.
+  ///
+  /// In en, this message translates to:
+  /// **'You chose the first route and reduced overload by moving along a predictable path.'**
+  String get first_path_description;
+
+  /// No description provided for @second_path_description.
+  ///
+  /// In en, this message translates to:
+  /// **'You chose the second route and maintained control through a personal navigation strategy.'**
+  String get second_path_description;
+
+  /// No description provided for @map_of_calm_olya.
+  ///
+  /// In en, this message translates to:
+  /// **'Map of Calm: Olya'**
+  String get map_of_calm_olya;
 }
 
 class _AppLocalizationsGenDelegate

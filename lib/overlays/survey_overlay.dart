@@ -1,6 +1,7 @@
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/game/survey_service.dart';
 import 'package:flutter/material.dart';
+import 'package:emvia/l10n/app_localizations.dart';
 
 class SurveyOverlay extends StatefulWidget {
   final EmviaGame game;
@@ -18,6 +19,9 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l = AppLocalizations.of(context)!;
+    final questions = SurveyService.localizedQuestions(context);
+
     return Scaffold(
       backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.32),
       body: Center(
@@ -36,7 +40,7 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Калібрування сенсорного профілю',
+                    l.survey_calibration_title,
                     style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w800,
                       color: theme.colorScheme.primary,
@@ -44,13 +48,13 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Відповіді персоналізують історію Олі та фінальну «Мапу спокою».',
+                    l.survey_calibration_subtitle,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
                   const SizedBox(height: 20),
-                  ...SurveyService.questions.map((question) {
+                  ...questions.map((question) {
                     final selected = _answers[question.id];
 
                     return Padding(
@@ -111,8 +115,8 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         elevation: 0,
                       ),
-                      onPressed: _isComplete ? _submit : null,
-                      child: const Text('Зберегти та продовжити'),
+                      onPressed: _isComplete(questions) ? _submit : null,
+                      child: Text(l.survey_save_continue),
                     ),
                   ),
                 ],
@@ -124,7 +128,8 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
     );
   }
 
-  bool get _isComplete => _answers.length == SurveyService.questions.length;
+  bool _isComplete(List<SurveyQuestion> questions) =>
+      _answers.length == questions.length;
 
   Future<void> _submit() async {
     await _surveyService.saveSurvey(_answers);

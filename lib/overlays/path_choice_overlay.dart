@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:emvia/l10n/app_localizations.dart';
 
 import '../game/emvia_game.dart';
 
@@ -25,21 +26,21 @@ class _PathChoiceOverlayState extends State<PathChoiceOverlay> {
   @override
   void dispose() {
     game.clearPathOverlay();
-    game.restoreClassroomBackground();
     super.dispose();
   }
 
   void _onAccept() {
     if (_selectedIndex == 0) {
-      game.chooseFirstPath();
+      game.chooseFirstPath(context);
     } else if (_selectedIndex == 1) {
-      game.chooseSecondPath();
+      game.chooseSecondPath(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Colors.black.withValues(alpha: 0.12),
@@ -57,7 +58,7 @@ class _PathChoiceOverlayState extends State<PathChoiceOverlay> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Обери маршрут',
+                      l.path_choice_title,
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w800,
                       ),
@@ -67,22 +68,26 @@ class _PathChoiceOverlayState extends State<PathChoiceOverlay> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _OptionChip(
-                          label: 'Перший шлях',
-                          selected: _selectedIndex == 0,
-                          onTap: () {
-                            setState(() => _selectedIndex = 0);
-                            game.previewPathOverlay(0);
-                          },
+                        Expanded(
+                          child: _OptionChip(
+                            label: l.path_first,
+                            selected: _selectedIndex == 0,
+                            onTap: () {
+                              setState(() => _selectedIndex = 0);
+                              game.previewPathOverlay(0);
+                            },
+                          ),
                         ),
                         const SizedBox(width: 12),
-                        _OptionChip(
-                          label: 'Другий шлях',
-                          selected: _selectedIndex == 1,
-                          onTap: () {
-                            setState(() => _selectedIndex = 1);
-                            game.previewPathOverlay(1);
-                          },
+                        Expanded(
+                          child: _OptionChip(
+                            label: l.path_second,
+                            selected: _selectedIndex == 1,
+                            onTap: () {
+                              setState(() => _selectedIndex = 1);
+                              game.previewPathOverlay(1);
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -92,22 +97,13 @@ class _PathChoiceOverlayState extends State<PathChoiceOverlay> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        TextButton(
-                          onPressed: () {
-                            game.clearPathOverlay();
-                            game.restoreClassroomBackground();
-                            game.overlays.remove('PathChoice');
-                          },
-                          child: const Text('Скасувати'),
-                        ),
-                        const SizedBox(width: 8),
                         ElevatedButton(
                           onPressed: _selectedIndex == null ? null : _onAccept,
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(100, 36),
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                           ),
-                          child: const Text('Підтвердити'),
+                          child: Text(l.confirm),
                         ),
                       ],
                     ),
@@ -153,18 +149,28 @@ class _OptionChip extends StatelessWidget {
             width: selected ? 2 : 1,
           ),
         ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.map,
-              size: 18,
-              color: selected
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.onSurfaceVariant,
-            ),
-            const SizedBox(width: 8),
-            Text(label, style: theme.textTheme.bodyMedium),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.map,
+                size: 24,
+                color: selected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                label,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: selected ? FontWeight.bold : null,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

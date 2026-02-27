@@ -303,5 +303,98 @@
   "character_olenka_description": "Навігує у складному міському середовищі та вчить повазі до самостійності незрячих людей.",
   "@character_olenka_description": {
     "description": "Olenka long description"
-  }
+  },
+  "survey_calibration_title": "Калібрування сенсорного профілю",
+  "survey_calibration_subtitle": "Відповіді персоналізують історію Олі та фінальну «Мапу спокою».",
+  "survey_save_continue": "Зберегти та продовжити",
+  "path_choice_title": "Обери маршрут",
+  "path_first": "Перший шлях",
+  "path_second": "Другий шлях",
+  "confirm": "Підтвердити",
+  "calm_map_personal_artifact": "Персональний артефакт",
+  "calm_map_title": "Твоя Мапа спокою",
+  "calm_map_pattern": "Патерн: {value}",
+  "@calm_map_pattern": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "calm_map_item": "Предмет опори: {value}",
+  "@calm_map_item": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "calm_map_support_message": "Фраза підтримки: {value}",
+  "@calm_map_support_message": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "calm_map_support_symbol": "Символ опори: {value}",
+  "@calm_map_support_symbol": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "calm_map_selected_tools": "Обрані ресурси: {value}",
+  "@calm_map_selected_tools": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "play_again": "Зіграти ще раз",
+  "survey_safe_color_title": "1. Який колір для тебе — безпечний?",
+  "survey_mint": "М’ятний",
+  "survey_lavender": "Лавандовий",
+  "survey_deep_ocean": "Глибокий синій",
+  "survey_sand": "Теплий пісочний",
+  "survey_calming_pattern_title": "2. Який візерунок заспокоює?",
+  "survey_geometry": "Чітка геометрія",
+  "survey_nature": "Природні мотиви",
+  "survey_stars": "Зоряне небо",
+  "survey_clouds": "М’які хмари",
+  "survey_calming_item_title": "3. Який предмет дає відчуття спокою?",
+  "survey_book": "Книжка",
+  "survey_stones": "Мішечок з камінчиками",
+  "survey_toy": "Заспокоююча іграшка",
+  "survey_sound_trigger_title": "4. Які звуки тебе дратують?",
+  "survey_crowd": "Гучний натовп",
+  "survey_mechanical": "Різкі механічні звуки",
+  "survey_high_pitch": "Високий писк",
+  "survey_chaotic_music": "Хаотична гучна музика",
+  "survey_calming_action_title": "5. Які рухи тебе заспокоюють?",
+  "survey_squeeze": "Стискання м’якого предмета",
+  "survey_breathing": "Глибоке повільне дихання",
+  "survey_counting": "Рахунок предметів",
+  "survey_eyes_closed": "Коротко закрити очі",
+  "survey_panic_style_title": "6. Як виглядає твоя “паніка”?",
+  "survey_shake": "Екран тремтить і пульсує",
+  "survey_blur": "Картинка розмита, як у тумані",
+  "survey_acid": "Яскраві “кислотні” кольори",
+  "survey_noise": "Зображення шумить і двоїться",
+  "survey_support_message_title": "7. Яке повідомлення тебе б підтримало?",
+  "survey_safe_breathe": "Ти в безпеці, просто дихай",
+  "survey_not_alone": "Ти не одна, ми пройдемо це разом",
+  "survey_your_world_strength": "Твій світ — це твоя сила, покажи його",
+  "survey_all_good_time": "Все гаразд. Дай собі час на відновлення",
+  "survey_support_symbol_title": "8. Яку форму підтримки обереш?",
+  "survey_shield": "Щит",
+  "survey_cat": "Котик",
+  "survey_battery": "Батарейка",
+  "survey_anchor": "Якір",
+  "classroom": "Клас",
+  "first_path_description": "Ти обрала перший маршрут і зменшила перевантаження, рухаючись передбачуваним шляхом.",
+  "second_path_description": "Ти обрала другий маршрут і зберегла контроль через особисту стратегію навігації.",
+  "map_of_calm_olya": "Мапа спокою: Оля"
 }

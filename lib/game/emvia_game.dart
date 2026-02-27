@@ -3,18 +3,22 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:emvia/l10n/app_localizations.dart';
 
 import 'survey_service.dart';
 import 'components/player.dart';
 import 'scenes/game_scene.dart';
 import 'scenes/classroom_scene.dart';
+import 'scenes/corridor_scene.dart';
 import 'dialog_model.dart';
+
+import 'mixins/dialog_handler.dart';
 
 enum PlayableCharacter { olya, liam, olenka }
 
 class EmviaGame extends FlameGame
-    with TapCallbacks, HasKeyboardHandlerComponents {
+    with TapCallbacks, HasKeyboardHandlerComponents, DialogHandler {
   static const double worldWidth = 2000.0;
 
   static const double _cameraFollowSharpness = 5.0;
@@ -28,10 +32,11 @@ class EmviaGame extends FlameGame
   final Vector2 _cameraPos = Vector2.zero();
   double _zoom = _defaultZoom;
 
-  static const double _defaultZoom = 1.4;
+  static const double _defaultZoom = 1.1;
 
   GameScene? currentScene;
   ClassroomScene? _classroomScene;
+  bool _isSceneTransitioning = false;
 
   bool freezeForPathChoice = false;
 
@@ -81,15 +86,22 @@ class EmviaGame extends FlameGame
   }
 
   Future<void> loadScene(GameScene scene) async {
+    _isSceneTransitioning = true;
+
     if (currentScene != null) {
       currentScene!.removeFromParent();
     }
+
+    worldRoot.size = Vector2(_sceneWorldWidth(scene), size.y);
+
     currentScene = scene;
     await worldRoot.add(scene);
     if (scene is ClassroomScene) {
       _classroomScene = scene;
+      _updateClassroomZoom();
     } else {
       _classroomScene = null;
+      worldRoot.scale = Vector2.all(_zoom);
     }
 
     if (olya.parent == null) {
@@ -97,10 +109,34 @@ class EmviaGame extends FlameGame
     }
     olya.priority = 10;
 
-    worldRoot.size = Vector2(worldWidth, size.y);
-
-    olya.position = Vector2(worldRoot.size.x / 2, worldRoot.size.y / 2);
+    olya.position = _sceneSpawnPoint(scene);
     _snapCameraToPlayer();
+
+    _isSceneTransitioning = false;
+  }
+
+  void _updateClassroomZoom() {
+    final scene = _classroomScene;
+    if (scene == null || !scene.isLoaded) return;
+    final h = scene.bgHeight;
+    if (h <= 0) return;
+    _zoom = size.y / h;
+    worldRoot.size = Vector2(worldRoot.size.x, h);
+    worldRoot.scale = Vector2.all(_zoom);
+  }
+
+  double _sceneWorldWidth(GameScene scene) {
+    return worldWidth;
+  }
+
+  Vector2 _sceneSpawnPoint(GameScene scene) {
+    if (scene is ClassroomScene) {
+      return Vector2(size.x * 0.2, worldRoot.size.y * 0.75);
+    }
+    if (scene is CorridorScene) {
+      return Vector2(80, worldRoot.size.y * 0.75);
+    }
+    return Vector2(worldRoot.size.x / 2, worldRoot.size.y * 0.75);
   }
 
   void startGame() {
@@ -138,7 +174,6 @@ class EmviaGame extends FlameGame
     isStressMode = false;
     noiseEffect.opacity = 0.0;
     _selectedTools.clear();
-    _selectedTools.add('Клас');
 
     overlays.remove('Dialog');
     overlays.remove('CalmMap');
@@ -150,6 +185,7 @@ class EmviaGame extends FlameGame
 
     freezeForPathChoice = true;
     worldRoot.scale = Vector2.all(1.0);
+    olya.opacity = 0;
     _classroomScene?.showPathImage();
 
     overlays.add('PathChoice');
@@ -174,29 +210,43 @@ class EmviaGame extends FlameGame
     _classroomScene?.showClassroomImage();
   }
 
-  void chooseFirstPath() {
-    _selectedTools.add('Перший маршрут');
-    _storyResultTitle = 'Мапа спокою: Оля';
-    _storyResultDescription =
-        'Ти обрала перший маршрут і зменшила перевантаження, рухаючись передбачуваним шляхом.';
+  void chooseFirstPath(BuildContext context) {
+    if (!context.mounted) return;
+    final l = AppLocalizations.of(context)!;
+    _selectedTools.add(l.classroom);
+    _selectedTools.add(l.path_first);
+    _storyResultTitle = l.map_of_calm_olya;
+    _storyResultDescription = l.first_path_description;
     _finishPathChoice();
   }
 
-  void chooseSecondPath() {
-    _selectedTools.add('Другий маршрут');
-    _storyResultTitle = 'Мапа спокою: Оля';
-    _storyResultDescription =
-        'Ти обрала другий маршрут і зберегла контроль через особисту стратегію навігації.';
+  void chooseSecondPath(BuildContext context) {
+    if (!context.mounted) return;
+    final l = AppLocalizations.of(context)!;
+    _selectedTools.add(l.classroom);
+    _selectedTools.add(l.path_second);
+    _storyResultTitle = l.map_of_calm_olya;
+    _storyResultDescription = l.second_path_description;
     _finishPathChoice();
   }
 
   void _finishPathChoice() {
     sceneIndex = 2;
     overlays.remove('PathChoice');
+    olya.opacity = 1;
+    _classroomScene?.showClassroomImage();
     freezeForPathChoice = false;
-    worldRoot.scale = Vector2.all(_zoom);
+    _updateClassroomZoom();
+    olya.position = _sceneSpawnPoint(currentScene!);
     _snapCameraToPlayer();
-    overlays.add('CalmMap');
+  }
+
+  Future<void> _transitionToCorridor() async {
+    if (_isSceneTransitioning) return;
+    sceneIndex = 3;
+    await loadScene(CorridorScene());
+    olya.position.x = olya.size.x / 2 + 10;
+    _snapCameraToPlayer();
   }
 
   void calmDown() {
@@ -208,49 +258,11 @@ class EmviaGame extends FlameGame
         nodes: {
           'calmed': DialogNode(
             id: 'calmed',
-            text: (_) => surveyProfile.supportMessageLabel,
+            text: (_) => surveyProfile.supportMessageLabel(buildContext!),
           ),
         },
       ),
     );
-  }
-
-  void startDialog(DialogTree tree) {
-    currentTree = tree;
-    currentNode = tree.getNode(tree.startNodeId);
-    currentNode?.onSelect?.call(this);
-    overlays.add('Dialog');
-  }
-
-  void selectChoice(DialogChoice choice) {
-    choice.onSelect?.call(this);
-    if (choice.nextNodeId != null) {
-      currentNode = currentTree?.getNode(choice.nextNodeId);
-      currentNode?.onSelect?.call(this);
-      if (currentNode == null) {
-        overlays.remove('Dialog');
-      }
-    } else {
-      overlays.remove('Dialog');
-      currentNode = null;
-    }
-  }
-
-  void nextDialog() {
-    if (currentNode?.choices != null && currentNode!.choices!.isNotEmpty) {
-      return;
-    }
-
-    if (currentNode?.nextNodeId != null) {
-      currentNode = currentTree?.getNode(currentNode!.nextNodeId);
-      currentNode?.onSelect?.call(this);
-      if (currentNode == null) {
-        overlays.remove('Dialog');
-      }
-    } else {
-      overlays.remove('Dialog');
-      currentNode = null;
-    }
   }
 
   void pauseGame() {
@@ -274,6 +286,12 @@ class EmviaGame extends FlameGame
       worldRoot.scale = Vector2.all(1.0);
       worldRoot.position = Vector2.zero();
       return;
+    }
+
+    if (currentScene is ClassroomScene) {
+      if (olya.position.x >= worldRoot.size.x - olya.size.x / 2 - 10) {
+        _transitionToCorridor();
+      }
     }
 
     final target = Vector2(olya.position.x, olya.position.y);
@@ -302,10 +320,25 @@ class EmviaGame extends FlameGame
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
 
-    worldRoot.size.y = size.y;
+    final scene = currentScene;
+    if (scene is ClassroomScene && !freezeForPathChoice && scene.isLoaded) {
+      _updateClassroomZoom();
+    } else {
+      worldRoot.size = Vector2(
+        scene != null ? _sceneWorldWidth(scene) : worldWidth,
+        size.y,
+      );
+    }
 
     if (olya.parent != null) {
-      olya.position.y = size.y / 2;
+      final minX = olya.size.x / 2;
+      final maxX = worldRoot.size.x - olya.size.x / 2;
+      if (minX <= maxX) {
+        olya.position.x = olya.position.x.clamp(minX, maxX).toDouble();
+      } else {
+        olya.position.x = worldRoot.size.x / 2;
+      }
+      olya.position.y = worldRoot.size.y * 0.75;
     }
 
     _snapCameraToPlayer();

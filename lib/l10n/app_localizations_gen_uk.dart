@@ -253,4 +253,194 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   @override
   String get character_olenka_description =>
       'Навігує у складному міському середовищі та вчить повазі до самостійності незрячих людей.';
+
+  @override
+  String get survey_calibration_title => 'Калібрування сенсорного профілю';
+
+  @override
+  String get survey_calibration_subtitle =>
+      'Відповіді персоналізують історію Олі та фінальну «Мапу спокою».';
+
+  @override
+  String get survey_save_continue => 'Зберегти та продовжити';
+
+  @override
+  String get path_choice_title => 'Обери маршрут';
+
+  @override
+  String get path_first => 'Перший шлях';
+
+  @override
+  String get path_second => 'Другий шлях';
+
+  @override
+  String get confirm => 'Підтвердити';
+
+  @override
+  String get calm_map_personal_artifact => 'Персональний артефакт';
+
+  @override
+  String get calm_map_title => 'Твоя Мапа спокою';
+
+  @override
+  String calm_map_pattern(String value) {
+    return 'Патерн: $value';
+  }
+
+  @override
+  String calm_map_item(String value) {
+    return 'Предмет опори: $value';
+  }
+
+  @override
+  String calm_map_support_message(String value) {
+    return 'Фраза підтримки: $value';
+  }
+
+  @override
+  String calm_map_support_symbol(String value) {
+    return 'Символ опори: $value';
+  }
+
+  @override
+  String calm_map_selected_tools(String value) {
+    return 'Обрані ресурси: $value';
+  }
+
+  @override
+  String get play_again => 'Зіграти ще раз';
+
+  @override
+  String get survey_safe_color_title => '1. Який колір для тебе — безпечний?';
+
+  @override
+  String get survey_mint => 'М’ятний';
+
+  @override
+  String get survey_lavender => 'Лавандовий';
+
+  @override
+  String get survey_deep_ocean => 'Глибокий синій';
+
+  @override
+  String get survey_sand => 'Теплий пісочний';
+
+  @override
+  String get survey_calming_pattern_title => '2. Який візерунок заспокоює?';
+
+  @override
+  String get survey_geometry => 'Чітка геометрія';
+
+  @override
+  String get survey_nature => 'Природні мотиви';
+
+  @override
+  String get survey_stars => 'Зоряне небо';
+
+  @override
+  String get survey_clouds => 'М’які хмари';
+
+  @override
+  String get survey_calming_item_title =>
+      '3. Який предмет дає відчуття спокою?';
+
+  @override
+  String get survey_book => 'Книжка';
+
+  @override
+  String get survey_stones => 'Мішечок з камінчиками';
+
+  @override
+  String get survey_toy => 'Заспокоююча іграшка';
+
+  @override
+  String get survey_sound_trigger_title => '4. Які звуки тебе дратують?';
+
+  @override
+  String get survey_crowd => 'Гучний натовп';
+
+  @override
+  String get survey_mechanical => 'Різкі механічні звуки';
+
+  @override
+  String get survey_high_pitch => 'Високий писк';
+
+  @override
+  String get survey_chaotic_music => 'Хаотична гучна музика';
+
+  @override
+  String get survey_calming_action_title => '5. Які рухи тебе заспокоюють?';
+
+  @override
+  String get survey_squeeze => 'Стискання м’якого предмета';
+
+  @override
+  String get survey_breathing => 'Глибоке повільне дихання';
+
+  @override
+  String get survey_counting => 'Рахунок предметів';
+
+  @override
+  String get survey_eyes_closed => 'Коротко закрити очі';
+
+  @override
+  String get survey_panic_style_title => '6. Як виглядає твоя “паніка”?';
+
+  @override
+  String get survey_shake => 'Екран тремтить і пульсує';
+
+  @override
+  String get survey_blur => 'Картинка розмита, як у тумані';
+
+  @override
+  String get survey_acid => 'Яскраві “кислотні” кольори';
+
+  @override
+  String get survey_noise => 'Зображення шумить і двоїться';
+
+  @override
+  String get survey_support_message_title =>
+      '7. Яке повідомлення тебе б підтримало?';
+
+  @override
+  String get survey_safe_breathe => 'Ти в безпеці, просто дихай';
+
+  @override
+  String get survey_not_alone => 'Ти не одна, ми пройдемо це разом';
+
+  @override
+  String get survey_your_world_strength =>
+      'Твій світ — це твоя сила, покажи його';
+
+  @override
+  String get survey_all_good_time => 'Все гаразд. Дай собі час на відновлення';
+
+  @override
+  String get survey_support_symbol_title => '8. Яку форму підтримки обереш?';
+
+  @override
+  String get survey_shield => 'Щит';
+
+  @override
+  String get survey_cat => 'Котик';
+
+  @override
+  String get survey_battery => 'Батарейка';
+
+  @override
+  String get survey_anchor => 'Якір';
+
+  @override
+  String get classroom => 'Клас';
+
+  @override
+  String get first_path_description =>
+      'Ти обрала перший маршрут і зменшила перевантаження, рухаючись передбачуваним шляхом.';
+
+  @override
+  String get second_path_description =>
+      'Ти обрала другий маршрут і зберегла контроль через особисту стратегію навігації.';
+
+  @override
+  String get map_of_calm_olya => 'Мапа спокою: Оля';
 }

@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:emvia/l10n/app_localizations.dart';
 
 class SurveyQuestion {
   final String id;
@@ -52,17 +53,46 @@ class SurveyProfile {
     }
   }
 
-  String get supportMessageLabel {
+  String supportMessageLabel(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     switch (supportMessage) {
       case 'not_alone':
-        return 'Ти не одна, ми пройдемо це разом';
+        return l.survey_not_alone;
       case 'your_world_strength':
-        return 'Твій світ — це твоя сила, покажи його';
+        return l.survey_your_world_strength;
       case 'all_good_time':
-        return 'Все гаразд. Дай собі час на відновлення';
+        return l.survey_all_good_time;
       case 'safe_breathe':
       default:
-        return 'Ти в безпеці, просто дихай';
+        return l.survey_safe_breathe;
+    }
+  }
+
+  String calmingPatternLabel(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    switch (calmingPattern) {
+      case 'nature':
+        return l.survey_nature;
+      case 'stars':
+        return l.survey_stars;
+      case 'clouds':
+        return l.survey_clouds;
+      case 'geometry':
+      default:
+        return l.survey_geometry;
+    }
+  }
+
+  String calmingItemLabel(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    switch (calmingItem) {
+      case 'stones':
+        return l.survey_stones;
+      case 'toy':
+        return l.survey_toy;
+      case 'book':
+      default:
+        return l.survey_book;
     }
   }
 
@@ -80,57 +110,33 @@ class SurveyProfile {
     }
   }
 
-  String get calmingPatternLabel {
-    switch (calmingPattern) {
-      case 'nature':
-        return 'Природні мотиви';
-      case 'stars':
-        return 'Зоряне небо';
-      case 'clouds':
-        return 'М’які хмари';
-      case 'geometry':
-      default:
-        return 'Чітка геометрія';
-    }
-  }
-
-  String get calmingItemLabel {
-    switch (calmingItem) {
-      case 'stones':
-        return 'Мішечок з камінчиками';
-      case 'toy':
-        return 'Заспокоююча іграшка';
-      case 'book':
-      default:
-        return 'Книжка';
-    }
-  }
-
-  String get calmingActionLabel {
+  String calmingActionLabel(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     switch (calmingAction) {
       case 'squeeze':
-        return 'Стискання м’якого предмета';
+        return l.survey_squeeze;
       case 'counting':
-        return 'Рахунок предметів навколо';
+        return l.survey_counting;
       case 'eyes_closed':
-        return 'Коротко закрити очі';
+        return l.survey_eyes_closed;
       case 'breathing':
       default:
-        return 'Глибоке повільне дихання';
+        return l.survey_breathing;
     }
   }
 
-  String get soundTriggerLabel {
+  String soundTriggerLabel(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     switch (soundTrigger) {
       case 'mechanical':
-        return 'різкі механічні звуки';
+        return l.survey_mechanical;
       case 'high_pitch':
-        return 'високий писк';
+        return l.survey_high_pitch;
       case 'chaotic_music':
-        return 'хаотична гучна музика';
+        return l.survey_chaotic_music;
       case 'crowd':
       default:
-        return 'гучний натовп';
+        return l.survey_crowd;
     }
   }
 }
@@ -147,96 +153,93 @@ class SurveyService {
   static const String supportMessageKey = 'support_message';
   static const String supportSymbolKey = 'support_symbol';
 
-  static const List<SurveyQuestion> questions = [
-    SurveyQuestion(
-      id: safeColorKey,
-      title: '1. Який колір для тебе — безпечний?',
-      options: [
-        SurveyOption(id: 'mint', label: 'М’ятний'),
-        SurveyOption(id: 'lavender', label: 'Лавандовий'),
-        SurveyOption(id: 'deep_ocean', label: 'Глибокий синій'),
-        SurveyOption(id: 'sand', label: 'Теплий пісочний'),
-      ],
-    ),
-    SurveyQuestion(
-      id: calmingPatternKey,
-      title: '2. Який візерунок заспокоює?',
-      options: [
-        SurveyOption(id: 'geometry', label: 'Чітка геометрія'),
-        SurveyOption(id: 'nature', label: 'Природні мотиви'),
-        SurveyOption(id: 'stars', label: 'Зоряне небо'),
-        SurveyOption(id: 'clouds', label: 'М’які хмари'),
-      ],
-    ),
-    SurveyQuestion(
-      id: calmingItemKey,
-      title: '3. Який предмет дає відчуття спокою?',
-      options: [
-        SurveyOption(id: 'book', label: 'Книжка'),
-        SurveyOption(id: 'stones', label: 'Мішечок з камінчиками'),
-        SurveyOption(id: 'toy', label: 'Заспокоююча іграшка'),
-      ],
-    ),
-    SurveyQuestion(
-      id: soundTriggerKey,
-      title: '4. Які звуки тебе дратують?',
-      options: [
-        SurveyOption(id: 'crowd', label: 'Гучний натовп'),
-        SurveyOption(id: 'mechanical', label: 'Різкі механічні звуки'),
-        SurveyOption(id: 'high_pitch', label: 'Високий писк'),
-        SurveyOption(id: 'chaotic_music', label: 'Хаотична гучна музика'),
-      ],
-    ),
-    SurveyQuestion(
-      id: calmingActionKey,
-      title: '5. Які рухи тебе заспокоюють?',
-      options: [
-        SurveyOption(id: 'squeeze', label: 'Стискання м’якого предмета'),
-        SurveyOption(id: 'breathing', label: 'Глибоке повільне дихання'),
-        SurveyOption(id: 'counting', label: 'Рахунок предметів'),
-        SurveyOption(id: 'eyes_closed', label: 'Коротко закрити очі'),
-      ],
-    ),
-    SurveyQuestion(
-      id: panicStyleKey,
-      title: '6. Як виглядає твоя “паніка”?',
-      options: [
-        SurveyOption(id: 'shake', label: 'Екран тремтить і пульсує'),
-        SurveyOption(id: 'blur', label: 'Картинка розмита, як у тумані'),
-        SurveyOption(id: 'acid', label: 'Яскраві “кислотні” кольори'),
-        SurveyOption(id: 'noise', label: 'Зображення шумить і двоїться'),
-      ],
-    ),
-    SurveyQuestion(
-      id: supportMessageKey,
-      title: '7. Яке повідомлення тебе б підтримало?',
-      options: [
-        SurveyOption(id: 'safe_breathe', label: 'Ти в безпеці, просто дихай'),
-        SurveyOption(
-          id: 'not_alone',
-          label: 'Ти не одна, ми пройдемо це разом',
-        ),
-        SurveyOption(
-          id: 'your_world_strength',
-          label: 'Твій світ — це твоя сила, покажи його',
-        ),
-        SurveyOption(
-          id: 'all_good_time',
-          label: 'Все гаразд. Дай собі час на відновлення',
-        ),
-      ],
-    ),
-    SurveyQuestion(
-      id: supportSymbolKey,
-      title: '8. Яку форму підтримки обереш?',
-      options: [
-        SurveyOption(id: 'shield', label: 'Щит'),
-        SurveyOption(id: 'cat', label: 'Котик'),
-        SurveyOption(id: 'battery', label: 'Батарейка'),
-        SurveyOption(id: 'anchor', label: 'Якір'),
-      ],
-    ),
-  ];
+  static List<SurveyQuestion> localizedQuestions(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    return [
+      SurveyQuestion(
+        id: safeColorKey,
+        title: l.survey_safe_color_title,
+        options: [
+          SurveyOption(id: 'mint', label: l.survey_mint),
+          SurveyOption(id: 'lavender', label: l.survey_lavender),
+          SurveyOption(id: 'deep_ocean', label: l.survey_deep_ocean),
+          SurveyOption(id: 'sand', label: l.survey_sand),
+        ],
+      ),
+      SurveyQuestion(
+        id: calmingPatternKey,
+        title: l.survey_calming_pattern_title,
+        options: [
+          SurveyOption(id: 'geometry', label: l.survey_geometry),
+          SurveyOption(id: 'nature', label: l.survey_nature),
+          SurveyOption(id: 'stars', label: l.survey_stars),
+          SurveyOption(id: 'clouds', label: l.survey_clouds),
+        ],
+      ),
+      SurveyQuestion(
+        id: calmingItemKey,
+        title: l.survey_calming_item_title,
+        options: [
+          SurveyOption(id: 'book', label: l.survey_book),
+          SurveyOption(id: 'stones', label: l.survey_stones),
+          SurveyOption(id: 'toy', label: l.survey_toy),
+        ],
+      ),
+      SurveyQuestion(
+        id: soundTriggerKey,
+        title: l.survey_sound_trigger_title,
+        options: [
+          SurveyOption(id: 'crowd', label: l.survey_crowd),
+          SurveyOption(id: 'mechanical', label: l.survey_mechanical),
+          SurveyOption(id: 'high_pitch', label: l.survey_high_pitch),
+          SurveyOption(id: 'chaotic_music', label: l.survey_chaotic_music),
+        ],
+      ),
+      SurveyQuestion(
+        id: calmingActionKey,
+        title: l.survey_calming_action_title,
+        options: [
+          SurveyOption(id: 'squeeze', label: l.survey_squeeze),
+          SurveyOption(id: 'breathing', label: l.survey_breathing),
+          SurveyOption(id: 'counting', label: l.survey_counting),
+          SurveyOption(id: 'eyes_closed', label: l.survey_eyes_closed),
+        ],
+      ),
+      SurveyQuestion(
+        id: panicStyleKey,
+        title: l.survey_panic_style_title,
+        options: [
+          SurveyOption(id: 'shake', label: l.survey_shake),
+          SurveyOption(id: 'blur', label: l.survey_blur),
+          SurveyOption(id: 'acid', label: l.survey_acid),
+          SurveyOption(id: 'noise', label: l.survey_noise),
+        ],
+      ),
+      SurveyQuestion(
+        id: supportMessageKey,
+        title: l.survey_support_message_title,
+        options: [
+          SurveyOption(id: 'safe_breathe', label: l.survey_safe_breathe),
+          SurveyOption(id: 'not_alone', label: l.survey_not_alone),
+          SurveyOption(
+            id: 'your_world_strength',
+            label: l.survey_your_world_strength,
+          ),
+          SurveyOption(id: 'all_good_time', label: l.survey_all_good_time),
+        ],
+      ),
+      SurveyQuestion(
+        id: supportSymbolKey,
+        title: l.survey_support_symbol_title,
+        options: [
+          SurveyOption(id: 'shield', label: l.survey_shield),
+          SurveyOption(id: 'cat', label: l.survey_cat),
+          SurveyOption(id: 'battery', label: l.survey_battery),
+          SurveyOption(id: 'anchor', label: l.survey_anchor),
+        ],
+      ),
+    ];
+  }
 
   Future<bool> isSurveyCompleted() async {
     final prefs = await SharedPreferences.getInstance();
@@ -246,11 +249,8 @@ class SurveyService {
   Future<void> saveSurvey(Map<String, String> answers) async {
     final prefs = await SharedPreferences.getInstance();
 
-    for (final question in questions) {
-      final answer = answers[question.id];
-      if (answer != null) {
-        await prefs.setString(question.id, answer);
-      }
+    for (final entry in answers.entries) {
+      await prefs.setString(entry.key, entry.value);
     }
 
     await prefs.setBool(_surveyCompletedKey, true);
@@ -260,10 +260,21 @@ class SurveyService {
     final prefs = await SharedPreferences.getInstance();
 
     final result = <String, String>{};
-    for (final question in questions) {
-      final value = prefs.getString(question.id);
+    final keys = [
+      safeColorKey,
+      calmingPatternKey,
+      calmingItemKey,
+      soundTriggerKey,
+      calmingActionKey,
+      panicStyleKey,
+      supportMessageKey,
+      supportSymbolKey,
+    ];
+
+    for (final key in keys) {
+      final value = prefs.getString(key);
       if (value != null) {
-        result[question.id] = value;
+        result[key] = value;
       }
     }
 
