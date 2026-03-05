@@ -12,6 +12,8 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
   late final SpriteAnimation _walkingAnimation;
 
   final Vector2 _velocity = Vector2.zero();
+  final Vector2 _keyboardVelocity = Vector2.zero();
+  final Vector2 _mobileVelocity = Vector2.zero();
   final double _speed = 200.0;
 
   @override
@@ -42,6 +44,15 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
     super.update(dt);
     if (game.freezeForPathChoice) {
       _velocity.setZero();
+      _keyboardVelocity.setZero();
+      _mobileVelocity.setZero();
+    }
+
+    _velocity
+      ..x = _keyboardVelocity.x + _mobileVelocity.x
+      ..y = _keyboardVelocity.y + _mobileVelocity.y;
+    if (!_velocity.isZero()) {
+      _velocity.normalize();
     }
 
     position += _velocity * _speed * dt;
@@ -66,27 +77,39 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.tab) {
+      game.toggleBackpack();
+      return true;
+    }
+
     if (game.freezeForPathChoice) {
-      _velocity.setZero();
+      _keyboardVelocity.setZero();
       return false;
     }
 
-    _velocity.x = 0;
-    _velocity.y = 0;
+    _keyboardVelocity
+      ..x = 0
+      ..y = 0;
 
     if (keysPressed.contains(LogicalKeyboardKey.keyA) ||
         keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
-      _velocity.x -= 1;
+      _keyboardVelocity.x -= 1;
     }
     if (keysPressed.contains(LogicalKeyboardKey.keyD) ||
         keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
-      _velocity.x += 1;
+      _keyboardVelocity.x += 1;
     }
 
-    if (!_velocity.isZero()) {
-      _velocity.normalize();
+    if (!_keyboardVelocity.isZero()) {
+      _keyboardVelocity.normalize();
     }
 
     return super.onKeyEvent(event, keysPressed);
+  }
+
+  void setMobileDirection(double xDirection) {
+    _mobileVelocity
+      ..x = xDirection.clamp(-1.0, 1.0)
+      ..y = 0;
   }
 }

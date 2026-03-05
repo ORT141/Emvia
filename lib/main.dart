@@ -1,10 +1,11 @@
 import 'package:emvia/game/emvia_game.dart';
+import 'package:emvia/game/components/path_detail_component.dart';
 import 'package:emvia/overlays/credits_overlay.dart';
 import 'package:emvia/overlays/dialog.dart';
-import 'package:emvia/overlays/calm_map_overlay.dart';
 import 'package:emvia/overlays/main_menu.dart';
+import 'package:emvia/overlays/mobile_controls_overlay.dart';
 import 'package:emvia/overlays/pause_overlay.dart';
-import 'package:emvia/overlays/path_choice_overlay.dart';
+import 'package:emvia/overlays/backpack_overlay.dart';
 import 'package:emvia/overlays/settings_overlay.dart';
 import 'package:emvia/overlays/survey_overlay.dart';
 import 'package:flame/game.dart';
@@ -106,8 +107,31 @@ class _MyAppState extends State<MyApp> {
           'Credits': (_, game) => CreditsOverlay(game: game),
           'Pause': (_, game) => PauseOverlay(game: game),
           'Survey': (_, game) => SurveyOverlay(game: game),
-          'CalmMap': (_, game) => CalmMapOverlay(game: game),
-          'PathChoice': (_, game) => PathChoiceOverlay(game: game),
+          'Backpack': (_, game) => BackpackOverlay(game: game),
+          'MobileControls': (_, game) => MobileControlsOverlay(game: game),
+          'PathDetail': (_, game) => ValueListenableBuilder(
+                valueListenable: game.pathDetailNotifier,
+                builder: (context, value, child) {
+                  final info = value;
+                  if (info == null) return const SizedBox.shrink();
+                  return PathDetailComponent(
+                    index: info.index,
+                    title: info.title,
+                    name: info.name,
+                    description: info.description,
+                    confirmLabel: info.confirmLabel,
+                    cancelLabel: info.cancelLabel,
+                    onConfirm: () {
+                      game.applyPathChoice(info.index, game.buildContext!);
+                      game.hidePathDetail();
+                    },
+                    onCancel: () {
+                      game.hidePathDetail();
+                      game.clearPathSelection();
+                    },
+                  );
+                },
+              ),
         },
       ),
     );

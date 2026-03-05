@@ -134,6 +134,12 @@ abstract class AppLocalizationsGen {
   /// **'Resume'**
   String get resume;
 
+  /// Warning message when a path is locked.
+  ///
+  /// In en, this message translates to:
+  /// **'This way are too dangerous'**
+  String get too_dangerous;
+
   /// A line spoken by the teacher to Olya, indicating her turn time.
   ///
   /// In en, this message translates to:
@@ -590,6 +596,12 @@ abstract class AppLocalizationsGen {
   /// **'Second Path'**
   String get path_second;
 
+  /// No description provided for @path_third.
+  ///
+  /// In en, this message translates to:
+  /// **'Third Path'**
+  String get path_third;
+
   /// No description provided for @confirm.
   ///
   /// In en, this message translates to:
@@ -887,14 +899,20 @@ abstract class AppLocalizationsGen {
   /// No description provided for @first_path_description.
   ///
   /// In en, this message translates to:
-  /// **'You chose the first route and reduced overload by moving along a predictable path.'**
+  /// **'A calm, straight route with clear sightlines and familiar desks.'**
   String get first_path_description;
 
   /// No description provided for @second_path_description.
   ///
   /// In en, this message translates to:
-  /// **'You chose the second route and maintained control through a personal navigation strategy.'**
+  /// **'A winding route weaving between clustered desks and quiet corners.'**
   String get second_path_description;
+
+  /// No description provided for @third_path_description.
+  ///
+  /// In en, this message translates to:
+  /// **'A narrower path through scattered drawings and small ledges, offering new perspectives.'**
+  String get third_path_description;
 
   /// No description provided for @map_of_calm_olya.
   ///

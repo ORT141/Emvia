@@ -13,7 +13,6 @@ class DialogData {
             DialogChoice(
               label: (l) => l.dialog_teacher_choice_yes,
               nextNodeId: 'ready',
-              onSelect: (game) => print('Player is ready'),
             ),
             DialogChoice(
               label: (l) => l.dialog_teacher_choice_not_really,

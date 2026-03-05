@@ -27,6 +27,9 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get resume => 'Resume';
 
   @override
+  String get too_dangerous => 'This way are too dangerous';
+
+  @override
   String get teacher_intro => 'Teacher: Olya, your turn is in 15 minutes';
 
   @override
@@ -276,6 +279,9 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get path_second => 'Second Path';
 
   @override
+  String get path_third => 'Third Path';
+
+  @override
   String get confirm => 'Confirm';
 
   @override
@@ -441,11 +447,15 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get first_path_description =>
-      'You chose the first route and reduced overload by moving along a predictable path.';
+      'A calm, straight route with clear sightlines and familiar desks.';
 
   @override
   String get second_path_description =>
-      'You chose the second route and maintained control through a personal navigation strategy.';
+      'A winding route weaving between clustered desks and quiet corners.';
+
+  @override
+  String get third_path_description =>
+      'A narrower path through scattered drawings and small ledges, offering new perspectives.';
 
   @override
   String get map_of_calm_olya => 'Map of Calm: Olya';

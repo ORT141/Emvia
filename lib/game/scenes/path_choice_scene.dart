@@ -1,13 +1,15 @@
 import 'dart:math' as math;
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
+import 'package:emvia/l10n/app_localizations.dart';
+import 'package:emvia/game/emvia_game.dart';
 
-import '../components/path_confirm_button.dart';
 import '../components/path_mark.dart';
 import 'game_scene.dart';
 
-class ClassroomScene extends GameScene {
-  ClassroomScene()
+class PathChoiceScene extends GameScene {
+  PathChoiceScene()
     : super(
         backgroundPath: 'scenes/classroom/classroom.png',
         foregroundPath: 'scenes/classroom/classmates.png',
@@ -19,9 +21,8 @@ class ClassroomScene extends GameScene {
   final List<Vector2> _marks = <Vector2>[];
   final List<PathMark> _markCircles = <PathMark>[];
   int? _selectedMarkIndex;
-  PathConfirmButton? _confirmButton;
 
-  double _bgHeight = 0;
+  final double _bgHeight = 0;
 
   double get bgHeight => _bgHeight > 0 ? _bgHeight : game.size.y;
 
@@ -36,44 +37,34 @@ class ClassroomScene extends GameScene {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final src = background.sprite?.srcSize;
-    if (src != null && src.x > 0 && src.y > 0) {
-      _bgHeight = game.worldRoot.size.x * src.y / src.x;
-    }
-    background.size = Vector2(game.worldRoot.size.x, bgHeight);
-    foreground?.size = Vector2(game.worldRoot.size.x, bgHeight);
-  }
-
-  Future<void> showPathImage() async {
     final sprite = await game.loadSprite('scenes/classroom/path.png');
     background.sprite = sprite;
     _pathBgSrcSize = sprite.srcSize.clone();
-    background.size = Vector2(game.worldRoot.size.x, bgHeight);
-    background.position = Vector2.zero();
+    final covered = _coverSize(_pathBgSrcSize!, game.size);
+    background.size = covered;
+    background.position = _coverPosition(covered, game.size);
     foreground?.opacity = 0.0;
-    await clearPathOverlay();
-  }
 
-  Future<void> showClassroomImage() async {
-    background.sprite = await game.loadSprite(backgroundPath);
-    _pathBgSrcSize = null;
-    background.size = Vector2(game.worldRoot.size.x, bgHeight);
-    background.position = Vector2.zero();
-    foreground?.size = Vector2(game.worldRoot.size.x, bgHeight);
-    foreground?.opacity = 1.0;
-    await clearPathOverlay();
+    background.opacity = 1.0;
+
+    await showMarks([
+      Vector2(559.2 / game.size.x, 204.8 / game.size.y),
+      Vector2(624.1 / game.size.x, 260.8 / game.size.y),
+      Vector2(670.0 / game.size.x, 321.9 / game.size.y),
+    ]);
   }
 
   Future<void> showPathOverlay(String asset) async {
     final sprite = await game.loadSprite(asset);
-    final pos = Vector2.zero();
-    final covered = Vector2(game.worldRoot.size.x, bgHeight);
+    final covered = _coverSize(sprite.srcSize, game.size);
+    final pos = _coverPosition(covered, game.size);
     if (_pathOverlay == null) {
       _pathOverlay = SpriteComponent(
         sprite: sprite,
         size: covered,
         anchor: Anchor.topLeft,
         position: pos,
+        priority: 5,
       );
       add(_pathOverlay!);
     } else {
@@ -104,12 +95,6 @@ class ClassroomScene extends GameScene {
       _markCircles.add(mark);
       add(mark);
     }
-
-    _confirmButton = PathConfirmButton(
-      onConfirm: _onConfirmChoice,
-      position: Vector2(game.size.x / 2, game.size.y - 80),
-    );
-    add(_confirmButton!);
   }
 
   void _onMarkSelected(int index) {
@@ -117,18 +102,29 @@ class ClassroomScene extends GameScene {
     for (var i = 0; i < _markCircles.length; i++) {
       _markCircles[i].isSelected = (i == _selectedMarkIndex);
     }
-    _confirmButton?.setEnabled(true);
+    _showDetailForIndex(index);
   }
 
-  void _onConfirmChoice() {
-    if (_selectedMarkIndex == null) return;
-    if (_selectedMarkIndex == 0) {
-      game.chooseFirstPath(game.buildContext!);
-    } else if (_selectedMarkIndex == 1) {
-      game.chooseSecondPath(game.buildContext!);
-    } else if (_selectedMarkIndex == 2) {
-      game.chooseSecondPath(game.buildContext!);
-    }
+  void _showDetailForIndex(int index) {
+    final l = AppLocalizations.of(game.buildContext!);
+    final info = PathDetailInfo(
+      index: index,
+      name: index == 0
+          ? (l?.path_first ?? 'First Path')
+          : index == 1
+              ? (l?.path_second ?? 'Second Path')
+              : (l?.path_third ?? 'Third Path'),
+      title: l?.map_of_calm_olya ?? 'Map of Calm: Olya',
+      description: index == 0
+          ? (l?.first_path_description ?? '')
+          : index == 1
+              ? (l?.second_path_description ?? '')
+              : (l?.third_path_description ?? ''),
+      confirmLabel: l?.confirm ?? 'Confirm',
+      cancelLabel: l?.cancel ?? 'Cancel',
+    );
+
+    game.showPathDetail(info);
   }
 
   Future<void> clearMarks() async {
@@ -138,8 +134,13 @@ class ClassroomScene extends GameScene {
     _markCircles.clear();
     _marks.clear();
     _selectedMarkIndex = null;
-    _confirmButton?.removeFromParent();
-    _confirmButton = null;
+  }
+
+  void clearSelection() {
+    _selectedMarkIndex = null;
+    for (var i = 0; i < _markCircles.length; i++) {
+      _markCircles[i].isSelected = false;
+    }
   }
 
   @override
@@ -169,7 +170,9 @@ class ClassroomScene extends GameScene {
           mark.position = screenPos;
         }
       }
-      _confirmButton?.position = Vector2(size.x / 2, size.y - 80);
     }
   }
+
+  @override
+  void onTapDown(TapDownEvent event) {}
 }

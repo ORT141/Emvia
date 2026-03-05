@@ -45,7 +45,6 @@ class PauseOverlay extends StatelessWidget {
               FilledButton.icon(
                 onPressed: () {
                   game.resumeGame();
-                  game.overlays.remove('Pause');
                 },
                 icon: const Icon(Icons.play_arrow_rounded),
                 label: Text(
@@ -65,9 +64,7 @@ class PauseOverlay extends StatelessWidget {
               const SizedBox(height: 12),
               TextButton(
                 onPressed: () {
-                  game.resumeGame();
-                  game.overlays.remove('Pause');
-                  game.overlays.add('MainMenu');
+                  game.returnToMainMenuFromPause();
                 },
                 child: Text(
                   loc.backToMenu,

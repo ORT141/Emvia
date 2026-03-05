@@ -24,6 +24,10 @@
   "@resume": {
     "description": "Label for resuming a paused activity."
   },
+  "too_dangerous": "Цей шлях надто небезпечний",
+  "@too_dangerous": {
+    "description": "Warning message when a path is locked."
+  },
   "teacher_intro": "Вчитель: Оля, твій вихід через 15 хвилин",
   "@teacher_intro": {
     "description": "A line spoken by the teacher to Olya, indicating her turn time."
@@ -310,6 +314,7 @@
   "path_choice_title": "Обери маршрут",
   "path_first": "Перший шлях",
   "path_second": "Другий шлях",
+  "path_third": "Третій шлях",
   "confirm": "Підтвердити",
   "calm_map_personal_artifact": "Персональний артефакт",
   "calm_map_title": "Твоя Мапа спокою",
@@ -394,7 +399,8 @@
   "survey_battery": "Батарейка",
   "survey_anchor": "Якір",
   "classroom": "Клас",
-  "first_path_description": "Ти обрала перший маршрут і зменшила перевантаження, рухаючись передбачуваним шляхом.",
-  "second_path_description": "Ти обрала другий маршрут і зберегла контроль через особисту стратегію навігації.",
+  "first_path_description": "Спокійний прямий шлях зі зрозумілою видимістю та знайомими партами.",
+  "second_path_description": "Звивистий маршрут поміж сгрупованих парт і тихих кутків.",
+  "third_path_description": "Вужчий шлях крізь розкидані малюнки й невеликі уступи, що відкриває нові ракурси.",
   "map_of_calm_olya": "Мапа спокою: Оля"
 }

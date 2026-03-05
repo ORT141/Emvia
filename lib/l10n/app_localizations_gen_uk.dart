@@ -27,6 +27,9 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get resume => 'Продовжити';
 
   @override
+  String get too_dangerous => 'Цей шлях надто небезпечний';
+
+  @override
   String get teacher_intro => 'Вчитель: Оля, твій вихід через 15 хвилин';
 
   @override
@@ -274,6 +277,9 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get path_second => 'Другий шлях';
 
   @override
+  String get path_third => 'Третій шлях';
+
+  @override
   String get confirm => 'Підтвердити';
 
   @override
@@ -435,11 +441,15 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get first_path_description =>
-      'Ти обрала перший маршрут і зменшила перевантаження, рухаючись передбачуваним шляхом.';
+      'Спокійний прямий шлях зі зрозумілою видимістю та знайомими партами.';
 
   @override
   String get second_path_description =>
-      'Ти обрала другий маршрут і зберегла контроль через особисту стратегію навігації.';
+      'Звивистий маршрут поміж сгрупованих парт і тихих кутків.';
+
+  @override
+  String get third_path_description =>
+      'Вужчий шлях крізь розкидані малюнки й невеликі уступи, що відкриває нові ракурси.';
 
   @override
   String get map_of_calm_olya => 'Мапа спокою: Оля';

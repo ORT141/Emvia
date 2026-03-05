@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import '../emvia_game.dart';
 
 abstract class GameScene extends Component with HasGameReference<EmviaGame> {
@@ -42,4 +43,6 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
   }
 
   void onPlayerInteract(PositionComponent other) {}
+
+  void onTapDown(TapDownEvent event) {}
 }

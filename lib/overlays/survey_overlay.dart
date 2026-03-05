@@ -12,6 +12,11 @@ class SurveyOverlay extends StatefulWidget {
   State<SurveyOverlay> createState() => _SurveyOverlayState();
 }
 
+const bool kAllowSurveySkip = bool.fromEnvironment(
+  'ALLOW_SURVEY_SKIP',
+  defaultValue: false,
+);
+
 class _SurveyOverlayState extends State<SurveyOverlay> {
   final SurveyService _surveyService = SurveyService();
   final Map<String, String> _answers = {};
@@ -119,6 +124,21 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
                       child: Text(l.survey_save_continue),
                     ),
                   ),
+                  if (kAllowSurveySkip) ...[
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed: _skip,
+                        child: Text(
+                          'Skip',
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -133,6 +153,16 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
 
   Future<void> _submit() async {
     await _surveyService.saveSurvey(_answers);
+    final shouldStartGame = widget.game.consumeStartGameAfterSurvey();
+    widget.game.overlays.remove('Survey');
+    if (shouldStartGame) {
+      widget.game.startGame();
+    } else {
+      widget.game.overlays.add('MainMenu');
+    }
+  }
+
+  Future<void> _skip() async {
     final shouldStartGame = widget.game.consumeStartGameAfterSurvey();
     widget.game.overlays.remove('Survey');
     if (shouldStartGame) {
