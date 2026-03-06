@@ -73,21 +73,23 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                 color: theme.colorScheme.onSurface,
               ),
             ),
-            content: SizedBox(
-              width: 420,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _CharacterSelectBar(
-                    game: widget.game,
-                    selectedCharacter: pendingCharacter,
-                    onCharacterSelected: (character) {
-                      setModalState(() {
-                        pendingCharacter = character;
-                      });
-                    },
-                  ),
-                ],
+            content: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _CharacterSelectBar(
+                      game: widget.game,
+                      selectedCharacter: pendingCharacter,
+                      onCharacterSelected: (character) {
+                        setModalState(() {
+                          pendingCharacter = character;
+                        });
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             actions: [
@@ -186,38 +188,20 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
     final theme = Theme.of(context);
     final canContinue = widget.game.sceneIndex > 0;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final panelWidth = (constraints.maxWidth * 0.36)
-            .clamp(260.0, 420.0)
-            .toDouble();
-        final gradientWidth = (panelWidth + 120).clamp(320.0, 540.0).toDouble();
-        final horizontalPadding = (panelWidth * 0.07)
-            .clamp(14.0, 30.0)
-            .toDouble();
-        final verticalPadding = (constraints.maxHeight * 0.04)
-            .clamp(14.0, 34.0)
-            .toDouble();
+    return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isSmallScreen = constraints.maxWidth < 650;
 
-        final topButtonWidth = (panelWidth * 0.19).clamp(56.0, 96.0).toDouble();
-        final topGap = (panelWidth * 0.03).clamp(8.0, 14.0).toDouble();
-        final logoWidth = (panelWidth * 0.68).clamp(170.0, 280.0).toDouble();
-        final menuButtonWidth = (panelWidth * 0.86)
-            .clamp(180.0, 340.0)
-            .toDouble();
-        final menuButtonMinHeight = (constraints.maxHeight * 0.09)
-            .clamp(52.0, 78.0)
-            .toDouble();
-        final buttonSpacing = (constraints.maxHeight * 0.025)
-            .clamp(10.0, 24.0)
-            .toDouble();
-        final footerFontSize = (panelWidth * 0.045)
-            .clamp(12.0, 16.0)
-            .toDouble();
+          final double topButtonWidth = isSmallScreen ? 64.0 : 86.0;
+          final double topGap = isSmallScreen ? 12.0 : 16.0;
+          final double logoWidth = isSmallScreen ? 220.0 : 280.0;
+          final double menuButtonWidth = isSmallScreen ? 240.0 : 280.0;
+          final double menuButtonMinHeight = isSmallScreen ? 56.0 : 64.0;
+          final double footerFontSize = isSmallScreen ? 14.0 : 16.0;
 
-        return Scaffold(
-          backgroundColor: theme.colorScheme.surface,
-          body: Stack(
+          return Stack(
             children: [
               Positioned.fill(
                 child: Image.asset(
@@ -228,152 +212,177 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                 ),
               ),
               Positioned.fill(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Container(
-                    width: gradientWidth,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [
-                          Colors.black.withValues(alpha: 0.8),
-                          Colors.transparent,
-                        ],
-                      ),
-                    ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: isSmallScreen
+                        ? LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.black.withValues(alpha: 0.3),
+                              Colors.black.withValues(alpha: 0.85),
+                            ],
+                          )
+                        : LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Colors.black.withValues(alpha: 0.85),
+                              Colors.black.withValues(alpha: 0.0),
+                            ],
+                            stops: const [0.3, 0.8],
+                          ),
                   ),
                 ),
               ),
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: isSmallScreen
+                    ? Alignment.center
+                    : Alignment.centerLeft,
                 child: SizedBox(
-                  width: panelWidth,
-                  height: double.infinity,
-                  child: SafeArea(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: horizontalPadding,
-                        vertical: verticalPadding,
-                      ),
-                      child: SingleChildScrollView(
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minHeight:
-                                constraints.maxHeight - (verticalPadding * 2),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  _TopImageButton(
-                                    onTap: _openSettings,
-                                    assetPath:
-                                        'assets/images/main-menu/settings-main-menu.png',
-                                    width: topButtonWidth,
-                                  ),
-                                  SizedBox(width: topGap),
-                                  _TopImageButton(
-                                    onTap: widget.onThemeToggled,
-                                    assetPath:
-                                        'assets/images/main-menu/theme-switch-main-menu.png',
-                                    width: topButtonWidth,
-                                  ),
-                                  SizedBox(width: topGap),
-                                  _LanguageButton(
-                                    onSelected: _switchLanguage,
-                                    width: topButtonWidth,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: buttonSpacing),
-                              Center(
-                                child: AnimatedBuilder(
-                                  animation: _pulseController,
-                                  builder: (context, child) {
-                                    final scale =
-                                        1.0 + (_pulseController.value * 0.04);
-                                    return Transform.scale(
-                                      scale: scale,
-                                      child: child,
-                                    );
-                                  },
-                                  child: Image.asset(
-                                    'assets/images/main-menu/logo-main-menu.png',
-                                    width: logoWidth,
-                                    fit: BoxFit.contain,
+                  width: isSmallScreen ? constraints.maxWidth : 460.0,
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: SafeArea(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isSmallScreen ? 24.0 : 40.0,
+                              vertical: isSmallScreen ? 24.0 : 32.0,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: isSmallScreen
+                                  ? CrossAxisAlignment.center
+                                  : CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: isSmallScreen
+                                      ? MainAxisAlignment.center
+                                      : MainAxisAlignment.start,
+                                  children: [
+                                    _TopImageButton(
+                                      onTap: _openSettings,
+                                      assetPath:
+                                          'assets/images/main-menu/settings-main-menu.png',
+                                      width: topButtonWidth,
+                                    ),
+                                    SizedBox(width: topGap),
+                                    _TopImageButton(
+                                      onTap: widget.onThemeToggled,
+                                      assetPath:
+                                          'assets/images/main-menu/theme-switch-main-menu.png',
+                                      width: topButtonWidth,
+                                    ),
+                                    SizedBox(width: topGap),
+                                    _LanguageButton(
+                                      onSelected: _switchLanguage,
+                                      width: topButtonWidth,
+                                    ),
+                                  ],
+                                ),
+                                const Spacer(),
+                                Center(
+                                  child: AnimatedBuilder(
+                                    animation: _pulseController,
+                                    builder: (context, child) {
+                                      final scale =
+                                          1.0 + (_pulseController.value * 0.03);
+                                      return Transform.scale(
+                                        scale: scale,
+                                        child: child,
+                                      );
+                                    },
+                                    child: Image.asset(
+                                      'assets/images/main-menu/logo-main-menu.png',
+                                      width: logoWidth,
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: buttonSpacing * 1.2),
-                              _ImageMenuButton(
-                                assetPath:
-                                    'assets/images/main-menu/play-main-menu.png',
-                                onPressed: _startNewGame,
-                                width: menuButtonWidth,
-                                minHeight: menuButtonMinHeight,
-                              ),
-                              SizedBox(height: buttonSpacing),
-                              _ImageMenuButton(
-                                assetPath:
-                                    'assets/images/main-menu/continue-main-menu.png',
-                                onPressed: canContinue ? _continueGame : null,
-                                width: menuButtonWidth,
-                                minHeight: menuButtonMinHeight,
-                              ),
-                              SizedBox(height: buttonSpacing * 1.2),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  TextButton(
-                                    onPressed: _openCredits,
-                                    style: TextButton.styleFrom(
-                                      foregroundColor:
-                                          theme.colorScheme.onSurfaceVariant,
-                                      textStyle: TextStyle(
-                                        fontSize: footerFontSize,
+                                const SizedBox(height: 32),
+                                Align(
+                                  alignment: isSmallScreen
+                                      ? Alignment.center
+                                      : Alignment.centerLeft,
+                                  child: Column(
+                                    crossAxisAlignment: isSmallScreen
+                                        ? CrossAxisAlignment.center
+                                        : CrossAxisAlignment.start,
+                                    children: [
+                                      _ImageMenuButton(
+                                        assetPath:
+                                            'assets/images/main-menu/play-main-menu.png',
+                                        onPressed: _startNewGame,
+                                        width: menuButtonWidth,
+                                        minHeight: menuButtonMinHeight,
+                                      ),
+                                      const SizedBox(height: 16),
+                                      _ImageMenuButton(
+                                        assetPath:
+                                            'assets/images/main-menu/continue-main-menu.png',
+                                        onPressed: canContinue
+                                            ? _continueGame
+                                            : null,
+                                        width: menuButtonWidth,
+                                        minHeight: menuButtonMinHeight,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Spacer(flex: 2),
+                                Row(
+                                  mainAxisAlignment: isSmallScreen
+                                      ? MainAxisAlignment.center
+                                      : MainAxisAlignment.start,
+                                  children: [
+                                    TextButton(
+                                      onPressed: _openCredits,
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.white70,
+                                        textStyle: TextStyle(
+                                          fontSize: footerFontSize,
+                                        ),
+                                      ),
+                                      child: Text(loc.credits),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.symmetric(
+                                        horizontal: topGap,
+                                      ),
+                                      width: 4,
+                                      height: 4,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white54,
+                                        shape: BoxShape.circle,
                                       ),
                                     ),
-                                    child: Text(loc.credits),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.symmetric(
-                                      horizontal: topGap,
-                                    ),
-                                    width: 4,
-                                    height: 4,
-                                    decoration: BoxDecoration(
-                                      color: theme.colorScheme.outlineVariant,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: _confirmExit,
-                                    style: TextButton.styleFrom(
-                                      foregroundColor: theme.colorScheme.error
-                                          .withValues(alpha: 0.7),
-                                      textStyle: TextStyle(
-                                        fontSize: footerFontSize,
+                                    TextButton(
+                                      onPressed: _confirmExit,
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.redAccent
+                                            .withValues(alpha: 0.8),
+                                        textStyle: TextStyle(
+                                          fontSize: footerFontSize,
+                                        ),
                                       ),
+                                      child: Text(loc.exit),
                                     ),
-                                    child: Text(loc.exit),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),
             ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -531,9 +540,11 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
               color: theme.colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          const SizedBox(height: 12),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 12,
+            runSpacing: 12,
             children: [
               _CharacterGhost(
                 imagePath: 'player-selecting/olya_ghost.png',
@@ -555,7 +566,6 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
                   widget.onCharacterSelected(PlayableCharacter.olya);
                 },
               ),
-              const SizedBox(width: 10),
               _CharacterGhost(
                 imagePath: 'player-selecting/liam_ghost.png',
                 label: 'Ліам',
@@ -572,7 +582,6 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
                   });
                 },
               ),
-              const SizedBox(width: 10),
               _CharacterGhost(
                 imagePath: 'player-selecting/olenka_ghost.png',
                 label: 'Оленка',
@@ -591,7 +600,7 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           _CharacterInfoCard(data: selectedCard),
         ],
       ),

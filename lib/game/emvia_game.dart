@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -19,24 +17,10 @@ import 'inventory/backpack_inventory.dart';
 import 'inventory/backpack_item.dart';
 
 import 'mixins/dialog_handler.dart';
+import 'emvia_types.dart';
 
-class PathDetailInfo {
-  final int index;
-  final String title;
-  final String name;
-  final String description;
-  final String confirmLabel;
-  final String cancelLabel;
-
-  PathDetailInfo({
-    required this.index,
-    required this.title,
-    required this.name,
-    required this.description,
-    required this.confirmLabel,
-    required this.cancelLabel,
-  });
-}
+import 'managers/camera_manager.dart';
+import 'managers/transition_manager.dart';
 
 enum PlayableCharacter { olya, liam, olenka }
 
@@ -44,8 +28,10 @@ class EmviaGame extends FlameGame
     with TapCallbacks, HasKeyboardHandlerComponents, DialogHandler {
   static const double worldWidth = 2000.0;
 
-  static const double _cameraFollowSharpness = 5.0;
-  static const double _cameraDeadZonePx = 10.0;
+  EmviaGame() {
+    cameraManager = CameraManager(this);
+    transitionManager = TransitionManager(this);
+  }
 
   late final OlyaPlayer olya = OlyaPlayer();
   late SpriteComponent noiseEffect;
@@ -53,14 +39,11 @@ class EmviaGame extends FlameGame
 
   final PositionComponent worldRoot = PositionComponent();
 
-  final Vector2 _cameraPos = Vector2.zero();
-  double _zoom = _defaultZoom;
-
-  static const double _defaultZoom = 1.1;
+  late final CameraManager cameraManager;
+  late final TransitionManager transitionManager;
 
   GameScene? currentScene;
-  ClassroomScene? _classroomScene;
-  bool _isSceneTransitioning = false;
+  ClassroomScene? classroomScene;
 
   bool freezeForPathChoice = false;
 
@@ -99,8 +82,7 @@ class EmviaGame extends FlameGame
       ..size = size
       ..opacity = 0.0;
 
-    _zoom = _defaultZoom;
-    worldRoot.scale = Vector2.all(_zoom);
+    worldRoot.scale = Vector2.all(cameraManager.zoom);
     worldRoot.anchor = Anchor.topLeft;
 
     add(worldRoot);
@@ -116,68 +98,27 @@ class EmviaGame extends FlameGame
   }
 
   Future<void> loadScene(GameScene scene) async {
-    _isSceneTransitioning = true;
-
-    await fadeOverlay.fadeIn(0.4);
-
-    if (currentScene != null) {
-      currentScene!.removeFromParent();
-    }
-
-    worldRoot.size = Vector2(_sceneWorldWidth(scene), size.y);
-
-    currentScene = scene;
-    await worldRoot.add(scene);
-    if (scene is ClassroomScene) {
-      _classroomScene = scene;
-      _updateClassroomZoom();
-    } else {
-      _classroomScene = null;
-      _zoom = _defaultZoom;
-      worldRoot.scale = Vector2.all(_zoom);
-    }
-
-    if (olya.parent == null) {
-      await worldRoot.add(olya);
-    }
-    olya.priority = 10;
-
-    if (scene is PathChoiceScene) {
-      olya.opacity = 0;
-    }
-
-    olya.position = _sceneSpawnPoint(scene);
-    _snapCameraToPlayer();
-
-    await fadeOverlay.fadeOut(0.4);
-
-    _isSceneTransitioning = false;
+    await transitionManager.loadScene(scene);
   }
 
   void _updateClassroomZoom() {
-    final scene = _classroomScene;
-    if (scene == null || !scene.isLoaded) return;
-    final h = scene.bgHeight;
-    if (h <= 0) return;
-    final widthFit = size.x / worldRoot.size.x;
-    final heightFit = size.y / h;
-    _zoom = math.max(widthFit, heightFit);
-    worldRoot.size = Vector2(worldRoot.size.x, h);
-    worldRoot.scale = Vector2.all(_zoom);
+    transitionManager.updateClassroomZoom();
   }
 
-  double _sceneWorldWidth(GameScene scene) {
-    return worldWidth;
+  double sceneWorldWidth(double baseWidth) {
+    if (currentScene != null) {
+      if (currentScene is ClassroomScene) return 1920.0;
+      if (currentScene is CorridorScene) return 3000.0;
+      if (currentScene is PathChoiceScene) return size.x;
+    }
+    return baseWidth;
   }
 
   Vector2 _sceneSpawnPoint(GameScene scene) {
-    if (scene is ClassroomScene) {
-      return Vector2(size.x * 0.2, worldRoot.size.y * 0.75);
-    }
-    if (scene is CorridorScene) {
-      return Vector2(80, worldRoot.size.y * 0.75);
-    }
-    return Vector2(worldRoot.size.x / 2, worldRoot.size.y * 0.75);
+    if (scene is PathChoiceScene) return Vector2(size.x / 2, size.y / 2);
+    if (scene is ClassroomScene) return Vector2(250, size.y * 0.75);
+    if (scene is CorridorScene) return Vector2(100, size.y * 0.75);
+    return Vector2(size.x / 2, size.y * 0.75);
   }
 
   void startGame() {
@@ -203,7 +144,7 @@ class EmviaGame extends FlameGame
 
   bool _canToggleBackpack() {
     if (sceneIndex == 0) return false;
-    if (_isSceneTransitioning) return false;
+    if (transitionManager.isTransitioning) return false;
     if (overlays.isActive('MainMenu') || overlays.isActive('Pause')) {
       return false;
     }
@@ -286,18 +227,12 @@ class EmviaGame extends FlameGame
     overlays.remove('PathChoice');
     overlays.remove('Backpack');
 
-    await fadeOverlay.fadeIn(0.4);
-
+    freezeForPathChoice = true;
     await loadScene(PathChoiceScene());
 
     if (token != _sessionToken) return;
 
-    freezeForPathChoice = true;
-    worldRoot.scale = Vector2.all(1.0);
     olya.opacity = 0;
-
-    await fadeOverlay.fadeOut(0.4);
-
     showMobileControls();
   }
 
@@ -318,15 +253,15 @@ class EmviaGame extends FlameGame
   }
 
   void showPathBackground() {
-    _classroomScene?.showPathImage();
+    classroomScene?.showPathImage();
   }
 
   void clearPathOverlay() {
-    _classroomScene?.clearPathOverlay();
+    classroomScene?.clearPathOverlay();
   }
 
   void restoreClassroomBackground() {
-    _classroomScene?.showClassroomImage();
+    classroomScene?.showClassroomImage();
   }
 
   void chooseFirstPath(BuildContext context) {
@@ -356,12 +291,11 @@ class EmviaGame extends FlameGame
   void _finishPathChoice(String title, String description) {
     sceneIndex = 2;
     olya.opacity = 1;
-    _classroomScene?.showClassroomImage();
-    _classroomScene?.clearMarks();
     freezeForPathChoice = false;
+    classroomScene?.showClassroomImage();
+    classroomScene?.clearMarks();
     _updateClassroomZoom();
-    olya.position = _sceneSpawnPoint(currentScene!);
-    _snapCameraToPlayer();
+    cameraManager.snapToPlayer(force: true);
   }
 
   Future<void> applyPathChoice(int index, BuildContext context) async {
@@ -387,11 +321,15 @@ class EmviaGame extends FlameGame
   }
 
   Future<void> _transitionToCorridor() async {
-    if (_isSceneTransitioning) return;
+    if (transitionManager.isTransitioning) return;
     sceneIndex = 3;
     await loadScene(CorridorScene());
+    playerToCorridorEntrance();
+  }
+
+  void playerToCorridorEntrance() {
     olya.position.x = olya.size.x / 2 + 10;
-    _snapCameraToPlayer();
+    cameraManager.snapToPlayer(force: true);
   }
 
   void calmDown() {
@@ -436,38 +374,13 @@ class EmviaGame extends FlameGame
 
     if (olya.parent == null) return;
 
-    if (freezeForPathChoice) {
-      worldRoot.scale = Vector2.all(1.0);
-      worldRoot.position = Vector2.zero();
-      return;
-    }
-
     if (currentScene is ClassroomScene) {
       if (olya.position.x >= worldRoot.size.x - olya.size.x / 2 - 10) {
         _transitionToCorridor();
       }
     }
 
-    final target = Vector2(olya.position.x, olya.position.y);
-
-    final deadZoneWorld = _cameraDeadZonePx / _zoom;
-    final distX = (target.x - _cameraPos.x).abs();
-    final distY = (target.y - _cameraPos.y).abs();
-
-    final resolvedTargetX = (distX > deadZoneWorld) ? target.x : _cameraPos.x;
-    final resolvedTargetY = (distY > deadZoneWorld) ? target.y : _cameraPos.y;
-
-    final rawTarget = Vector2(resolvedTargetX, resolvedTargetY);
-
-    final clampedTarget = _clampTargetToWorldBounds(rawTarget);
-
-    final alpha = 1 - math.exp(-_cameraFollowSharpness * dt);
-
-    _cameraPos.x = _cameraPos.x + (clampedTarget.x - _cameraPos.x) * alpha;
-    _cameraPos.y = _cameraPos.y + (clampedTarget.y - _cameraPos.y) * alpha;
-
-    final screenCenter = Vector2(size.x / 2, size.y / 2);
-    worldRoot.position = screenCenter - (_cameraPos * _zoom);
+    cameraManager.update(dt);
   }
 
   @override
@@ -479,7 +392,7 @@ class EmviaGame extends FlameGame
       _updateClassroomZoom();
     } else {
       worldRoot.size = Vector2(
-        scene != null ? _sceneWorldWidth(scene) : worldWidth,
+        scene != null ? sceneWorldWidth(worldWidth) : worldWidth,
         size.y,
       );
     }
@@ -495,52 +408,7 @@ class EmviaGame extends FlameGame
       olya.position.y = worldRoot.size.y * 0.75;
     }
 
-    _snapCameraToPlayer();
-  }
-
-  void _snapCameraToPlayer() {
-    final rawTarget = Vector2(olya.position.x, olya.position.y);
-    final clamped = _clampTargetToWorldBounds(rawTarget);
-
-    _cameraPos.setFrom(clamped);
-
-    final screenCenter = Vector2(size.x / 2, size.y / 2);
-    worldRoot.position = screenCenter - (_cameraPos * _zoom);
-  }
-
-  Vector2 _clampTargetToWorldBounds(Vector2 target) {
-    final zoom = _zoom;
-
-    final visibleWidthWorld = size.x / zoom;
-    final visibleHeightWorld = size.y / zoom;
-
-    final halfVisibleWidth = visibleWidthWorld / 2;
-    final halfVisibleHeight = visibleHeightWorld / 2;
-
-    final worldWidthLocal = worldRoot.size.x;
-    final worldHeightLocal = worldRoot.size.y;
-
-    final minX = halfVisibleWidth;
-    final maxX = worldWidthLocal - halfVisibleWidth;
-    final minY = halfVisibleHeight;
-    final maxY = worldHeightLocal - halfVisibleHeight;
-
-    double clampedX = target.x;
-    double clampedY = target.y;
-
-    if (minX <= maxX) {
-      clampedX = target.x.clamp(minX, maxX).toDouble();
-    } else {
-      clampedX = worldWidthLocal / 2;
-    }
-
-    if (minY <= maxY) {
-      clampedY = target.y.clamp(minY, maxY).toDouble();
-    } else {
-      clampedY = worldHeightLocal / 2;
-    }
-
-    return Vector2(clampedX, clampedY);
+    cameraManager.snapToPlayer();
   }
 
   @override
@@ -552,5 +420,13 @@ class EmviaGame extends FlameGame
       }
     }
     currentScene?.onTapDown(event);
+  }
+
+  Vector2 sceneSpawnPoint(
+    GameScene scene,
+    Vector2 screenSize,
+    PositionComponent root,
+  ) {
+    return _sceneSpawnPoint(scene);
   }
 }

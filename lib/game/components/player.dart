@@ -36,7 +36,7 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
     };
 
     current = PlayerState.standing;
-    position = game.worldRoot.size / 2;
+    // Do not set position here; positioning is handled by scene transitions.
   }
 
   @override

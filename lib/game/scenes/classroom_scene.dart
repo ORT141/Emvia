@@ -95,7 +95,10 @@ class ClassroomScene extends GameScene {
     _marks.addAll(marksNormalized);
 
     for (var i = 0; i < _marks.length; i++) {
-      final pos = Vector2(_marks[i].x * game.size.x, _marks[i].y * game.size.y);
+      final bgPos = background.position.clone();
+      final bgSize = background.size;
+      final pos =
+          bgPos + Vector2(_marks[i].x * bgSize.x, _marks[i].y * bgSize.y);
       final mark = PathMark(
         index: i,
         position: pos,
@@ -163,7 +166,9 @@ class ClassroomScene extends GameScene {
       }
       for (var i = 0; i < _marks.length; i++) {
         final m = _marks[i];
-        final screenPos = Vector2(m.x * size.x, m.y * size.y);
+        final bgPos = background.position.clone();
+        final bgSize = background.size;
+        final screenPos = bgPos + Vector2(m.x * bgSize.x, m.y * bgSize.y);
         final mark = _markCircles.length > i ? _markCircles[i] : null;
         if (mark != null) {
           mark.position = screenPos;

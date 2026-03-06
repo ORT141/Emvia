@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
+import 'package:emvia/game/emvia_types.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:emvia/l10n/app_localizations.dart';
-import 'package:emvia/game/emvia_game.dart';
 
 import '../components/path_mark.dart';
 import 'game_scene.dart';
