@@ -31,10 +31,17 @@ class ClassroomScene extends GameScene with TapCallbacks {
   void onTapDown(TapDownEvent event) {
     final centerX = game.worldRoot.size.x / 2;
     final centerY = game.worldRoot.size.y / 2;
-    final clickPos = event.localPosition;
 
-    if ((clickPos.x - centerX).abs() < 220 &&
-        (clickPos.y - centerY).abs() < 220) {
+    final clickScreen = event.localPosition;
+    final worldRootPos = game.worldRoot.position;
+    final worldRootScale = game.worldRoot.scale;
+    final clickWorld = Vector2(
+      (clickScreen.x - worldRootPos.x) / worldRootScale.x,
+      (clickScreen.y - worldRootPos.y) / worldRootScale.y,
+    );
+
+    if ((clickWorld.x - centerX).abs() < 300 &&
+        (clickWorld.y - centerY).abs() < 300) {
       game.loadScene(PathChoiceScene());
     }
   }
