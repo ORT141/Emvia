@@ -17,22 +17,22 @@ class BackpackOverlay extends StatelessWidget {
       color: Colors.black.withValues(alpha: 0.55),
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 760, maxHeight: 560),
+          constraints: const BoxConstraints(maxWidth: 800, maxHeight: 600),
           child: Container(
-            margin: const EdgeInsets.all(20),
-            padding: const EdgeInsets.all(20),
+            margin: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(32),
               border: Border.all(
-                color: theme.colorScheme.primary.withValues(alpha: 0.35),
+                color: theme.colorScheme.primary.withValues(alpha: 0.25),
                 width: 2,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.18),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
+                  color: Colors.black.withValues(alpha: 0.2),
+                  blurRadius: 24,
+                  offset: const Offset(0, 10),
                 ),
               ],
             ),
@@ -43,28 +43,21 @@ class BackpackOverlay extends StatelessWidget {
                     Text(
                       'Backpack',
                       style: GoogleFonts.baloo2(
-                        fontSize: 32,
+                        fontSize: 36,
                         fontWeight: FontWeight.w800,
                         color: theme.colorScheme.primary,
                       ),
                     ),
                     const Spacer(),
-                    Text(
-                      'TAB',
-                      style: theme.textTheme.labelLarge?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.8,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
                     IconButton.filledTonal(
                       onPressed: game.toggleBackpack,
+                      iconSize: 32,
+                      padding: const EdgeInsets.all(12),
                       icon: const Icon(Icons.close_rounded),
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
                 Expanded(
                   child: ValueListenableBuilder<List<BackpackItem>>(
                     valueListenable: game.backpack.itemsListenable,
@@ -80,12 +73,13 @@ class BackpackOverlay extends StatelessWidget {
 
                       return GridView.builder(
                         itemCount: items.length,
+                        padding: const EdgeInsets.only(bottom: 8),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              crossAxisSpacing: 12,
-                              mainAxisSpacing: 12,
-                              childAspectRatio: 1.8,
+                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 16,
+                              childAspectRatio: 2.2,
                             ),
                         itemBuilder: (context, index) {
                           final item = items[index];

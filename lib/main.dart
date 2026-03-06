@@ -9,12 +9,16 @@ import 'package:emvia/overlays/backpack_overlay.dart';
 import 'package:emvia/overlays/settings_overlay.dart';
 import 'package:emvia/overlays/survey_overlay.dart';
 import 'package:flame/game.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'l10n/app_localizations_gen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Flame.device.fullScreen();
+  await Flame.device.setLandscape();
   runApp(const MyApp());
 }
 

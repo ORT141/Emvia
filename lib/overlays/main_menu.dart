@@ -194,11 +194,11 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
         builder: (context, constraints) {
           final isSmallScreen = constraints.maxWidth < 650;
 
-          final double topButtonWidth = isSmallScreen ? 64.0 : 86.0;
-          final double topGap = isSmallScreen ? 12.0 : 16.0;
-          final double logoWidth = isSmallScreen ? 220.0 : 280.0;
-          final double menuButtonWidth = isSmallScreen ? 240.0 : 280.0;
-          final double menuButtonMinHeight = isSmallScreen ? 56.0 : 64.0;
+          final double topButtonWidth = isSmallScreen ? 72.0 : 86.0;
+          final double topGap = isSmallScreen ? 16.0 : 16.0;
+          final double logoWidth = isSmallScreen ? 240.0 : 280.0;
+          final double menuButtonWidth = isSmallScreen ? 260.0 : 280.0;
+          final double menuButtonMinHeight = isSmallScreen ? 64.0 : 64.0;
           final double footerFontSize = isSmallScreen ? 14.0 : 16.0;
 
           return Stack(

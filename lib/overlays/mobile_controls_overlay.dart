@@ -12,11 +12,12 @@ class MobileControlsOverlay extends StatelessWidget {
     return IgnorePointer(
       ignoring: !game.isMobilePlatform,
       child: SafeArea(
+        minimum: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Stack(
           children: [
             Positioned(
-              left: 16,
-              bottom: 20,
+              left: 24,
+              bottom: 24,
               child: Row(
                 children: [
                   _HoldMoveButton(
@@ -25,7 +26,7 @@ class MobileControlsOverlay extends StatelessWidget {
                       game.setMobileMoveX(isPressed ? -1 : 0);
                     },
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 24),
                   _HoldMoveButton(
                     icon: Icons.arrow_right_rounded,
                     onPressChanged: (isPressed) {
@@ -36,12 +37,14 @@ class MobileControlsOverlay extends StatelessWidget {
               ),
             ),
             Positioned(
-              right: 16,
-              bottom: 24,
+              right: 24,
+              bottom: 28,
               child: FloatingActionButton.large(
                 heroTag: 'backpack_mobile_button',
                 onPressed: game.toggleBackpack,
-                child: const Icon(Icons.backpack_rounded),
+                elevation: 6,
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                child: const Icon(Icons.backpack_rounded, size: 40),
               ),
             ),
           ],
@@ -82,24 +85,24 @@ class _HoldMoveButtonState extends State<_HoldMoveButton> {
       onLongPressEnd: (_) => _setPressed(false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 90),
-        width: 72,
-        height: 72,
+        width: 84,
+        height: 84,
         decoration: BoxDecoration(
           color: _pressed
-              ? theme.colorScheme.primary
-              : theme.colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(16),
+              ? theme.colorScheme.primary.withValues(alpha: 0.9)
+              : theme.colorScheme.primaryContainer.withValues(alpha: 0.7),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.2),
-              blurRadius: 8,
+              blurRadius: 10,
               offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Icon(
           widget.icon,
-          size: 42,
+          size: 48,
           color: _pressed
               ? theme.colorScheme.onPrimary
               : theme.colorScheme.onPrimaryContainer,
