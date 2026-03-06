@@ -99,6 +99,17 @@ class EmviaGame extends FlameGame
 
   Future<void> loadScene(GameScene scene) async {
     await transitionManager.loadScene(scene);
+    currentScene = scene;
+    if (scene is ClassroomScene) {
+      classroomScene = scene;
+    }
+  }
+
+  void goToCorridor() async {
+    await loadScene(CorridorScene());
+    sceneIndex = 3;
+    olya.opacity = 1;
+    showMobileControls();
   }
 
   void _updateClassroomZoom() {
@@ -116,7 +127,9 @@ class EmviaGame extends FlameGame
 
   Vector2 _sceneSpawnPoint(GameScene scene) {
     if (scene is PathChoiceScene) return Vector2(size.x / 2, size.y / 2);
-    if (scene is ClassroomScene) return Vector2(250, size.y * 0.75);
+    if (scene is ClassroomScene) {
+      return Vector2(worldRoot.size.x / 2, worldRoot.size.y * 0.75);
+    }
     if (scene is CorridorScene) return Vector2(100, size.y * 0.75);
     return Vector2(size.x / 2, size.y * 0.75);
   }
@@ -155,6 +168,7 @@ class EmviaGame extends FlameGame
   }
 
   void setMobileMoveX(double direction) {
+    if (freezeForPathChoice) return;
     _mobileMoveX = direction.clamp(-1.0, 1.0);
     olya.setMobileDirection(_mobileMoveX);
   }
@@ -179,7 +193,7 @@ class EmviaGame extends FlameGame
 
   void closeMainMenu() {
     overlays.remove('MainMenu');
-    if (sceneIndex == 0) {
+    if (sceneIndex == 0 && currentScene is CorridorScene) {
       olya.opacity = 1;
     }
     if (!paused && sceneIndex > 0) {
@@ -227,12 +241,12 @@ class EmviaGame extends FlameGame
     overlays.remove('PathChoice');
     overlays.remove('Backpack');
 
-    freezeForPathChoice = true;
-    await loadScene(PathChoiceScene());
+    await loadScene(ClassroomScene());
 
     if (token != _sessionToken) return;
 
     olya.opacity = 0;
+    freezeForPathChoice = true;
     showMobileControls();
   }
 
@@ -296,6 +310,10 @@ class EmviaGame extends FlameGame
     classroomScene?.clearMarks();
     _updateClassroomZoom();
     cameraManager.snapToPlayer(force: true);
+
+    Future.delayed(const Duration(seconds: 1), () {
+      goToCorridor();
+    });
   }
 
   Future<void> applyPathChoice(int index, BuildContext context) async {
@@ -309,15 +327,8 @@ class EmviaGame extends FlameGame
       _selectedTools.add(l.path_third);
     }
 
-    await loadScene(ClassroomScene());
-    _finishPathChoice(
-      l.map_of_calm_olya,
-      index == 0
-          ? l.first_path_description
-          : index == 1
-          ? l.second_path_description
-          : l.third_path_description,
-    );
+    freezeForPathChoice = false;
+    await _transitionToCorridor();
   }
 
   Future<void> _transitionToCorridor() async {
@@ -388,7 +399,7 @@ class EmviaGame extends FlameGame
     super.onGameResize(size);
 
     final scene = currentScene;
-    if (scene is ClassroomScene && !freezeForPathChoice && scene.isLoaded) {
+    if (scene is ClassroomScene && scene.isLoaded) {
       _updateClassroomZoom();
     } else {
       worldRoot.size = Vector2(

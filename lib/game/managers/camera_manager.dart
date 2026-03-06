@@ -7,7 +7,7 @@ class CameraManager {
   final EmviaGame game;
 
   final Vector2 _cameraPos = Vector2.zero();
-  double _zoom = 1.1;
+  double zoom = 1.1;
   static const double _defaultZoom = 1.1;
   static const double _followSharpness = 5.0;
   static const double _deadZonePx = 10.0;
@@ -21,19 +21,19 @@ class CameraManager {
 
   CameraManager(this.game);
 
-  double get zoom => _zoom;
-  set zoom(double value) {
-    _zoom = value;
-  }
-
   void resetZoom() {
     zoom = _defaultZoom;
   }
 
   void update(double dt) {
     if (game.freezeForPathChoice) {
-      game.worldRoot.scale = Vector2.all(1.0);
-      game.worldRoot.position = Vector2.zero();
+      final sceneCenter = Vector2(
+        game.worldRoot.size.x / 2,
+        game.worldRoot.size.y / 2,
+      );
+      _cameraPos.setFrom(sceneCenter);
+      final effectiveZoom = zoom;
+      _applyToWorld(effectiveZoom, 0.0);
       return;
     }
 
@@ -41,7 +41,7 @@ class CameraManager {
     final isWalking = game.olya.current == PlayerState.walking;
 
     if (isWalking) {
-      final deadZoneWorld = _deadZonePx / _zoom;
+      final deadZoneWorld = _deadZonePx / zoom;
 
       final distX = (target.x - _cameraPos.x).abs();
       final distY = (target.y - _cameraPos.y).abs();
@@ -67,7 +67,7 @@ class CameraManager {
               _breathAmplitude *
               _bobAmount
         : 0.0;
-    final effectiveZoom = _zoom * (1.0 + breath);
+    final effectiveZoom = zoom * (1.0 + breath);
 
     final bobPixels = (liveEnabled)
         ? math.sin(_time * (2 * math.pi) * _bobFrequency) *
@@ -85,7 +85,7 @@ class CameraManager {
     final rawTarget = Vector2(game.olya.position.x, game.olya.position.y);
     final clamped = _clampTargetToWorldBounds(rawTarget);
     _cameraPos.setFrom(clamped);
-    _applyToWorld(_zoom, 0.0);
+    _applyToWorld(zoom, 0.0);
   }
 
   void _applyToWorld(double effectiveZoom, double bobWorld) {
@@ -98,11 +98,14 @@ class CameraManager {
       effectiveZoom,
     );
     final worldPos = screenCenter - (cameraWithBob * effectiveZoom);
-    game.worldRoot.position = worldPos;
+    game.worldRoot.position = Vector2(
+      worldPos.x.roundToDouble(),
+      worldPos.y.roundToDouble(),
+    );
   }
 
   Vector2 _clampTargetToWorldBounds(Vector2 target, [double? zoomOverride]) {
-    final usedZoom = zoomOverride ?? _zoom;
+    final usedZoom = zoomOverride ?? zoom;
     final worldWidth = game.worldRoot.size.x;
     final worldHeight = game.worldRoot.size.y;
 

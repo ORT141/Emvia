@@ -1,11 +1,13 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
 import '../emvia_game.dart';
+import '../scenes/classroom_scene.dart';
 
 enum PlayerState { standing, walking }
 
 class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
-    with HasGameReference<EmviaGame>, KeyboardHandler {
+    with HasGameReference<EmviaGame>, KeyboardHandler, TapCallbacks {
   OlyaPlayer() : super(size: Vector2(130, 260), anchor: Anchor.center);
 
   late final SpriteAnimation _standingAnimation;
@@ -36,7 +38,13 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
     };
 
     current = PlayerState.standing;
-    // Do not set position here; positioning is handled by scene transitions.
+  }
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    if (game.currentScene is ClassroomScene) {
+      return;
+    }
   }
 
   @override

@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import '../emvia_game.dart';
 import '../scenes/game_scene.dart';
 import '../scenes/classroom_scene.dart';
-import '../scenes/path_choice_scene.dart';
+import '../scenes/corridor_scene.dart';
 
 class TransitionManager {
   final EmviaGame game;
@@ -28,7 +28,6 @@ class TransitionManager {
 
     if (scene is ClassroomScene) {
       game.classroomScene = scene;
-      updateClassroomZoom();
     } else {
       game.classroomScene = null;
       game.cameraManager.resetZoom();
@@ -37,15 +36,19 @@ class TransitionManager {
 
     await game.worldRoot.add(scene);
 
+    if (scene is ClassroomScene) {
+      updateClassroomZoom();
+    }
+
     if (game.olya.parent == null) {
       await game.worldRoot.add(game.olya);
     }
     game.olya.priority = 10;
 
-    if (scene is PathChoiceScene) {
-      game.olya.opacity = 0;
-    } else {
+    if (scene is CorridorScene) {
       game.olya.opacity = 1.0;
+    } else {
+      game.olya.opacity = 0.0;
     }
 
     game.olya.position = game.sceneSpawnPoint(scene, game.size, game.worldRoot);
@@ -66,7 +69,8 @@ class TransitionManager {
     final widthFit = game.size.x / game.worldRoot.size.x;
     final heightFit = game.size.y / h;
 
-    game.cameraManager.zoom = (widthFit > heightFit) ? widthFit : heightFit;
+    game.cameraManager.zoom =
+        ((widthFit > heightFit) ? widthFit : heightFit) + 0.001;
     game.worldRoot.size = Vector2(game.worldRoot.size.x, h);
     game.worldRoot.scale = Vector2.all(game.cameraManager.zoom);
   }

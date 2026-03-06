@@ -1,12 +1,14 @@
 import 'dart:math' as math;
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 
 import '../components/path_confirm_button.dart';
 import '../components/path_mark.dart';
 import 'game_scene.dart';
+import 'path_choice_scene.dart';
 
-class ClassroomScene extends GameScene {
+class ClassroomScene extends GameScene with TapCallbacks {
   ClassroomScene()
     : super(
         backgroundPath: 'scenes/classroom/classroom.png',
@@ -25,6 +27,18 @@ class ClassroomScene extends GameScene {
 
   double get bgHeight => _bgHeight > 0 ? _bgHeight : game.size.y;
 
+  @override
+  void onTapDown(TapDownEvent event) {
+    final centerX = game.worldRoot.size.x / 2;
+    final centerY = game.worldRoot.size.y / 2;
+    final clickPos = event.localPosition;
+
+    if ((clickPos.x - centerX).abs() < 220 &&
+        (clickPos.y - centerY).abs() < 220) {
+      game.loadScene(PathChoiceScene());
+    }
+  }
+
   Vector2 _coverSize(Vector2 src, Vector2 target) {
     final scale = math.max(target.x / src.x, target.y / src.y);
     return Vector2(src.x * scale, src.y * scale);
@@ -38,10 +52,12 @@ class ClassroomScene extends GameScene {
     await super.onLoad();
     final src = background.sprite?.srcSize;
     if (src != null && src.x > 0 && src.y > 0) {
-      _bgHeight = game.worldRoot.size.x * src.y / src.x;
+      _bgHeight = (game.worldRoot.size.x * src.y / src.x).ceilToDouble();
     }
     background.size = Vector2(game.worldRoot.size.x, bgHeight);
+    background.position = Vector2.zero();
     foreground?.size = Vector2(game.worldRoot.size.x, bgHeight);
+    foreground?.position = Vector2.zero();
   }
 
   Future<void> showPathImage() async {
@@ -163,6 +179,7 @@ class ClassroomScene extends GameScene {
         background.size = Vector2(game.worldRoot.size.x, bgHeight);
         background.position = Vector2.zero();
         foreground?.size = Vector2(game.worldRoot.size.x, bgHeight);
+        foreground?.position = Vector2.zero();
       }
       for (var i = 0; i < _marks.length; i++) {
         final m = _marks[i];
