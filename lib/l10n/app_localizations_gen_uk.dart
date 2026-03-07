@@ -171,8 +171,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get survey_title => 'Маленьке опитування';
 
   @override
-  String get survey_question_color =>
-      'Які кольори тобі більше подобаються? (я пофарбую ними стіни)';
+  String get survey_question_color => 'Які кольори тобі більше подобаються?';
 
   @override
   String get survey_question_atmosphere =>
@@ -403,38 +402,6 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get survey_noise => 'Зображення шумить і двоїться';
-
-  @override
-  String get survey_support_message_title =>
-      '7. Яке повідомлення тебе б підтримало?';
-
-  @override
-  String get survey_safe_breathe => 'Ти в безпеці, просто дихай';
-
-  @override
-  String get survey_not_alone => 'Ти не одна, ми пройдемо це разом';
-
-  @override
-  String get survey_your_world_strength =>
-      'Твій світ — це твоя сила, покажи його';
-
-  @override
-  String get survey_all_good_time => 'Все гаразд. Дай собі час на відновлення';
-
-  @override
-  String get survey_support_symbol_title => '8. Яку форму підтримки обереш?';
-
-  @override
-  String get survey_shield => 'Щит';
-
-  @override
-  String get survey_cat => 'Котик';
-
-  @override
-  String get survey_battery => 'Батарейка';
-
-  @override
-  String get survey_anchor => 'Якір';
 
   @override
   String get classroom => 'Клас';

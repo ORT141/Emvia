@@ -208,7 +208,7 @@
   "@survey_title": {
     "description": "Title for the onboarding survey"
   },
-  "survey_question_color": "What colors do you like more? (I'll use it to paint the walls)",
+  "survey_question_color": "What colors do you like more?",
   "@survey_question_color": {
     "description": "Question about color preference"
   },
@@ -388,16 +388,6 @@
   "survey_blur": "Image is blurred like in fog",
   "survey_acid": "Bright \"acid\" colors",
   "survey_noise": "Image is noisy and doubled",
-  "survey_support_message_title": "7. What message would support you?",
-  "survey_safe_breathe": "You are safe, just breathe",
-  "survey_not_alone": "You are not alone, we will get through this together",
-  "survey_your_world_strength": "Your world is your strength, show it",
-  "survey_all_good_time": "It's okay. Give yourself time to recover",
-  "survey_support_symbol_title": "8. What form of support will you choose?",
-  "survey_shield": "Shield",
-  "survey_cat": "Cat",
-  "survey_battery": "Battery",
-  "survey_anchor": "Anchor",
   "classroom": "Classroom",
   "first_path_description": "A calm, straight route with clear sightlines and familiar desks.",
   "second_path_description": "A winding route weaving between clustered desks and quiet corners.",

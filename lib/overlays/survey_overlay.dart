@@ -20,6 +20,7 @@ const bool kAllowSurveySkip = bool.fromEnvironment(
 class _SurveyOverlayState extends State<SurveyOverlay> {
   final SurveyService _surveyService = SurveyService();
   final Map<String, String> _answers = {};
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -120,8 +121,18 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         elevation: 0,
                       ),
-                      onPressed: _isComplete(questions) ? _submit : null,
-                      child: Text(l.survey_save_continue),
+                      onPressed: _isComplete(questions) && !_isLoading
+                          ? _submit
+                          : null,
+                      child: _isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : Text(l.survey_save_continue),
                     ),
                   ),
                   if (kAllowSurveySkip) ...[
@@ -152,7 +163,15 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
       _answers.length == questions.length;
 
   Future<void> _submit() async {
-    await _surveyService.saveSurvey(_answers);
+    if (_isLoading) return;
+    setState(() => _isLoading = true);
+    try {
+      await _surveyService.saveSurvey(_answers);
+      await _surveyService.callAiBackend(_answers);
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+    if (!mounted) return;
     final shouldStartGame = widget.game.consumeStartGameAfterSurvey();
     widget.game.overlays.remove('Survey');
     if (shouldStartGame) {

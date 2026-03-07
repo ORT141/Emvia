@@ -117,21 +117,9 @@ class EmviaGame extends FlameGame
   }
 
   double sceneWorldWidth(double baseWidth) {
-    if (currentScene != null) {
-      if (currentScene is ClassroomScene) return 1920.0;
-      if (currentScene is CorridorScene) return 3000.0;
-      if (currentScene is PathChoiceScene) return size.x;
-    }
-    return baseWidth;
-  }
-
-  Vector2 _sceneSpawnPoint(GameScene scene) {
-    if (scene is PathChoiceScene) return Vector2(size.x / 2, size.y / 2);
-    if (scene is ClassroomScene) {
-      return Vector2(worldRoot.size.x / 2, worldRoot.size.y * 0.75);
-    }
-    if (scene is CorridorScene) return Vector2(100, size.y * 0.75);
-    return Vector2(size.x / 2, size.y * 0.75);
+    final scene = currentScene;
+    if (scene == null) return baseWidth;
+    return scene.worldWidthForViewport(size);
   }
 
   void startGame() {
@@ -343,22 +331,6 @@ class EmviaGame extends FlameGame
     cameraManager.snapToPlayer(force: true);
   }
 
-  void calmDown() {
-    isStressMode = false;
-    noiseEffect.opacity = 0.0;
-    startDialog(
-      DialogTree(
-        startNodeId: 'calmed',
-        nodes: {
-          'calmed': DialogNode(
-            id: 'calmed',
-            text: (_) => surveyProfile.supportMessageLabel(buildContext!),
-          ),
-        },
-      ),
-    );
-  }
-
   void pauseGame() {
     overlays.remove('Backpack');
     hideMobileControls();
@@ -438,6 +410,6 @@ class EmviaGame extends FlameGame
     Vector2 screenSize,
     PositionComponent root,
   ) {
-    return _sceneSpawnPoint(scene);
+    return scene.spawnPoint(screenSize, root.size);
   }
 }

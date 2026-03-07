@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flutter/foundation.dart';
 import '../emvia_game.dart';
 
 abstract class GameScene extends Component with HasGameReference<EmviaGame> {
@@ -11,35 +12,83 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
   late SpriteComponent background;
   SpriteComponent? foreground;
 
+  double worldWidthForViewport(Vector2 viewportSize) => EmviaGame.worldWidth;
+
+  Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
+      Vector2(viewportSize.x / 2, worldSize.y * 0.75);
+
+  @override
+  @mustCallSuper
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    if (isLoaded) {
+      layoutToWorld();
+    }
+  }
+
+  @protected
+  void layoutToWorld() {
+    final viewportH = game.size.y;
+
+    if (background.sprite?.srcSize != null &&
+        background.sprite!.srcSize.x > 0 &&
+        background.sprite!.srcSize.y > 0) {
+      final src = background.sprite!.srcSize;
+      final scale = viewportH / src.y;
+      final w = src.x * scale;
+
+      background
+        ..size = Vector2(w, viewportH)
+        ..position = Vector2.zero();
+
+      game.worldRoot.size = Vector2(w, viewportH);
+    } else {
+      background
+        ..size = Vector2(game.worldRoot.size.x, viewportH)
+        ..position = Vector2.zero();
+    }
+
+    if (foreground != null) {
+      if (foreground!.sprite?.srcSize != null &&
+          foreground!.sprite!.srcSize.x > 0 &&
+          foreground!.sprite!.srcSize.y > 0) {
+        final src = foreground!.sprite!.srcSize;
+        final scale = viewportH / src.y;
+        final w = src.x * scale;
+        foreground!
+          ..size = Vector2(w, viewportH)
+          ..position = Vector2.zero();
+      } else {
+        foreground!
+          ..size = Vector2(game.worldRoot.size.x, viewportH)
+          ..position = Vector2.zero();
+      }
+    }
+  }
+
   @override
   Future<void> onLoad() async {
     background = SpriteComponent()
       ..sprite = await game.loadSprite(backgroundPath)
-      ..size = Vector2(game.worldRoot.size.x, game.size.y);
+      ..anchor = Anchor.topLeft
+      ..priority = 0;
     add(background);
 
     if (foregroundPath != null) {
       foreground = SpriteComponent()
         ..sprite = await game.loadSprite(foregroundPath!)
-        ..size = Vector2(game.worldRoot.size.x, game.size.y)
+        ..anchor = Anchor.topLeft
         ..priority = 20;
-      game.worldRoot.add(foreground!);
+      add(foreground!);
     }
+
+    layoutToWorld();
   }
 
   @override
   void onRemove() {
     foreground?.removeFromParent();
     super.onRemove();
-  }
-
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    if (isLoaded) {
-      background.size = Vector2(game.worldRoot.size.x, size.y);
-      foreground?.size = Vector2(game.worldRoot.size.x, size.y);
-    }
   }
 
   void onPlayerInteract(PositionComponent other) {}

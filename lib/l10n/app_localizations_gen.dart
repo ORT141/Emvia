@@ -413,7 +413,7 @@ abstract class AppLocalizationsGen {
   /// Question about color preference
   ///
   /// In en, this message translates to:
-  /// **'What colors do you like more? (I\'ll use it to paint the walls)'**
+  /// **'What colors do you like more?'**
   String get survey_question_color;
 
   /// Question about atmosphere preference
@@ -829,66 +829,6 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'Image is noisy and doubled'**
   String get survey_noise;
-
-  /// No description provided for @survey_support_message_title.
-  ///
-  /// In en, this message translates to:
-  /// **'7. What message would support you?'**
-  String get survey_support_message_title;
-
-  /// No description provided for @survey_safe_breathe.
-  ///
-  /// In en, this message translates to:
-  /// **'You are safe, just breathe'**
-  String get survey_safe_breathe;
-
-  /// No description provided for @survey_not_alone.
-  ///
-  /// In en, this message translates to:
-  /// **'You are not alone, we will get through this together'**
-  String get survey_not_alone;
-
-  /// No description provided for @survey_your_world_strength.
-  ///
-  /// In en, this message translates to:
-  /// **'Your world is your strength, show it'**
-  String get survey_your_world_strength;
-
-  /// No description provided for @survey_all_good_time.
-  ///
-  /// In en, this message translates to:
-  /// **'It\'s okay. Give yourself time to recover'**
-  String get survey_all_good_time;
-
-  /// No description provided for @survey_support_symbol_title.
-  ///
-  /// In en, this message translates to:
-  /// **'8. What form of support will you choose?'**
-  String get survey_support_symbol_title;
-
-  /// No description provided for @survey_shield.
-  ///
-  /// In en, this message translates to:
-  /// **'Shield'**
-  String get survey_shield;
-
-  /// No description provided for @survey_cat.
-  ///
-  /// In en, this message translates to:
-  /// **'Cat'**
-  String get survey_cat;
-
-  /// No description provided for @survey_battery.
-  ///
-  /// In en, this message translates to:
-  /// **'Battery'**
-  String get survey_battery;
-
-  /// No description provided for @survey_anchor.
-  ///
-  /// In en, this message translates to:
-  /// **'Anchor'**
-  String get survey_anchor;
 
   /// No description provided for @classroom.
   ///

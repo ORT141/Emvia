@@ -208,7 +208,7 @@
   "@survey_title": {
     "description": "Title for the onboarding survey"
   },
-  "survey_question_color": "Які кольори тобі більше подобаються? (я пофарбую ними стіни)",
+  "survey_question_color": "Які кольори тобі більше подобаються?",
   "@survey_question_color": {
     "description": "Question about color preference"
   },
@@ -388,16 +388,6 @@
   "survey_blur": "Картинка розмита, як у тумані",
   "survey_acid": "Яскраві “кислотні” кольори",
   "survey_noise": "Зображення шумить і двоїться",
-  "survey_support_message_title": "7. Яке повідомлення тебе б підтримало?",
-  "survey_safe_breathe": "Ти в безпеці, просто дихай",
-  "survey_not_alone": "Ти не одна, ми пройдемо це разом",
-  "survey_your_world_strength": "Твій світ — це твоя сила, покажи його",
-  "survey_all_good_time": "Все гаразд. Дай собі час на відновлення",
-  "survey_support_symbol_title": "8. Яку форму підтримки обереш?",
-  "survey_shield": "Щит",
-  "survey_cat": "Котик",
-  "survey_battery": "Батарейка",
-  "survey_anchor": "Якір",
   "classroom": "Клас",
   "first_path_description": "Спокійний прямий шлях зі зрозумілою видимістю та знайомими партами.",
   "second_path_description": "Звивистий маршрут поміж сгрупованих парт і тихих кутків.",

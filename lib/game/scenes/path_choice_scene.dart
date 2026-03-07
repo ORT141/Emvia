@@ -15,6 +15,13 @@ class PathChoiceScene extends GameScene {
         foregroundPath: 'scenes/classroom/classmates.png',
       );
 
+  @override
+  double worldWidthForViewport(Vector2 viewportSize) => viewportSize.x;
+
+  @override
+  Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
+      Vector2(viewportSize.x / 2, viewportSize.y / 2);
+
   SpriteComponent? _pathOverlay;
   Vector2? _pathBgSrcSize;
 
@@ -112,14 +119,14 @@ class PathChoiceScene extends GameScene {
       name: index == 0
           ? (l?.path_first ?? 'First Path')
           : index == 1
-              ? (l?.path_second ?? 'Second Path')
-              : (l?.path_third ?? 'Third Path'),
+          ? (l?.path_second ?? 'Second Path')
+          : (l?.path_third ?? 'Third Path'),
       title: l?.map_of_calm_olya ?? 'Map of Calm: Olya',
       description: index == 0
           ? (l?.first_path_description ?? '')
           : index == 1
-              ? (l?.second_path_description ?? '')
-              : (l?.third_path_description ?? ''),
+          ? (l?.second_path_description ?? '')
+          : (l?.third_path_description ?? ''),
       confirmLabel: l?.confirm ?? 'Confirm',
       cancelLabel: l?.cancel ?? 'Cancel',
     );

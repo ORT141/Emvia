@@ -173,8 +173,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get survey_title => 'Little Questionnaire';
 
   @override
-  String get survey_question_color =>
-      'What colors do you like more? (I\'ll use it to paint the walls)';
+  String get survey_question_color => 'What colors do you like more?';
 
   @override
   String get survey_question_atmosphere => 'What atmosphere do you prefer?';
@@ -406,41 +405,6 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get survey_noise => 'Image is noisy and doubled';
-
-  @override
-  String get survey_support_message_title =>
-      '7. What message would support you?';
-
-  @override
-  String get survey_safe_breathe => 'You are safe, just breathe';
-
-  @override
-  String get survey_not_alone =>
-      'You are not alone, we will get through this together';
-
-  @override
-  String get survey_your_world_strength =>
-      'Your world is your strength, show it';
-
-  @override
-  String get survey_all_good_time =>
-      'It\'s okay. Give yourself time to recover';
-
-  @override
-  String get survey_support_symbol_title =>
-      '8. What form of support will you choose?';
-
-  @override
-  String get survey_shield => 'Shield';
-
-  @override
-  String get survey_cat => 'Cat';
-
-  @override
-  String get survey_battery => 'Battery';
-
-  @override
-  String get survey_anchor => 'Anchor';
 
   @override
   String get classroom => 'Classroom';

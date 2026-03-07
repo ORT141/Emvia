@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:emvia/l10n/app_localizations.dart';
@@ -39,6 +42,18 @@ class SurveyProfile {
   String get supportSymbol =>
       answers[SurveyService.supportSymbolKey] ?? 'anchor';
 
+  String get aiPattern => answers[SurveyService.aiPatternKey] ?? '';
+
+  List<String> get aiWords {
+    final raw = answers[SurveyService.aiWordsKey];
+    if (raw == null || raw.isEmpty) return [];
+    try {
+      return (jsonDecode(raw) as List).cast<String>();
+    } catch (_) {
+      return [];
+    }
+  }
+
   Color get safeColorValue {
     switch (safeColor) {
       case 'lavender':
@@ -50,21 +65,6 @@ class SurveyProfile {
       case 'mint':
       default:
         return const Color(0xFFA7E9D3);
-    }
-  }
-
-  String supportMessageLabel(BuildContext context) {
-    final l = AppLocalizations.of(context)!;
-    switch (supportMessage) {
-      case 'not_alone':
-        return l.survey_not_alone;
-      case 'your_world_strength':
-        return l.survey_your_world_strength;
-      case 'all_good_time':
-        return l.survey_all_good_time;
-      case 'safe_breathe':
-      default:
-        return l.survey_safe_breathe;
     }
   }
 
@@ -152,6 +152,8 @@ class SurveyService {
   static const String panicStyleKey = 'panic_style';
   static const String supportMessageKey = 'support_message';
   static const String supportSymbolKey = 'support_symbol';
+  static const String aiPatternKey = 'ai_pattern';
+  static const String aiWordsKey = 'ai_words';
 
   static List<SurveyQuestion> localizedQuestions(BuildContext context) {
     final l = AppLocalizations.of(context)!;
@@ -215,29 +217,6 @@ class SurveyService {
           SurveyOption(id: 'noise', label: l.survey_noise),
         ],
       ),
-      SurveyQuestion(
-        id: supportMessageKey,
-        title: l.survey_support_message_title,
-        options: [
-          SurveyOption(id: 'safe_breathe', label: l.survey_safe_breathe),
-          SurveyOption(id: 'not_alone', label: l.survey_not_alone),
-          SurveyOption(
-            id: 'your_world_strength',
-            label: l.survey_your_world_strength,
-          ),
-          SurveyOption(id: 'all_good_time', label: l.survey_all_good_time),
-        ],
-      ),
-      SurveyQuestion(
-        id: supportSymbolKey,
-        title: l.survey_support_symbol_title,
-        options: [
-          SurveyOption(id: 'shield', label: l.survey_shield),
-          SurveyOption(id: 'cat', label: l.survey_cat),
-          SurveyOption(id: 'battery', label: l.survey_battery),
-          SurveyOption(id: 'anchor', label: l.survey_anchor),
-        ],
-      ),
     ];
   }
 
@@ -269,6 +248,8 @@ class SurveyService {
       panicStyleKey,
       supportMessageKey,
       supportSymbolKey,
+      aiPatternKey,
+      aiWordsKey,
     ];
 
     for (final key in keys) {
@@ -284,5 +265,40 @@ class SurveyService {
   Future<SurveyProfile> getProfile() async {
     final answers = await getSurveyResults();
     return SurveyProfile(answers);
+  }
+
+  Future<void> callAiBackend(Map<String, String> answers) async {
+    try {
+      final body = jsonEncode({
+        'safe_color': answers[safeColorKey] ?? 'mint',
+        'calming_pattern': answers[calmingPatternKey] ?? 'geometry',
+        'calming_item': answers[calmingItemKey] ?? 'book',
+        'sound_trigger': answers[soundTriggerKey] ?? 'crowd',
+        'calming_action': answers[calmingActionKey] ?? 'breathing',
+        'panic_style': answers[panicStyleKey] ?? 'shake',
+        'support_message': answers[supportMessageKey] ?? 'safe_breathe',
+      });
+
+      final response = await http
+          .post(
+            Uri.parse('http://91.231.182.132:8066/survey'),
+            headers: {
+              'Content-Type': 'application/json',
+              'User-Agent': 'Emvia/1.0',
+            },
+            body: body,
+          )
+          .timeout(const Duration(seconds: 20));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final pattern = (data['pattern'] as String?) ?? '';
+        final words = (data['words'] as List?)?.cast<String>() ?? [];
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString(aiPatternKey, pattern);
+        await prefs.setString(aiWordsKey, jsonEncode(words));
+      }
+    } catch (_) {}
   }
 }

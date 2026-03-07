@@ -15,6 +15,13 @@ class ClassroomScene extends GameScene with TapCallbacks {
         foregroundPath: 'scenes/classroom/classmates.png',
       );
 
+  @override
+  double worldWidthForViewport(Vector2 viewportSize) => 1920.0;
+
+  @override
+  Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
+      Vector2(worldSize.x / 2, worldSize.y * 0.75);
+
   SpriteComponent? _pathOverlay;
   Vector2? _pathBgSrcSize;
 
