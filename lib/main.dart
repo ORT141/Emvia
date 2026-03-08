@@ -8,6 +8,7 @@ import 'package:emvia/overlays/pause_overlay.dart';
 import 'package:emvia/overlays/backpack_overlay.dart';
 import 'package:emvia/overlays/settings_overlay.dart';
 import 'package:emvia/overlays/survey_overlay.dart';
+import 'package:emvia/overlays/debug_overlay.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
@@ -113,6 +114,7 @@ class _MyAppState extends State<MyApp> {
           'Survey': (_, game) => SurveyOverlay(game: game),
           'Backpack': (_, game) => BackpackOverlay(game: game),
           'MobileControls': (_, game) => MobileControlsOverlay(game: game),
+          'Debug': (_, game) => DebugOverlay(game: game),
           'PathDetail': (_, game) => ValueListenableBuilder(
                 valueListenable: game.pathDetailNotifier,
                 builder: (context, value, child) {

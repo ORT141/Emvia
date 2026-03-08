@@ -35,16 +35,18 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
         background.sprite!.srcSize.y > 0) {
       final src = background.sprite!.srcSize;
       final scale = viewportH / src.y;
-      final w = src.x * scale;
+      final contentW = src.x * scale;
+      final worldW = worldWidthForViewport(game.size);
 
       background
-        ..size = Vector2(w, viewportH)
+        ..size = Vector2(contentW, viewportH)
         ..position = Vector2.zero();
 
-      game.worldRoot.size = Vector2(w, viewportH);
+      game.worldRoot.size = Vector2(worldW, viewportH);
     } else {
+      final w = worldWidthForViewport(game.size);
       background
-        ..size = Vector2(game.worldRoot.size.x, viewportH)
+        ..size = Vector2(w, viewportH)
         ..position = Vector2.zero();
     }
 
@@ -54,13 +56,14 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
           foreground!.sprite!.srcSize.y > 0) {
         final src = foreground!.sprite!.srcSize;
         final scale = viewportH / src.y;
-        final w = src.x * scale;
+        final contentW = src.x * scale;
         foreground!
-          ..size = Vector2(w, viewportH)
+          ..size = Vector2(contentW, viewportH)
           ..position = Vector2.zero();
       } else {
+        final w = worldWidthForViewport(game.size);
         foreground!
-          ..size = Vector2(game.worldRoot.size.x, viewportH)
+          ..size = Vector2(w, viewportH)
           ..position = Vector2.zero();
       }
     }
@@ -82,6 +85,11 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
       add(foreground!);
     }
 
+    layoutToWorld();
+  }
+
+  @mustCallSuper
+  void redrawScene() {
     layoutToWorld();
   }
 

@@ -1,5 +1,7 @@
+import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/rendering.dart';
+import 'package:flutter/material.dart';
 
 import 'game_scene.dart';
 
@@ -13,7 +15,15 @@ class CorridorScene extends GameScene {
   final List<SpriteComponent> _patternSprites = [];
 
   @override
-  double worldWidthForViewport(Vector2 viewportSize) => viewportSize.x;
+  double worldWidthForViewport(Vector2 viewportSize) {
+    if (background.sprite?.srcSize != null &&
+        background.sprite!.srcSize.y > 0) {
+      final src = background.sprite!.srcSize;
+      final scale = viewportSize.y / src.y;
+      return src.x * scale;
+    }
+    return viewportSize.x * 2;
+  }
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
@@ -37,22 +47,52 @@ class CorridorScene extends GameScene {
       final sprite = await game.loadSprite('wall-patterns/$pattern.png');
       final worldH = game.size.y;
       final patternSize = worldH * 0.11;
-      final worldW = game.worldRoot.size.x;
-      final spacing = patternSize * 2.2;
-      final count = (worldW / spacing).ceil() + 1;
-      final y = worldH * 0.2;
+      final spacing = patternSize * 1.1;
+      final minY = worldH * 0.13;
+      final maxY = worldH * 0.5;
 
+      final startX = 2100.0;
+      final endX = 3500.0;
+      final areaWidth = endX - startX;
+      final count = (areaWidth / spacing).floor();
+
+      final random = math.Random();
       for (int i = 0; i < count; i++) {
+        final y = minY + random.nextDouble() * (maxY - minY);
         final sp = SpriteComponent()
           ..sprite = sprite
           ..size = Vector2.all(patternSize)
-          ..position = Vector2(i * spacing + patternSize * 0.6, y)
+          ..position = Vector2(startX + i * spacing + patternSize * 0.6, y)
           ..anchor = Anchor.center
+          ..angle = random.nextDouble() * math.pi * 2
           ..opacity = 0.50
           ..priority = 1;
         _patternSprites.add(sp);
         add(sp);
       }
     } catch (_) {}
+  }
+
+  @override
+  @mustCallSuper
+  void redrawScene() {
+    try {
+      for (final sp in List<SpriteComponent>.from(_patternSprites)) {
+        sp.removeFromParent();
+      }
+    } catch (_) {}
+    _patternSprites.clear();
+
+    final color = game.surveyProfile.safeColorValue;
+    try {
+      background.decorator.removeLast();
+    } catch (_) {}
+    try {
+      background.decorator.addLast(PaintDecorator.tint(color));
+    } catch (_) {}
+
+    _loadWallPattern();
+    layoutToWorld();
+    super.redrawScene();
   }
 }

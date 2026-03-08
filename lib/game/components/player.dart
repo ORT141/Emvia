@@ -85,9 +85,15 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
 
   @override
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.tab) {
-      game.toggleBackpack();
-      return true;
+    if (event is KeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.tab) {
+        game.toggleBackpack();
+        return true;
+      }
+      if (event.logicalKey == LogicalKeyboardKey.f3) {
+        game.toggleDebug();
+        return true;
+      }
     }
 
     if (game.freezeForPathChoice) {

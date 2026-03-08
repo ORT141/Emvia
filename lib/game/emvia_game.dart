@@ -133,6 +133,7 @@ class EmviaGame extends FlameGame
   }
 
   bool get isBackpackOpen => overlays.isActive('Backpack');
+  bool get isDebugOpen => overlays.isActive('Debug');
 
   void toggleBackpack() {
     if (!_canToggleBackpack()) return;
@@ -140,6 +141,14 @@ class EmviaGame extends FlameGame
       overlays.remove('Backpack');
     } else {
       overlays.add('Backpack');
+    }
+  }
+
+  void toggleDebug() {
+    if (isDebugOpen) {
+      overlays.remove('Debug');
+    } else {
+      overlays.add('Debug');
     }
   }
 

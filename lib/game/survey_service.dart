@@ -50,7 +50,6 @@ class SurveyProfile {
     if (raw == null || raw.isEmpty) return [];
     try {
       final list = (jsonDecode(raw) as List).cast<String>();
-      debugPrint('AI Generated Words: ${list.join(", ")}');
       return list;
     } catch (_) {
       return [];
