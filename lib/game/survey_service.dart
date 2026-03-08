@@ -43,18 +43,27 @@ class SurveyProfile {
       answers[SurveyService.supportSymbolKey] ?? 'anchor';
 
   String get aiPattern => answers[SurveyService.aiPatternKey] ?? '';
+  String get aiColor => answers[SurveyService.aiColorKey] ?? '';
 
   List<String> get aiWords {
     final raw = answers[SurveyService.aiWordsKey];
     if (raw == null || raw.isEmpty) return [];
     try {
-      return (jsonDecode(raw) as List).cast<String>();
+      final list = (jsonDecode(raw) as List).cast<String>();
+      debugPrint('AI Generated Words: ${list.join(", ")}');
+      return list;
     } catch (_) {
       return [];
     }
   }
 
   Color get safeColorValue {
+    if (aiColor.isNotEmpty) {
+      try {
+        final hex = aiColor.replaceAll('#', '');
+        return Color(int.parse('FF$hex', radix: 16));
+      } catch (_) {}
+    }
     switch (safeColor) {
       case 'lavender':
         return const Color(0xFFDCC6FF);
@@ -154,6 +163,7 @@ class SurveyService {
   static const String supportSymbolKey = 'support_symbol';
   static const String aiPatternKey = 'ai_pattern';
   static const String aiWordsKey = 'ai_words';
+  static const String aiColorKey = 'ai_color';
 
   static List<SurveyQuestion> localizedQuestions(BuildContext context) {
     final l = AppLocalizations.of(context)!;
@@ -250,6 +260,7 @@ class SurveyService {
       supportSymbolKey,
       aiPatternKey,
       aiWordsKey,
+      aiColorKey,
     ];
 
     for (final key in keys) {
@@ -294,10 +305,12 @@ class SurveyService {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
         final pattern = (data['pattern'] as String?) ?? '';
         final words = (data['words'] as List?)?.cast<String>() ?? [];
+        final color = (data['color'] as String?) ?? '';
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString(aiPatternKey, pattern);
         await prefs.setString(aiWordsKey, jsonEncode(words));
+        await prefs.setString(aiColorKey, color);
       }
     } catch (_) {}
   }

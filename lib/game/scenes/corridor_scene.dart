@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/rendering.dart';
 
 import 'game_scene.dart';
 
@@ -21,6 +22,10 @@ class CorridorScene extends GameScene {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+
+    final color = game.surveyProfile.safeColorValue;
+    background.decorator.addLast(PaintDecorator.tint(color));
+
     await _loadWallPattern();
   }
 
