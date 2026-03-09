@@ -26,7 +26,6 @@ class _SettingsOverlayState extends State<SettingsOverlay>
   late final AnimationController _slideController;
   late final Animation<Offset> _slideAnimation;
   late final Animation<double> _fadeAnimation;
-  double _volume = 0.6;
 
   @override
   void initState() {
@@ -124,8 +123,8 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                       style: const TextStyle(fontWeight: FontWeight.w700),
                     ),
                     Slider(
-                      value: _volume,
-                      onChanged: (v) => setState(() => _volume = v),
+                      value: widget.game.volume,
+                      onChanged: (v) => setState(() => widget.game.volume = v),
                       min: 0,
                       max: 1,
                       activeColor: theme.colorScheme.primary,

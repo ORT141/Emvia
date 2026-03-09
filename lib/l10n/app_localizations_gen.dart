@@ -587,19 +587,19 @@ abstract class AppLocalizationsGen {
   /// No description provided for @path_first.
   ///
   /// In en, this message translates to:
-  /// **'First Path'**
+  /// **'Main corridor'**
   String get path_first;
 
   /// No description provided for @path_second.
   ///
   /// In en, this message translates to:
-  /// **'Second Path'**
+  /// **'Through the library'**
   String get path_second;
 
   /// No description provided for @path_third.
   ///
   /// In en, this message translates to:
-  /// **'Third Path'**
+  /// **'Through the schoolyard'**
   String get path_third;
 
   /// No description provided for @confirm.
@@ -869,19 +869,19 @@ abstract class AppLocalizationsGen {
   /// No description provided for @first_path_description.
   ///
   /// In en, this message translates to:
-  /// **'A calm, straight route with clear sightlines and familiar desks.'**
+  /// **'The shortest route. Crowded, noisy, many students. You will have to quickly make your way through the crowd.'**
   String get first_path_description;
 
   /// No description provided for @second_path_description.
   ///
   /// In en, this message translates to:
-  /// **'A winding route weaving between clustered desks and quiet corners.'**
+  /// **'Quiet corridors near the library. School lockers are located here — Olya can stop and take something from her belongings. The route is a bit longer, but calmer.'**
   String get second_path_description;
 
   /// No description provided for @third_path_description.
   ///
   /// In en, this message translates to:
-  /// **'A narrower path through scattered drawings and small ledges, offering new perspectives.'**
+  /// **'A detour through the inner courtyard and the back entrance. There are almost no people, but the path is longer and less safe — older students or other unpredictable situations might be encountered in the yard.'**
   String get third_path_description;
 
   /// No description provided for @map_of_calm_olya.

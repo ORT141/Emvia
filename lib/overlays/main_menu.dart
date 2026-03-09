@@ -534,7 +534,10 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
 
   Future<void> _playPreview(String file) async {
     await _stopPreview?.call();
-    final player = await FlameAudio.play('player-cards/$file');
+    final player = await FlameAudio.play(
+      'player-cards/$file',
+      volume: widget.game.volume,
+    );
     _stopPreview = player.stop;
   }
 

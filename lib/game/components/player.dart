@@ -25,11 +25,8 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
     ], stepTime: 1);
 
     _walkingAnimation = SpriteAnimation.spriteList([
-      await game.loadSprite('player/walking1.png'),
-      await game.loadSprite('player/walking2.png'),
-      await game.loadSprite('player/walking3.png'),
-      await game.loadSprite('player/walking4.png'),
-      await game.loadSprite('player/walking5.png'),
+      for (int i = 1; i <= 26; i++)
+        await game.loadSprite('player/walking_$i.png'),
     ], stepTime: 0.1);
 
     animations = {

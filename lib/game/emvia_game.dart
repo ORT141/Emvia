@@ -4,6 +4,7 @@ import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:emvia/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'survey_service.dart';
 import 'components/fade_overlay.dart';
@@ -56,6 +57,22 @@ class EmviaGame extends FlameGame
   PlayableCharacter selectedCharacter = PlayableCharacter.olya;
   bool _startGameAfterSurvey = false;
 
+  static const String _volumeKey = 'volume';
+
+  double _volume = 0.6;
+  double get volume => _volume;
+  set volume(double value) {
+    _volume = value.clamp(0.0, 1.0);
+    _saveVolume();
+  }
+
+  Future<void> _saveVolume() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setDouble(_volumeKey, _volume);
+    } catch (_) {}
+  }
+
   final SurveyService _surveyService = SurveyService();
   SurveyProfile surveyProfile = SurveyProfile(const {});
   final BackpackInventory backpack = BackpackInventory(
@@ -77,6 +94,8 @@ class EmviaGame extends FlameGame
 
   @override
   Future<void> onLoad() async {
+    await _loadVolume();
+
     noiseEffect = SpriteComponent()
       ..sprite = await loadSprite('overlays/noise.jpg')
       ..size = size
@@ -186,6 +205,13 @@ class EmviaGame extends FlameGame
     _startGameAfterSurvey = true;
     closeMainMenu();
     overlays.add('Survey');
+  }
+
+  Future<void> _loadVolume() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      _volume = prefs.getDouble(_volumeKey) ?? _volume;
+    } catch (_) {}
   }
 
   void closeMainMenu() {

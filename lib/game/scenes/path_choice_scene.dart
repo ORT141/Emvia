@@ -152,8 +152,11 @@ class PathChoiceScene extends GameScene {
       final files = _pathSoundFiles[lang]!;
       if (index < 0 || index >= files.length) return;
       await _stopPathAudio?.call();
-      print('Playing path sound: ${files[index]}');
-      final player = await FlameAudio.play('paths/${files[index]}');
+
+      final player = await FlameAudio.play(
+        'paths/${files[index]}',
+        volume: game.volume,
+      );
       _stopPathAudio = player.stop;
     } catch (_) {}
   }

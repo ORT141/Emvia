@@ -270,13 +270,13 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get path_choice_title => 'Обери маршрут';
 
   @override
-  String get path_first => 'Перший шлях';
+  String get path_first => 'Головний коридор';
 
   @override
-  String get path_second => 'Другий шлях';
+  String get path_second => 'Через бібліотеку';
 
   @override
-  String get path_third => 'Третій шлях';
+  String get path_third => 'Через шкільний двір';
 
   @override
   String get confirm => 'Підтвердити';
@@ -423,15 +423,15 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get first_path_description =>
-      'Спокійний прямий шлях зі зрозумілою видимістю та знайомими партами.';
+      'Найкоротший шлях. Людно, шумно, багато учнів. Доведеться швидко пробиратися крізь натовп.';
 
   @override
   String get second_path_description =>
-      'Звивистий маршрут поміж сгрупованих парт і тихих кутків.';
+      'Тихі коридори біля бібліотеки. Тут розташовані шкільні шафки — Оля може зупинитися і взяти щось зі своїх речей. Маршрут трохи довший, але спокійніший.';
 
   @override
   String get third_path_description =>
-      'Вужчий шлях крізь розкидані малюнки й невеликі уступи, що відкриває нові ракурси.';
+      'Обхід через внутрішній двір і запасний вхід. Людей майже немає, але шлях довший і менш безпечний — у дворі можуть трапитися старші учні або інші непередбачувані ситуації.';
 
   @override
   String get map_of_calm_olya => 'Мапа спокою: Оля';

@@ -272,13 +272,13 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get path_choice_title => 'Choose Route';
 
   @override
-  String get path_first => 'First Path';
+  String get path_first => 'Main corridor';
 
   @override
-  String get path_second => 'Second Path';
+  String get path_second => 'Through the library';
 
   @override
-  String get path_third => 'Third Path';
+  String get path_third => 'Through the schoolyard';
 
   @override
   String get confirm => 'Confirm';
@@ -427,15 +427,15 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get first_path_description =>
-      'A calm, straight route with clear sightlines and familiar desks.';
+      'The shortest route. Crowded, noisy, many students. You will have to quickly make your way through the crowd.';
 
   @override
   String get second_path_description =>
-      'A winding route weaving between clustered desks and quiet corners.';
+      'Quiet corridors near the library. School lockers are located here — Olya can stop and take something from her belongings. The route is a bit longer, but calmer.';
 
   @override
   String get third_path_description =>
-      'A narrower path through scattered drawings and small ledges, offering new perspectives.';
+      'A detour through the inner courtyard and the back entrance. There are almost no people, but the path is longer and less safe — older students or other unpredictable situations might be encountered in the yard.';
 
   @override
   String get map_of_calm_olya => 'Map of Calm: Olya';

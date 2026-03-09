@@ -58,7 +58,10 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
     final files = _soundFiles[lang]!;
     if (index >= files.length) return;
     await _stopQuestionAudio?.call();
-    final player = await FlameAudio.play('survey/${files[index]}');
+    final player = await FlameAudio.play(
+      'survey/${files[index]}',
+      volume: widget.game.volume,
+    );
     _stopQuestionAudio = player.stop;
   }
 
