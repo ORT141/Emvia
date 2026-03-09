@@ -226,6 +226,16 @@ class SurveyService {
           SurveyOption(id: 'noise', label: l.survey_noise),
         ],
       ),
+      SurveyQuestion(
+        id: supportMessageKey,
+        title: l.survey_support_form_title,
+        options: [
+          SurveyOption(id: 'safe_breathe', label: l.survey_support_safe_breathe),
+          SurveyOption(id: 'affirmation', label: l.survey_support_affirmation),
+          SurveyOption(id: 'grounding', label: l.survey_support_grounding),
+          SurveyOption(id: 'visualization', label: l.survey_support_visualization),
+        ],
+      ),
     ];
   }
 

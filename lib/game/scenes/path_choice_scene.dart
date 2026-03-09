@@ -4,6 +4,8 @@ import 'package:emvia/game/emvia_types.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:emvia/l10n/app_localizations.dart';
+import 'package:flame_audio/flame_audio.dart';
+import 'package:flutter/widgets.dart';
 
 import '../components/path_mark.dart';
 import 'game_scene.dart';
@@ -29,6 +31,21 @@ class PathChoiceScene extends GameScene {
   final List<PathMark> _markCircles = <PathMark>[];
   int? _selectedMarkIndex;
 
+  Future<void> Function()? _stopPathAudio;
+
+  static const _pathSoundFiles = {
+    'en': [
+      'main corridor.mp3',
+      'through the library.mp3',
+      'through the schoolyard.mp3',
+    ],
+    'uk': [
+      'головний коридор.mp3',
+      'через бібліотеку.mp3',
+      'через шкільний двір.mp3',
+    ],
+  };
+
   final double _bgHeight = 0;
 
   double get bgHeight => _bgHeight > 0 ? _bgHeight : game.size.y;
@@ -53,6 +70,15 @@ class PathChoiceScene extends GameScene {
     foreground?.opacity = 0.0;
 
     background.opacity = 1.0;
+
+    try {
+      final allFiles = <String>[];
+      allFiles.addAll(_pathSoundFiles['en']!);
+      allFiles.addAll(_pathSoundFiles['uk']!);
+      await FlameAudio.audioCache.loadAll(
+        allFiles.map((f) => 'paths/$f').toList(),
+      );
+    } catch (_) {}
 
     await showMarks([
       Vector2(559.2 / game.size.x, 204.8 / game.size.y),
@@ -109,7 +135,27 @@ class PathChoiceScene extends GameScene {
     for (var i = 0; i < _markCircles.length; i++) {
       _markCircles[i].isSelected = (i == _selectedMarkIndex);
     }
+    _playPathSound(index);
     _showDetailForIndex(index);
+  }
+
+  void _playPathSound(int index) async {
+    try {
+      String lang;
+      if (game.buildContext != null) {
+        final locale = Localizations.localeOf(game.buildContext!);
+        lang = locale.languageCode == 'uk' ? 'uk' : 'en';
+      } else {
+        final plat = WidgetsBinding.instance.platformDispatcher.locale;
+        lang = plat.languageCode == 'uk' ? 'uk' : 'en';
+      }
+      final files = _pathSoundFiles[lang]!;
+      if (index < 0 || index >= files.length) return;
+      await _stopPathAudio?.call();
+      print('Playing path sound: ${files[index]}');
+      final player = await FlameAudio.play('paths/${files[index]}');
+      _stopPathAudio = player.stop;
+    } catch (_) {}
   }
 
   void _showDetailForIndex(int index) {
@@ -141,6 +187,7 @@ class PathChoiceScene extends GameScene {
     _markCircles.clear();
     _marks.clear();
     _selectedMarkIndex = null;
+    _stopPathAudio?.call();
   }
 
   void clearSelection() {

@@ -830,6 +830,36 @@ abstract class AppLocalizationsGen {
   /// **'Image is noisy and doubled'**
   String get survey_noise;
 
+  /// Survey question 7: What form of support.
+  ///
+  /// In en, this message translates to:
+  /// **'7. What form of support would you choose?'**
+  String get survey_support_form_title;
+
+  /// Survey option: safe phrase and breathing.
+  ///
+  /// In en, this message translates to:
+  /// **'Safe phrase + breathing'**
+  String get survey_support_safe_breathe;
+
+  /// Survey option: positive affirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Positive affirmation'**
+  String get survey_support_affirmation;
+
+  /// Survey option: grounding technique.
+  ///
+  /// In en, this message translates to:
+  /// **'Grounding technique'**
+  String get survey_support_grounding;
+
+  /// Survey option: calm visualization.
+  ///
+  /// In en, this message translates to:
+  /// **'Calm visualization'**
+  String get survey_support_visualization;
+
   /// No description provided for @classroom.
   ///
   /// In en, this message translates to:

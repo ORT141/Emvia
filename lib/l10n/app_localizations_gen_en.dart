@@ -407,6 +407,22 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get survey_noise => 'Image is noisy and doubled';
 
   @override
+  String get survey_support_form_title =>
+      '7. What form of support would you choose?';
+
+  @override
+  String get survey_support_safe_breathe => 'Safe phrase + breathing';
+
+  @override
+  String get survey_support_affirmation => 'Positive affirmation';
+
+  @override
+  String get survey_support_grounding => 'Grounding technique';
+
+  @override
+  String get survey_support_visualization => 'Calm visualization';
+
+  @override
   String get classroom => 'Classroom';
 
   @override

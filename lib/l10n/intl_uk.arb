@@ -312,9 +312,9 @@
   "survey_calibration_subtitle": "Відповіді персоналізують історію Олі та фінальну «Мапу спокою».",
   "survey_save_continue": "Зберегти та продовжити",
   "path_choice_title": "Обери маршрут",
-  "path_first": "Перший шлях",
-  "path_second": "Другий шлях",
-  "path_third": "Третій шлях",
+  "path_first": "Головний коридор",
+  "path_second": "Через бібліотеку",
+  "path_third": "Через шкільний двір",
   "confirm": "Підтвердити",
   "calm_map_personal_artifact": "Персональний артефакт",
   "calm_map_title": "Твоя Мапа спокою",
@@ -388,9 +388,29 @@
   "survey_blur": "Картинка розмита, як у тумані",
   "survey_acid": "Яскраві “кислотні” кольори",
   "survey_noise": "Зображення шумить і двоїться",
+  "survey_support_form_title": "7. Яку форму підтримки обереш?",
+  "@survey_support_form_title": {
+    "description": "Survey question 7: What form of support."
+  },
+  "survey_support_safe_breathe": "Безпечна фраза + дихання",
+  "@survey_support_safe_breathe": {
+    "description": "Survey option: safe phrase and breathing."
+  },
+  "survey_support_affirmation": "Позитивне твердження",
+  "@survey_support_affirmation": {
+    "description": "Survey option: positive affirmation."
+  },
+  "survey_support_grounding": "Техніка заземлення",
+  "@survey_support_grounding": {
+    "description": "Survey option: grounding technique."
+  },
+  "survey_support_visualization": "Спокійна візуалізація",
+  "@survey_support_visualization": {
+    "description": "Survey option: calm visualization."
+  },
   "classroom": "Клас",
-  "first_path_description": "Спокійний прямий шлях зі зрозумілою видимістю та знайомими партами.",
-  "second_path_description": "Звивистий маршрут поміж сгрупованих парт і тихих кутків.",
-  "third_path_description": "Вужчий шлях крізь розкидані малюнки й невеликі уступи, що відкриває нові ракурси.",
+  "first_path_description": "Найкоротший шлях. Людно, шумно, багато учнів. Доведеться швидко пробиратися крізь натовп.",
+  "second_path_description": "Тихі коридори біля бібліотеки. Тут розташовані шкільні шафки — Оля може зупинитися і взяти щось зі своїх речей. Маршрут трохи довший, але спокійніший.",
+  "third_path_description": "Обхід через внутрішній двір і запасний вхід. Людей майже немає, але шлях довший і менш безпечний — у дворі можуть трапитися старші учні або інші непередбачувані ситуації.",
   "map_of_calm_olya": "Мапа спокою: Оля"
 }

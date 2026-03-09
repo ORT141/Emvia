@@ -312,9 +312,9 @@
   "survey_calibration_subtitle": "Answers will personalize Olya's story and the final \"Map of Calm\".",
   "survey_save_continue": "Save and Continue",
   "path_choice_title": "Choose Route",
-  "path_first": "First Path",
-  "path_second": "Second Path",
-  "path_third": "Third Path",
+  "path_first": "Main corridor",
+  "path_second": "Through the library",
+  "path_third": "Through the schoolyard",
   "confirm": "Confirm",
   "calm_map_personal_artifact": "Personal Artifact",
   "calm_map_title": "Your Map of Calm",
@@ -388,9 +388,29 @@
   "survey_blur": "Image is blurred like in fog",
   "survey_acid": "Bright \"acid\" colors",
   "survey_noise": "Image is noisy and doubled",
+  "survey_support_form_title": "7. What form of support would you choose?",
+  "@survey_support_form_title": {
+    "description": "Survey question 7: What form of support."
+  },
+  "survey_support_safe_breathe": "Safe phrase + breathing",
+  "@survey_support_safe_breathe": {
+    "description": "Survey option: safe phrase and breathing."
+  },
+  "survey_support_affirmation": "Positive affirmation",
+  "@survey_support_affirmation": {
+    "description": "Survey option: positive affirmation."
+  },
+  "survey_support_grounding": "Grounding technique",
+  "@survey_support_grounding": {
+    "description": "Survey option: grounding technique."
+  },
+  "survey_support_visualization": "Calm visualization",
+  "@survey_support_visualization": {
+    "description": "Survey option: calm visualization."
+  },
   "classroom": "Classroom",
-  "first_path_description": "A calm, straight route with clear sightlines and familiar desks.",
-  "second_path_description": "A winding route weaving between clustered desks and quiet corners.",
-  "third_path_description": "A narrower path through scattered drawings and small ledges, offering new perspectives.",
+  "first_path_description": "The shortest route. Crowded, noisy, many students. You will have to quickly make your way through the crowd.",
+  "second_path_description": "Quiet corridors near the library. School lockers are located here — Olya can stop and take something from her belongings. The route is a bit longer, but calmer.",
+  "third_path_description": "A detour through the inner courtyard and the back entrance. There are almost no people, but the path is longer and less safe — older students or other unpredictable situations might be encountered in the yard.",
   "map_of_calm_olya": "Map of Calm: Olya"
 }

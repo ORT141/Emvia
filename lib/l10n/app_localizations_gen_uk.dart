@@ -404,6 +404,21 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get survey_noise => 'Зображення шумить і двоїться';
 
   @override
+  String get survey_support_form_title => '7. Яку форму підтримки обереш?';
+
+  @override
+  String get survey_support_safe_breathe => 'Безпечна фраза + дихання';
+
+  @override
+  String get survey_support_affirmation => 'Позитивне твердження';
+
+  @override
+  String get survey_support_grounding => 'Техніка заземлення';
+
+  @override
+  String get survey_support_visualization => 'Спокійна візуалізація';
+
+  @override
   String get classroom => 'Клас';
 
   @override

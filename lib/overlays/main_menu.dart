@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flame_audio/flame_audio.dart';
 
 import '../game/emvia_game.dart';
 import '../l10n/app_localizations_gen.dart';
@@ -516,6 +517,33 @@ class _CharacterSelectBar extends StatefulWidget {
 class _CharacterSelectBarState extends State<_CharacterSelectBar> {
   PlayableCharacter? _hoveredCharacter;
 
+  static const _playerCardFiles = {
+    'en': {
+      PlayableCharacter.olya: 'olya.mp3',
+      PlayableCharacter.liam: 'liam.mp3',
+      PlayableCharacter.olenka: 'olena.mp3',
+    },
+    'uk': {
+      PlayableCharacter.olya: 'оля.mp3',
+      PlayableCharacter.liam: 'ліам.mp3',
+      PlayableCharacter.olenka: 'олена.mp3',
+    },
+  };
+
+  Future<void> Function()? _stopPreview;
+
+  Future<void> _playPreview(String file) async {
+    await _stopPreview?.call();
+    final player = await FlameAudio.play('player-cards/$file');
+    _stopPreview = player.stop;
+  }
+
+  @override
+  void dispose() {
+    _stopPreview?.call();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -562,7 +590,17 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
                               : _hoveredCharacter);
                   });
                 },
-                onTap: () {
+                onTap: () async {
+                  final lang =
+                      Localizations.localeOf(context).languageCode == 'uk'
+                      ? 'uk'
+                      : 'en';
+                  final file = _playerCardFiles[lang]?[PlayableCharacter.olya];
+                  if (file != null) {
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => _playPreview(file),
+                    );
+                  }
                   widget.onCharacterSelected(PlayableCharacter.olya);
                 },
               ),
@@ -581,6 +619,19 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
                               : _hoveredCharacter);
                   });
                 },
+                onTap: () async {
+                  final lang =
+                      Localizations.localeOf(context).languageCode == 'uk'
+                      ? 'uk'
+                      : 'en';
+                  final file = _playerCardFiles[lang]?[PlayableCharacter.liam];
+                  if (file != null) {
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => _playPreview(file),
+                    );
+                  }
+                  widget.onCharacterSelected(PlayableCharacter.liam);
+                },
               ),
               _CharacterGhost(
                 imagePath: 'player-selecting/olenka_ghost.png',
@@ -596,6 +647,20 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
                               ? null
                               : _hoveredCharacter);
                   });
+                },
+                onTap: () async {
+                  final lang =
+                      Localizations.localeOf(context).languageCode == 'uk'
+                      ? 'uk'
+                      : 'en';
+                  final file =
+                      _playerCardFiles[lang]?[PlayableCharacter.olenka];
+                  if (file != null) {
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => _playPreview(file),
+                    );
+                  }
+                  widget.onCharacterSelected(PlayableCharacter.olenka);
                 },
               ),
             ],

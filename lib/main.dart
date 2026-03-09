@@ -11,6 +11,7 @@ import 'package:emvia/overlays/survey_overlay.dart';
 import 'package:emvia/overlays/debug_overlay.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -18,6 +19,7 @@ import 'l10n/app_localizations_gen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FlameAudio.audioCache.prefix = 'assets/sounds/';
   await Flame.device.fullScreen();
   await Flame.device.setLandscape();
   runApp(const MyApp());
@@ -116,28 +118,28 @@ class _MyAppState extends State<MyApp> {
           'MobileControls': (_, game) => MobileControlsOverlay(game: game),
           'Debug': (_, game) => DebugOverlay(game: game),
           'PathDetail': (_, game) => ValueListenableBuilder(
-                valueListenable: game.pathDetailNotifier,
-                builder: (context, value, child) {
-                  final info = value;
-                  if (info == null) return const SizedBox.shrink();
-                  return PathDetailComponent(
-                    index: info.index,
-                    title: info.title,
-                    name: info.name,
-                    description: info.description,
-                    confirmLabel: info.confirmLabel,
-                    cancelLabel: info.cancelLabel,
-                    onConfirm: () {
-                      game.applyPathChoice(info.index, game.buildContext!);
-                      game.hidePathDetail();
-                    },
-                    onCancel: () {
-                      game.hidePathDetail();
-                      game.clearPathSelection();
-                    },
-                  );
+            valueListenable: game.pathDetailNotifier,
+            builder: (context, value, child) {
+              final info = value;
+              if (info == null) return const SizedBox.shrink();
+              return PathDetailComponent(
+                index: info.index,
+                title: info.title,
+                name: info.name,
+                description: info.description,
+                confirmLabel: info.confirmLabel,
+                cancelLabel: info.cancelLabel,
+                onConfirm: () {
+                  game.applyPathChoice(info.index, game.buildContext!);
+                  game.hidePathDetail();
                 },
-              ),
+                onCancel: () {
+                  game.hidePathDetail();
+                  game.clearPathSelection();
+                },
+              );
+            },
+          ),
         },
       ),
     );
