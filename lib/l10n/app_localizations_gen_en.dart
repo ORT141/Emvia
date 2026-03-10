@@ -75,6 +75,16 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get thanksForPlaying => 'Thank you for playing';
 
   @override
+  String get sound_question_title =>
+      'Before we start, do you want to play with sound?';
+
+  @override
+  String get sound_on => 'Sound On';
+
+  @override
+  String get sound_off => 'Sound Off';
+
+  @override
   String get leadDeveloper => 'Lead Developer';
 
   @override
@@ -257,6 +267,25 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   @override
   String get character_olenka_description =>
       'Navigates complex urban environments and teaches respect for the independence of visually impaired people.';
+
+  @override
+  String get character_anton_title => 'Anton, 14 years';
+
+  @override
+  String get character_anton_quote =>
+      '\"Silence isn\'t empty. It speaks loudly if you listen with your heart\"';
+
+  @override
+  String get character_anton_trait =>
+      'Has a severe hearing impairment. Communicates using sign language, reads lips, and actively uses gadgets.';
+
+  @override
+  String get character_anton_superPower =>
+      'Graphic design and observation skills. Knows how to \"hear with his eyes\" — flawlessly reads the most subtle emotions from a face (even sarcasm or confusion).';
+
+  @override
+  String get character_anton_description =>
+      'A confident, creative teenager with a subtle sense of humor who dreams of creating his own manga. Anton proves that communication is not limited to voice. His story teaches that sign language is a complete language, and art and emojis can explain what words cannot.';
 
   @override
   String get survey_calibration_title => 'Sensory Profile Calibration';

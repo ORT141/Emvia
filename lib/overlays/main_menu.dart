@@ -58,10 +58,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (context, setModalState) {
-          final bool canStart =
-              pendingCharacter != null &&
-              widget.game.isCharacterUnlocked(pendingCharacter!);
-
           return AlertDialog(
             backgroundColor: theme.colorScheme.surface,
             shape: RoundedRectangleBorder(
@@ -99,7 +95,9 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                 child: Text(loc.cancel),
               ),
               ElevatedButton(
-                onPressed: canStart
+                onPressed:
+                    (pendingCharacter != null &&
+                        widget.game.isCharacterUnlocked(pendingCharacter!))
                     ? () {
                         widget.game.selectCharacter(pendingCharacter!);
                         Navigator.of(ctx).pop();
@@ -522,11 +520,13 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
       PlayableCharacter.olya: 'olya.mp3',
       PlayableCharacter.liam: 'liam.mp3',
       PlayableCharacter.olenka: 'olena.mp3',
+      PlayableCharacter.anton: 'anton.mp3',
     },
     'uk': {
       PlayableCharacter.olya: 'оля.mp3',
       PlayableCharacter.liam: 'ліам.mp3',
       PlayableCharacter.olenka: 'олена.mp3',
+      PlayableCharacter.anton: 'антон.mp3',
     },
   };
 
@@ -666,6 +666,35 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
                   widget.onCharacterSelected(PlayableCharacter.olenka);
                 },
               ),
+              _CharacterGhost(
+                imagePath: 'player-selecting/anton_ghost.png',
+                label: 'Антон',
+                selected: selectedCharacter == PlayableCharacter.anton,
+                hovered: _hoveredCharacter == PlayableCharacter.anton,
+                locked: true,
+                onHoverChanged: (isHovering) {
+                  setState(() {
+                    _hoveredCharacter = isHovering
+                        ? PlayableCharacter.anton
+                        : (_hoveredCharacter == PlayableCharacter.anton
+                              ? null
+                              : _hoveredCharacter);
+                  });
+                },
+                onTap: () async {
+                  final lang =
+                      Localizations.localeOf(context).languageCode == 'uk'
+                      ? 'uk'
+                      : 'en';
+                  final file = _playerCardFiles[lang]?[PlayableCharacter.anton];
+                  if (file != null) {
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => _playPreview(file),
+                    );
+                  }
+                  widget.onCharacterSelected(PlayableCharacter.anton);
+                },
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -701,6 +730,14 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
           trait: loc.character_olenka_trait,
           superPower: loc.character_olenka_superPower,
           description: loc.character_olenka_description,
+        );
+      case PlayableCharacter.anton:
+        return _CharacterCardData(
+          title: loc.character_anton_title,
+          quote: loc.character_anton_quote,
+          trait: loc.character_anton_trait,
+          superPower: loc.character_anton_superPower,
+          description: loc.character_anton_description,
         );
     }
   }
@@ -802,7 +839,6 @@ class _CharacterGhost extends StatelessWidget {
     this.onHoverChanged,
     this.onTap,
   });
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -813,101 +849,110 @@ class _CharacterGhost extends StatelessWidget {
     return MouseRegion(
       onEnter: (_) => onHoverChanged?.call(true),
       onExit: (_) => onHoverChanged?.call(false),
-      child: InkWell(
-        onTap: locked ? null : onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Ink(
-          width: 84,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Ink(
+            width: 84,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: selected
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.outlineVariant,
+                width: selected ? 2 : 1,
+              ),
+              boxShadow: selected
+                  ? [
+                      BoxShadow(
+                        color: theme.colorScheme.primary.withValues(
+                          alpha: 0.25,
+                        ),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ]
+                  : null,
               color: selected
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.outlineVariant,
-              width: selected ? 2 : 1,
+                  ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3)
+                  : theme.colorScheme.surface,
             ),
-            boxShadow: selected
-                ? [
-                    BoxShadow(
-                      color: theme.colorScheme.primary.withValues(alpha: 0.25),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ]
-                : null,
-            color: locked
-                ? theme.colorScheme.surfaceContainerHighest.withValues(
-                    alpha: 0.5,
-                  )
-                : (selected
-                      ? theme.colorScheme.primaryContainer.withValues(
-                          alpha: 0.3,
-                        )
-                      : theme.colorScheme.surface),
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 76,
-                child: Stack(
-                  children: [
-                    Center(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 220),
-                        switchInCurve: Curves.easeOutCubic,
-                        switchOutCurve: Curves.easeInCubic,
-                        transitionBuilder: (child, animation) {
-                          return FadeTransition(
-                            opacity: animation,
-                            child: ScaleTransition(
-                              scale: Tween<double>(
-                                begin: 0.92,
-                                end: 1.0,
-                              ).animate(animation),
-                              child: child,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 76,
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 220),
+                          switchInCurve: Curves.easeOutCubic,
+                          switchOutCurve: Curves.easeInCubic,
+                          transitionBuilder: (child, animation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: ScaleTransition(
+                                scale: Tween<double>(
+                                  begin: 0.92,
+                                  end: 1.0,
+                                ).animate(animation),
+                                child: child,
+                              ),
+                            );
+                          },
+                          child: Opacity(
+                            opacity: locked && !selected && !hovered
+                                ? 0.5
+                                : 1.0,
+                            child: Image.asset(
+                              'assets/images/$displayPath',
+                              key: ValueKey(displayPath),
+                              fit: BoxFit.contain,
                             ),
-                          );
-                        },
-                        child: Image.asset(
-                          'assets/images/$displayPath',
-                          key: ValueKey(displayPath),
-                          fit: BoxFit.contain,
+                          ),
                         ),
                       ),
+                      if (locked)
+                        Positioned(
+                          right: 2,
+                          top: 2,
+                          child: Icon(
+                            Icons.lock,
+                            size: 16,
+                            color: theme.colorScheme.onSurfaceVariant
+                                .withValues(alpha: selected ? 1.0 : 0.6),
+                          ),
+                        ),
+                      if (selected && !locked)
+                        Positioned(
+                          left: 2,
+                          top: 2,
+                          child: Icon(
+                            Icons.check_circle,
+                            size: 16,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.baloo2(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface.withValues(
+                      alpha: locked && !selected ? 0.6 : 1.0,
                     ),
-                    if (locked)
-                      Positioned(
-                        right: 2,
-                        top: 2,
-                        child: Icon(
-                          Icons.lock,
-                          size: 16,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    if (selected && !locked)
-                      Positioned(
-                        left: 2,
-                        top: 2,
-                        child: Icon(
-                          Icons.check_circle,
-                          size: 16,
-                          color: theme.colorScheme.primary,
-                        ),
-                      ),
-                  ],
+                  ),
                 ),
-              ),
-              Text(
-                label,
-                style: GoogleFonts.baloo2(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: theme.colorScheme.onSurface,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -23,7 +23,7 @@ import 'emvia_types.dart';
 import 'managers/camera_manager.dart';
 import 'managers/transition_manager.dart';
 
-enum PlayableCharacter { olya, liam, olenka }
+enum PlayableCharacter { olya, liam, olenka, anton }
 
 class EmviaGame extends FlameGame
     with TapCallbacks, HasKeyboardHandlerComponents, DialogHandler {
@@ -35,7 +35,6 @@ class EmviaGame extends FlameGame
   }
 
   late final OlyaPlayer olya = OlyaPlayer();
-  late SpriteComponent noiseEffect;
   late FadeOverlay fadeOverlay;
 
   final PositionComponent worldRoot = PositionComponent();
@@ -49,7 +48,6 @@ class EmviaGame extends FlameGame
   bool freezeForPathChoice = false;
 
   int sceneIndex = 0;
-  bool isStressMode = false;
   int stressLevel = 0;
 
   int _sessionToken = 0;
@@ -58,18 +56,34 @@ class EmviaGame extends FlameGame
   bool _startGameAfterSurvey = false;
 
   static const String _volumeKey = 'volume';
+  static const String _soundEnabledKey = 'sound_enabled';
 
   double _volume = 0.6;
-  double get volume => _volume;
+  bool _soundEnabled = true;
+
+  double get volume => _soundEnabled ? _volume : 0.0;
   set volume(double value) {
     _volume = value.clamp(0.0, 1.0);
     _saveVolume();
+  }
+
+  bool get soundEnabled => _soundEnabled;
+  set soundEnabled(bool value) {
+    _soundEnabled = value;
+    _saveSoundEnabled();
   }
 
   Future<void> _saveVolume() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setDouble(_volumeKey, _volume);
+    } catch (_) {}
+  }
+
+  Future<void> _saveSoundEnabled() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_soundEnabledKey, _soundEnabled);
     } catch (_) {}
   }
 
@@ -96,11 +110,6 @@ class EmviaGame extends FlameGame
   Future<void> onLoad() async {
     await _loadVolume();
 
-    noiseEffect = SpriteComponent()
-      ..sprite = await loadSprite('overlays/noise.jpg')
-      ..size = size
-      ..opacity = 0.0;
-
     worldRoot.scale = Vector2.all(cameraManager.zoom);
     worldRoot.anchor = Anchor.topLeft;
 
@@ -110,8 +119,6 @@ class EmviaGame extends FlameGame
 
     await loadScene(ClassroomScene());
     olya.opacity = 0;
-
-    add(noiseEffect);
 
     overlays.add('MainMenu');
   }
@@ -211,6 +218,7 @@ class EmviaGame extends FlameGame
     try {
       final prefs = await SharedPreferences.getInstance();
       _volume = prefs.getDouble(_volumeKey) ?? _volume;
+      _soundEnabled = prefs.getBool(_soundEnabledKey) ?? _soundEnabled;
     } catch (_) {}
   }
 
@@ -251,8 +259,6 @@ class EmviaGame extends FlameGame
     surveyProfile = await _surveyService.getProfile();
     sceneIndex = 1;
     stressLevel = 0;
-    isStressMode = false;
-    noiseEffect.opacity = 0.0;
     _selectedTools.clear();
     backpack.clear();
     for (final item in BackpackItem.placeholderItems()) {

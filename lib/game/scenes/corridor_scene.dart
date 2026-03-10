@@ -43,6 +43,8 @@ class CorridorScene extends GameScene {
     final pattern = game.surveyProfile.aiPattern;
     if (pattern.isEmpty) return;
 
+    const noRotatePatterns = {'cloud', 'tree', 'moon'};
+
     try {
       final sprite = await game.loadSprite('wall-patterns/$pattern.png');
       final worldH = game.size.y;
@@ -59,14 +61,20 @@ class CorridorScene extends GameScene {
       final random = math.Random();
       for (int i = 0; i < count; i++) {
         final y = minY + random.nextDouble() * (maxY - minY);
+        final angle = noRotatePatterns.contains(pattern)
+            ? 0.0
+            : random.nextDouble() * math.pi * 2;
         final sp = SpriteComponent()
           ..sprite = sprite
           ..size = Vector2.all(patternSize)
           ..position = Vector2(startX + i * spacing + patternSize * 0.6, y)
           ..anchor = Anchor.center
-          ..angle = random.nextDouble() * math.pi * 2
+          ..angle = angle
           ..opacity = 0.50
           ..priority = 1;
+        sp.paint = Paint()
+          ..isAntiAlias = true
+          ..filterQuality = FilterQuality.high;
         _patternSprites.add(sp);
         add(sp);
       }

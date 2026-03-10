@@ -22,7 +22,7 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
   final SurveyService _surveyService = SurveyService();
   final Map<String, String> _answers = {};
   bool _isLoading = false;
-  int _currentIndex = 0;
+  int _currentIndex = -1;
   Future<void> Function()? _stopQuestionAudio;
 
   static const _soundFiles = {
@@ -53,6 +53,7 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
   }
 
   void _playQuestionSound(int index) async {
+    if (index < 0) return;
     final locale = Localizations.localeOf(context);
     final lang = locale.languageCode == 'uk' ? 'uk' : 'en';
     final files = _soundFiles[lang]!;
@@ -75,6 +76,11 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l = AppLocalizations.of(context)!;
+
+    if (_currentIndex == -1) {
+      return _buildSoundChoice(context, theme, l);
+    }
+
     final questions = SurveyService.localizedQuestions(context);
     final question = questions[_currentIndex];
     final selected = _answers[question.id];
@@ -289,9 +295,92 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
     }
   }
 
+  Widget _buildSoundChoice(
+    BuildContext context,
+    ThemeData theme,
+    AppLocalizationsGen l,
+  ) {
+    return Scaffold(
+      backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.32),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            color: theme.colorScheme.surface,
+            elevation: 24,
+            child: Padding(
+              padding: const EdgeInsets.all(32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.volume_up_rounded,
+                    size: 64,
+                    color: theme.colorScheme.primary,
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    l.sound_question_title,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          onPressed: () {
+                            widget.game.soundEnabled = false;
+                            setState(() => _currentIndex = 0);
+                          },
+                          child: Text(l.sound_off),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.primary,
+                            foregroundColor: theme.colorScheme.onPrimary,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          onPressed: () {
+                            widget.game.soundEnabled = true;
+                            setState(() => _currentIndex = 0);
+                          },
+                          child: Text(l.sound_on),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _skip() async {
     final shouldStartGame = widget.game.consumeStartGameAfterSurvey();
+
     widget.game.overlays.remove('Survey');
+
     if (shouldStartGame) {
       widget.game.startGame();
     } else {

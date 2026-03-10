@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:ui' show FilterQuality, Paint;
 import '../emvia_game.dart';
 
 abstract class GameScene extends Component with HasGameReference<EmviaGame> {
@@ -75,6 +76,9 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
       ..sprite = await game.loadSprite(backgroundPath)
       ..anchor = Anchor.topLeft
       ..priority = 0;
+    background.paint = Paint()
+      ..isAntiAlias = true
+      ..filterQuality = FilterQuality.high;
     add(background);
 
     if (foregroundPath != null) {
@@ -82,6 +86,9 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
         ..sprite = await game.loadSprite(foregroundPath!)
         ..anchor = Anchor.topLeft
         ..priority = 20;
+      foreground!.paint = Paint()
+        ..isAntiAlias = true
+        ..filterQuality = FilterQuality.high;
       add(foreground!);
     }
 

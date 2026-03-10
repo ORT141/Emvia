@@ -99,12 +99,6 @@ class DebugOverlay extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        game.isStressMode = !game.isStressMode;
-                      },
-                      child: const Text('Toggle Stress'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
                         game.currentScene?.redrawScene();
                       },
                       child: const Text('Redraw Scene'),

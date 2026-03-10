@@ -230,6 +230,24 @@ abstract class AppLocalizationsGen {
   /// **'Thank you for playing'**
   String get thanksForPlaying;
 
+  /// Question asked at the start of the game about sound preference.
+  ///
+  /// In en, this message translates to:
+  /// **'Before we start, do you want to play with sound?'**
+  String get sound_question_title;
+
+  /// Option to enable sound.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound On'**
+  String get sound_on;
+
+  /// Option to disable sound.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound Off'**
+  String get sound_off;
+
   /// Title for the lead developer in the credits.
   ///
   /// In en, this message translates to:
@@ -559,6 +577,36 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'Navigates complex urban environments and teaches respect for the independence of visually impaired people.'**
   String get character_olenka_description;
+
+  /// Anton name + age
+  ///
+  /// In en, this message translates to:
+  /// **'Anton, 14 years'**
+  String get character_anton_title;
+
+  /// Anton short quote
+  ///
+  /// In en, this message translates to:
+  /// **'\"Silence isn\'t empty. It speaks loudly if you listen with your heart\"'**
+  String get character_anton_quote;
+
+  /// Anton trait description
+  ///
+  /// In en, this message translates to:
+  /// **'Has a severe hearing impairment. Communicates using sign language, reads lips, and actively uses gadgets.'**
+  String get character_anton_trait;
+
+  /// Anton super power
+  ///
+  /// In en, this message translates to:
+  /// **'Graphic design and observation skills. Knows how to \"hear with his eyes\" — flawlessly reads the most subtle emotions from a face (even sarcasm or confusion).'**
+  String get character_anton_superPower;
+
+  /// Anton long description
+  ///
+  /// In en, this message translates to:
+  /// **'A confident, creative teenager with a subtle sense of humor who dreams of creating his own manga. Anton proves that communication is not limited to voice. His story teaches that sign language is a complete language, and art and emojis can explain what words cannot.'**
+  String get character_anton_description;
 
   /// No description provided for @survey_calibration_title.
   ///

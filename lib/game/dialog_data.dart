@@ -83,10 +83,6 @@ class DialogData {
           id: 'rude',
           speakerName: (l) => l.speaker_stranger,
           text: (l) => l.dialog_stranger_rude,
-          onSelect: (game) {
-            game.isStressMode = true;
-            game.noiseEffect.opacity = 0.3;
-          },
         ),
       },
     );

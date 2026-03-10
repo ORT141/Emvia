@@ -88,6 +88,18 @@
   "@thanksForPlaying": {
     "description": "Closing message after the game or session ends."
   },
+  "sound_question_title": "Перед початком, чи хочеш ти грати зі звуком?",
+  "@sound_question_title": {
+    "description": "Question asked at the start of the game about sound preference."
+  },
+  "sound_on": "Зі звуком",
+  "@sound_on": {
+    "description": "Option to enable sound."
+  },
+  "sound_off": "Без звуку",
+  "@sound_off": {
+    "description": "Option to disable sound."
+  },
   "leadDeveloper": "Головний розробник",
   "@leadDeveloper": {
     "description": "Title for the lead developer in the credits."
@@ -267,6 +279,26 @@
   "character_olya_description": "Для Олі світ часто нагадує переповнену автостраду без знаків. Вона створює власну \"Мапу спокою\" та перетворює сенсорний шум на мистецтво.",
   "@character_olya_description": {
     "description": "Olya long description"
+  },
+  "character_anton_title": "Антон, 14 років",
+  "@character_anton_title": {
+    "description": "Anton name + age"
+  },
+  "character_anton_quote": "\"Тиша не порожня. Вона говорить голосно, якщо слухати серцем\"",
+  "@character_anton_quote": {
+    "description": "Anton short quote"
+  },
+  "character_anton_trait": "Має виражене порушення слуху. Комунікує жестовою мовою, читає по губах та активно використовує гаджети.",
+  "@character_anton_trait": {
+    "description": "Anton trait description"
+  },
+  "character_anton_superPower": "Графічний дизайн та спостережливість. Вміє «чути очима» — безпомилково зчитує найтонші емоції з обличчя (навіть сарказм чи розгубленість).",
+  "@character_anton_superPower": {
+    "description": "Anton super power"
+  },
+  "character_anton_description": "Впевнений, креативний підліток із тонким почуттям гумору, який мріє створити власну манґу. Антон доводить, що комунікація не обмежується голосом. Його історія вчить тому, що жестова мова — це повноцінна мова, а мистецтво та емодзі можуть пояснити те, для чого не вистачає слів",
+  "@character_anton_description": {
+    "description": "Anton long description"
   },
   "character_liam_title": "Ліам, 15 років",
   "@character_liam_title": {

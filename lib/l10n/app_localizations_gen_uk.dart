@@ -75,6 +75,16 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get thanksForPlaying => 'Дякуємо за те, що граєте';
 
   @override
+  String get sound_question_title =>
+      'Перед початком, чи хочеш ти грати зі звуком?';
+
+  @override
+  String get sound_on => 'Зі звуком';
+
+  @override
+  String get sound_off => 'Без звуку';
+
+  @override
   String get leadDeveloper => 'Головний розробник';
 
   @override
@@ -255,6 +265,25 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   @override
   String get character_olenka_description =>
       'Навігує у складному міському середовищі та вчить повазі до самостійності незрячих людей.';
+
+  @override
+  String get character_anton_title => 'Антон, 14 років';
+
+  @override
+  String get character_anton_quote =>
+      '\"Тиша не порожня. Вона говорить голосно, якщо слухати серцем\"';
+
+  @override
+  String get character_anton_trait =>
+      'Має виражене порушення слуху. Комунікує жестовою мовою, читає по губах та активно використовує гаджети.';
+
+  @override
+  String get character_anton_superPower =>
+      'Графічний дизайн та спостережливість. Вміє «чути очима» — безпомилково зчитує найтонші емоції з обличчя (навіть сарказм чи розгубленість).';
+
+  @override
+  String get character_anton_description =>
+      'Впевнений, креативний підліток із тонким почуттям гумору, який мріє створити власну манґу. Антон доводить, що комунікація не обмежується голосом. Його історія вчить тому, що жестова мова — це повноцінна мова, а мистецтво та емодзі можуть пояснити те, для чого не вистачає слів';
 
   @override
   String get survey_calibration_title => 'Калібрування сенсорного профілю';

@@ -1,4 +1,4 @@
-enum PlayableCharacter { olya, liam, olenka }
+enum PlayableCharacter { olya, liam, olenka, anton }
 
 class PathDetailInfo {
   final int index;
