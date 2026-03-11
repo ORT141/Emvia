@@ -398,6 +398,72 @@ abstract class AppLocalizationsGen {
   /// **'Thought so. Be careful around here after dark.'**
   String get dialog_stranger_from_out;
 
+  /// No description provided for @item_headphones_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Sensory headphones'**
+  String get item_headphones_name;
+
+  /// No description provided for @item_headphones_status.
+  ///
+  /// In en, this message translates to:
+  /// **'Exactly what\'s needed! (Click to equip)'**
+  String get item_headphones_status;
+
+  /// No description provided for @item_headphones_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'A reliable shield against chaos. They instantly block out excess stimuli and harsh sounds, helping to create a personal safe zone even in the noisiest corridor.'**
+  String get item_headphones_desc;
+
+  /// No description provided for @item_blanket_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Weighted blanket'**
+  String get item_blanket_name;
+
+  /// No description provided for @item_blanket_status.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable right now'**
+  String get item_blanket_status;
+
+  /// No description provided for @item_blanket_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'The sensation of deep pressure perfectly relieves overload and provides a feeling of a safety \"cocoon\". But it is impossible to take it with you into a noisy corridor. Look for something more mobile!'**
+  String get item_blanket_desc;
+
+  /// No description provided for @item_lunchbox_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunch box'**
+  String get item_lunchbox_name;
+
+  /// No description provided for @item_lunchbox_status.
+  ///
+  /// In en, this message translates to:
+  /// **'Not the right time'**
+  String get item_lunchbox_status;
+
+  /// No description provided for @item_lunchbox_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Familiar and safe food in your own box is important for comfort away from home. But right now the problem isn\'t hunger, it\'s the noise level! This item won\'t help here.'**
+  String get item_lunchbox_desc;
+
+  /// No description provided for @backpack_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Backpack'**
+  String get backpack_title;
+
+  /// No description provided for @no_items.
+  ///
+  /// In en, this message translates to:
+  /// **'No items yet. Explore to collect more.'**
+  String get no_items;
+
   /// Stranger replies rudely and triggers effect
   ///
   /// In en, this message translates to:

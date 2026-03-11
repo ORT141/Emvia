@@ -1,448 +1,459 @@
 {
-  "@@locale": "uk",
-  "title": "Emvia",
-  "@title": {
-    "description": "The main title of the application or game."
-  },
-  "play": "Грати",
-  "@play": {
-    "description": "Label for the action to start the game or experience."
-  },
-  "settings": "Налаштування",
-  "@settings": {
-    "description": "Label for the settings menu."
-  },
-  "exit": "Вихід",
-  "@exit": {
-    "description": "Label for the action to quit the application or game."
-  },
-  "pause": "Пауза",
-  "@pause": {
-    "description": "Label for pausing the current activity."
-  },
-  "resume": "Продовжити",
-  "@resume": {
-    "description": "Label for resuming a paused activity."
-  },
-  "too_dangerous": "Цей шлях надто небезпечний",
-  "@too_dangerous": {
-    "description": "Warning message when a path is locked."
-  },
-  "teacher_intro": "Вчитель: Оля, твій вихід через 15 хвилин",
-  "@teacher_intro": {
-    "description": "A line spoken by the teacher to Olya, indicating her turn time."
-  },
-  "too_loud": "Занадто голосно... треба заспокоїтися",
-  "@too_loud": {
-    "description": "Player's internal thought or statement indicating distress due to high volume and the need to calm down."
-  },
-  "calmed": "Фух... стало тихіше. йду далі",
-  "@calmed": {
-    "description": "Player's statement after successfully calming down, noting the quieter environment."
-  },
-  "inhale": "вдих",
-  "@inhale": {
-    "description": "Instruction or label for the breathing in action."
-  },
-  "exhale": "видих",
-  "@exhale": {
-    "description": "Instruction or label for the breathing out action."
-  },
-  "i_calm_down": "Я заспокоїлась",
-  "@i_calm_down": {
-    "description": "Confirmation that the player has successfully managed to calm down."
-  },
-  "continueLabel": "Продовжити",
-  "@continueLabel": {
-    "description": "General label for proceeding to the next step or screen."
-  },
-  "headphones": "Навушники",
-  "@headphones": {
-    "description": "Label related to headphone settings or an instruction to use them."
-  },
-  "headphonesOff": "Заспокоїтись",
-  "@headphonesOff": {
-    "description": "Potentially a state or alternative setting when headphones are off, linked to the 'Calm' theme."
-  },
-  "breathing": "Дихання",
-  "@breathing": {
-    "description": "Label for the breathing exercise section or setting."
-  },
-  "credits": "Автори",
-  "@credits": {
-    "description": "Label for the credits screen."
-  },
-  "exitConfirm": "Ви впевнені, що хочете вийти?",
-  "@exitConfirm": {
-    "description": "Confirmation prompt message before exiting."
-  },
-  "cancel": "Скасувати",
-  "@cancel": {
-    "description": "Label for canceling an action or closing a dialog."
-  },
-  "backToMenu": "Головне меню",
-  "@backToMenu": {
-    "description": "Label to return to the main menu screen."
-  },
-  "thanksForPlaying": "Дякуємо за те, що граєте",
-  "@thanksForPlaying": {
-    "description": "Closing message after the game or session ends."
-  },
-  "sound_question_title": "Перед початком, чи хочеш ти грати зі звуком?",
-  "@sound_question_title": {
-    "description": "Question asked at the start of the game about sound preference."
-  },
-  "sound_on": "Зі звуком",
-  "@sound_on": {
-    "description": "Option to enable sound."
-  },
-  "sound_off": "Без звуку",
-  "@sound_off": {
-    "description": "Option to disable sound."
-  },
-  "leadDeveloper": "Головний розробник",
-  "@leadDeveloper": {
-    "description": "Title for the lead developer in the credits."
-  },
-  "artistAndDesigner": "Художник і дизайнер",
-  "@artistAndDesigner": {
-    "description": "Title for the artist and designer in the credits."
-  },
-  "breathingGuide": "Ніжний гайд для заспокоєння",
-  "@breathingGuide": {
-    "description": "Title or description for the breathing guidance feature."
-  },
-  "sound": "Звук",
-  "@sound": {
-    "description": "Label for sound settings."
-  },
-  "language": "Мова",
-  "@language": {
-    "description": "Label for the language selection setting."
-  },
-  "done": "Готово",
-  "@done": {
-    "description": "Label for confirming changes or completing a task."
-  },
-  "theme": "Тема",
-  "@theme": {
-    "description": "Label for theme selection setting."
-  },
-  "light": "Світла",
-  "@light": {
-    "description": "Option for the light theme."
-  },
-  "dark": "Темна",
-  "@dark": {
-    "description": "Option for the dark theme."
-  },
-  "npc_greeting": "Таємнича особа: Привіт Олю! Ласкаво просимо до цього спокійного місця.",
-  "@npc_greeting": {
-    "description": "Initial greeting from the Mysterious Stranger character to Olya."
-  },
-  "speaker_teacher": "Вчитель",
-  "@speaker_teacher": {
-    "description": "Name label for the teacher speaker"
-  },
-  "dialog_teacher_start": "Ласкаво просимо на заняття! Ти готова почати?",
-  "@dialog_teacher_start": {
-    "description": "Teacher opening line asking if the player is ready"
-  },
-  "dialog_teacher_choice_yes": "Так, професоре",
-  "@dialog_teacher_choice_yes": {
-    "description": "Affirmative response by player"
-  },
-  "dialog_teacher_choice_not_really": "Не зовсім...",
-  "@dialog_teacher_choice_not_really": {
-    "description": "Negative unsure response by player"
-  },
-  "dialog_teacher_ready": "Чудово. Розкрийте підручники на сторінці 42.",
-  "@dialog_teacher_ready": {
-    "description": "Teacher tells students to open books"
-  },
-  "dialog_teacher_not_ready": "О? Не поспішай. Скажи, коли влаштуєшся.",
-  "@dialog_teacher_not_ready": {
-    "description": "Teacher tells player to take time"
-  },
-  "dialog_teacher_end": "Є запитання перед початком?",
-  "@dialog_teacher_end": {
-    "description": "Teacher asks for questions"
-  },
-  "dialog_teacher_choice_no_lets_go": "Ні, почнемо!",
-  "@dialog_teacher_choice_no_lets_go": {
-    "description": "Player agrees to start"
-  },
-  "dialog_teacher_choice_what_book": "Яка книжка?",
-  "@dialog_teacher_choice_what_book": {
-    "description": "Player asks which book"
-  },
-  "dialog_teacher_what_book": "Звісно, підручник з історії! Зосередься, будь ласка.",
-  "@dialog_teacher_what_book": {
-    "description": "Teacher answers which book"
-  },
-  "speaker_stranger": "Невідомець",
-  "@speaker_stranger": {
-    "description": "Name label for the stranger speaker"
-  },
-  "dialog_stranger_entry": "Гей ти. Схоже, ти не з цих країв.",
-  "@dialog_stranger_entry": {
-    "description": "Stranger initial greeting"
-  },
-  "dialog_stranger_choice_i_am": "Я звідти.",
-  "@dialog_stranger_choice_i_am": {
-    "description": "Player confirms they're from out of town"
-  },
-  "dialog_stranger_choice_mind_your_business": "Не твоя справа.",
-  "@dialog_stranger_choice_mind_your_business": {
-    "description": "Player responds rudely"
-  },
-  "dialog_stranger_from_out": "Так і думав. Остерігайся тут після заходу сонця.",
-  "@dialog_stranger_from_out": {
-    "description": "Stranger warns player to be careful"
-  },
-  "dialog_stranger_rude": "Коли кажу — не говори, що не попереджав.",
-  "@dialog_stranger_rude": {
-    "description": "Stranger replies rudely and triggers effect"
-  },
-  "dialog_calmed_you_feel_better": "Ти почуваєшся набагато краще.",
-  "@dialog_calmed_you_feel_better": {
-    "description": "Line shown after calming down"
-  },
-  "lang_en": "English",
-  "@lang_en": {
-    "description": "English language name"
-  },
-  "lang_uk": "Українська",
-  "@lang_uk": {
-    "description": "Ukrainian language name"
-  },
-  "survey_title": "Маленьке опитування",
-  "@survey_title": {
-    "description": "Title for the onboarding survey"
-  },
-  "survey_question_color": "Які кольори тобі більше подобаються?",
-  "@survey_question_color": {
-    "description": "Question about color preference"
-  },
-  "survey_question_atmosphere": "Якій атмосфері ти віддаєш перевагу?",
-  "@survey_question_atmosphere": {
-    "description": "Question about atmosphere preference"
-  },
-  "survey_question_brightness": "Яке освітлення кімнати тобі подобається?",
-  "@survey_question_brightness": {
-    "description": "Question about brightness preference"
-  },
-  "survey_option_blue": "Блакитний",
-  "@survey_option_blue": {
-    "description": "Option for blue color"
-  },
-  "survey_option_green": "Зелений",
-  "@survey_option_green": {
-    "description": "Option for green color"
-  },
-  "survey_option_warm": "Теплий",
-  "@survey_option_warm": {
-    "description": "Option for warm color"
-  },
-  "survey_option_calm": "Спокійна",
-  "@survey_option_calm": {
-    "description": "Option for calm atmosphere"
-  },
-  "survey_option_energetic": "Енергійна",
-  "@survey_option_energetic": {
-    "description": "Option for energetic atmosphere"
-  },
-  "survey_option_bright": "Яскраве",
-  "@survey_option_bright": {
-    "description": "Option for bright lighting"
-  },
-  "survey_option_dim": "Приглушене",
-  "@survey_option_dim": {
-    "description": "Option for dim lighting"
-  },
-  "character_olya_title": "Оля, 14 років",
-  "@character_olya_title": {
-    "description": "Olya name + age"
-  },
-  "character_olya_quote": "\"Я не говоритиму — я покажу\"",
-  "@character_olya_quote": {
-    "description": "Olya short quote"
-  },
-  "character_olya_trait": "Аутичний спектр (АСД), гіперчутливість до гучних звуків, яскравого світла та хаосу.",
-  "@character_olya_trait": {
-    "description": "Olya trait description"
-  },
-  "character_olya_superPower": "Запам’ятовує та структурує простір через візуальні патерни, малюнки та геометрію.",
-  "@character_olya_superPower": {
-    "description": "Olya super power"
-  },
-  "character_olya_description": "Для Олі світ часто нагадує переповнену автостраду без знаків. Вона створює власну \"Мапу спокою\" та перетворює сенсорний шум на мистецтво.",
-  "@character_olya_description": {
-    "description": "Olya long description"
-  },
-  "character_anton_title": "Антон, 14 років",
-  "@character_anton_title": {
-    "description": "Anton name + age"
-  },
-  "character_anton_quote": "\"Тиша не порожня. Вона говорить голосно, якщо слухати серцем\"",
-  "@character_anton_quote": {
-    "description": "Anton short quote"
-  },
-  "character_anton_trait": "Має виражене порушення слуху. Комунікує жестовою мовою, читає по губах та активно використовує гаджети.",
-  "@character_anton_trait": {
-    "description": "Anton trait description"
-  },
-  "character_anton_superPower": "Графічний дизайн та спостережливість. Вміє «чути очима» — безпомилково зчитує найтонші емоції з обличчя (навіть сарказм чи розгубленість).",
-  "@character_anton_superPower": {
-    "description": "Anton super power"
-  },
-  "character_anton_description": "Впевнений, креативний підліток із тонким почуттям гумору, який мріє створити власну манґу. Антон доводить, що комунікація не обмежується голосом. Його історія вчить тому, що жестова мова — це повноцінна мова, а мистецтво та емодзі можуть пояснити те, для чого не вистачає слів",
-  "@character_anton_description": {
-    "description": "Anton long description"
-  },
-  "character_liam_title": "Ліам, 15 років",
-  "@character_liam_title": {
-    "description": "Liam name + age"
-  },
-  "character_liam_quote": "\"Це не про стиль. Це про рівень\"",
-  "@character_liam_quote": {
-    "description": "Liam short quote"
-  },
-  "character_liam_trait": "Пересувається на колісному кріслі; місто часто стає смугою перешкод.",
-  "@character_liam_trait": {
-    "description": "Liam trait description"
-  },
-  "character_liam_superPower": "Фотографія, дотепність та активізм.",
-  "@character_liam_superPower": {
-    "description": "Liam super power"
-  },
-  "character_liam_description": "Бореться за безбар’єрність і показує, що доступність — це свобода обирати свій маршрут.",
-  "@character_liam_description": {
-    "description": "Liam long description"
-  },
-  "character_olenka_title": "Оленка, 15 років",
-  "@character_olenka_title": {
-    "description": "Olenka name + age"
-  },
-  "character_olenka_quote": "\"Іноді, щоб побачити, треба просто навчитися чути\"",
-  "@character_olenka_quote": {
-    "description": "Olenka short quote"
-  },
-  "character_olenka_trait": "Незряча, орієнтується через слух, дотик, уяву та логіку.",
-  "@character_olenka_trait": {
-    "description": "Olenka trait description"
-  },
-  "character_olenka_superPower": "Ехолокація та вміння \"бачити\" простір через звуковий ландшафт.",
-  "@character_olenka_superPower": {
-    "description": "Olenka super power"
-  },
-  "character_olenka_description": "Навігує у складному міському середовищі та вчить повазі до самостійності незрячих людей.",
-  "@character_olenka_description": {
-    "description": "Olenka long description"
-  },
-  "survey_calibration_title": "Калібрування сенсорного профілю",
-  "survey_calibration_subtitle": "Відповіді персоналізують історію Олі та фінальну «Мапу спокою».",
-  "survey_save_continue": "Зберегти та продовжити",
-  "path_choice_title": "Обери маршрут",
-  "path_first": "Головний коридор",
-  "path_second": "Через бібліотеку",
-  "path_third": "Через шкільний двір",
-  "confirm": "Підтвердити",
-  "calm_map_personal_artifact": "Персональний артефакт",
-  "calm_map_title": "Твоя Мапа спокою",
-  "calm_map_pattern": "Патерн: {value}",
-  "@calm_map_pattern": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "calm_map_item": "Предмет опори: {value}",
-  "@calm_map_item": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "calm_map_support_message": "Фраза підтримки: {value}",
-  "@calm_map_support_message": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "calm_map_support_symbol": "Символ опори: {value}",
-  "@calm_map_support_symbol": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "calm_map_selected_tools": "Обрані ресурси: {value}",
-  "@calm_map_selected_tools": {
-    "placeholders": {
-      "value": {
-        "type": "String"
-      }
-    }
-  },
-  "play_again": "Зіграти ще раз",
-  "survey_safe_color_title": "1. Який колір для тебе — безпечний?",
-  "survey_mint": "М’ятний",
-  "survey_lavender": "Лавандовий",
-  "survey_deep_ocean": "Глибокий синій",
-  "survey_sand": "Теплий пісочний",
-  "survey_calming_pattern_title": "2. Який візерунок заспокоює?",
-  "survey_geometry": "Чітка геометрія",
-  "survey_nature": "Природні мотиви",
-  "survey_stars": "Зоряне небо",
-  "survey_clouds": "М’які хмари",
-  "survey_calming_item_title": "3. Який предмет дає відчуття спокою?",
-  "survey_book": "Книжка",
-  "survey_stones": "Мішечок з камінчиками",
-  "survey_toy": "Заспокоююча іграшка",
-  "survey_sound_trigger_title": "4. Які звуки тебе дратують?",
-  "survey_crowd": "Гучний натовп",
-  "survey_mechanical": "Різкі механічні звуки",
-  "survey_high_pitch": "Високий писк",
-  "survey_chaotic_music": "Хаотична гучна музика",
-  "survey_calming_action_title": "5. Які рухи тебе заспокоюють?",
-  "survey_squeeze": "Стискання м’якого предмета",
-  "survey_breathing": "Глибоке повільне дихання",
-  "survey_counting": "Рахунок предметів",
-  "survey_eyes_closed": "Коротко закрити очі",
-  "survey_panic_style_title": "6. Як виглядає твоя “паніка”?",
-  "survey_shake": "Екран тремтить і пульсує",
-  "survey_blur": "Картинка розмита, як у тумані",
-  "survey_acid": "Яскраві “кислотні” кольори",
-  "survey_noise": "Зображення шумить і двоїться",
-  "survey_support_form_title": "7. Яку форму підтримки обереш?",
-  "@survey_support_form_title": {
-    "description": "Survey question 7: What form of support."
-  },
-  "survey_support_safe_breathe": "Безпечна фраза + дихання",
-  "@survey_support_safe_breathe": {
-    "description": "Survey option: safe phrase and breathing."
-  },
-  "survey_support_affirmation": "Позитивне твердження",
-  "@survey_support_affirmation": {
-    "description": "Survey option: positive affirmation."
-  },
-  "survey_support_grounding": "Техніка заземлення",
-  "@survey_support_grounding": {
-    "description": "Survey option: grounding technique."
-  },
-  "survey_support_visualization": "Спокійна візуалізація",
-  "@survey_support_visualization": {
-    "description": "Survey option: calm visualization."
-  },
-  "classroom": "Клас",
-  "first_path_description": "Найкоротший шлях. Людно, шумно, багато учнів. Доведеться швидко пробиратися крізь натовп.",
-  "second_path_description": "Тихі коридори біля бібліотеки. Тут розташовані шкільні шафки — Оля може зупинитися і взяти щось зі своїх речей. Маршрут трохи довший, але спокійніший.",
-  "third_path_description": "Обхід через внутрішній двір і запасний вхід. Людей майже немає, але шлях довший і менш безпечний — у дворі можуть трапитися старші учні або інші непередбачувані ситуації.",
-  "map_of_calm_olya": "Мапа спокою: Оля"
+    "@@locale": "uk",
+    "title": "Emvia",
+    "@title": {
+        "description": "The main title of the application or game."
+    },
+    "play": "Грати",
+    "@play": {
+        "description": "Label for the action to start the game or experience."
+    },
+    "settings": "Налаштування",
+    "@settings": {
+        "description": "Label for the settings menu."
+    },
+    "exit": "Вихід",
+    "@exit": {
+        "description": "Label for the action to quit the application or game."
+    },
+    "pause": "Пауза",
+    "@pause": {
+        "description": "Label for pausing the current activity."
+    },
+    "resume": "Продовжити",
+    "@resume": {
+        "description": "Label for resuming a paused activity."
+    },
+    "too_dangerous": "Цей шлях надто небезпечний",
+    "@too_dangerous": {
+        "description": "Warning message when a path is locked."
+    },
+    "teacher_intro": "Вчитель: Оля, твій вихід через 15 хвилин",
+    "@teacher_intro": {
+        "description": "A line spoken by the teacher to Olya, indicating her turn time."
+    },
+    "too_loud": "Занадто голосно... треба заспокоїтися",
+    "@too_loud": {
+        "description": "Player's internal thought or statement indicating distress due to high volume and the need to calm down."
+    },
+    "calmed": "Фух... стало тихіше. йду далі",
+    "@calmed": {
+        "description": "Player's statement after successfully calming down, noting the quieter environment."
+    },
+    "inhale": "вдих",
+    "@inhale": {
+        "description": "Instruction or label for the breathing in action."
+    },
+    "exhale": "видих",
+    "@exhale": {
+        "description": "Instruction or label for the breathing out action."
+    },
+    "i_calm_down": "Я заспокоїлась",
+    "@i_calm_down": {
+        "description": "Confirmation that the player has successfully managed to calm down."
+    },
+    "continueLabel": "Продовжити",
+    "@continueLabel": {
+        "description": "General label for proceeding to the next step or screen."
+    },
+    "headphones": "Навушники",
+    "@headphones": {
+        "description": "Label related to headphone settings or an instruction to use them."
+    },
+    "headphonesOff": "Заспокоїтись",
+    "@headphonesOff": {
+        "description": "Potentially a state or alternative setting when headphones are off, linked to the 'Calm' theme."
+    },
+    "breathing": "Дихання",
+    "@breathing": {
+        "description": "Label for the breathing exercise section or setting."
+    },
+    "credits": "Автори",
+    "@credits": {
+        "description": "Label for the credits screen."
+    },
+    "exitConfirm": "Ви впевнені, що хочете вийти?",
+    "@exitConfirm": {
+        "description": "Confirmation prompt message before exiting."
+    },
+    "cancel": "Скасувати",
+    "@cancel": {
+        "description": "Label for canceling an action or closing a dialog."
+    },
+    "backToMenu": "Головне меню",
+    "@backToMenu": {
+        "description": "Label to return to the main menu screen."
+    },
+    "thanksForPlaying": "Дякуємо за те, що граєте",
+    "@thanksForPlaying": {
+        "description": "Closing message after the game or session ends."
+    },
+    "sound_question_title": "Перед початком, чи хочеш ти грати зі звуком?",
+    "@sound_question_title": {
+        "description": "Question asked at the start of the game about sound preference."
+    },
+    "sound_on": "Зі звуком",
+    "@sound_on": {
+        "description": "Option to enable sound."
+    },
+    "sound_off": "Без звуку",
+    "@sound_off": {
+        "description": "Option to disable sound."
+    },
+    "leadDeveloper": "Головний розробник",
+    "@leadDeveloper": {
+        "description": "Title for the lead developer in the credits."
+    },
+    "artistAndDesigner": "Художник і дизайнер",
+    "@artistAndDesigner": {
+        "description": "Title for the artist and designer in the credits."
+    },
+    "breathingGuide": "Ніжний гайд для заспокоєння",
+    "@breathingGuide": {
+        "description": "Title or description for the breathing guidance feature."
+    },
+    "sound": "Звук",
+    "@sound": {
+        "description": "Label for sound settings."
+    },
+    "language": "Мова",
+    "@language": {
+        "description": "Label for the language selection setting."
+    },
+    "done": "Готово",
+    "@done": {
+        "description": "Label for confirming changes or completing a task."
+    },
+    "theme": "Тема",
+    "@theme": {
+        "description": "Label for theme selection setting."
+    },
+    "light": "Світла",
+    "@light": {
+        "description": "Option for the light theme."
+    },
+    "dark": "Темна",
+    "@dark": {
+        "description": "Option for the dark theme."
+    },
+    "npc_greeting": "Таємнича особа: Привіт Олю! Ласкаво просимо до цього спокійного місця.",
+    "@npc_greeting": {
+        "description": "Initial greeting from the Mysterious Stranger character to Olya."
+    },
+    "speaker_teacher": "Вчитель",
+    "@speaker_teacher": {
+        "description": "Name label for the teacher speaker"
+    },
+    "dialog_teacher_start": "Ласкаво просимо на заняття! Ти готова почати?",
+    "@dialog_teacher_start": {
+        "description": "Teacher opening line asking if the player is ready"
+    },
+    "dialog_teacher_choice_yes": "Так, професоре",
+    "@dialog_teacher_choice_yes": {
+        "description": "Affirmative response by player"
+    },
+    "dialog_teacher_choice_not_really": "Не зовсім...",
+    "@dialog_teacher_choice_not_really": {
+        "description": "Negative unsure response by player"
+    },
+    "dialog_teacher_ready": "Чудово. Розкрийте підручники на сторінці 42.",
+    "@dialog_teacher_ready": {
+        "description": "Teacher tells students to open books"
+    },
+    "dialog_teacher_not_ready": "О? Не поспішай. Скажи, коли влаштуєшся.",
+    "@dialog_teacher_not_ready": {
+        "description": "Teacher tells player to take time"
+    },
+    "dialog_teacher_end": "Є запитання перед початком?",
+    "@dialog_teacher_end": {
+        "description": "Teacher asks for questions"
+    },
+    "dialog_teacher_choice_no_lets_go": "Ні, почнемо!",
+    "@dialog_teacher_choice_no_lets_go": {
+        "description": "Player agrees to start"
+    },
+    "dialog_teacher_choice_what_book": "Яка книжка?",
+    "@dialog_teacher_choice_what_book": {
+        "description": "Player asks which book"
+    },
+    "dialog_teacher_what_book": "Звісно, підручник з історії! Зосередься, будь ласка.",
+    "@dialog_teacher_what_book": {
+        "description": "Teacher answers which book"
+    },
+    "speaker_stranger": "Невідомець",
+    "@speaker_stranger": {
+        "description": "Name label for the stranger speaker"
+    },
+    "dialog_stranger_entry": "Гей ти. Схоже, ти не з цих країв.",
+    "@dialog_stranger_entry": {
+        "description": "Stranger initial greeting"
+    },
+    "dialog_stranger_choice_i_am": "Я звідти.",
+    "@dialog_stranger_choice_i_am": {
+        "description": "Player confirms they're from out of town"
+    },
+    "dialog_stranger_choice_mind_your_business": "Не твоя справа.",
+    "@dialog_stranger_choice_mind_your_business": {
+        "description": "Player responds rudely"
+    },
+    "dialog_stranger_from_out": "Так і думав. Остерігайся тут після заходу сонця.",
+    "item_headphones_name": "Сенсорні навушники",
+    "item_headphones_status": "Те, що треба! (Натисни, щоб екіпірувати)",
+    "item_headphones_desc": "Надійний щит від хаосу. Вони миттєво відсікають зайві стимули та різкі звуки, допомагаючи створити персональну зону безпеки навіть у найгучнішому коридорі.",
+    "item_blanket_name": "Важка ковдра",
+    "item_blanket_status": "Недоступно зараз",
+    "item_blanket_desc": "Відчуття глибокого тиску чудово знімає перевантаження і дає відчуття «кокона» безпеки. Але забрати її з собою в шумний коридор неможливо. Шукай щось більш мобільне!",
+    "item_lunchbox_name": "Ланч-бокс",
+    "item_lunchbox_status": "Не на часі",
+    "item_lunchbox_desc": "Знайома та безпечна їжа у своєму боксі — це важливо для комфорту поза домом. Але зараз проблема не в голоді, а в рівні шуму! Цей предмет тут не допоможе.",
+    "backpack_title": "Рюкзак",
+    "no_items": "Поки що порожньо. Досліджуй світ, щоб знайти щось корисне.",
+    "@dialog_stranger_from_out": {
+        "description": "Stranger warns player to be careful"
+    },
+    "dialog_stranger_rude": "Коли кажу — не говори, що не попереджав.",
+    "@dialog_stranger_rude": {
+        "description": "Stranger replies rudely and triggers effect"
+    },
+    "dialog_calmed_you_feel_better": "Ти почуваєшся набагато краще.",
+    "@dialog_calmed_you_feel_better": {
+        "description": "Line shown after calming down"
+    },
+    "lang_en": "English",
+    "@lang_en": {
+        "description": "English language name"
+    },
+    "lang_uk": "Українська",
+    "@lang_uk": {
+        "description": "Ukrainian language name"
+    },
+    "survey_title": "Маленьке опитування",
+    "@survey_title": {
+        "description": "Title for the onboarding survey"
+    },
+    "survey_question_color": "Які кольори тобі більше подобаються?",
+    "@survey_question_color": {
+        "description": "Question about color preference"
+    },
+    "survey_question_atmosphere": "Якій атмосфері ти віддаєш перевагу?",
+    "@survey_question_atmosphere": {
+        "description": "Question about atmosphere preference"
+    },
+    "survey_question_brightness": "Яке освітлення кімнати тобі подобається?",
+    "@survey_question_brightness": {
+        "description": "Question about brightness preference"
+    },
+    "survey_option_blue": "Блакитний",
+    "@survey_option_blue": {
+        "description": "Option for blue color"
+    },
+    "survey_option_green": "Зелений",
+    "@survey_option_green": {
+        "description": "Option for green color"
+    },
+    "survey_option_warm": "Теплий",
+    "@survey_option_warm": {
+        "description": "Option for warm color"
+    },
+    "survey_option_calm": "Спокійна",
+    "@survey_option_calm": {
+        "description": "Option for calm atmosphere"
+    },
+    "survey_option_energetic": "Енергійна",
+    "@survey_option_energetic": {
+        "description": "Option for energetic atmosphere"
+    },
+    "survey_option_bright": "Яскраве",
+    "@survey_option_bright": {
+        "description": "Option for bright lighting"
+    },
+    "survey_option_dim": "Приглушене",
+    "@survey_option_dim": {
+        "description": "Option for dim lighting"
+    },
+    "character_olya_title": "Оля, 14 років",
+    "@character_olya_title": {
+        "description": "Olya name + age"
+    },
+    "character_olya_quote": "\"Я не говоритиму — я покажу\"",
+    "@character_olya_quote": {
+        "description": "Olya short quote"
+    },
+    "character_olya_trait": "Аутичний спектр (АСД), гіперчутливість до гучних звуків, яскравого світла та хаосу.",
+    "@character_olya_trait": {
+        "description": "Olya trait description"
+    },
+    "character_olya_superPower": "Запам’ятовує та структурує простір через візуальні патерни, малюнки та геометрію.",
+    "@character_olya_superPower": {
+        "description": "Olya super power"
+    },
+    "character_olya_description": "Для Олі світ часто нагадує переповнену автостраду без знаків. Вона створює власну \"Мапу спокою\" та перетворює сенсорний шум на мистецтво.",
+    "@character_olya_description": {
+        "description": "Olya long description"
+    },
+    "character_anton_title": "Антон, 14 років",
+    "@character_anton_title": {
+        "description": "Anton name + age"
+    },
+    "character_anton_quote": "\"Тиша не порожня. Вона говорить голосно, якщо слухати серцем\"",
+    "@character_anton_quote": {
+        "description": "Anton short quote"
+    },
+    "character_anton_trait": "Має виражене порушення слуху. Комунікує жестовою мовою, читає по губах та активно використовує гаджети.",
+    "@character_anton_trait": {
+        "description": "Anton trait description"
+    },
+    "character_anton_superPower": "Графічний дизайн та спостережливість. Вміє «чути очима» — безпомилково зчитує найтонші емоції з обличчя (навіть сарказм чи розгубленість).",
+    "@character_anton_superPower": {
+        "description": "Anton super power"
+    },
+    "character_anton_description": "Впевнений, креативний підліток із тонким почуттям гумору, який мріє створити власну манґу. Антон доводить, що комунікація не обмежується голосом. Його історія вчить тому, що жестова мова — це повноцінна мова, а мистецтво та емодзі можуть пояснити те, для чого не вистачає слів",
+    "@character_anton_description": {
+        "description": "Anton long description"
+    },
+    "character_liam_title": "Ліам, 15 років",
+    "@character_liam_title": {
+        "description": "Liam name + age"
+    },
+    "character_liam_quote": "\"Це не про стиль. Це про рівень\"",
+    "@character_liam_quote": {
+        "description": "Liam short quote"
+    },
+    "character_liam_trait": "Пересувається на колісному кріслі; місто часто стає смугою перешкод.",
+    "@character_liam_trait": {
+        "description": "Liam trait description"
+    },
+    "character_liam_superPower": "Фотографія, дотепність та активізм.",
+    "@character_liam_superPower": {
+        "description": "Liam super power"
+    },
+    "character_liam_description": "Бореться за безбар’єрність і показує, що доступність — це свобода обирати свій маршрут.",
+    "@character_liam_description": {
+        "description": "Liam long description"
+    },
+    "character_olenka_title": "Оленка, 15 років",
+    "@character_olenka_title": {
+        "description": "Olenka name + age"
+    },
+    "character_olenka_quote": "\"Іноді, щоб побачити, треба просто навчитися чути\"",
+    "@character_olenka_quote": {
+        "description": "Olenka short quote"
+    },
+    "character_olenka_trait": "Незряча, орієнтується через слух, дотик, уяву та логіку.",
+    "@character_olenka_trait": {
+        "description": "Olenka trait description"
+    },
+    "character_olenka_superPower": "Ехолокація та вміння \"бачити\" простір через звуковий ландшафт.",
+    "@character_olenka_superPower": {
+        "description": "Olenka super power"
+    },
+    "character_olenka_description": "Навігує у складному міському середовищі та вчить повазі до самостійності незрячих людей.",
+    "@character_olenka_description": {
+        "description": "Olenka long description"
+    },
+    "survey_calibration_title": "Калібрування сенсорного профілю",
+    "survey_calibration_subtitle": "Відповіді персоналізують історію Олі та фінальну «Мапу спокою».",
+    "survey_save_continue": "Зберегти та продовжити",
+    "path_choice_title": "Обери маршрут",
+    "path_first": "Головний коридор",
+    "path_second": "Через бібліотеку",
+    "path_third": "Через шкільний двір",
+    "confirm": "Підтвердити",
+    "calm_map_personal_artifact": "Персональний артефакт",
+    "calm_map_title": "Твоя Мапа спокою",
+    "calm_map_pattern": "Патерн: {value}",
+    "@calm_map_pattern": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "calm_map_item": "Предмет опори: {value}",
+    "@calm_map_item": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "calm_map_support_message": "Фраза підтримки: {value}",
+    "@calm_map_support_message": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "calm_map_support_symbol": "Символ опори: {value}",
+    "@calm_map_support_symbol": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "calm_map_selected_tools": "Обрані ресурси: {value}",
+    "@calm_map_selected_tools": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "play_again": "Зіграти ще раз",
+    "survey_safe_color_title": "1. Який колір для тебе — безпечний?",
+    "survey_mint": "М’ятний",
+    "survey_lavender": "Лавандовий",
+    "survey_deep_ocean": "Глибокий синій",
+    "survey_sand": "Теплий пісочний",
+    "survey_calming_pattern_title": "2. Який візерунок заспокоює?",
+    "survey_geometry": "Чітка геометрія",
+    "survey_nature": "Природні мотиви",
+    "survey_stars": "Зоряне небо",
+    "survey_clouds": "М’які хмари",
+    "survey_calming_item_title": "3. Який предмет дає відчуття спокою?",
+    "survey_book": "Книжка",
+    "survey_stones": "Мішечок з камінчиками",
+    "survey_toy": "Заспокоююча іграшка",
+    "survey_sound_trigger_title": "4. Які звуки тебе дратують?",
+    "survey_crowd": "Гучний натовп",
+    "survey_mechanical": "Різкі механічні звуки",
+    "survey_high_pitch": "Високий писк",
+    "survey_chaotic_music": "Хаотична гучна музика",
+    "survey_calming_action_title": "5. Які рухи тебе заспокоюють?",
+    "survey_squeeze": "Стискання м’якого предмета",
+    "survey_breathing": "Глибоке повільне дихання",
+    "survey_counting": "Рахунок предметів",
+    "survey_eyes_closed": "Коротко закрити очі",
+    "survey_panic_style_title": "6. Як виглядає твоя “паніка”?",
+    "survey_shake": "Екран тремтить і пульсує",
+    "survey_blur": "Картинка розмита, як у тумані",
+    "survey_acid": "Яскраві “кислотні” кольори",
+    "survey_noise": "Зображення шумить і двоїться",
+    "survey_support_form_title": "7. Яку форму підтримки обереш?",
+    "@survey_support_form_title": {
+        "description": "Survey question 7: What form of support."
+    },
+    "survey_support_safe_breathe": "Безпечна фраза + дихання",
+    "@survey_support_safe_breathe": {
+        "description": "Survey option: safe phrase and breathing."
+    },
+    "survey_support_affirmation": "Позитивне твердження",
+    "@survey_support_affirmation": {
+        "description": "Survey option: positive affirmation."
+    },
+    "survey_support_grounding": "Техніка заземлення",
+    "@survey_support_grounding": {
+        "description": "Survey option: grounding technique."
+    },
+    "survey_support_visualization": "Спокійна візуалізація",
+    "@survey_support_visualization": {
+        "description": "Survey option: calm visualization."
+    },
+    "classroom": "Клас",
+    "first_path_description": "Найкоротший шлях. Людно, шумно, багато учнів. Доведеться швидко пробиратися крізь натовп.",
+    "second_path_description": "Тихі коридори біля бібліотеки. Тут розташовані шкільні шафки — Оля може зупинитися і взяти щось зі своїх речей. Маршрут трохи довший, але спокійніший.",
+    "third_path_description": "Обхід через внутрішній двір і запасний вхід. Людей майже немає, але шлях довший і менш безпечний — у дворі можуть трапитися старші учні або інші непередбачувані ситуації.",
+    "map_of_calm_olya": "Мапа спокою: Оля"
 }

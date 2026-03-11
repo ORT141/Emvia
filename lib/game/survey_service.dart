@@ -44,6 +44,8 @@ class SurveyProfile {
 
   String get aiPattern => answers[SurveyService.aiPatternKey] ?? '';
   String get aiColor => answers[SurveyService.aiColorKey] ?? '';
+  String get aiStressType =>
+      answers[SurveyService.aiStressTypeKey] ?? 'battery';
 
   List<String> get aiWords {
     final raw = answers[SurveyService.aiWordsKey];
@@ -163,6 +165,7 @@ class SurveyService {
   static const String aiPatternKey = 'ai_pattern';
   static const String aiWordsKey = 'ai_words';
   static const String aiColorKey = 'ai_color';
+  static const String aiStressTypeKey = 'ai_stress_type';
 
   static List<SurveyQuestion> localizedQuestions(BuildContext context) {
     final l = AppLocalizations.of(context)!;
@@ -230,10 +233,16 @@ class SurveyService {
         id: supportMessageKey,
         title: l.survey_support_form_title,
         options: [
-          SurveyOption(id: 'safe_breathe', label: l.survey_support_safe_breathe),
+          SurveyOption(
+            id: 'safe_breathe',
+            label: l.survey_support_safe_breathe,
+          ),
           SurveyOption(id: 'affirmation', label: l.survey_support_affirmation),
           SurveyOption(id: 'grounding', label: l.survey_support_grounding),
-          SurveyOption(id: 'visualization', label: l.survey_support_visualization),
+          SurveyOption(
+            id: 'visualization',
+            label: l.survey_support_visualization,
+          ),
         ],
       ),
     ];
@@ -270,6 +279,7 @@ class SurveyService {
       aiPatternKey,
       aiWordsKey,
       aiColorKey,
+      aiStressTypeKey,
     ];
 
     for (final key in keys) {
@@ -315,10 +325,13 @@ class SurveyService {
         final pattern = (data['pattern'] as String?) ?? '';
         final words = (data['words'] as List?)?.cast<String>() ?? [];
         final color = (data['color'] as String?) ?? '';
+        final stressType = (data['stress_type'] as String?) ?? 'battery';
 
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString(aiPatternKey, pattern);
         await prefs.setString(aiWordsKey, jsonEncode(words));
+        await prefs.setString(aiColorKey, color);
+        await prefs.setString(aiStressTypeKey, stressType);
         await prefs.setString(aiColorKey, color);
       }
     } catch (_) {}

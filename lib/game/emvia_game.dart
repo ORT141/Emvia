@@ -48,7 +48,14 @@ class EmviaGame extends FlameGame
   bool freezeForPathChoice = false;
 
   int sceneIndex = 0;
-  int stressLevel = 0;
+  int _stressLevel = 0;
+  final ValueNotifier<int> stressNotifier = ValueNotifier<int>(0);
+
+  int get stressLevel => _stressLevel;
+  set stressLevel(int value) {
+    _stressLevel = value.clamp(0, 100);
+    stressNotifier.value = _stressLevel;
+  }
 
   int _sessionToken = 0;
 
@@ -89,9 +96,7 @@ class EmviaGame extends FlameGame
 
   final SurveyService _surveyService = SurveyService();
   SurveyProfile surveyProfile = SurveyProfile(const {});
-  final BackpackInventory backpack = BackpackInventory(
-    initialItems: BackpackItem.placeholderItems(),
-  );
+  late final BackpackInventory backpack = BackpackInventory();
 
   double _mobileMoveX = 0;
 
@@ -123,6 +128,13 @@ class EmviaGame extends FlameGame
     overlays.add('MainMenu');
   }
 
+  void initializeInventory(BuildContext context) {
+    if (backpack.items.isNotEmpty) return;
+    for (final item in BackpackItem.initialItems(context)) {
+      backpack.addItem(item);
+    }
+  }
+
   Future<void> loadScene(GameScene scene) async {
     await transitionManager.loadScene(scene);
     currentScene = scene;
@@ -136,6 +148,7 @@ class EmviaGame extends FlameGame
     sceneIndex = 3;
     olya.opacity = 1;
     showMobileControls();
+    overlays.add('Stress');
   }
 
   void _updateClassroomZoom() {
@@ -261,9 +274,6 @@ class EmviaGame extends FlameGame
     stressLevel = 0;
     _selectedTools.clear();
     backpack.clear();
-    for (final item in BackpackItem.placeholderItems()) {
-      backpack.addItem(item);
-    }
 
     overlays.remove('Dialog');
     overlays.remove('CalmMap');

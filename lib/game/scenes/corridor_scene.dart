@@ -33,10 +33,34 @@ class CorridorScene extends GameScene {
   Future<void> onLoad() async {
     await super.onLoad();
 
+    game.overlays.add('Stress');
+
     final color = game.surveyProfile.safeColorValue;
     background.decorator.addLast(PaintDecorator.tint(color));
 
     await _loadWallPattern();
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    final playerX = game.olya.position.x;
+    final worldW = worldWidthForViewport(game.size);
+    final centerX = worldW / 2;
+
+    final distanceToCenter = (playerX - centerX).abs();
+
+    final proximity = 1.0 - (distanceToCenter / centerX).clamp(0.0, 1.0);
+
+    game.stressLevel = (math.pow(proximity, 2) * 100).toInt();
+  }
+
+  @override
+  void onRemove() {
+    game.overlays.remove('Stress');
+    game.stressLevel = 0;
+    super.onRemove();
   }
 
   Future<void> _loadWallPattern() async {

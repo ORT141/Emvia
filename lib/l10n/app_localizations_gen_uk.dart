@@ -166,6 +166,44 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
       'Так і думав. Остерігайся тут після заходу сонця.';
 
   @override
+  String get item_headphones_name => 'Сенсорні навушники';
+
+  @override
+  String get item_headphones_status =>
+      'Те, що треба! (Натисни, щоб екіпірувати)';
+
+  @override
+  String get item_headphones_desc =>
+      'Надійний щит від хаосу. Вони миттєво відсікають зайві стимули та різкі звуки, допомагаючи створити персональну зону безпеки навіть у найгучнішому коридорі.';
+
+  @override
+  String get item_blanket_name => 'Важка ковдра';
+
+  @override
+  String get item_blanket_status => 'Недоступно зараз';
+
+  @override
+  String get item_blanket_desc =>
+      'Відчуття глибокого тиску чудово знімає перевантаження і дає відчуття «кокона» безпеки. Але забрати її з собою в шумний коридор неможливо. Шукай щось більш мобільне!';
+
+  @override
+  String get item_lunchbox_name => 'Ланч-бокс';
+
+  @override
+  String get item_lunchbox_status => 'Не на часі';
+
+  @override
+  String get item_lunchbox_desc =>
+      'Знайома та безпечна їжа у своєму боксі — це важливо для комфорту поза домом. Але зараз проблема не в голоді, а в рівні шуму! Цей предмет тут не допоможе.';
+
+  @override
+  String get backpack_title => 'Рюкзак';
+
+  @override
+  String get no_items =>
+      'Поки що порожньо. Досліджуй світ, щоб знайти щось корисне.';
+
+  @override
   String get dialog_stranger_rude => 'Коли кажу — не говори, що не попереджав.';
 
   @override

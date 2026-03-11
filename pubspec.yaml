@@ -34,8 +34,9 @@ flutter:
     assets:
         - assets/images/
         - assets/images/main-menu/
-        - assets/images/overlays/
+        - assets/images/stress/
         - assets/images/player/
+        - assets/images/backpack/
         - assets/images/player-selecting/
         - assets/images/scenes/
         - assets/images/scenes/classroom/

@@ -8,7 +8,7 @@ enum PlayerState { standing, walking }
 
 class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
     with HasGameReference<EmviaGame>, KeyboardHandler, TapCallbacks {
-  OlyaPlayer() : super(size: Vector2(130, 260), anchor: Anchor.center);
+  OlyaPlayer() : super(size: Vector2(130, 280), anchor: Anchor.center);
 
   late final SpriteAnimation _standingAnimation;
   late final SpriteAnimation _walkingAnimation;
@@ -16,7 +16,7 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
   final Vector2 _velocity = Vector2.zero();
   final Vector2 _keyboardVelocity = Vector2.zero();
   final Vector2 _mobileVelocity = Vector2.zero();
-  final double _speed = 200.0;
+  final double _speed = 220.0;
 
   @override
   Future<void> onLoad() async {

@@ -167,6 +167,43 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
       'Thought so. Be careful around here after dark.';
 
   @override
+  String get item_headphones_name => 'Sensory headphones';
+
+  @override
+  String get item_headphones_status =>
+      'Exactly what\'s needed! (Click to equip)';
+
+  @override
+  String get item_headphones_desc =>
+      'A reliable shield against chaos. They instantly block out excess stimuli and harsh sounds, helping to create a personal safe zone even in the noisiest corridor.';
+
+  @override
+  String get item_blanket_name => 'Weighted blanket';
+
+  @override
+  String get item_blanket_status => 'Unavailable right now';
+
+  @override
+  String get item_blanket_desc =>
+      'The sensation of deep pressure perfectly relieves overload and provides a feeling of a safety \"cocoon\". But it is impossible to take it with you into a noisy corridor. Look for something more mobile!';
+
+  @override
+  String get item_lunchbox_name => 'Lunch box';
+
+  @override
+  String get item_lunchbox_status => 'Not the right time';
+
+  @override
+  String get item_lunchbox_desc =>
+      'Familiar and safe food in your own box is important for comfort away from home. But right now the problem isn\'t hunger, it\'s the noise level! This item won\'t help here.';
+
+  @override
+  String get backpack_title => 'Backpack';
+
+  @override
+  String get no_items => 'No items yet. Explore to collect more.';
+
+  @override
   String get dialog_stranger_rude =>
       'Suit yourself. Don\'t say I didn\'t warn you.';
 
