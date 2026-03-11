@@ -206,6 +206,10 @@
     "item_lunchbox_name": "Ланч-бокс",
     "item_lunchbox_status": "Не на часі",
     "item_lunchbox_desc": "Знайома та безпечна їжа у своєму боксі — це важливо для комфорту поза домом. Але зараз проблема не в голоді, а в рівні шуму! Цей предмет тут не допоможе.",
+    "use_item": "Використати предмет",
+    "@use_item": {
+        "description": "Label for using an item from the backpack."
+    },
     "backpack_title": "Рюкзак",
     "no_items": "Поки що порожньо. Досліджуй світ, щоб знайти щось корисне.",
     "@dialog_stranger_from_out": {

@@ -198,6 +198,9 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
       'Familiar and safe food in your own box is important for comfort away from home. But right now the problem isn\'t hunger, it\'s the noise level! This item won\'t help here.';
 
   @override
+  String get use_item => 'Use Item';
+
+  @override
   String get backpack_title => 'Backpack';
 
   @override

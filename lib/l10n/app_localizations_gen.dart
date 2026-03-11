@@ -452,6 +452,12 @@ abstract class AppLocalizationsGen {
   /// **'Familiar and safe food in your own box is important for comfort away from home. But right now the problem isn\'t hunger, it\'s the noise level! This item won\'t help here.'**
   String get item_lunchbox_desc;
 
+  /// Label for using an item from the backpack.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Item'**
+  String get use_item;
+
   /// No description provided for @backpack_title.
   ///
   /// In en, this message translates to:

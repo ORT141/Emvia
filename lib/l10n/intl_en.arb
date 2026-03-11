@@ -209,6 +209,10 @@
     "item_lunchbox_name": "Lunch box",
     "item_lunchbox_status": "Not the right time",
     "item_lunchbox_desc": "Familiar and safe food in your own box is important for comfort away from home. But right now the problem isn't hunger, it's the noise level! This item won't help here.",
+    "use_item": "Use Item",
+    "@use_item": {
+        "description": "Label for using an item from the backpack."
+    },
     "backpack_title": "Backpack",
     "no_items": "No items yet. Explore to collect more.",
     "dialog_stranger_rude": "Suit yourself. Don't say I didn't warn you.",

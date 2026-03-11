@@ -197,6 +197,9 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
       'Знайома та безпечна їжа у своєму боксі — це важливо для комфорту поза домом. Але зараз проблема не в голоді, а в рівні шуму! Цей предмет тут не допоможе.';
 
   @override
+  String get use_item => 'Використати предмет';
+
+  @override
   String get backpack_title => 'Рюкзак';
 
   @override

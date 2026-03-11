@@ -18,6 +18,7 @@ class BackpackOverlay extends StatefulWidget {
 
 class _BackpackOverlayState extends State<BackpackOverlay> {
   BackpackItem? _selectedItem;
+  Future<void> Function()? _stopItemAudio;
 
   @override
   void initState() {
@@ -30,10 +31,33 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
   }
 
   void _selectItem(BackpackItem item) {
+    _doSelect(item);
+  }
+
+  Future<void> _doSelect(BackpackItem item) async {
     setState(() => _selectedItem = item);
-    if (widget.game.soundEnabled) {
-      FlameAudio.play(item.soundAsset);
-    }
+    if (!widget.game.soundEnabled) return;
+    await _stopItemAudio?.call();
+    try {
+      final player = await FlameAudio.play(
+        item.soundAsset,
+        volume: widget.game.volume,
+      );
+      _stopItemAudio = player.stop;
+    } catch (_) {}
+  }
+
+  @override
+  void dispose() {
+    _stopItemAudio?.call();
+    super.dispose();
+  }
+
+  String _localizedAssetFor(String assetPath) {
+    final locale = Localizations.localeOf(context);
+    final lang = locale.languageCode == 'uk' ? 'uk' : 'en';
+    final filename = assetPath.split('/').last;
+    return 'assets/images/backpack/$lang/$filename';
   }
 
   @override
@@ -69,24 +93,58 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
   }
 
   Widget _buildBackpackIcon() {
+    final items = widget.game.backpack.items;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        GestureDetector(
-          onTap: () {
-            final items = widget.game.backpack.items;
-            if (items.isNotEmpty) {
-              _selectItem(items.first);
-            }
-          },
-          child: MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: Hero(
-              tag: 'backpack_main',
-              child: Image.asset(
-                'assets/images/backpack/backpack.png',
-                width: 300,
-                fit: BoxFit.contain,
+        MouseRegion(
+          cursor: SystemMouseCursors.basic,
+          child: Hero(
+            tag: 'backpack_main',
+            child: SizedBox(
+              width: 360,
+              height: 360,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Positioned.fill(
+                        child: Image.asset(
+                          'assets/images/backpack/backpack.png',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+
+                      for (final it in items)
+                        Positioned(
+                          child: GestureDetector(
+                            onTap: () => _selectItem(it),
+                            behavior: HitTestBehavior.translucent,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: _selectedItem?.id == it.id
+                                    ? Theme.of(context).colorScheme.primary
+                                          .withValues(alpha: 0.15)
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Image.asset(
+                                _localizedAssetFor(it.iconAsset),
+                                fit: BoxFit.contain,
+                                errorBuilder: (ctx, err, st) => Image.asset(
+                                  it.iconAsset,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -165,9 +223,12 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                                   .withValues(alpha: 0.3),
                               borderRadius: BorderRadius.circular(32),
                             ),
-                            child: Image.asset(
-                              item.iconAsset,
-                              fit: BoxFit.contain,
+                            child: Center(
+                              child: Icon(
+                                Icons.inventory_2_outlined,
+                                size: 48,
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 24),
@@ -198,8 +259,13 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                                       ),
                                     ),
                                     child: Image.asset(
-                                      other.iconAsset,
+                                      _localizedAssetFor(other.iconAsset),
                                       fit: BoxFit.contain,
+                                      errorBuilder: (ctx, err, st) =>
+                                          Image.asset(
+                                            other.iconAsset,
+                                            fit: BoxFit.contain,
+                                          ),
                                     ),
                                   ),
                                 );
@@ -249,10 +315,16 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                             child: FilledButton.icon(
                               onPressed: isBlocked
                                   ? null
-                                  : () {
-                                      if (widget.game.soundEnabled) {
-                                        FlameAudio.play(item.soundAsset);
-                                      }
+                                  : () async {
+                                      if (!widget.game.soundEnabled) return;
+                                      await _stopItemAudio?.call();
+                                      try {
+                                        final player = await FlameAudio.play(
+                                          item.soundAsset,
+                                          volume: widget.game.volume,
+                                        );
+                                        _stopItemAudio = player.stop;
+                                      } catch (_) {}
                                     },
                               icon: Icon(
                                 isBlocked
@@ -262,9 +334,13 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                               label: Text(
                                 isBlocked
                                     ? (item.id == 'blanket'
-                                          ? "Unavailable in corridor"
-                                          : "Not the right time")
-                                    : "Use Item",
+                                          ? AppLocalizations.of(
+                                              context,
+                                            )!.item_blanket_status
+                                          : AppLocalizations.of(
+                                              context,
+                                            )!.item_lunchbox_status)
+                                    : AppLocalizations.of(context)!.use_item,
                               ),
                               style: FilledButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(

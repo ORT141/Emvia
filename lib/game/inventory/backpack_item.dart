@@ -56,7 +56,7 @@ class BackpackItem {
         description: l10n.item_headphones_desc,
         type: BackpackItemType.tool,
         iconAsset: 'assets/images/backpack/headphones.png',
-        soundAsset: 'sounds/items/sensory headphones.mp3',
+        soundAsset: 'items/sensory headphones.mp3',
       ),
       BackpackItem(
         id: 'blanket',
@@ -65,7 +65,7 @@ class BackpackItem {
         description: l10n.item_blanket_desc,
         type: BackpackItemType.tool,
         iconAsset: 'assets/images/backpack/coat.png',
-        soundAsset: 'sounds/items/weighted blanket.mp3',
+        soundAsset: 'items/weighted blanket.mp3',
       ),
       BackpackItem(
         id: 'lunchbox',
@@ -74,7 +74,7 @@ class BackpackItem {
         description: l10n.item_lunchbox_desc,
         type: BackpackItemType.tool,
         iconAsset: 'assets/images/backpack/lunchbox.png',
-        soundAsset: 'sounds/items/lunchbox.mp3',
+        soundAsset: 'items/lunchbox.mp3',
       ),
     ];
   }
