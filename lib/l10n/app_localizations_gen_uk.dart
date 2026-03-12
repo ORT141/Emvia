@@ -378,8 +378,8 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   }
 
   @override
-  String calm_map_selected_tools(String value) {
-    return 'Обрані ресурси: $value';
+  String calm_map_selected_path(String value) {
+    return 'Обраний шлях: $value';
   }
 
   @override
@@ -474,19 +474,65 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get survey_noise => 'Зображення шумить і двоїться';
 
   @override
-  String get survey_support_form_title => '7. Яку форму підтримки обереш?';
+  String get survey_support_form_title =>
+      '7. Яке повідомлення тебе б підтримало?';
 
   @override
-  String get survey_support_safe_breathe => 'Безпечна фраза + дихання';
+  String get survey_support_safe_breathe => 'Ти в безпеці, просто дихай';
 
   @override
-  String get survey_support_affirmation => 'Позитивне твердження';
+  String get survey_support_affirmation => 'Ти не одна, ми пройдемо це разом';
 
   @override
-  String get survey_support_grounding => 'Техніка заземлення';
+  String get survey_support_grounding =>
+      'Твій світ — це твоя сила, покажи його';
 
   @override
-  String get survey_support_visualization => 'Спокійна візуалізація';
+  String get survey_support_visualization =>
+      'Все гаразд. Дай собі час на відновлення';
+
+  @override
+  String get survey_support_symbol_title => '8. Яку форму підтримки обереш?';
+
+  @override
+  String get survey_shield => 'Щит';
+
+  @override
+  String get survey_cat => 'Котик';
+
+  @override
+  String get survey_battery => 'Батарейка';
+
+  @override
+  String get survey_anchor => 'Якір';
+
+  @override
+  String calm_map_safe_color(String value) {
+    return 'Безпечний колір: $value';
+  }
+
+  @override
+  String calm_map_calming_action(String value) {
+    return 'Заспокійливий рух: $value';
+  }
+
+  @override
+  String calm_map_sound_trigger(String value) {
+    return 'Звуковий тригер: $value';
+  }
+
+  @override
+  String get calm_map_export_png => 'Зберегти PNG';
+
+  @override
+  String get calm_map_export_hint =>
+      'Натисни P, щоб зберегти PNG і відкрити його.';
+
+  @override
+  String get calm_map_export_success => 'PNG збережено. Відкриваю файл...';
+
+  @override
+  String get calm_map_export_failed => 'Не вдалося зберегти PNG мапи спокою.';
 
   @override
   String get classroom => 'Клас';

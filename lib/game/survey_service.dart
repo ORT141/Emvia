@@ -106,6 +106,21 @@ class SurveyProfile {
     }
   }
 
+  String safeColorLabel(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    switch (safeColor) {
+      case 'lavender':
+        return l.survey_lavender;
+      case 'deep_ocean':
+        return l.survey_deep_ocean;
+      case 'sand':
+        return l.survey_sand;
+      case 'mint':
+      default:
+        return l.survey_mint;
+    }
+  }
+
   String get supportSymbolEmoji {
     switch (supportSymbol) {
       case 'shield':
@@ -117,6 +132,36 @@ class SurveyProfile {
       case 'anchor':
       default:
         return '⚓';
+    }
+  }
+
+  String supportMessageLabel(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    switch (supportMessage) {
+      case 'affirmation':
+        return l.survey_support_affirmation;
+      case 'grounding':
+        return l.survey_support_grounding;
+      case 'visualization':
+        return l.survey_support_visualization;
+      case 'safe_breathe':
+      default:
+        return l.survey_support_safe_breathe;
+    }
+  }
+
+  String supportSymbolLabel(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    switch (supportSymbol) {
+      case 'shield':
+        return l.survey_shield;
+      case 'cat':
+        return l.survey_cat;
+      case 'battery':
+        return l.survey_battery;
+      case 'anchor':
+      default:
+        return l.survey_anchor;
     }
   }
 

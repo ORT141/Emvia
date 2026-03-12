@@ -764,11 +764,11 @@ abstract class AppLocalizationsGen {
   /// **'Support Symbol: {value}'**
   String calm_map_support_symbol(String value);
 
-  /// No description provided for @calm_map_selected_tools.
+  /// No description provided for @calm_map_selected_path.
   ///
   /// In en, this message translates to:
-  /// **'Selected Resources: {value}'**
-  String calm_map_selected_tools(String value);
+  /// **'Selected path: {value}'**
+  String calm_map_selected_path(String value);
 
   /// No description provided for @play_again.
   ///
@@ -953,32 +953,104 @@ abstract class AppLocalizationsGen {
   /// Survey question 7: What form of support.
   ///
   /// In en, this message translates to:
-  /// **'7. What form of support would you choose?'**
+  /// **'7. What message would support you?'**
   String get survey_support_form_title;
 
   /// Survey option: safe phrase and breathing.
   ///
   /// In en, this message translates to:
-  /// **'Safe phrase + breathing'**
+  /// **'You are safe, just breathe'**
   String get survey_support_safe_breathe;
 
   /// Survey option: positive affirmation.
   ///
   /// In en, this message translates to:
-  /// **'Positive affirmation'**
+  /// **'You are not alone, we\'ll get through this together'**
   String get survey_support_affirmation;
 
   /// Survey option: grounding technique.
   ///
   /// In en, this message translates to:
-  /// **'Grounding technique'**
+  /// **'Your world is your strength, show it'**
   String get survey_support_grounding;
 
   /// Survey option: calm visualization.
   ///
   /// In en, this message translates to:
-  /// **'Calm visualization'**
+  /// **'It\'s okay. Give yourself time to recover'**
   String get survey_support_visualization;
+
+  /// No description provided for @survey_support_symbol_title.
+  ///
+  /// In en, this message translates to:
+  /// **'8. Which form of support would you choose?'**
+  String get survey_support_symbol_title;
+
+  /// No description provided for @survey_shield.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield'**
+  String get survey_shield;
+
+  /// No description provided for @survey_cat.
+  ///
+  /// In en, this message translates to:
+  /// **'Cat'**
+  String get survey_cat;
+
+  /// No description provided for @survey_battery.
+  ///
+  /// In en, this message translates to:
+  /// **'Battery'**
+  String get survey_battery;
+
+  /// No description provided for @survey_anchor.
+  ///
+  /// In en, this message translates to:
+  /// **'Anchor'**
+  String get survey_anchor;
+
+  /// No description provided for @calm_map_safe_color.
+  ///
+  /// In en, this message translates to:
+  /// **'Safe Color: {value}'**
+  String calm_map_safe_color(String value);
+
+  /// No description provided for @calm_map_calming_action.
+  ///
+  /// In en, this message translates to:
+  /// **'Calming Action: {value}'**
+  String calm_map_calming_action(String value);
+
+  /// No description provided for @calm_map_sound_trigger.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound Trigger: {value}'**
+  String calm_map_sound_trigger(String value);
+
+  /// No description provided for @calm_map_export_png.
+  ///
+  /// In en, this message translates to:
+  /// **'Export PNG'**
+  String get calm_map_export_png;
+
+  /// No description provided for @calm_map_export_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Press P to export the PNG and open it.'**
+  String get calm_map_export_hint;
+
+  /// No description provided for @calm_map_export_success.
+  ///
+  /// In en, this message translates to:
+  /// **'PNG saved. Opening file...'**
+  String get calm_map_export_success;
+
+  /// No description provided for @calm_map_export_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not export the calm map PNG.'**
+  String get calm_map_export_failed;
 
   /// No description provided for @classroom.
   ///

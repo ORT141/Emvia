@@ -1,5 +1,6 @@
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/game/components/path_detail_component.dart';
+import 'package:emvia/overlays/calm_map_overlay.dart';
 import 'package:emvia/overlays/credits_overlay.dart';
 import 'package:emvia/overlays/dialog.dart';
 import 'package:emvia/overlays/main_menu.dart';
@@ -119,6 +120,7 @@ class _MyAppState extends State<MyApp> {
           'MobileControls': (_, game) => MobileControlsOverlay(game: game),
           'Debug': (_, game) => DebugOverlay(game: game),
           'Stress': (_, game) => StressOverlay(game: game),
+          'CalmMap': (_, game) => CalmMapOverlay(game: game),
           'PathDetail': (_, game) => ValueListenableBuilder(
             valueListenable: game.pathDetailNotifier,
             builder: (context, value, child) {

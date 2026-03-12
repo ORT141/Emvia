@@ -160,7 +160,7 @@ class ClassroomScene extends GameScene with TapCallbacks {
     } else if (_selectedMarkIndex == 1) {
       game.chooseSecondPath(game.buildContext!);
     } else if (_selectedMarkIndex == 2) {
-      game.chooseSecondPath(game.buildContext!);
+      game.chooseThirdPath(game.buildContext!);
     }
   }
 

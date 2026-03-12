@@ -397,8 +397,8 @@
             }
         }
     },
-    "calm_map_selected_tools": "Обрані ресурси: {value}",
-    "@calm_map_selected_tools": {
+    "calm_map_selected_path": "Обраний шлях: {value}",
+    "@calm_map_selected_path": {
         "placeholders": {
             "value": {
                 "type": "String"
@@ -435,26 +435,59 @@
     "survey_blur": "Картинка розмита, як у тумані",
     "survey_acid": "Яскраві “кислотні” кольори",
     "survey_noise": "Зображення шумить і двоїться",
-    "survey_support_form_title": "7. Яку форму підтримки обереш?",
+    "survey_support_form_title": "7. Яке повідомлення тебе б підтримало?",
     "@survey_support_form_title": {
         "description": "Survey question 7: What form of support."
     },
-    "survey_support_safe_breathe": "Безпечна фраза + дихання",
+    "survey_support_safe_breathe": "Ти в безпеці, просто дихай",
     "@survey_support_safe_breathe": {
         "description": "Survey option: safe phrase and breathing."
     },
-    "survey_support_affirmation": "Позитивне твердження",
+    "survey_support_affirmation": "Ти не одна, ми пройдемо це разом",
     "@survey_support_affirmation": {
         "description": "Survey option: positive affirmation."
     },
-    "survey_support_grounding": "Техніка заземлення",
+    "survey_support_grounding": "Твій світ — це твоя сила, покажи його",
     "@survey_support_grounding": {
         "description": "Survey option: grounding technique."
     },
-    "survey_support_visualization": "Спокійна візуалізація",
+    "survey_support_visualization": "Все гаразд. Дай собі час на відновлення",
     "@survey_support_visualization": {
         "description": "Survey option: calm visualization."
     },
+    "survey_support_symbol_title": "8. Яку форму підтримки обереш?",
+    "survey_shield": "Щит",
+    "survey_cat": "Котик",
+    "survey_battery": "Батарейка",
+    "survey_anchor": "Якір",
+    "calm_map_safe_color": "Безпечний колір: {value}",
+    "@calm_map_safe_color": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "calm_map_calming_action": "Заспокійливий рух: {value}",
+    "@calm_map_calming_action": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "calm_map_sound_trigger": "Звуковий тригер: {value}",
+    "@calm_map_sound_trigger": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "calm_map_export_png": "Зберегти PNG",
+    "calm_map_export_hint": "Натисни P, щоб зберегти PNG і відкрити його.",
+    "calm_map_export_success": "PNG збережено. Відкриваю файл...",
+    "calm_map_export_failed": "Не вдалося зберегти PNG мапи спокою.",
     "classroom": "Клас",
     "first_path_description": "Найкоротший шлях. Людно, шумно, багато учнів. Доведеться швидко пробиратися крізь натовп.",
     "second_path_description": "Тихі коридори біля бібліотеки. Тут розташовані шкільні шафки — Оля може зупинитися і взяти щось зі своїх речей. Маршрут трохи довший, але спокійніший.",

@@ -58,6 +58,7 @@ class EmviaGame extends FlameGame
   }
 
   int _sessionToken = 0;
+  bool _journeyCompleted = false;
 
   PlayableCharacter selectedCharacter = PlayableCharacter.olya;
   bool _startGameAfterSurvey = false;
@@ -293,6 +294,7 @@ class EmviaGame extends FlameGame
     surveyProfile = await _surveyService.getProfile();
     sceneIndex = 1;
     stressLevel = 0;
+    _journeyCompleted = false;
     _selectedTools.clear();
     backpack.clear();
 
@@ -398,6 +400,30 @@ class EmviaGame extends FlameGame
     playerToCorridorEntrance();
   }
 
+  void finishOlyaJourney() {
+    if (_journeyCompleted) return;
+    _journeyCompleted = true;
+    freezeForPathChoice = true;
+    hideMobileControls();
+    pauseEngine();
+    overlays.add('CalmMap');
+  }
+
+  Future<void> returnToMainMenuAfterJourney() async {
+    overlays.remove('CalmMap');
+    if (paused) {
+      resumeEngine();
+    }
+    freezeForPathChoice = false;
+    stressLevel = 0;
+    sceneIndex = 0;
+    hideMobileControls();
+    overlays.remove('Stress');
+    await loadScene(ClassroomScene());
+    olya.opacity = 0;
+    openMainMenu();
+  }
+
   void playerToCorridorEntrance() {
     olya.position.x = olya.size.x / 2 + 10;
     cameraManager.snapToPlayer(force: true);
@@ -433,6 +459,12 @@ class EmviaGame extends FlameGame
       if (olya.position.x >= worldRoot.size.x - olya.size.x / 2 - 10) {
         _transitionToCorridor();
       }
+    }
+
+    if (currentScene is CorridorScene &&
+        !_journeyCompleted &&
+        olya.position.x >= worldRoot.size.x - olya.size.x / 2 - 10) {
+      finishOlyaJourney();
     }
 
     cameraManager.update(dt);

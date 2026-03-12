@@ -379,8 +379,8 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   }
 
   @override
-  String calm_map_selected_tools(String value) {
-    return 'Selected Resources: $value';
+  String calm_map_selected_path(String value) {
+    return 'Selected path: $value';
   }
 
   @override
@@ -476,20 +476,64 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get survey_noise => 'Image is noisy and doubled';
 
   @override
-  String get survey_support_form_title =>
-      '7. What form of support would you choose?';
+  String get survey_support_form_title => '7. What message would support you?';
 
   @override
-  String get survey_support_safe_breathe => 'Safe phrase + breathing';
+  String get survey_support_safe_breathe => 'You are safe, just breathe';
 
   @override
-  String get survey_support_affirmation => 'Positive affirmation';
+  String get survey_support_affirmation =>
+      'You are not alone, we\'ll get through this together';
 
   @override
-  String get survey_support_grounding => 'Grounding technique';
+  String get survey_support_grounding => 'Your world is your strength, show it';
 
   @override
-  String get survey_support_visualization => 'Calm visualization';
+  String get survey_support_visualization =>
+      'It\'s okay. Give yourself time to recover';
+
+  @override
+  String get survey_support_symbol_title =>
+      '8. Which form of support would you choose?';
+
+  @override
+  String get survey_shield => 'Shield';
+
+  @override
+  String get survey_cat => 'Cat';
+
+  @override
+  String get survey_battery => 'Battery';
+
+  @override
+  String get survey_anchor => 'Anchor';
+
+  @override
+  String calm_map_safe_color(String value) {
+    return 'Safe Color: $value';
+  }
+
+  @override
+  String calm_map_calming_action(String value) {
+    return 'Calming Action: $value';
+  }
+
+  @override
+  String calm_map_sound_trigger(String value) {
+    return 'Sound Trigger: $value';
+  }
+
+  @override
+  String get calm_map_export_png => 'Export PNG';
+
+  @override
+  String get calm_map_export_hint => 'Press P to export the PNG and open it.';
+
+  @override
+  String get calm_map_export_success => 'PNG saved. Opening file...';
+
+  @override
+  String get calm_map_export_failed => 'Could not export the calm map PNG.';
 
   @override
   String get classroom => 'Classroom';

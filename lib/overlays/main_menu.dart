@@ -46,12 +46,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
   }
 
   void _startNewGame() async {
-    // ask the user whether sounds should be enabled before we show the
-    // character picker. previously the sound question was part of the survey
-    // that only ran after the player selected a character, which meant the
-    // dialog popped up "after I select character". moving it here ensures the
-    // enable‑sounds prompt appears as soon as the player taps the main menu
-    // play button.
     await _askEnableSounds();
     _openNewGameModal();
   }

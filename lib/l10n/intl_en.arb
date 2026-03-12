@@ -397,8 +397,8 @@
             }
         }
     },
-    "calm_map_selected_tools": "Selected Resources: {value}",
-    "@calm_map_selected_tools": {
+    "calm_map_selected_path": "Selected path: {value}",
+    "@calm_map_selected_path": {
         "placeholders": {
             "value": {
                 "type": "String"
@@ -435,26 +435,59 @@
     "survey_blur": "Image is blurred like in fog",
     "survey_acid": "Bright \"acid\" colors",
     "survey_noise": "Image is noisy and doubled",
-    "survey_support_form_title": "7. What form of support would you choose?",
+    "survey_support_form_title": "7. What message would support you?",
     "@survey_support_form_title": {
         "description": "Survey question 7: What form of support."
     },
-    "survey_support_safe_breathe": "Safe phrase + breathing",
+    "survey_support_safe_breathe": "You are safe, just breathe",
     "@survey_support_safe_breathe": {
         "description": "Survey option: safe phrase and breathing."
     },
-    "survey_support_affirmation": "Positive affirmation",
+    "survey_support_affirmation": "You are not alone, we'll get through this together",
     "@survey_support_affirmation": {
         "description": "Survey option: positive affirmation."
     },
-    "survey_support_grounding": "Grounding technique",
+    "survey_support_grounding": "Your world is your strength, show it",
     "@survey_support_grounding": {
         "description": "Survey option: grounding technique."
     },
-    "survey_support_visualization": "Calm visualization",
+    "survey_support_visualization": "It's okay. Give yourself time to recover",
     "@survey_support_visualization": {
         "description": "Survey option: calm visualization."
     },
+    "survey_support_symbol_title": "8. Which form of support would you choose?",
+    "survey_shield": "Shield",
+    "survey_cat": "Cat",
+    "survey_battery": "Battery",
+    "survey_anchor": "Anchor",
+    "calm_map_safe_color": "Safe Color: {value}",
+    "@calm_map_safe_color": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "calm_map_calming_action": "Calming Action: {value}",
+    "@calm_map_calming_action": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "calm_map_sound_trigger": "Sound Trigger: {value}",
+    "@calm_map_sound_trigger": {
+        "placeholders": {
+            "value": {
+                "type": "String"
+            }
+        }
+    },
+    "calm_map_export_png": "Export PNG",
+    "calm_map_export_hint": "Press P to export the PNG and open it.",
+    "calm_map_export_success": "PNG saved. Opening file...",
+    "calm_map_export_failed": "Could not export the calm map PNG.",
     "classroom": "Classroom",
     "first_path_description": "The shortest route. Crowded, noisy, many students. You will have to quickly make your way through the crowd.",
     "second_path_description": "Quiet corridors near the library. School lockers are located here — Olya can stop and take something from her belongings. The route is a bit longer, but calmer.",
