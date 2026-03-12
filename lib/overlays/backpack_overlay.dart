@@ -19,15 +19,20 @@ class BackpackOverlay extends StatefulWidget {
 class _BackpackOverlayState extends State<BackpackOverlay> {
   BackpackItem? _selectedItem;
   Future<void> Function()? _stopItemAudio;
+  bool _inventoryInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        widget.game.initializeInventory(context);
-      }
-    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_inventoryInitialized) {
+      widget.game.initializeInventory(context);
+      _inventoryInitialized = true;
+    }
   }
 
   void _selectItem(BackpackItem item) {
@@ -119,6 +124,9 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
 
                       for (final it in items)
                         Positioned(
+                          left: 5,
+                          top: -17,
+                          width: 350,
                           child: GestureDetector(
                             onTap: () => _selectItem(it),
                             behavior: HitTestBehavior.translucent,
@@ -291,12 +299,14 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            item.status,
+                            widget.game.selectedTools.contains(item.id)
+                                ? '${item.status} (equipped)'
+                                : item.status,
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w700,
                               color: isBlocked
                                   ? theme.colorScheme.error
-                                  : (item.id == 'headphones'
+                                  : (widget.game.selectedTools.contains(item.id)
                                         ? Colors.green.shade600
                                         : theme.colorScheme.secondary),
                             ),
@@ -316,6 +326,14 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                               onPressed: isBlocked
                                   ? null
                                   : () async {
+                                      // if the item is a tool we toggle its equipped
+                                      if (item.id == 'headphones') {
+                                        widget.game.equipTool(item.id);
+                                        // close overlay as requested by user
+                                        widget.game.overlays.remove('Backpack');
+                                        return;
+                                      }
+
                                       if (!widget.game.soundEnabled) return;
                                       await _stopItemAudio?.call();
                                       try {
@@ -329,7 +347,9 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                               icon: Icon(
                                 isBlocked
                                     ? Icons.block_rounded
-                                    : Icons.check_circle_outline_rounded,
+                                    : (widget.game.selectedTools.contains(item.id)
+                                        ? Icons.autorenew_rounded
+                                        : Icons.check_circle_outline_rounded),
                               ),
                               label: Text(
                                 isBlocked
@@ -340,7 +360,9 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                                           : AppLocalizations.of(
                                               context,
                                             )!.item_lunchbox_status)
-                                    : AppLocalizations.of(context)!.use_item,
+                                    : (widget.game.selectedTools.contains(item.id)
+                                        ? 'Unequip'
+                                        : AppLocalizations.of(context)!.use_item),
                               ),
                               style: FilledButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(

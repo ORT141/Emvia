@@ -12,6 +12,8 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
 
   late final SpriteAnimation _standingAnimation;
   late final SpriteAnimation _walkingAnimation;
+  late final SpriteAnimation _standingHeadphonesAnimation;
+  late final SpriteAnimation _walkingHeadphonesAnimation;
 
   final Vector2 _velocity = Vector2.zero();
   final Vector2 _keyboardVelocity = Vector2.zero();
@@ -29,11 +31,20 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
         await game.loadSprite('player/walking_$i.png'),
     ], stepTime: 0.1);
 
-    animations = {
-      PlayerState.standing: _standingAnimation,
-      PlayerState.walking: _walkingAnimation,
-    };
+    try {
+      _standingHeadphonesAnimation = SpriteAnimation.spriteList([
+        await game.loadSprite('player/standing_headphones.png'),
+      ], stepTime: 1);
+      _walkingHeadphonesAnimation = SpriteAnimation.spriteList([
+        for (int i = 1; i <= 26; i++)
+          await game.loadSprite('player/walking_headphones_$i.png'),
+      ], stepTime: 0.1);
+    } catch (_) {
+      _standingHeadphonesAnimation = _standingAnimation;
+      _walkingHeadphonesAnimation = _walkingAnimation;
+    }
 
+    _updateAnimations();
     current = PlayerState.standing;
   }
 
@@ -46,6 +57,7 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
 
   @override
   void update(double dt) {
+    _updateAnimations();
     super.update(dt);
     if (game.freezeForPathChoice) {
       _velocity.setZero();
@@ -85,6 +97,7 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
     if (event is KeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.tab) {
         game.toggleBackpack();
+
         return true;
       }
       if (event.logicalKey == LogicalKeyboardKey.f3) {
@@ -122,5 +135,21 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
     _mobileVelocity
       ..x = xDirection.clamp(-1.0, 1.0)
       ..y = 0;
+  }
+
+  void _updateAnimations() {
+    final hasHeadphones = game.selectedTools.contains('headphones');
+    animations = {
+      PlayerState.standing: hasHeadphones
+          ? _standingHeadphonesAnimation
+          : _standingAnimation,
+      PlayerState.walking: hasHeadphones
+          ? _walkingHeadphonesAnimation
+          : _walkingAnimation,
+    };
+    final cur = current;
+    if (cur != null) {
+      current = cur;
+    }
   }
 }

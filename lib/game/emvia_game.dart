@@ -183,6 +183,14 @@ class EmviaGame extends FlameGame
     }
   }
 
+  void equipTool(String toolId) {
+    if (!_selectedTools.contains(toolId)) {
+      _selectedTools.add(toolId);
+    } else {
+      _selectedTools.remove(toolId);
+    }
+  }
+
   void toggleDebug() {
     if (isDebugOpen) {
       overlays.remove('Debug');

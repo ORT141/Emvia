@@ -247,7 +247,7 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
                     SizedBox(
                       width: double.infinity,
                       child: TextButton(
-                        onPressed: _skip,
+                        onPressed: _isLoading ? null : _skip,
                         child: Text(
                           'Skip',
                           style: TextStyle(
@@ -288,6 +288,7 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
     if (!mounted) return;
     final shouldStartGame = widget.game.consumeStartGameAfterSurvey();
     widget.game.overlays.remove('Survey');
+    _resetState();
     if (shouldStartGame) {
       widget.game.startGame();
     } else {
@@ -376,10 +377,22 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
     );
   }
 
+  void _resetState() {
+    _answers.clear();
+    _currentIndex = -1;
+    _isLoading = false;
+    _stopQuestionAudio?.call();
+    _stopQuestionAudio = null;
+  }
+
   Future<void> _skip() async {
+    if (_isLoading) return;
+    setState(() => _isLoading = true);
+
     final shouldStartGame = widget.game.consumeStartGameAfterSurvey();
 
     widget.game.overlays.remove('Survey');
+    _resetState();
 
     if (shouldStartGame) {
       widget.game.startGame();
