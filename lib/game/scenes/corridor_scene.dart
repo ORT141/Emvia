@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/rendering.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,34 @@ class CorridorScene extends GameScene {
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
       Vector2(180, viewportSize.y * 0.78);
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    final screenPos = event.localPosition;
+    final worldOffset = game.worldRoot.position;
+    final zoom = game.worldRoot.scale.x;
+    final worldPos = (screenPos - worldOffset) / zoom;
+
+    debugPrint(
+      'tap world x=${worldPos.x.toStringAsFixed(1)}, '
+      'y=${worldPos.y.toStringAsFixed(1)}',
+    );
+
+    const minX = 1228.2;
+    const minY = 397.3;
+    const maxX = 1369.1;
+    const maxY = 494.5;
+
+    if (worldPos.x >= minX &&
+        worldPos.x <= maxX &&
+        worldPos.y >= minY &&
+        worldPos.y <= maxY) {
+      game.toggleBackpack();
+      return;
+    }
+
+    super.onTapDown(event);
+  }
 
   @override
   Future<void> onLoad() async {

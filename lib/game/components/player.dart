@@ -36,7 +36,7 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
         await game.loadSprite('player/standing_headphones.png'),
       ], stepTime: 1);
       _walkingHeadphonesAnimation = SpriteAnimation.spriteList([
-        for (int i = 1; i <= 26; i++)
+        for (int i = 1; i <= 29; i++)
           await game.loadSprite('player/walking_headphones_$i.png'),
       ], stepTime: 0.1);
     } catch (_) {
@@ -57,6 +57,9 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
 
   @override
   void update(double dt) {
+    // only refresh the animations map when the headphones state actually
+    // changes – recreating the map every frame forces the animation to
+    // restart, which is why the walking animation appeared static.
     _updateAnimations();
     super.update(dt);
     if (game.freezeForPathChoice) {
@@ -137,8 +140,19 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
       ..y = 0;
   }
 
+  // track the previous headphones state so we only rebuild the map when
+  // something actually changes.  Reassigning `animations` every frame caused
+  // the current animation to reset to frame 0, which made the walking cycle
+  // look frozen.
+  bool _hasHeadphones = false;
+
   void _updateAnimations() {
     final hasHeadphones = game.selectedTools.contains('headphones');
+    if (hasHeadphones == _hasHeadphones && animations != null) {
+      return; // nothing changed
+    }
+    _hasHeadphones = hasHeadphones;
+
     animations = {
       PlayerState.standing: hasHeadphones
           ? _standingHeadphonesAnimation
@@ -147,9 +161,9 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
           ? _walkingHeadphonesAnimation
           : _walkingAnimation,
     };
-    final cur = current;
-    if (cur != null) {
-      current = cur;
+    // preserve the current state so the animation doesn't jump back to frame 0
+    if (current != null) {
+      current = current;
     }
   }
 }

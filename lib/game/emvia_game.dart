@@ -80,6 +80,18 @@ class EmviaGame extends FlameGame
     _saveSoundEnabled();
   }
 
+  static const String _soundAskedKey = 'sound_asked';
+  bool _soundQuestionAnswered = false;
+
+  bool get soundQuestionAnswered => _soundQuestionAnswered;
+
+  set soundQuestionAnswered(bool value) {
+    _soundQuestionAnswered = value;
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setBool(_soundAskedKey, value);
+    });
+  }
+
   Future<void> _saveVolume() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -240,6 +252,7 @@ class EmviaGame extends FlameGame
       final prefs = await SharedPreferences.getInstance();
       _volume = prefs.getDouble(_volumeKey) ?? _volume;
       _soundEnabled = prefs.getBool(_soundEnabledKey) ?? _soundEnabled;
+      _soundQuestionAnswered = prefs.getBool(_soundAskedKey) ?? false;
     } catch (_) {}
   }
 

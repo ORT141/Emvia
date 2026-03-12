@@ -11,7 +11,7 @@ class BackpackItem {
     required this.description,
     required this.type,
     required this.iconAsset,
-    required this.soundAsset,
+    required this.soundAssets,
     this.quantity = 1,
   });
 
@@ -21,8 +21,14 @@ class BackpackItem {
   final String description;
   final BackpackItemType type;
   final String iconAsset;
-  final String soundAsset;
+  final Map<String, String> soundAssets;
   final int quantity;
+
+  String localizedSoundAsset(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final lang = locale.languageCode == 'uk' ? 'uk' : 'en';
+    return soundAssets[lang] ?? soundAssets['en']!;
+  }
 
   BackpackItem copyWith({
     String? id,
@@ -31,7 +37,7 @@ class BackpackItem {
     String? description,
     BackpackItemType? type,
     String? iconAsset,
-    String? soundAsset,
+    Map<String, String>? soundAssets,
     int? quantity,
   }) {
     return BackpackItem(
@@ -41,7 +47,7 @@ class BackpackItem {
       description: description ?? this.description,
       type: type ?? this.type,
       iconAsset: iconAsset ?? this.iconAsset,
-      soundAsset: soundAsset ?? this.soundAsset,
+      soundAssets: soundAssets ?? this.soundAssets,
       quantity: quantity ?? this.quantity,
     );
   }
@@ -56,7 +62,10 @@ class BackpackItem {
         description: l10n.item_headphones_desc,
         type: BackpackItemType.tool,
         iconAsset: 'assets/images/backpack/headphones.png',
-        soundAsset: 'items/sensory headphones.mp3',
+        soundAssets: {
+          'en': 'items/sensory headphones.mp3',
+          'uk': 'items/сенсорні навушники.mp3',
+        },
       ),
       BackpackItem(
         id: 'blanket',
@@ -65,7 +74,10 @@ class BackpackItem {
         description: l10n.item_blanket_desc,
         type: BackpackItemType.tool,
         iconAsset: 'assets/images/backpack/coat.png',
-        soundAsset: 'items/weighted blanket.mp3',
+        soundAssets: {
+          'en': 'items/weighted blanket.mp3',
+          'uk': 'items/важка ковдра.mp3',
+        },
       ),
       BackpackItem(
         id: 'lunchbox',
@@ -74,7 +86,7 @@ class BackpackItem {
         description: l10n.item_lunchbox_desc,
         type: BackpackItemType.tool,
         iconAsset: 'assets/images/backpack/lunchbox.png',
-        soundAsset: 'items/lunchbox.mp3',
+        soundAssets: {'en': 'items/lunchbox.mp3', 'uk': 'items/ланчбокс.mp3'},
       ),
     ];
   }

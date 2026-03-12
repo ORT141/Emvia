@@ -45,8 +45,90 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
     super.dispose();
   }
 
-  void _startNewGame() {
+  void _startNewGame() async {
+    // ask the user whether sounds should be enabled before we show the
+    // character picker. previously the sound question was part of the survey
+    // that only ran after the player selected a character, which meant the
+    // dialog popped up "after I select character". moving it here ensures the
+    // enable‑sounds prompt appears as soon as the player taps the main menu
+    // play button.
+    await _askEnableSounds();
     _openNewGameModal();
+  }
+
+  Future<void> _askEnableSounds() async {
+    final loc = AppLocalizationsGen.of(context)!;
+    final theme = Theme.of(context);
+
+    final choice = await showDialog<bool>(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          backgroundColor: theme.colorScheme.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          content: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.volume_up_rounded,
+                  size: 64,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  loc.sound_question_title,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        onPressed: () => Navigator.of(ctx).pop(false),
+                        child: Text(loc.sound_off),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.primary,
+                          foregroundColor: theme.colorScheme.onPrimary,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        onPressed: () => Navigator.of(ctx).pop(true),
+                        child: Text(loc.sound_on),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (choice != null) {
+      widget.game.soundEnabled = choice;
+      widget.game.soundQuestionAnswered = true;
+    }
   }
 
   Future<void> _openNewGameModal() async {
@@ -213,24 +295,15 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
               Positioned.fill(
                 child: Container(
                   decoration: BoxDecoration(
-                    gradient: isSmallScreen
-                        ? LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.black.withValues(alpha: 0.3),
-                              Colors.black.withValues(alpha: 0.85),
-                            ],
-                          )
-                        : LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              Colors.black.withValues(alpha: 0.85),
-                              Colors.black.withValues(alpha: 0.0),
-                            ],
-                            stops: const [0.3, 0.8],
-                          ),
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Colors.black.withValues(alpha: 0.6),
+                        Colors.black.withValues(alpha: 0.0),
+                      ],
+                      stops: const [0.3, 0.8],
+                    ),
                   ),
                 ),
               ),

@@ -42,10 +42,13 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
   Future<void> _doSelect(BackpackItem item) async {
     setState(() => _selectedItem = item);
     if (!widget.game.soundEnabled) return;
+
+    final soundPath = item.localizedSoundAsset(context);
+
     await _stopItemAudio?.call();
     try {
       final player = await FlameAudio.play(
-        item.soundAsset,
+        soundPath,
         volume: widget.game.volume,
       );
       _stopItemAudio = player.stop;
@@ -326,19 +329,22 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                               onPressed: isBlocked
                                   ? null
                                   : () async {
-                                      // if the item is a tool we toggle its equipped
                                       if (item.id == 'headphones') {
                                         widget.game.equipTool(item.id);
-                                        // close overlay as requested by user
                                         widget.game.overlays.remove('Backpack');
                                         return;
                                       }
 
                                       if (!widget.game.soundEnabled) return;
+
+                                      final soundPath = item
+                                          .localizedSoundAsset(context);
+
                                       await _stopItemAudio?.call();
+                                      if (!mounted) return;
                                       try {
                                         final player = await FlameAudio.play(
-                                          item.soundAsset,
+                                          soundPath,
                                           volume: widget.game.volume,
                                         );
                                         _stopItemAudio = player.stop;
@@ -347,9 +353,11 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                               icon: Icon(
                                 isBlocked
                                     ? Icons.block_rounded
-                                    : (widget.game.selectedTools.contains(item.id)
-                                        ? Icons.autorenew_rounded
-                                        : Icons.check_circle_outline_rounded),
+                                    : (widget.game.selectedTools.contains(
+                                            item.id,
+                                          )
+                                          ? Icons.autorenew_rounded
+                                          : Icons.check_circle_outline_rounded),
                               ),
                               label: Text(
                                 isBlocked
@@ -360,9 +368,13 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                                           : AppLocalizations.of(
                                               context,
                                             )!.item_lunchbox_status)
-                                    : (widget.game.selectedTools.contains(item.id)
-                                        ? 'Unequip'
-                                        : AppLocalizations.of(context)!.use_item),
+                                    : (widget.game.selectedTools.contains(
+                                            item.id,
+                                          )
+                                          ? 'Unequip'
+                                          : AppLocalizations.of(
+                                              context,
+                                            )!.use_item),
                               ),
                               style: FilledButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
