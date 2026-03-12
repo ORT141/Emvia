@@ -551,4 +551,12 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get map_of_calm_olya => 'Мапа спокою: Оля';
+
+  @override
+  String get tap_game_title =>
+      'Торкніться екрану кілька разів, щоб заспокоїтись';
+
+  @override
+  String get locker_prompt =>
+      'Ви біля своєї шафки — відкрийте рюкзак, щоб продовжити.';
 }

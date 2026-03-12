@@ -19,20 +19,20 @@ class BackpackOverlay extends StatefulWidget {
 class _BackpackOverlayState extends State<BackpackOverlay> {
   BackpackItem? _selectedItem;
   Future<void> Function()? _stopItemAudio;
-  bool _inventoryInitialized = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        widget.game.initializeInventory(context);
+      }
+    });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if (!_inventoryInitialized) {
-      widget.game.initializeInventory(context);
-      _inventoryInitialized = true;
-    }
   }
 
   void _selectItem(BackpackItem item) {
@@ -101,82 +101,86 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
   }
 
   Widget _buildBackpackIcon() {
-    final items = widget.game.backpack.items;
+    return ListenableBuilder(
+      listenable: widget.game.backpack.itemsListenable,
+      builder: (context, _) {
+        final items = widget.game.backpack.items;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        MouseRegion(
-          cursor: SystemMouseCursors.basic,
-          child: Hero(
-            tag: 'backpack_main',
-            child: SizedBox(
-              width: 360,
-              height: 360,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned.fill(
-                        child: Image.asset(
-                          'assets/images/backpack/backpack.png',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-
-                      for (final it in items)
-                        Positioned(
-                          left: 5,
-                          top: -17,
-                          width: 350,
-                          child: GestureDetector(
-                            onTap: () => _selectItem(it),
-                            behavior: HitTestBehavior.translucent,
-                            child: Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: _selectedItem?.id == it.id
-                                    ? Theme.of(context).colorScheme.primary
-                                          .withValues(alpha: 0.15)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Image.asset(
-                                _localizedAssetFor(it.iconAsset),
-                                fit: BoxFit.contain,
-                                errorBuilder: (ctx, err, st) => Image.asset(
-                                  it.iconAsset,
-                                  fit: BoxFit.contain,
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            MouseRegion(
+              cursor: SystemMouseCursors.basic,
+              child: Hero(
+                tag: 'backpack_main',
+                child: SizedBox(
+                  width: 360,
+                  height: 360,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Positioned.fill(
+                            child: Image.asset(
+                              'assets/images/backpack/backpack.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          for (final it in items)
+                            Positioned(
+                              left: 5,
+                              top: -17,
+                              width: 350,
+                              child: GestureDetector(
+                                onTap: () => _selectItem(it),
+                                behavior: HitTestBehavior.translucent,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: _selectedItem?.id == it.id
+                                        ? Theme.of(context).colorScheme.primary
+                                              .withValues(alpha: 0.15)
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Image.asset(
+                                    _localizedAssetFor(it.iconAsset),
+                                    fit: BoxFit.contain,
+                                    errorBuilder: (ctx, err, st) => Image.asset(
+                                      it.iconAsset,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                    ],
-                  );
-                },
+                        ],
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        Text(
-          AppLocalizations.of(context)!.backpack_title,
-          style: GoogleFonts.baloo2(
-            fontSize: 48,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
-            shadows: [
-              const Shadow(
-                color: Colors.black45,
-                blurRadius: 12,
-                offset: Offset(0, 4),
+            const SizedBox(height: 16),
+            Text(
+              AppLocalizations.of(context)!.backpack_title,
+              style: GoogleFonts.baloo2(
+                fontSize: 48,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+                shadows: [
+                  const Shadow(
+                    color: Colors.black45,
+                    blurRadius: 12,
+                    offset: Offset(0, 4),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -331,6 +335,7 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                                   : () async {
                                       if (item.id == 'headphones') {
                                         widget.game.equipTool(item.id);
+                                        widget.game.stressLevel = 10;
                                         widget.game.overlays.remove('Backpack');
                                         return;
                                       }

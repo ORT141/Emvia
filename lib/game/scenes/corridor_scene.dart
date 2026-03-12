@@ -6,12 +6,17 @@ import 'package:flutter/material.dart';
 
 import 'game_scene.dart';
 
+import 'package:emvia/l10n/app_localizations_gen.dart';
+import '../dialog_model.dart';
+
 class CorridorScene extends GameScene {
   CorridorScene()
     : super(
         backgroundPath: 'scenes/corridor/wall.png',
         foregroundPath: 'scenes/corridor/background.png',
       );
+
+  bool _lockerPromptShown = false;
 
   final List<SpriteComponent> _patternSprites = [];
 
@@ -32,6 +37,10 @@ class CorridorScene extends GameScene {
 
   @override
   void onTapDown(TapDownEvent event) {
+    if (game.overlays.isActive('TapGame')) {
+      return;
+    }
+
     final screenPos = event.localPosition;
     final worldOffset = game.worldRoot.position;
     final zoom = game.worldRoot.scale.x;
@@ -64,6 +73,9 @@ class CorridorScene extends GameScene {
 
     game.overlays.add('Stress');
 
+    game.freezeForPathChoice = true;
+    game.overlays.add('TapGame');
+
     final color = game.surveyProfile.safeColorValue;
     background.decorator.addLast(PaintDecorator.tint(color));
 
@@ -83,6 +95,23 @@ class CorridorScene extends GameScene {
     final proximity = 1.0 - (distanceToCenter / centerX).clamp(0.0, 1.0);
 
     game.stressLevel = (math.pow(proximity, 2) * 100).toInt();
+
+    const lockerX = 1228.0;
+    if (!_lockerPromptShown && playerX >= lockerX) {
+      _lockerPromptShown = true;
+      game.freezeForPathChoice = true;
+
+      final l = AppLocalizationsGen.of(game.buildContext!)!;
+      final tree = DialogTree(
+        nodes: {'start': DialogNode(id: 'start', text: (_) => l.locker_prompt)},
+        startNodeId: 'start',
+      );
+      game.startDialog(tree);
+    }
+
+    if (_lockerPromptShown && game.isBackpackOpen) {
+      game.freezeForPathChoice = false;
+    }
   }
 
   @override

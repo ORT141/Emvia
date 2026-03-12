@@ -11,6 +11,7 @@ import 'package:emvia/overlays/settings_overlay.dart';
 import 'package:emvia/overlays/survey_overlay.dart';
 import 'package:emvia/overlays/debug_overlay.dart';
 import 'package:emvia/overlays/stress_overlay.dart';
+import 'package:emvia/overlays/tap_game_overlay.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -120,6 +121,7 @@ class _MyAppState extends State<MyApp> {
           'MobileControls': (_, game) => MobileControlsOverlay(game: game),
           'Debug': (_, game) => DebugOverlay(game: game),
           'Stress': (_, game) => StressOverlay(game: game),
+          'TapGame': (_, game) => TapGameOverlay(game: game),
           'CalmMap': (_, game) => CalmMapOverlay(game: game),
           'PathDetail': (_, game) => ValueListenableBuilder(
             valueListenable: game.pathDetailNotifier,

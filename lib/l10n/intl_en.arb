@@ -492,5 +492,7 @@
     "first_path_description": "The shortest route. Crowded, noisy, many students. You will have to quickly make your way through the crowd.",
     "second_path_description": "Quiet corridors near the library. School lockers are located here — Olya can stop and take something from her belongings. The route is a bit longer, but calmer.",
     "third_path_description": "A detour through the inner courtyard and the back entrance. There are almost no people, but the path is longer and less safe — older students or other unpredictable situations might be encountered in the yard.",
-    "map_of_calm_olya": "Map of Calm: Olya"
+    "map_of_calm_olya": "Map of Calm: Olya",
+    "tap_game_title": "Tap the screen repeatedly to calm down",
+    "locker_prompt": "You're at your locker, open your backpack to continue."
 }

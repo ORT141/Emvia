@@ -195,20 +195,6 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
 
                   Row(
                     children: [
-                      if (_currentIndex > 0)
-                        Expanded(
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                            ),
-                            onPressed: _goBack,
-                            child: const Text('←'),
-                          ),
-                        ),
-                      if (_currentIndex > 0) const SizedBox(width: 12),
                       Expanded(
                         flex: 3,
                         child: ElevatedButton(
@@ -235,6 +221,20 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
                               : Text(isLast ? l.survey_save_continue : '→'),
                         ),
                       ),
+                      if (_currentIndex > 0) const SizedBox(width: 12),
+                      if (_currentIndex > 0)
+                        Expanded(
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            onPressed: _goBack,
+                            child: const Text('←'),
+                          ),
+                        ),
                     ],
                   ),
 

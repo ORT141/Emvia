@@ -26,7 +26,7 @@ class CameraManager {
   }
 
   void update(double dt) {
-    if (game.freezeForPathChoice) {
+    if (game.freezeForPathChoice && game.overlays.isActive('PathChoice')) {
       final sceneCenter = Vector2(
         game.worldRoot.size.x / 2,
         game.worldRoot.size.y / 2,

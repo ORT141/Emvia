@@ -48,7 +48,9 @@ class EmviaGame extends FlameGame
   bool freezeForPathChoice = false;
 
   int sceneIndex = 0;
-  int _stressLevel = 0;
+  // stress is measured 0–100, higher means more overwhelmed
+  // start the player at maximum stress by default
+  int _stressLevel = 100;
   final ValueNotifier<int> stressNotifier = ValueNotifier<int>(0);
 
   int get stressLevel => _stressLevel;
@@ -192,6 +194,9 @@ class EmviaGame extends FlameGame
     if (isBackpackOpen) {
       overlays.remove('Backpack');
     } else {
+      // hide any dialog when backpack opens
+      overlays.remove('Dialog');
+      currentNode = null;
       overlays.add('Backpack');
     }
   }
@@ -218,7 +223,7 @@ class EmviaGame extends FlameGame
     if (overlays.isActive('MainMenu') || overlays.isActive('Pause')) {
       return false;
     }
-    if (overlays.isActive('Survey') || overlays.isActive('Dialog')) {
+    if (overlays.isActive('Survey')) {
       return false;
     }
     return true;
@@ -293,7 +298,8 @@ class EmviaGame extends FlameGame
 
     surveyProfile = await _surveyService.getProfile();
     sceneIndex = 1;
-    stressLevel = 0;
+    // reset stress to the maximum instead of zero
+    stressLevel = 100;
     _journeyCompleted = false;
     _selectedTools.clear();
     backpack.clear();
@@ -415,7 +421,8 @@ class EmviaGame extends FlameGame
       resumeEngine();
     }
     freezeForPathChoice = false;
-    stressLevel = 0;
+    // when returning to main menu reset stress to default max
+    stressLevel = 100;
     sceneIndex = 0;
     hideMobileControls();
     overlays.remove('Stress');

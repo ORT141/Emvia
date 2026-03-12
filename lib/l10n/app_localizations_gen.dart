@@ -1081,6 +1081,18 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'Map of Calm: Olya'**
   String get map_of_calm_olya;
+
+  /// No description provided for @tap_game_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the screen repeatedly to calm down'**
+  String get tap_game_title;
+
+  /// No description provided for @locker_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re at your locker, open your backpack to continue.'**
+  String get locker_prompt;
 }
 
 class _AppLocalizationsGenDelegate

@@ -552,4 +552,11 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get map_of_calm_olya => 'Map of Calm: Olya';
+
+  @override
+  String get tap_game_title => 'Tap the screen repeatedly to calm down';
+
+  @override
+  String get locker_prompt =>
+      'You\'re at your locker, open your backpack to continue.';
 }
