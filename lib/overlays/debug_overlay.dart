@@ -77,6 +77,10 @@ class DebugOverlay extends StatelessWidget {
                   spacing: 8,
                   children: [
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        foregroundColor: Colors.white,
+                      ),
                       onPressed: () async {
                         game.overlays.remove('Debug');
                         await game.loadScene(ClassroomScene());
@@ -84,6 +88,10 @@ class DebugOverlay extends StatelessWidget {
                       child: const Text('Classroom'),
                     ),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        foregroundColor: Colors.white,
+                      ),
                       onPressed: () async {
                         game.overlays.remove('Debug');
                         await game.loadScene(CorridorScene());
@@ -98,12 +106,20 @@ class DebugOverlay extends StatelessWidget {
                   spacing: 8,
                   children: [
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        foregroundColor: Colors.white,
+                      ),
                       onPressed: () {
                         game.currentScene?.redrawScene();
                       },
                       child: const Text('Redraw Scene'),
                     ),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        foregroundColor: Colors.white,
+                      ),
                       onPressed: () {
                         game.overlays.remove('Debug');
                         game.toggleBackpack();
@@ -111,6 +127,10 @@ class DebugOverlay extends StatelessWidget {
                       child: const Text('Toggle Inventory'),
                     ),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        foregroundColor: Colors.white,
+                      ),
                       onPressed: () async {
                         game.overlays.remove('Debug');
                         game.startGameSkippingSurvey();

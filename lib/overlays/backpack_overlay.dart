@@ -307,7 +307,7 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                           const SizedBox(height: 8),
                           Text(
                             widget.game.selectedTools.contains(item.id)
-                                ? '${item.status} (equipped)'
+                                ? item.status
                                 : item.status,
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w700,

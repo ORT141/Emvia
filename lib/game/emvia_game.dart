@@ -60,6 +60,8 @@ class EmviaGame extends FlameGame
     }
   }
 
+  bool hasTriggeredStressScene = false;
+
   int get sceneIndex => _session.sceneIndex;
   set sceneIndex(int value) => _session.sceneIndex = value;
 
@@ -147,12 +149,14 @@ class EmviaGame extends FlameGame
 
   Future<void> goToCorridor() async {
     await loadScene(
-      StressScene(),
+      CorridorScene(),
       onFullOpacity: () {
-        sceneIndex = 3;
-        olya.opacity = 0;
+        sceneIndex = 4;
+        overlays.remove('TapGame');
+        showMobileControls();
       },
     );
+    isFrozen = false;
   }
 
   Future<void> transitionToCorridor() async {
@@ -293,6 +297,7 @@ class EmviaGame extends FlameGame
 
     _session.resetForNewJourney(profile: profile);
     backpack.clear();
+    hasTriggeredStressScene = false;
 
     _clearGameplayOverlays();
 
@@ -383,7 +388,7 @@ class EmviaGame extends FlameGame
     _recordPathChoice(l, index);
 
     isFrozen = false;
-    await _transitionToStressScene();
+    await goToCorridor();
   }
 
   void _recordPathChoice(AppLocalizationsGen l, int index) {
@@ -444,6 +449,7 @@ class EmviaGame extends FlameGame
   void _prepareReturnToMainMenu() {
     stressLevel = 100;
     sceneIndex = 0;
+    hasTriggeredStressScene = false;
     hideMobileControls();
     overlays.remove('Stress');
     overlays.remove('TapGame');

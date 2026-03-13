@@ -34,6 +34,7 @@ class TransitionManager {
     );
 
     if (scene is ClassroomScene) {
+      game.isFrozen = true;
       game.classroomScene = scene;
     } else {
       game.classroomScene = null;

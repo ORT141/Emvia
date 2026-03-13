@@ -5,6 +5,7 @@ import 'package:flame/rendering.dart';
 import 'package:flutter/material.dart';
 
 import 'game_scene.dart';
+import 'stress_scene.dart';
 
 import 'package:emvia/l10n/app_localizations_gen.dart';
 import '../dialog_model.dart';
@@ -81,11 +82,30 @@ class CorridorScene extends GameScene {
     await _loadWallPattern();
   }
 
+  bool _stressSceneTriggered = false;
+  static const _stressTriggerX = 500.0;
+
   @override
   void update(double dt) {
     super.update(dt);
 
     final playerX = game.olya.position.x;
+
+    if (!_stressSceneTriggered &&
+        !game.transitionManager.isTransitioning &&
+        !game.hasTriggeredStressScene &&
+        playerX >= _stressTriggerX) {
+      _stressSceneTriggered = true;
+      game.hasTriggeredStressScene = true;
+      game.loadScene(
+        StressScene(),
+        onFullOpacity: () {
+          game.sceneIndex = 3;
+          game.olya.opacity = 0;
+        },
+      );
+      return;
+    }
 
     const lockerX = 1228.0;
     if (!_lockerPromptShown && playerX >= lockerX) {

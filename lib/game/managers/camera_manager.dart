@@ -13,10 +13,10 @@ class CameraManager {
   static const double _deadZonePx = 10.0;
   double _time = 0.0;
   bool liveEnabled = true;
-  final double _bobAmplitude = 2.0;
-  final double _bobFrequency = 1.4;
-  final double _breathAmplitude = 0.008;
-  final double _breathFrequency = 0.2;
+  final double _bobAmplitude = 1.0;
+  final double _bobFrequency = 0.7;
+  final double _breathAmplitude = 0.004;
+  final double _breathFrequency = 0.1;
   double _bobAmount = 0.0;
 
   CameraManager(this.game);

@@ -19,7 +19,7 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
   final Vector2 _velocity = Vector2.zero();
   final Vector2 _keyboardVelocity = Vector2.zero();
   final Vector2 _mobileVelocity = Vector2.zero();
-  final double _speed = 220.0;
+  final double _speed = 230.0;
 
   bool isFrozen = false;
 
@@ -45,10 +45,10 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
 
       try {
         final wearingSprite = await game.loadSprite(
-          'player/olya_headphones_wearing.png',
+          'player/headphones_wearing.png',
         );
         final wearedSprite = await game.loadSprite(
-          'player/olya_headphones_weared.png',
+          'player/headphones_weared.png',
         );
         _wearingHeadphonesAnimation = SpriteAnimation.spriteList(
           [wearingSprite, wearedSprite],
@@ -109,7 +109,7 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
       size.x / 2,
       game.worldRoot.size.x - size.x / 2,
     );
-    position.y = game.worldRoot.size.y * 0.75;
+    position.y = game.worldRoot.size.y * 0.55;
   }
 
   @override

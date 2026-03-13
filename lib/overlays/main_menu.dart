@@ -85,19 +85,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                 Row(
                   children: [
                     Expanded(
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        onPressed: () => Navigator.of(ctx).pop(false),
-                        child: Text(loc.sound_off),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.colorScheme.primary,
@@ -109,6 +96,19 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                         ),
                         onPressed: () => Navigator.of(ctx).pop(true),
                         child: Text(loc.sound_on),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        onPressed: () => Navigator.of(ctx).pop(false),
+                        child: Text(loc.sound_off),
                       ),
                     ),
                   ],

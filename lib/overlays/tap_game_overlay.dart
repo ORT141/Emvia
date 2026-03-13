@@ -54,7 +54,7 @@ class _TapGameOverlayState extends State<TapGameOverlay>
     final isNearingEnd = _tapCount > _target * 0.7;
 
     return Scaffold(
-      backgroundColor: Colors.black.withValues(alpha: 0.6),
+      backgroundColor: Colors.black.withValues(alpha: 0),
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: _handleTap,
