@@ -51,41 +51,60 @@ class _TapGameOverlayState extends State<TapGameOverlay>
   @override
   Widget build(BuildContext context) {
     final progress = (_tapCount / _target).clamp(0.0, 1.0);
+    final isNearingEnd = _tapCount > _target * 0.7;
 
     return Scaffold(
-      backgroundColor: Colors.black.withValues(alpha: 0.45),
+      backgroundColor: Colors.black.withValues(alpha: 0.6),
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: _handleTap,
-        child: Center(
+        child: Align(
+          alignment: const Alignment(0, 0.6),
           child: ScaleTransition(
             scale: Tween<double>(begin: 1.0, end: 1.1).animate(
               CurvedAnimation(parent: _pulseController, curve: Curves.easeOut),
             ),
-            child: SizedBox(
-              width: 300,
-              height: 300,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    value: progress,
-                    strokeWidth: 12,
-                    backgroundColor: Colors.white24,
-                    valueColor: const AlwaysStoppedAnimation<Color>(
-                      Colors.cyanAccent,
-                    ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: 250,
+                  height: 250,
+                  child: TweenAnimationBuilder<double>(
+                    duration: const Duration(milliseconds: 200),
+                    tween: Tween<double>(begin: 0, end: progress),
+                    builder: (context, value, child) {
+                      return CircularProgressIndicator(
+                        value: value,
+                        strokeWidth: 26,
+                        strokeCap: StrokeCap.round,
+                        backgroundColor: Colors.white10,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          isNearingEnd
+                              ? Colors.orangeAccent
+                              : Colors.cyanAccent,
+                        ),
+                      );
+                    },
                   ),
-                  Text(
-                    '$_tapCount/$_target',
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.9),
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+
+                Text(
+                  '$_tapCount/$_target',
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.9),
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(
+                        color: (isNearingEnd ? Colors.orange : Colors.cyan)
+                            .withValues(alpha: 0.5),
+                        blurRadius: 20,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

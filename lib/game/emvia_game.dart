@@ -124,7 +124,7 @@ class EmviaGame extends FlameGame
 
   Future<void> _loadMenuScene() async {
     await loadScene(
-      ClassroomScene(),
+      SurveyScene(),
       onFullOpacity: () {
         olya.opacity = 0;
       },

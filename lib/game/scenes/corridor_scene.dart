@@ -71,6 +71,10 @@ class CorridorScene extends GameScene {
   Future<void> onLoad() async {
     await super.onLoad();
 
+    if (game.stressLevel >= 30 && !game.overlays.isActive('Stress')) {
+      game.overlays.add('Stress');
+    }
+
     final color = game.surveyProfile.safeColorValue;
     background.decorator.addLast(PaintDecorator.tint(color));
 
@@ -99,6 +103,12 @@ class CorridorScene extends GameScene {
     if (_lockerPromptShown && game.isBackpackOpen) {
       game.isFrozen = false;
     }
+  }
+
+  @override
+  void onRemove() {
+    game.overlays.remove('Stress');
+    super.onRemove();
   }
 
   Future<void> _loadWallPattern() async {
