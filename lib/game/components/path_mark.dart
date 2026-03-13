@@ -6,7 +6,7 @@ class PathMark extends CircleComponent with TapCallbacks, HoverCallbacks {
   final int index;
   final void Function(int) onSelected;
   bool isSelected = false;
-  
+
   @override
   bool isHovered = false;
 

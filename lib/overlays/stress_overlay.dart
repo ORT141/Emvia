@@ -20,10 +20,13 @@ class _StressOverlayState extends State<StressOverlay>
   void initState() {
     super.initState();
     _shakeController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 600));
-    _shakeAnimation = Tween<double>(begin: -2, end: 2)
-        .chain(CurveTween(curve: Curves.linear))
-        .animate(_shakeController);
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _shakeAnimation = Tween<double>(
+      begin: -2,
+      end: 2,
+    ).chain(CurveTween(curve: Curves.linear)).animate(_shakeController);
   }
 
   @override
@@ -114,8 +117,7 @@ class _StressOverlayState extends State<StressOverlay>
       ]),
       builder: (context, _) {
         final stress = widget.game.stressLevel;
-        final hasHeadphones =
-            widget.game.selectedTools.contains('headphones');
+        final hasHeadphones = widget.game.selectedTools.contains('headphones');
 
         if (hasHeadphones || stress < 30) return const SizedBox.shrink();
 

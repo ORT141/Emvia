@@ -38,6 +38,7 @@ flutter:
         - assets/images/
         - assets/images/main-menu/
         - assets/images/stress/
+        - assets/images/stress/stress-scene/
         - assets/images/player/
         - assets/images/backpack/
         - assets/images/player-selecting/

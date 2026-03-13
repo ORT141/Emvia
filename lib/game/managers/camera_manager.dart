@@ -26,7 +26,7 @@ class CameraManager {
   }
 
   void update(double dt) {
-    if (game.freezeForPathChoice && game.overlays.isActive('PathChoice')) {
+    if (game.isFrozen && game.overlays.isActive('PathChoice')) {
       final sceneCenter = Vector2(
         game.worldRoot.size.x / 2,
         game.worldRoot.size.y / 2,
@@ -80,7 +80,7 @@ class CameraManager {
   }
 
   void snapToPlayer({bool force = false}) {
-    if (game.freezeForPathChoice && !force) return;
+    if (game.isFrozen && !force) return;
 
     final rawTarget = Vector2(game.olya.position.x, game.olya.position.y);
     final clamped = _clampTargetToWorldBounds(rawTarget);
@@ -97,11 +97,10 @@ class CameraManager {
       _cameraPos + Vector2(0, bobWorld),
       effectiveZoom,
     );
+
     final worldPos = screenCenter - (cameraWithBob * effectiveZoom);
-    game.worldRoot.position = Vector2(
-      worldPos.x.roundToDouble(),
-      worldPos.y.roundToDouble(),
-    );
+
+    game.worldRoot.position = worldPos;
   }
 
   Vector2 _clampTargetToWorldBounds(Vector2 target, [double? zoomOverride]) {

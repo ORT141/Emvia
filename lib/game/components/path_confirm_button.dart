@@ -23,7 +23,8 @@ class PathConfirmButton extends PositionComponent
        );
 
   final Paint _activePaint = Paint()..color = Colors.white;
-  final Paint _disabledPaint = Paint()..color = Colors.white.withValues(alpha: 0.5);
+  final Paint _disabledPaint = Paint()
+    ..color = Colors.white.withValues(alpha: 0.5);
   late Paint _currentPaint;
 
   late TextPainter _textPainter;

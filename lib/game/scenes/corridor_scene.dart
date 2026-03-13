@@ -51,7 +51,7 @@ class CorridorScene extends GameScene {
       'y=${worldPos.y.toStringAsFixed(1)}',
     );
 
-    const minX = 1228.2;
+    const minX = 1210.0;
     const minY = 397.3;
     const maxX = 1369.1;
     const maxY = 494.5;
@@ -71,11 +71,6 @@ class CorridorScene extends GameScene {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    game.overlays.add('Stress');
-
-    game.freezeForPathChoice = true;
-    game.overlays.add('TapGame');
-
     final color = game.surveyProfile.safeColorValue;
     background.decorator.addLast(PaintDecorator.tint(color));
 
@@ -87,19 +82,11 @@ class CorridorScene extends GameScene {
     super.update(dt);
 
     final playerX = game.olya.position.x;
-    final worldW = worldWidthForViewport(game.size);
-    final centerX = worldW / 2;
-
-    final distanceToCenter = (playerX - centerX).abs();
-
-    final proximity = 1.0 - (distanceToCenter / centerX).clamp(0.0, 1.0);
-
-    game.stressLevel = (math.pow(proximity, 2) * 100).toInt();
 
     const lockerX = 1228.0;
     if (!_lockerPromptShown && playerX >= lockerX) {
       _lockerPromptShown = true;
-      game.freezeForPathChoice = true;
+      game.isFrozen = true;
 
       final l = AppLocalizationsGen.of(game.buildContext!)!;
       final tree = DialogTree(
@@ -110,15 +97,8 @@ class CorridorScene extends GameScene {
     }
 
     if (_lockerPromptShown && game.isBackpackOpen) {
-      game.freezeForPathChoice = false;
+      game.isFrozen = false;
     }
-  }
-
-  @override
-  void onRemove() {
-    game.overlays.remove('Stress');
-    game.stressLevel = 0;
-    super.onRemove();
   }
 
   Future<void> _loadWallPattern() async {

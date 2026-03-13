@@ -167,6 +167,7 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
                     children: question.options.map((option) {
                       final isSelected = selected == option.id;
                       return ChoiceChip(
+                        key: ValueKey(option.id),
                         label: Text(option.label),
                         selected: isSelected,
                         avatar: isSelected
@@ -288,13 +289,13 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
     if (shouldStartGame) {
       widget.game.startGame();
     } else {
-      widget.game.overlays.add('MainMenu');
+      await widget.game.returnToMainMenuAfterSurvey();
     }
   }
 
   void _resetState() {
     _answers.clear();
-    _currentIndex = -1;
+    _currentIndex = 0;
     _isLoading = false;
     _stopQuestionAudio?.call();
     _stopQuestionAudio = null;
@@ -312,7 +313,7 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
     if (shouldStartGame) {
       widget.game.startGame();
     } else {
-      widget.game.overlays.add('MainMenu');
+      await widget.game.returnToMainMenuAfterSurvey();
     }
   }
 }

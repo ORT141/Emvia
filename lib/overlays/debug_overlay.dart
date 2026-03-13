@@ -110,6 +110,13 @@ class DebugOverlay extends StatelessWidget {
                       },
                       child: const Text('Toggle Inventory'),
                     ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        game.overlays.remove('Debug');
+                        game.startGameSkippingSurvey();
+                      },
+                      child: const Text('Skip Survey => Classroom'),
+                    ),
                   ],
                 ),
               ],

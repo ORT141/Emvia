@@ -10,39 +10,50 @@ class TransitionManager {
 
   TransitionManager(this.game);
 
-  Future<void> loadScene(GameScene scene) async {
+  Future<void> loadScene(
+    GameScene scene, {
+    void Function()? onFullOpacity,
+  }) async {
     isTransitioning = true;
 
     await game.fadeOverlay.fadeIn(0.4);
+
+    if (onFullOpacity != null) {
+      onFullOpacity();
+    }
 
     if (game.currentScene != null) {
       game.currentScene!.removeFromParent();
     }
 
+    game.currentScene = scene;
+
     game.worldRoot.size = Vector2(
-      game.sceneWorldWidth(EmviaGame.worldWidth),
+      scene.worldWidthForViewport(game.size),
       game.size.y,
     );
-
-    game.currentScene = scene;
 
     if (scene is ClassroomScene) {
       game.classroomScene = scene;
     } else {
       game.classroomScene = null;
       game.cameraManager.resetZoom();
-      game.worldRoot.scale = Vector2.all(game.cameraManager.zoom);
     }
 
     await game.worldRoot.add(scene);
 
+    scene.onGameResize(game.size);
+
     if (scene is ClassroomScene) {
       updateClassroomZoom();
+    } else {
+      game.worldRoot.scale = Vector2.all(game.cameraManager.zoom);
     }
 
-    if (game.olya.parent == null) {
+    if (game.olya.parent != game.worldRoot) {
       await game.worldRoot.add(game.olya);
     }
+
     game.olya.priority = 10;
 
     if (scene is CorridorScene) {
@@ -52,6 +63,9 @@ class TransitionManager {
     }
 
     game.olya.position = game.sceneSpawnPoint(scene, game.size, game.worldRoot);
+    game.cameraManager.snapToPlayer(force: true);
+
+    scene.onGameResize(game.size);
     game.cameraManager.snapToPlayer(force: true);
 
     await game.fadeOverlay.fadeOut(0.4);

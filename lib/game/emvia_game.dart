@@ -3,8 +3,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:emvia/l10n/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:emvia/l10n/app_localizations_gen.dart';
 
 import 'survey_service.dart';
 import 'components/fade_overlay.dart';
@@ -12,7 +11,9 @@ import 'components/player.dart';
 import 'scenes/game_scene.dart';
 import 'scenes/classroom_scene.dart';
 import 'scenes/corridor_scene.dart';
+import 'scenes/stress_scene.dart';
 import 'scenes/path_choice_scene.dart';
+import 'scenes/survey_scene.dart';
 import 'dialog_model.dart';
 import 'inventory/backpack_inventory.dart';
 import 'inventory/backpack_item.dart';
@@ -21,13 +22,17 @@ import 'mixins/dialog_handler.dart';
 import 'emvia_types.dart';
 
 import 'managers/camera_manager.dart';
+import 'managers/game_preferences_manager.dart';
+import 'managers/game_session_manager.dart';
 import 'managers/transition_manager.dart';
-
-enum PlayableCharacter { olya, liam, olenka, anton }
 
 class EmviaGame extends FlameGame
     with TapCallbacks, HasKeyboardHandlerComponents, DialogHandler {
   static const double worldWidth = 2000.0;
+
+  final SurveyService _surveyService = SurveyService();
+  final GamePreferencesManager _preferences = GamePreferencesManager();
+  final GameSessionManager _session = GameSessionManager();
 
   EmviaGame() {
     cameraManager = CameraManager(this);
@@ -45,102 +50,85 @@ class EmviaGame extends FlameGame
   GameScene? currentScene;
   ClassroomScene? classroomScene;
 
-  bool freezeForPathChoice = false;
-
-  int sceneIndex = 0;
-  // stress is measured 0–100, higher means more overwhelmed
-  // start the player at maximum stress by default
-  int _stressLevel = 100;
-  final ValueNotifier<int> stressNotifier = ValueNotifier<int>(0);
-
-  int get stressLevel => _stressLevel;
-  set stressLevel(int value) {
-    _stressLevel = value.clamp(0, 100);
-    stressNotifier.value = _stressLevel;
+  bool _isFrozen = false;
+  bool get isFrozen => _isFrozen;
+  set isFrozen(bool value) {
+    if (_isFrozen == value) return;
+    _isFrozen = value;
+    if (olya.isMounted) {
+      olya.isFrozen = value;
+    }
   }
 
-  int _sessionToken = 0;
-  bool _journeyCompleted = false;
+  int get sceneIndex => _session.sceneIndex;
+  set sceneIndex(int value) => _session.sceneIndex = value;
 
-  PlayableCharacter selectedCharacter = PlayableCharacter.olya;
-  bool _startGameAfterSurvey = false;
+  int get stressLevel => _session.stressLevel;
+  set stressLevel(int value) => _session.stressLevel = value;
 
-  static const String _volumeKey = 'volume';
-  static const String _soundEnabledKey = 'sound_enabled';
+  ValueNotifier<int> get stressNotifier => _session.stressNotifier;
 
-  double _volume = 0.6;
-  bool _soundEnabled = true;
+  PlayableCharacter get selectedCharacter => _session.selectedCharacter;
+  set selectedCharacter(PlayableCharacter value) =>
+      _session.selectedCharacter = value;
 
-  double get volume => _soundEnabled ? _volume : 0.0;
-  set volume(double value) {
-    _volume = value.clamp(0.0, 1.0);
-    _saveVolume();
-  }
+  SurveyProfile get surveyProfile => _session.surveyProfile;
+  set surveyProfile(SurveyProfile value) => _session.surveyProfile = value;
 
-  bool get soundEnabled => _soundEnabled;
-  set soundEnabled(bool value) {
-    _soundEnabled = value;
-    _saveSoundEnabled();
-  }
+  double get volume => _preferences.volume;
+  set volume(double value) => _preferences.volume = value;
 
-  static const String _soundAskedKey = 'sound_asked';
-  bool _soundQuestionAnswered = false;
+  bool get soundEnabled => _preferences.soundEnabled;
+  set soundEnabled(bool value) => _preferences.soundEnabled = value;
 
-  bool get soundQuestionAnswered => _soundQuestionAnswered;
+  bool get soundQuestionAnswered => _preferences.soundQuestionAnswered;
+  set soundQuestionAnswered(bool value) =>
+      _preferences.soundQuestionAnswered = value;
 
-  set soundQuestionAnswered(bool value) {
-    _soundQuestionAnswered = value;
-    SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool(_soundAskedKey, value);
-    });
-  }
-
-  Future<void> _saveVolume() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setDouble(_volumeKey, _volume);
-    } catch (_) {}
-  }
-
-  Future<void> _saveSoundEnabled() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_soundEnabledKey, _soundEnabled);
-    } catch (_) {}
-  }
-
-  final SurveyService _surveyService = SurveyService();
-  SurveyProfile surveyProfile = SurveyProfile(const {});
   late final BackpackInventory backpack = BackpackInventory();
 
   double _mobileMoveX = 0;
 
-  final List<String> _selectedTools = [];
+  List<String> get selectedTools => _session.selectedTools;
 
-  List<String> get selectedTools => List.unmodifiable(_selectedTools);
+  ValueNotifier<DialogNode?> get currentNodeNotifier =>
+      _session.currentNodeNotifier;
+  ValueNotifier<PathDetailInfo?> get pathDetailNotifier =>
+      _session.pathDetailNotifier;
 
-  final currentNodeNotifier = ValueNotifier<DialogNode?>(null);
-  final pathDetailNotifier = ValueNotifier<PathDetailInfo?>(null);
-  DialogNode? get currentNode => currentNodeNotifier.value;
-  set currentNode(DialogNode? value) => currentNodeNotifier.value = value;
+  DialogNode? get currentNode => _session.currentNode;
+  set currentNode(DialogNode? value) => _session.currentNode = value;
 
   DialogTree? currentTree;
 
   @override
   Future<void> onLoad() async {
-    await _loadVolume();
+    await _preferences.load();
 
-    worldRoot.scale = Vector2.all(cameraManager.zoom);
-    worldRoot.anchor = Anchor.topLeft;
+    _configureWorldRoot();
 
     add(worldRoot);
     fadeOverlay = FadeOverlay();
     add(fadeOverlay);
 
-    await loadScene(ClassroomScene());
-    olya.opacity = 0;
+    await _loadMenuScene();
 
     overlays.add('MainMenu');
+  }
+
+  void _configureWorldRoot() {
+    worldRoot
+      ..scale = Vector2.all(cameraManager.zoom)
+      ..anchor = Anchor.topLeft;
+  }
+
+  Future<void> _loadMenuScene() async {
+    await loadScene(
+      ClassroomScene(),
+      onFullOpacity: () {
+        olya.opacity = 0;
+      },
+    );
   }
 
   void initializeInventory(BuildContext context) {
@@ -150,35 +138,50 @@ class EmviaGame extends FlameGame
     }
   }
 
-  Future<void> loadScene(GameScene scene) async {
-    await transitionManager.loadScene(scene);
-    currentScene = scene;
-    if (scene is ClassroomScene) {
-      classroomScene = scene;
-    }
+  Future<void> loadScene(
+    GameScene scene, {
+    void Function()? onFullOpacity,
+  }) async {
+    await transitionManager.loadScene(scene, onFullOpacity: onFullOpacity);
   }
 
-  void goToCorridor() async {
-    await loadScene(CorridorScene());
-    sceneIndex = 3;
+  Future<void> goToCorridor() async {
+    await loadScene(
+      StressScene(),
+      onFullOpacity: () {
+        sceneIndex = 3;
+        olya.opacity = 0;
+      },
+    );
+  }
+
+  Future<void> transitionToCorridor() async {
+    await loadScene(
+      CorridorScene(),
+      onFullOpacity: () {
+        overlays.remove('TapGame');
+        playerToCorridorEntrance();
+      },
+    );
+    sceneIndex = 4;
     olya.opacity = 1;
     showMobileControls();
-    overlays.add('Stress');
+    isFrozen = false;
   }
 
   void _updateClassroomZoom() {
     transitionManager.updateClassroomZoom();
   }
 
-  double sceneWorldWidth(double baseWidth) {
+  double currentSceneWorldWidth() {
     final scene = currentScene;
-    if (scene == null) return baseWidth;
-    return scene.worldWidthForViewport(size);
+    return scene?.worldWidthForViewport(size) ?? worldWidth;
   }
 
   void startGame() {
-    if (selectedCharacter != PlayableCharacter.olya) return;
-    _startGameFlow();
+    if (selectedCharacter == PlayableCharacter.olya) {
+      _startGameFlow();
+    }
   }
 
   bool get isMobilePlatform {
@@ -194,7 +197,6 @@ class EmviaGame extends FlameGame
     if (isBackpackOpen) {
       overlays.remove('Backpack');
     } else {
-      // hide any dialog when backpack opens
       overlays.remove('Dialog');
       currentNode = null;
       overlays.add('Backpack');
@@ -202,11 +204,7 @@ class EmviaGame extends FlameGame
   }
 
   void equipTool(String toolId) {
-    if (!_selectedTools.contains(toolId)) {
-      _selectedTools.add(toolId);
-    } else {
-      _selectedTools.remove(toolId);
-    }
+    _session.toggleSelectedTool(toolId);
   }
 
   void toggleDebug() {
@@ -230,7 +228,7 @@ class EmviaGame extends FlameGame
   }
 
   void setMobileMoveX(double direction) {
-    if (freezeForPathChoice) return;
+    if (isFrozen) return;
     _mobileMoveX = direction.clamp(-1.0, 1.0);
     olya.setMobileDirection(_mobileMoveX);
   }
@@ -247,19 +245,19 @@ class EmviaGame extends FlameGame
     setMobileMoveX(0);
   }
 
-  void startNewGameSurveyFlow() {
-    _startGameAfterSurvey = true;
+  Future<void> startNewGameSurveyFlow() async {
+    _session.markStartGameAfterSurvey();
     closeMainMenu();
-    overlays.add('Survey');
+    await loadScene(
+      SurveyScene(),
+      onFullOpacity: () {
+        overlays.add('Survey');
+      },
+    );
   }
 
-  Future<void> _loadVolume() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      _volume = prefs.getDouble(_volumeKey) ?? _volume;
-      _soundEnabled = prefs.getBool(_soundEnabledKey) ?? _soundEnabled;
-      _soundQuestionAnswered = prefs.getBool(_soundAskedKey) ?? false;
-    } catch (_) {}
+  void startGameSkippingSurvey() {
+    _startGameFlow();
   }
 
   void closeMainMenu() {
@@ -278,11 +276,7 @@ class EmviaGame extends FlameGame
     overlays.add('MainMenu');
   }
 
-  bool consumeStartGameAfterSurvey() {
-    final shouldStart = _startGameAfterSurvey;
-    _startGameAfterSurvey = false;
-    return shouldStart;
-  }
+  bool consumeStartGameAfterSurvey() => _session.consumeStartGameAfterSurvey();
 
   bool isCharacterUnlocked(PlayableCharacter character) {
     return character == PlayableCharacter.olya;
@@ -294,38 +288,43 @@ class EmviaGame extends FlameGame
   }
 
   Future<void> _startGameFlow() async {
-    final token = ++_sessionToken;
+    final token = _session.beginSession();
+    final profile = await _surveyService.getProfile();
 
-    surveyProfile = await _surveyService.getProfile();
-    sceneIndex = 1;
-    // reset stress to the maximum instead of zero
-    stressLevel = 100;
-    _journeyCompleted = false;
-    _selectedTools.clear();
+    _session.resetForNewJourney(profile: profile);
     backpack.clear();
 
+    _clearGameplayOverlays();
+
+    await loadScene(
+      ClassroomScene(),
+      onFullOpacity: () {
+        olya.opacity = 0;
+        isFrozen = true;
+        showMobileControls();
+      },
+    );
+
+    if (!_session.isCurrentSession(token)) return;
+  }
+
+  void _clearGameplayOverlays() {
     overlays.remove('Dialog');
     overlays.remove('CalmMap');
     overlays.remove('PathChoice');
     overlays.remove('Backpack');
-
-    await loadScene(ClassroomScene());
-
-    if (token != _sessionToken) return;
-
-    olya.opacity = 0;
-    freezeForPathChoice = true;
-    showMobileControls();
+    currentNode = null;
+    hidePathDetail();
   }
 
   void showPathDetail(PathDetailInfo info) {
-    pathDetailNotifier.value = info;
+    _session.pathDetail = info;
     overlays.add('PathDetail');
   }
 
   void hidePathDetail() {
     overlays.remove('PathDetail');
-    pathDetailNotifier.value = null;
+    _session.pathDetail = null;
   }
 
   void clearPathSelection() {
@@ -347,33 +346,28 @@ class EmviaGame extends FlameGame
   }
 
   void chooseFirstPath(BuildContext context) {
-    if (!context.mounted) return;
-    final l = AppLocalizations.of(context)!;
-    _selectedTools.add(l.classroom);
-    _selectedTools.add(l.path_first);
-    _finishPathChoice(l.map_of_calm_olya, l.first_path_description);
+    _confirmSelectedPath(context, 0);
   }
 
   void chooseSecondPath(BuildContext context) {
-    if (!context.mounted) return;
-    final l = AppLocalizations.of(context)!;
-    _selectedTools.add(l.classroom);
-    _selectedTools.add(l.path_second);
-    _finishPathChoice(l.map_of_calm_olya, l.second_path_description);
+    _confirmSelectedPath(context, 1);
   }
 
   void chooseThirdPath(BuildContext context) {
-    if (!context.mounted) return;
-    final l = AppLocalizations.of(context)!;
-    _selectedTools.add(l.classroom);
-    _selectedTools.add(l.path_third);
-    _finishPathChoice(l.map_of_calm_olya, l.third_path_description);
+    _confirmSelectedPath(context, 2);
   }
 
-  void _finishPathChoice(String title, String description) {
+  void _confirmSelectedPath(BuildContext context, int index) {
+    if (!context.mounted) return;
+    final l = AppLocalizationsGen.of(context)!;
+    _recordPathChoice(l, index);
+    _finishPathChoice();
+  }
+
+  void _finishPathChoice() {
     sceneIndex = 2;
     olya.opacity = 1;
-    freezeForPathChoice = false;
+    isFrozen = false;
     classroomScene?.showClassroomImage();
     classroomScene?.clearMarks();
     _updateClassroomZoom();
@@ -385,31 +379,44 @@ class EmviaGame extends FlameGame
   }
 
   Future<void> applyPathChoice(int index, BuildContext context) async {
-    final l = AppLocalizations.of(context)!;
-    _selectedTools.add(l.classroom);
-    if (index == 0) {
-      _selectedTools.add(l.path_first);
-    } else if (index == 1) {
-      _selectedTools.add(l.path_second);
-    } else {
-      _selectedTools.add(l.path_third);
-    }
+    final l = AppLocalizationsGen.of(context)!;
+    _recordPathChoice(l, index);
 
-    freezeForPathChoice = false;
-    await _transitionToCorridor();
+    isFrozen = false;
+    await _transitionToStressScene();
   }
 
-  Future<void> _transitionToCorridor() async {
+  void _recordPathChoice(AppLocalizationsGen l, int index) {
+    _session.addSelectedTool(l.classroom);
+    _session.addSelectedTool(_pathLabelForIndex(l, index));
+  }
+
+  String _pathLabelForIndex(AppLocalizationsGen l, int index) {
+    switch (index) {
+      case 0:
+        return l.path_first;
+      case 1:
+        return l.path_second;
+      default:
+        return l.path_third;
+    }
+  }
+
+  Future<void> _transitionToStressScene() async {
     if (transitionManager.isTransitioning) return;
-    sceneIndex = 3;
-    await loadScene(CorridorScene());
-    playerToCorridorEntrance();
+    await loadScene(
+      StressScene(),
+      onFullOpacity: () {
+        sceneIndex = 3;
+        olya.opacity = 0;
+      },
+    );
   }
 
   void finishOlyaJourney() {
-    if (_journeyCompleted) return;
-    _journeyCompleted = true;
-    freezeForPathChoice = true;
+    if (_session.journeyCompleted) return;
+    _session.journeyCompleted = true;
+    isFrozen = true;
     hideMobileControls();
     pauseEngine();
     overlays.add('CalmMap');
@@ -420,15 +427,26 @@ class EmviaGame extends FlameGame
     if (paused) {
       resumeEngine();
     }
-    freezeForPathChoice = false;
-    // when returning to main menu reset stress to default max
+    isFrozen = false;
+    _prepareReturnToMainMenu();
+    await _loadMenuScene();
+    openMainMenu();
+  }
+
+  Future<void> returnToMainMenuAfterSurvey() async {
+    overlays.remove('Survey');
+    isFrozen = true;
+    _prepareReturnToMainMenu();
+    await _loadMenuScene();
+    openMainMenu();
+  }
+
+  void _prepareReturnToMainMenu() {
     stressLevel = 100;
     sceneIndex = 0;
     hideMobileControls();
     overlays.remove('Stress');
-    await loadScene(ClassroomScene());
-    olya.opacity = 0;
-    openMainMenu();
+    overlays.remove('TapGame');
   }
 
   void playerToCorridorEntrance() {
@@ -462,19 +480,21 @@ class EmviaGame extends FlameGame
 
     if (olya.parent == null) return;
 
-    if (currentScene is ClassroomScene) {
-      if (olya.position.x >= worldRoot.size.x - olya.size.x / 2 - 10) {
-        _transitionToCorridor();
-      }
+    if (currentScene is ClassroomScene && _hasReachedRightSceneEdge()) {
+      _transitionToStressScene();
     }
 
     if (currentScene is CorridorScene &&
-        !_journeyCompleted &&
-        olya.position.x >= worldRoot.size.x - olya.size.x / 2 - 10) {
+        !_session.journeyCompleted &&
+        _hasReachedRightSceneEdge()) {
       finishOlyaJourney();
     }
 
     cameraManager.update(dt);
+  }
+
+  bool _hasReachedRightSceneEdge() {
+    return olya.position.x >= worldRoot.size.x - olya.size.x / 2 - 10;
   }
 
   @override
@@ -485,24 +505,29 @@ class EmviaGame extends FlameGame
     if (scene is ClassroomScene && scene.isLoaded) {
       _updateClassroomZoom();
     } else {
-      worldRoot.size = Vector2(
-        scene != null ? sceneWorldWidth(worldWidth) : worldWidth,
-        size.y,
-      );
+      worldRoot.size = Vector2(currentSceneWorldWidth(), size.y);
     }
 
     if (olya.parent != null) {
-      final minX = olya.size.x / 2;
-      final maxX = worldRoot.size.x - olya.size.x / 2;
-      if (minX <= maxX) {
-        olya.position.x = olya.position.x.clamp(minX, maxX).toDouble();
-      } else {
-        olya.position.x = worldRoot.size.x / 2;
-      }
-      olya.position.y = worldRoot.size.y * 0.75;
+      _clampPlayerToWorld(scene);
     }
 
     cameraManager.snapToPlayer();
+  }
+
+  void _clampPlayerToWorld(GameScene? scene) {
+    final minX = olya.size.x / 2;
+    final maxX = worldRoot.size.x - olya.size.x / 2;
+
+    if (minX <= maxX) {
+      olya.position.x = olya.position.x.clamp(minX, maxX).toDouble();
+    } else {
+      olya.position.x = worldRoot.size.x / 2;
+    }
+
+    if (scene != null) {
+      olya.position.y = scene.spawnPoint(size, worldRoot.size).y;
+    }
   }
 
   @override

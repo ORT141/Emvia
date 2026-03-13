@@ -2,15 +2,26 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:ui' show FilterQuality, Paint;
+import 'dart:math' as math;
 import '../emvia_game.dart';
+
+enum SceneScalingMode { stretch, scrolling }
 
 abstract class GameScene extends Component with HasGameReference<EmviaGame> {
   final String backgroundPath;
   final String? foregroundPath;
+  final SceneScalingMode scalingMode;
 
-  GameScene({required this.backgroundPath, this.foregroundPath});
+  GameScene({
+    required this.backgroundPath,
+    this.foregroundPath,
+    this.scalingMode = SceneScalingMode.scrolling,
+  });
 
-  late SpriteComponent background;
+  final SpriteComponent background = SpriteComponent()
+    ..anchor = Anchor.topLeft
+    ..priority = 0;
+
   SpriteComponent? foreground;
 
   double worldWidthForViewport(Vector2 viewportSize) => EmviaGame.worldWidth;
@@ -29,12 +40,44 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
 
   @protected
   void layoutToWorld() {
-    final viewportH = game.size.y;
+    final viewportSize = game.size;
 
+    if (scalingMode == SceneScalingMode.stretch) {
+      _layoutStretch(viewportSize.x, viewportSize.y);
+    } else {
+      _layoutScrolling(viewportSize.x, viewportSize.y);
+    }
+  }
+
+  void _layoutStretch(double viewportW, double viewportH) {
+    if (background.sprite?.srcSize == null) return;
+
+    final src = background.sprite!.srcSize;
+    final scaleX = viewportW / src.x;
+    final scaleY = viewportH / src.y;
+    final scale = math.max(scaleX, scaleY);
+
+    final size = Vector2(src.x * scale, src.y * scale);
+
+    background
+      ..size = size
+      ..position = Vector2((viewportW - size.x) / 2, (viewportH - size.y) / 2);
+
+    if (foreground != null && foreground!.sprite?.srcSize != null) {
+      foreground!
+        ..size = size
+        ..position = background.position;
+    }
+
+    game.worldRoot.size = Vector2(viewportW, viewportH);
+  }
+
+  void _layoutScrolling(double viewportW, double viewportH) {
     if (background.sprite?.srcSize != null &&
         background.sprite!.srcSize.x > 0 &&
         background.sprite!.srcSize.y > 0) {
       final src = background.sprite!.srcSize;
+
       final scale = viewportH / src.y;
       final contentW = src.x * scale;
       final worldW = worldWidthForViewport(game.size);
@@ -72,24 +115,28 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
 
   @override
   Future<void> onLoad() async {
-    background = SpriteComponent()
-      ..sprite = await game.loadSprite(backgroundPath)
-      ..anchor = Anchor.topLeft
-      ..priority = 0;
+    background.sprite = await game.loadSprite(backgroundPath);
     background.paint = Paint()
       ..isAntiAlias = true
       ..filterQuality = FilterQuality.high;
-    add(background);
+    if (!children.contains(background)) {
+      add(background);
+    }
 
     if (foregroundPath != null) {
-      foreground = SpriteComponent()
-        ..sprite = await game.loadSprite(foregroundPath!)
+      foreground ??= SpriteComponent()
         ..anchor = Anchor.topLeft
         ..priority = 20;
+
+      foreground!.sprite = await game.loadSprite(foregroundPath!);
+
       foreground!.paint = Paint()
         ..isAntiAlias = true
         ..filterQuality = FilterQuality.high;
-      add(foreground!);
+
+      if (!children.contains(foreground)) {
+        add(foreground!);
+      }
     }
 
     layoutToWorld();

@@ -16,10 +16,13 @@ class FadeOverlay extends RectangleComponent with HasGameReference<EmviaGame> {
   @override
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
-    this.size = size;
+    this.size = size + Vector2.all(2);
+    position = Vector2.all(-1);
   }
 
   Future<void> fadeIn(double duration) async {
+    removeAll(children.whereType<OpacityEffect>());
+
     final completer = Completer<void>();
     add(
       OpacityEffect.to(
@@ -41,6 +44,8 @@ class FadeOverlay extends RectangleComponent with HasGameReference<EmviaGame> {
   }
 
   Future<void> fadeOut(double duration) async {
+    removeAll(children.whereType<OpacityEffect>());
+
     final completer = Completer<void>();
     add(
       OpacityEffect.to(

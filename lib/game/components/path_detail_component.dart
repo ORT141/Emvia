@@ -77,10 +77,9 @@ class _PathDetailComponentState extends State<PathDetailComponent>
           },
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final maxWidth =
-                  constraints.maxWidth.isFinite
-                      ? constraints.maxWidth
-                      : MediaQuery.of(context).size.width;
+              final maxWidth = constraints.maxWidth.isFinite
+                  ? constraints.maxWidth
+                  : MediaQuery.of(context).size.width;
               final dialogWidth = maxWidth * 0.9 < 600 ? maxWidth * 0.9 : 600.0;
 
               return Material(
@@ -204,8 +203,9 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                                     borderRadius: BorderRadius.circular(14),
                                   ),
                                 ),
-                                onPressed:
-                                    widget.index == 0 ? widget.onConfirm : null,
+                                onPressed: widget.index == 0
+                                    ? widget.onConfirm
+                                    : null,
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
