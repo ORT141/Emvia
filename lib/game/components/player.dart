@@ -14,6 +14,7 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
   late final SpriteAnimation _walkingAnimation;
   late final SpriteAnimation _standingHeadphonesAnimation;
   late final SpriteAnimation _walkingHeadphonesAnimation;
+  late final SpriteAnimation _wearingHeadphonesAnimation;
 
   final Vector2 _velocity = Vector2.zero();
   final Vector2 _keyboardVelocity = Vector2.zero();
@@ -41,9 +42,26 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
         for (int i = 1; i <= 29; i++)
           await game.loadSprite('player/walking_headphones_$i.png'),
       ], stepTime: 0.1);
+
+      try {
+        final wearingSprite = await game.loadSprite(
+          'player/olya_headphones_wearing.png',
+        );
+        final wearedSprite = await game.loadSprite(
+          'player/olya_headphones_weared.png',
+        );
+        _wearingHeadphonesAnimation = SpriteAnimation.spriteList(
+          [wearingSprite, wearedSprite],
+          stepTime: 0.12,
+          loop: false,
+        );
+      } catch (_) {
+        _wearingHeadphonesAnimation = _standingHeadphonesAnimation;
+      }
     } catch (_) {
       _standingHeadphonesAnimation = _standingAnimation;
       _walkingHeadphonesAnimation = _walkingAnimation;
+      _wearingHeadphonesAnimation = _standingAnimation;
     }
 
     _updateAnimations();
@@ -142,11 +160,44 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
   bool _hasHeadphones = false;
 
   void _updateAnimations() {
+    final prev = _hasHeadphones;
     final hasHeadphones = game.selectedTools.contains('headphones');
-    if (hasHeadphones == _hasHeadphones && animations != null) {
+    if (hasHeadphones == prev && animations != null) {
       return;
     }
     _hasHeadphones = hasHeadphones;
+
+    if (hasHeadphones && !prev) {
+      animations = {
+        PlayerState.standing: _wearingHeadphonesAnimation,
+        PlayerState.walking: _walkingHeadphonesAnimation,
+      };
+      if (current != null) current = current;
+
+      try {
+        final frameCount = _wearingHeadphonesAnimation.frames.length;
+        const stepMs = 320;
+        Future.delayed(
+          Duration(milliseconds: (frameCount * stepMs).toInt()),
+          () {
+            if (!game.selectedTools.contains('headphones')) return;
+            animations = {
+              PlayerState.standing: _standingHeadphonesAnimation,
+              PlayerState.walking: _walkingHeadphonesAnimation,
+            };
+            if (current != null) current = current;
+          },
+        );
+      } catch (_) {
+        animations = {
+          PlayerState.standing: _standingHeadphonesAnimation,
+          PlayerState.walking: _walkingHeadphonesAnimation,
+        };
+        if (current != null) current = current;
+      }
+
+      return;
+    }
 
     animations = {
       PlayerState.standing: hasHeadphones
