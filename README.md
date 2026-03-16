@@ -13,6 +13,17 @@ Emvia is a story-driven game where players navigate social environments, manage 
 - **Stress Management**: UI and gameplay mechanics centered around psychological well-being.
 - **Survey System**: In-game assessments to track player progress or states.
 
+## Screenshots
+
+<div align=center>
+
+<img width="412" src="https://github.com/user-attachments/assets/300afd1c-0fe1-4496-a692-95eb3bba1089" />
+<img width="412" src="https://github.com/user-attachments/assets/73684816-e780-44f2-bcb7-d1e8cca4f261" />
+<img width="412" src="https://github.com/user-attachments/assets/766cfed9-cdf2-4f3c-a81c-b5339481a491" />
+<img width="412" src="https://github.com/user-attachments/assets/584f754f-bba9-4474-b073-e79573ea94f0" />
+
+</div>
+
 ## Getting Started
 
 1. **Prerequisites**: Ensure you have Flutter installed.
