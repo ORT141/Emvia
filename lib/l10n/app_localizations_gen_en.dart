@@ -112,10 +112,6 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get dark => 'Dark';
 
   @override
-  String get npc_greeting =>
-      'Mysterious Stranger: Hello Olya! Welcome to this peaceful place.';
-
-  @override
   String get speaker_teacher => 'Teacher';
 
   @override

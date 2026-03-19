@@ -76,6 +76,9 @@ class StressScene extends GameScene {
   void _startTransitionToCorridor() {
     if (_transitioning) return;
     _transitioning = true;
+    try {
+      game.olya.position.x = 800.0;
+    } catch (_) {}
     game.transitionToCorridor();
   }
 

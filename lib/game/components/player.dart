@@ -8,7 +8,20 @@ enum PlayerState { standing, walking }
 
 class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
     with HasGameReference<EmviaGame>, KeyboardHandler, TapCallbacks {
-  OlyaPlayer() : super(size: Vector2(130, 280), anchor: Anchor.center);
+  OlyaPlayer() : super(anchor: Anchor.center);
+
+  void _updatePlayerSize() {
+    final height = game.size.y * 0.42;
+    size = Vector2(height * 0.5, height);
+  }
+
+  @override
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    if (isLoaded) {
+      _updatePlayerSize();
+    }
+  }
 
   @override
   int priority = 15;
@@ -28,6 +41,8 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
 
   @override
   Future<void> onLoad() async {
+    _updatePlayerSize();
+
     _standingAnimation = SpriteAnimation.spriteList([
       await game.loadSprite('player/standing.png'),
     ], stepTime: 1);
@@ -114,7 +129,7 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
       size.x / 2,
       game.worldRoot.size.x - size.x / 2,
     );
-    position.y = game.worldRoot.size.y * 0.55;
+    position.y = game.worldRoot.size.y * 0.58;
   }
 
   @override

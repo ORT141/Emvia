@@ -125,7 +125,7 @@ class CorridorScene extends GameScene {
   }
 
   bool _stressSceneTriggered = false;
-  static const _stressTriggerX = 500.0;
+  static const _stressTriggerX = 800.0;
 
   @override
   void update(double dt) {

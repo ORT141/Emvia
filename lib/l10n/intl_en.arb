@@ -136,10 +136,6 @@
     "@dark": {
         "description": "Option for the dark theme."
     },
-    "npc_greeting": "Mysterious Stranger: Hello Olya! Welcome to this peaceful place.",
-    "@npc_greeting": {
-        "description": "Initial greeting from the Mysterious Stranger character to Olya."
-    },
     "speaker_teacher": "Teacher",
     "@speaker_teacher": {
         "description": "Name label for the teacher speaker"

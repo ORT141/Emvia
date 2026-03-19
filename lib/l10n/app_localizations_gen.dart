@@ -302,12 +302,6 @@ abstract class AppLocalizationsGen {
   /// **'Dark'**
   String get dark;
 
-  /// Initial greeting from the Mysterious Stranger character to Olya.
-  ///
-  /// In en, this message translates to:
-  /// **'Mysterious Stranger: Hello Olya! Welcome to this peaceful place.'**
-  String get npc_greeting;
-
   /// Name label for the teacher speaker
   ///
   /// In en, this message translates to:

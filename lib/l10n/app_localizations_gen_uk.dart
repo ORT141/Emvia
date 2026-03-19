@@ -112,10 +112,6 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get dark => 'Темна';
 
   @override
-  String get npc_greeting =>
-      'Таємнича особа: Привіт Олю! Ласкаво просимо до цього спокійного місця.';
-
-  @override
   String get speaker_teacher => 'Вчитель';
 
   @override
