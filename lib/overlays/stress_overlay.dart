@@ -78,8 +78,8 @@ class _StressOverlayState extends State<StressOverlay>
             return Stack(
               children: [
                 Positioned(
-                  top: 10,
-                  right: 10,
+                  top: MediaQuery.of(context).padding.top + 8,
+                  right: MediaQuery.of(context).padding.right + 8,
                   child: AnimatedBuilder(
                     animation: _shakeAnimation,
                     builder: (context, child) {
@@ -121,7 +121,6 @@ class _StressOverlayState extends State<StressOverlay>
 
         if (hasHeadphones || stress < 30) return const SizedBox.shrink();
 
-        final opacity = ((stress - 30) / 70.0).clamp(0.0, 0.4);
         final shake = stress >= 70 ? (stress - 70) / 10.0 : 0.0;
 
         return IgnorePointer(
@@ -132,26 +131,6 @@ class _StressOverlayState extends State<StressOverlay>
                 offset: Offset(
                   _shakeAnimation.value * shake * 2,
                   _shakeAnimation.value * shake * 2,
-                ),
-                child: Opacity(
-                  opacity: opacity,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: RadialGradient(
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.8),
-                        ],
-                        radius: 1.2,
-                        center: Alignment.center,
-                      ),
-                    ),
-                    child: Center(
-                      child: Container(
-                        color: Colors.white.withValues(alpha: 0.05),
-                      ),
-                    ),
-                  ),
                 ),
               );
             },

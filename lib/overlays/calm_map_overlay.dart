@@ -228,7 +228,7 @@ class _CalmMapCard extends StatelessWidget {
     final accentColor = Color.lerp(baseColor, Colors.white, 0.45)!;
 
     return Container(
-      width: 980,
+      width: double.infinity,
       padding: const EdgeInsets.all(28),
       decoration: BoxDecoration(
         gradient: LinearGradient(

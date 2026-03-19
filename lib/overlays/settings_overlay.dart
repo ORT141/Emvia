@@ -73,7 +73,7 @@ class _SettingsOverlayState extends State<SettingsOverlay>
         child: Align(
           alignment: Alignment.centerRight,
           child: Container(
-            margin: const EdgeInsets.all(16),
+            margin: MediaQuery.of(context).padding + const EdgeInsets.all(16),
             padding: const EdgeInsets.all(16),
             width: 320,
             decoration: BoxDecoration(

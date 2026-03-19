@@ -61,6 +61,9 @@ class PathChoiceScene extends GameScene {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+
+    game.isFrozen = true;
+
     final sprite = await game.loadSprite('scenes/classroom/path.png');
     background.sprite = sprite;
     _pathBgSrcSize = sprite.srcSize.clone();

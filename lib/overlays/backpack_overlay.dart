@@ -113,9 +113,11 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
               cursor: SystemMouseCursors.basic,
               child: Hero(
                 tag: 'backpack_main',
-                child: SizedBox(
-                  width: 360,
-                  height: 360,
+                child: SizedBox.square(
+                  dimension: (MediaQuery.of(context).size.height * 0.5).clamp(
+                    0.0,
+                    360.0,
+                  ),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       return Stack(
@@ -166,7 +168,10 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
             Text(
               AppLocalizations.of(context)!.backpack_title,
               style: GoogleFonts.baloo2(
-                fontSize: 48,
+                fontSize: (MediaQuery.of(context).size.height * 0.065).clamp(
+                  28.0,
+                  48.0,
+                ),
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
                 shadows: [
@@ -299,7 +304,9 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                           Text(
                             item.name,
                             style: GoogleFonts.baloo2(
-                              fontSize: 36,
+                              fontSize:
+                                  (MediaQuery.of(context).size.height * 0.05)
+                                      .clamp(22.0, 36.0),
                               fontWeight: FontWeight.w900,
                               color: theme.colorScheme.onSurface,
                             ),

@@ -27,7 +27,9 @@ class DialogOverlay extends StatelessWidget {
         return Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 16),
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).padding.bottom + 16,
+            ),
             child: Material(
               type: MaterialType.transparency,
               child: Localizations.override(

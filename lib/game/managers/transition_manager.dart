@@ -55,8 +55,6 @@ class TransitionManager {
       await game.worldRoot.add(game.olya);
     }
 
-    game.olya.priority = 10;
-
     if (scene is CorridorScene) {
       game.olya.opacity = 1.0;
     } else {

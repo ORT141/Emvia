@@ -10,6 +10,9 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
     with HasGameReference<EmviaGame>, KeyboardHandler, TapCallbacks {
   OlyaPlayer() : super(size: Vector2(130, 280), anchor: Anchor.center);
 
+  @override
+  int priority = 15;
+
   late final SpriteAnimation _standingAnimation;
   late final SpriteAnimation _walkingAnimation;
   late final SpriteAnimation _standingHeadphonesAnimation;
@@ -66,6 +69,8 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
 
     _updateAnimations();
     current = PlayerState.standing;
+
+    game.olya.priority = priority;
   }
 
   @override

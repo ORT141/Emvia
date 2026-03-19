@@ -63,12 +63,6 @@ class StressScene extends GameScene {
   }
 
   @override
-  void onRemove() {
-    game.overlays.remove('Stress');
-    super.onRemove();
-  }
-
-  @override
   void update(double dt) {
     super.update(dt);
 

@@ -19,6 +19,9 @@ class CorridorScene extends GameScene {
 
   bool _lockerPromptShown = false;
 
+  SpriteComponent? _peopleBackgroundOverlay;
+  SpriteComponent? _peopleForegroundOverlay;
+
   final List<SpriteComponent> _patternSprites = [];
 
   @override
@@ -30,6 +33,25 @@ class CorridorScene extends GameScene {
       return src.x * scale;
     }
     return viewportSize.x * 2;
+  }
+
+  @override
+  @protected
+  void layoutToWorld() {
+    super.layoutToWorld();
+
+    for (final overlay in [
+      _peopleBackgroundOverlay,
+      _peopleForegroundOverlay,
+    ]) {
+      final src = overlay?.sprite?.srcSize;
+      if (overlay == null || src == null || src.y <= 0) continue;
+      final viewportH = game.size.y;
+      final scale = viewportH / src.y;
+      overlay
+        ..size = Vector2(src.x * scale, viewportH)
+        ..position = Vector2.zero();
+    }
   }
 
   @override
@@ -46,11 +68,6 @@ class CorridorScene extends GameScene {
     final worldOffset = game.worldRoot.position;
     final zoom = game.worldRoot.scale.x;
     final worldPos = (screenPos - worldOffset) / zoom;
-
-    debugPrint(
-      'tap world x=${worldPos.x.toStringAsFixed(1)}, '
-      'y=${worldPos.y.toStringAsFixed(1)}',
-    );
 
     const minX = 1210.0;
     const minY = 397.3;
@@ -71,6 +88,31 @@ class CorridorScene extends GameScene {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+
+    try {
+      _peopleBackgroundOverlay = SpriteComponent()
+        ..anchor = Anchor.topLeft
+        ..priority = 10;
+      _peopleBackgroundOverlay!.sprite = await game.loadSprite(
+        'scenes/corridor/people_background.png',
+      );
+      add(_peopleBackgroundOverlay!);
+    } catch (_) {
+      _peopleBackgroundOverlay = null;
+    }
+
+    try {
+      _peopleForegroundOverlay = SpriteComponent()
+        ..anchor = Anchor.topLeft
+        ..priority = 50;
+      _peopleForegroundOverlay!.sprite = await game.loadSprite(
+        'scenes/corridor/people_foreground.png',
+      );
+
+      game.worldRoot.add(_peopleForegroundOverlay!);
+    } catch (_) {
+      _peopleForegroundOverlay = null;
+    }
 
     if (game.stressLevel >= 30 && !game.overlays.isActive('Stress')) {
       game.overlays.add('Stress');
@@ -123,12 +165,6 @@ class CorridorScene extends GameScene {
     if (_lockerPromptShown && game.isBackpackOpen) {
       game.isFrozen = false;
     }
-  }
-
-  @override
-  void onRemove() {
-    game.overlays.remove('Stress');
-    super.onRemove();
   }
 
   Future<void> _loadWallPattern() async {
@@ -194,5 +230,17 @@ class CorridorScene extends GameScene {
     _loadWallPattern();
     layoutToWorld();
     super.redrawScene();
+  }
+
+  @override
+  void onRemove() {
+    game.worldRoot.remove(_peopleForegroundOverlay!);
+
+    _peopleBackgroundOverlay?.removeFromParent();
+    _peopleBackgroundOverlay = null;
+    _peopleForegroundOverlay?.removeFromParent();
+    _peopleForegroundOverlay = null;
+
+    super.onRemove();
   }
 }

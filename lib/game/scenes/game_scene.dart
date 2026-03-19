@@ -126,7 +126,7 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
     if (foregroundPath != null) {
       foreground ??= SpriteComponent()
         ..anchor = Anchor.topLeft
-        ..priority = 20;
+        ..priority = 10;
 
       foreground!.sprite = await game.loadSprite(foregroundPath!);
 
