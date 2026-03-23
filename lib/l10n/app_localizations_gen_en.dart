@@ -517,6 +517,9 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   }
 
   @override
+  String get next_item => 'Next item';
+
+  @override
   String calm_map_calming_action(String value) {
     return 'Calming Action: $value';
   }

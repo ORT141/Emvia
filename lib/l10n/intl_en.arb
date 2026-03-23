@@ -472,6 +472,10 @@
             }
         }
     },
+    "next_item": "Next item",
+    "@next_item": {
+        "description": "Label for the button or tooltip to go to the next item in a list or carousel."
+    },
     "calm_map_calming_action": "Calming Action: {value}",
     "@calm_map_calming_action": {
         "placeholders": {

@@ -347,6 +347,10 @@
     "@character_olenka_quote": {
         "description": "Olenka short quote"
     },
+    "next_item": "Наступний предмет",
+    "@next_item": {
+        "description": "Підпис для кнопки або підказки для переходу до наступного предмета у списку або каруселі."
+    },
     "character_olenka_trait": "Незряча, орієнтується через слух, дотик, уяву та логіку.",
     "@character_olenka_trait": {
         "description": "Olenka trait description"

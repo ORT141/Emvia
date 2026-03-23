@@ -10,7 +10,6 @@ class BackpackItem {
     required this.status,
     required this.description,
     required this.type,
-    required this.iconAsset,
     required this.soundAssets,
     this.quantity = 1,
   });
@@ -20,7 +19,6 @@ class BackpackItem {
   final String status;
   final String description;
   final BackpackItemType type;
-  final String iconAsset;
   final Map<String, String> soundAssets;
   final int quantity;
 
@@ -36,7 +34,6 @@ class BackpackItem {
     String? status,
     String? description,
     BackpackItemType? type,
-    String? iconAsset,
     Map<String, String>? soundAssets,
     int? quantity,
   }) {
@@ -46,7 +43,6 @@ class BackpackItem {
       status: status ?? this.status,
       description: description ?? this.description,
       type: type ?? this.type,
-      iconAsset: iconAsset ?? this.iconAsset,
       soundAssets: soundAssets ?? this.soundAssets,
       quantity: quantity ?? this.quantity,
     );
@@ -61,7 +57,6 @@ class BackpackItem {
         status: l10n.item_headphones_status,
         description: l10n.item_headphones_desc,
         type: BackpackItemType.tool,
-        iconAsset: 'assets/images/backpack/headphones.png',
         soundAssets: {
           'en': 'items/sensory headphones.mp3',
           'uk': 'items/сенсорні навушники.mp3',
@@ -73,7 +68,6 @@ class BackpackItem {
         status: l10n.item_blanket_status,
         description: l10n.item_blanket_desc,
         type: BackpackItemType.tool,
-        iconAsset: 'assets/images/backpack/coat.png',
         soundAssets: {
           'en': 'items/weighted blanket.mp3',
           'uk': 'items/важка ковдра.mp3',
@@ -85,7 +79,6 @@ class BackpackItem {
         status: l10n.item_lunchbox_status,
         description: l10n.item_lunchbox_desc,
         type: BackpackItemType.tool,
-        iconAsset: 'assets/images/backpack/lunchbox.png',
         soundAssets: {'en': 'items/lunchbox.mp3', 'uk': 'items/ланчбокс.mp3'},
       ),
     ];

@@ -1022,6 +1022,12 @@ abstract class AppLocalizationsGen {
   /// **'Safe Color: {value}'**
   String calm_map_safe_color(String value);
 
+  /// Label for the button or tooltip to go to the next item in a list or carousel.
+  ///
+  /// In en, this message translates to:
+  /// **'Next item'**
+  String get next_item;
+
   /// No description provided for @calm_map_calming_action.
   ///
   /// In en, this message translates to:

@@ -55,17 +55,34 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
     } catch (_) {}
   }
 
+  void _selectPrevItem() {
+    final items = widget.game.backpack.items;
+    if (items.isEmpty) return;
+    if (_selectedItem == null) {
+      _selectItem(items.first);
+      return;
+    }
+    final idx = items.indexWhere((it) => it.id == _selectedItem!.id);
+    final prev = (idx - 1) < 0 ? items.length - 1 : idx - 1;
+    _selectItem(items[prev]);
+  }
+
+  void _selectNextItem() {
+    final items = widget.game.backpack.items;
+    if (items.isEmpty) return;
+    if (_selectedItem == null) {
+      _selectItem(items.first);
+      return;
+    }
+    final idx = items.indexWhere((it) => it.id == _selectedItem!.id);
+    final next = (idx + 1) % items.length;
+    _selectItem(items[next]);
+  }
+
   @override
   void dispose() {
     _stopItemAudio?.call();
     super.dispose();
-  }
-
-  String _localizedAssetFor(String assetPath) {
-    final locale = Localizations.localeOf(context);
-    final lang = locale.languageCode == 'uk' ? 'uk' : 'en';
-    final filename = assetPath.split('/').last;
-    return 'assets/images/backpack/$lang/$filename';
   }
 
   @override
@@ -118,48 +135,12 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                     0.0,
                     360.0,
                   ),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Positioned.fill(
-                            child: Image.asset(
-                              'assets/images/backpack/backpack.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                          for (final it in items)
-                            Positioned(
-                              left: 5,
-                              top: -17,
-                              width: 350,
-                              child: GestureDetector(
-                                onTap: () => _selectItem(it),
-                                behavior: HitTestBehavior.translucent,
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    color: _selectedItem?.id == it.id
-                                        ? Theme.of(context).colorScheme.primary
-                                              .withValues(alpha: 0.15)
-                                        : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Image.asset(
-                                    _localizedAssetFor(it.iconAsset),
-                                    fit: BoxFit.contain,
-                                    errorBuilder: (ctx, err, st) => Image.asset(
-                                      it.iconAsset,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      );
-                    },
+                  child: GestureDetector(
+                    onTap: () => _selectItem(items.first),
+                    child: Image.asset(
+                      'assets/images/backpack/backpack.png',
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),
@@ -191,6 +172,9 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
 
   Widget _buildItemCard(BackpackItem item) {
     final theme = Theme.of(context);
+    final items = widget.game.backpack.items;
+    final currentIndex = items.indexWhere((it) => it.id == item.id);
+    final total = items.length;
     final isCorridor = widget.game.currentScene is CorridorScene;
     final isBlocked = isCorridor && item.id != 'headphones';
 
@@ -216,193 +200,136 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                const Spacer(),
-                IconButton.filledTonal(
-                  onPressed: () => setState(() => _selectedItem = null),
-                  icon: const Icon(Icons.arrow_back_rounded),
-                ),
-              ],
-            ),
             Flexible(
               child: SingleChildScrollView(
-                child: Row(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      flex: 2,
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 200,
-                            padding: const EdgeInsets.all(24),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.surfaceContainerHighest
-                                  .withValues(alpha: 0.3),
-                              borderRadius: BorderRadius.circular(32),
-                            ),
-                            child: Center(
-                              child: Icon(
-                                Icons.inventory_2_outlined,
-                                size: 48,
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          SizedBox(
-                            height: 80,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: widget.game.backpack.items.length,
-                              separatorBuilder: (_, _) =>
-                                  const SizedBox(width: 8),
-                              itemBuilder: (context, idx) {
-                                final other = widget.game.backpack.items[idx];
-                                return GestureDetector(
-                                  onTap: () => _selectItem(other),
-                                  child: Container(
-                                    width: 80,
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: other.id == item.id
-                                          ? theme.colorScheme.primary
-                                                .withValues(alpha: 0.2)
-                                          : theme.colorScheme.surfaceContainer,
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(
-                                        color: other.id == item.id
-                                            ? theme.colorScheme.primary
-                                            : Colors.transparent,
-                                      ),
-                                    ),
-                                    child: Image.asset(
-                                      _localizedAssetFor(other.iconAsset),
-                                      fit: BoxFit.contain,
-                                      errorBuilder: (ctx, err, st) =>
-                                          Image.asset(
-                                            other.iconAsset,
-                                            fit: BoxFit.contain,
-                                          ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
+                    Text(
+                      item.name,
+                      style: GoogleFonts.baloo2(
+                        fontSize: (MediaQuery.of(context).size.height * 0.05)
+                            .clamp(22.0, 36.0),
+                        fontWeight: FontWeight.w900,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
-                    const SizedBox(width: 32),
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            item.name,
-                            style: GoogleFonts.baloo2(
-                              fontSize:
-                                  (MediaQuery.of(context).size.height * 0.05)
-                                      .clamp(22.0, 36.0),
-                              fontWeight: FontWeight.w900,
-                              color: theme.colorScheme.onSurface,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            widget.game.selectedTools.contains(item.id)
-                                ? item.status
-                                : item.status,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              color: isBlocked
-                                  ? theme.colorScheme.error
-                                  : (widget.game.selectedTools.contains(item.id)
-                                        ? Colors.green.shade600
-                                        : theme.colorScheme.secondary),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          Text(
-                            item.description,
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              height: 1.5,
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                          const SizedBox(height: 40),
-                          SizedBox(
-                            width: double.infinity,
-                            child: FilledButton.icon(
-                              onPressed: isBlocked
-                                  ? null
-                                  : () async {
-                                      if (item.id == 'headphones') {
-                                        widget.game.equipTool(item.id);
-                                        widget.game.stressLevel = 10;
-                                        widget.game.overlays.remove('Backpack');
-                                        return;
-                                      }
-
-                                      if (!widget.game.soundEnabled) return;
-
-                                      final soundPath = item
-                                          .localizedSoundAsset(context);
-
-                                      await _stopItemAudio?.call();
-                                      if (!mounted) return;
-                                      try {
-                                        final player = await FlameAudio.play(
-                                          soundPath,
-                                          volume: widget.game.volume,
-                                        );
-                                        _stopItemAudio = player.stop;
-                                      } catch (_) {}
-                                    },
-                              icon: Icon(
-                                isBlocked
-                                    ? Icons.block_rounded
-                                    : (widget.game.selectedTools.contains(
-                                            item.id,
-                                          )
-                                          ? Icons.autorenew_rounded
-                                          : Icons.check_circle_outline_rounded),
+                    const SizedBox(height: 8),
+                    Text(
+                      widget.game.selectedTools.contains(item.id)
+                          ? item.status
+                          : item.status,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: isBlocked
+                            ? theme.colorScheme.error
+                            : (widget.game.selectedTools.contains(item.id)
+                                  ? Colors.green.shade600
+                                  : theme.colorScheme.secondary),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      item.description,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        height: 1.5,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: SizedBox(
+                          width: 160,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: _selectPrevItem,
+                                icon: const Icon(Icons.chevron_left_rounded),
+                                tooltip: 'Previous item',
                               ),
-                              label: Text(
-                                isBlocked
-                                    ? (item.id == 'blanket'
-                                          ? AppLocalizations.of(
-                                              context,
-                                            )!.item_blanket_status
-                                          : AppLocalizations.of(
-                                              context,
-                                            )!.item_lunchbox_status)
-                                    : (widget.game.selectedTools.contains(
-                                            item.id,
-                                          )
-                                          ? 'Unequip'
-                                          : AppLocalizations.of(
-                                              context,
-                                            )!.use_item),
-                              ),
-                              style: FilledButton.styleFrom(
+                              Padding(
                                 padding: const EdgeInsets.symmetric(
-                                  vertical: 20,
+                                  horizontal: 8.0,
                                 ),
-                                textStyle: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                                child: Text(
+                                  total > 0
+                                      ? '${currentIndex + 1} / $total'
+                                      : '0 / 0',
+                                  style: theme.textTheme.bodyLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
                                 ),
-                                backgroundColor: isBlocked
-                                    ? theme.colorScheme.errorContainer
-                                    : null,
                               ),
-                            ),
+                              IconButton(
+                                onPressed: _selectNextItem,
+                                icon: const Icon(Icons.chevron_right_rounded),
+                                tooltip: AppLocalizations.of(context)!.next_item,
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
+                        onPressed: isBlocked
+                            ? null
+                            : () async {
+                                if (item.id == 'headphones') {
+                                  widget.game.equipTool(item.id);
+                                  widget.game.stressLevel = 10;
+                                  widget.game.overlays.remove('Backpack');
+                                  return;
+                                }
+
+                                if (!widget.game.soundEnabled) return;
+
+                                final soundPath = item.localizedSoundAsset(
+                                  context,
+                                );
+
+                                await _stopItemAudio?.call();
+                                if (!mounted) return;
+                                try {
+                                  final player = await FlameAudio.play(
+                                    soundPath,
+                                    volume: widget.game.volume,
+                                  );
+                                  _stopItemAudio = player.stop;
+                                } catch (_) {}
+                              },
+                        style: FilledButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          textStyle: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          backgroundColor: isBlocked
+                              ? theme.colorScheme.errorContainer
+                              : null,
+                        ),
+                        child: Text(
+                          isBlocked
+                              ? (item.id == 'blanket'
+                                    ? AppLocalizations.of(
+                                        context,
+                                      )!.item_blanket_status
+                                    : AppLocalizations.of(
+                                        context,
+                                      )!.item_lunchbox_status)
+                              : (widget.game.selectedTools.contains(item.id)
+                                    ? 'Unequip'
+                                    : AppLocalizations.of(context)!.use_item),
+                        ),
                       ),
                     ),
                   ],
