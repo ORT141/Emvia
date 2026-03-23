@@ -40,6 +40,10 @@
     "@calmed": {
         "description": "Player's statement after successfully calming down, noting the quieter environment."
     },
+    "stress_intro_caption": "This is your stress level.\nYou can reduce it with items.",
+    "@stress_intro_caption": {
+        "description": "Caption shown under the stress meter when it first appears in the corridor."
+    },
     "inhale": "inhale",
     "@inhale": {
         "description": "Instruction or label for the breathing in action."

@@ -40,6 +40,10 @@
     "@calmed": {
         "description": "Player's statement after successfully calming down, noting the quieter environment."
     },
+    "stress_intro_caption": "Це ваш рівень стресу.\nЙого можна зменшити речами.",
+    "@stress_intro_caption": {
+        "description": "Caption shown under the stress meter when it first appears in the corridor."
+    },
     "inhale": "вдих",
     "@inhale": {
         "description": "Instruction or label for the breathing in action."

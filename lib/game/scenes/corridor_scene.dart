@@ -114,6 +114,10 @@ class CorridorScene extends GameScene {
       _peopleForegroundOverlay = null;
     }
 
+    if (game.isCorridorStressIntroActive) {
+      game.isFrozen = true;
+    }
+
     if (game.stressLevel >= 30 && !game.overlays.isActive('Stress')) {
       game.overlays.add('Stress');
     }

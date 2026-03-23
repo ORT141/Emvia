@@ -39,6 +39,10 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get calmed => 'Phew... it\'s quieter now. moving on';
 
   @override
+  String get stress_intro_caption =>
+      'This is your stress level.\nYou can reduce it with items.';
+
+  @override
   String get inhale => 'inhale';
 
   @override

@@ -158,6 +158,12 @@ abstract class AppLocalizationsGen {
   /// **'Phew... it\'s quieter now. moving on'**
   String get calmed;
 
+  /// Caption shown under the stress meter when it first appears in the corridor.
+  ///
+  /// In en, this message translates to:
+  /// **'This is your stress level.\nYou can reduce it with items.'**
+  String get stress_intro_caption;
+
   /// Instruction or label for the breathing in action.
   ///
   /// In en, this message translates to:

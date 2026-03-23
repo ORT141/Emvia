@@ -62,6 +62,8 @@ class EmviaGame extends FlameGame
 
   bool hasTriggeredStressScene = false;
   double? _savedCorridorReturnX;
+  bool _hasShownCorridorStressIntro = false;
+  bool _isCorridorStressIntroActive = false;
 
   int get sceneIndex => _session.sceneIndex;
   set sceneIndex(int value) => _session.sceneIndex = value;
@@ -70,6 +72,8 @@ class EmviaGame extends FlameGame
   set stressLevel(int value) => _session.stressLevel = value;
 
   ValueNotifier<int> get stressNotifier => _session.stressNotifier;
+
+  bool get isCorridorStressIntroActive => _isCorridorStressIntroActive;
 
   PlayableCharacter get selectedCharacter => _session.selectedCharacter;
   set selectedCharacter(PlayableCharacter value) =>
@@ -149,15 +153,26 @@ class EmviaGame extends FlameGame
   }
 
   Future<void> goToCorridor() async {
+    if (stressLevel >= 30 && !_hasShownCorridorStressIntro) {
+      _hasShownCorridorStressIntro = true;
+      _isCorridorStressIntroActive = true;
+    }
+
     await loadScene(
       CorridorScene(),
       onFullOpacity: () {
         sceneIndex = 4;
         overlays.remove('TapGame');
-        showMobileControls();
       },
     );
-    isFrozen = false;
+
+    if (_isCorridorStressIntroActive) {
+      isFrozen = true;
+      hideMobileControls();
+    } else {
+      isFrozen = false;
+      showMobileControls();
+    }
   }
 
   Future<void> transitionToCorridor() async {
@@ -223,6 +238,7 @@ class EmviaGame extends FlameGame
   bool _canToggleBackpack() {
     if (sceneIndex == 0) return false;
     if (transitionManager.isTransitioning) return false;
+    if (_isCorridorStressIntroActive) return false;
     if (overlays.isActive('MainMenu') || overlays.isActive('Pause')) {
       return false;
     }
@@ -451,9 +467,18 @@ class EmviaGame extends FlameGame
     stressLevel = 100;
     sceneIndex = 0;
     hasTriggeredStressScene = false;
+    _hasShownCorridorStressIntro = false;
+    _isCorridorStressIntroActive = false;
     hideMobileControls();
     overlays.remove('Stress');
     overlays.remove('TapGame');
+  }
+
+  void completeCorridorStressIntro() {
+    if (!_isCorridorStressIntroActive) return;
+    _isCorridorStressIntroActive = false;
+    isFrozen = false;
+    showMobileControls();
   }
 
   void playerToCorridorEntrance() {
