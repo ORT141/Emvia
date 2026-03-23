@@ -1,3 +1,4 @@
+// import 'package:device_preview/device_preview.dart';
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/game/components/path_detail_component.dart';
 import 'package:emvia/overlays/calm_map_overlay.dart';
@@ -23,8 +24,16 @@ import 'l10n/app_localizations_gen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FlameAudio.audioCache.prefix = 'assets/sounds/';
+  
   await Flame.device.fullScreen();
   await Flame.device.setLandscape();
+  
+  //runApp(
+  //  DevicePreview(
+  //    builder: (context) => MyApp(),
+  //  ),
+  //);
+
   runApp(const MyApp());
 }
 

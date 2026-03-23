@@ -24,6 +24,16 @@ class CorridorScene extends GameScene {
 
   final List<SpriteComponent> _patternSprites = [];
 
+  List<Vector2> get patternPositions =>
+      _patternSprites.map((sp) => sp.position.clone()).toList();
+
+  Vector2 get backpackWorldMin =>
+      Vector2(_uvWorldX(_backpackMinUV.x), _uvWorldY(_backpackMinUV.y));
+  Vector2 get backpackWorldMax =>
+      Vector2(_uvWorldX(_backpackMaxUV.x), _uvWorldY(_backpackMaxUV.y));
+  double get patternWorldStartX => _uvWorldX(_patternStartUVx);
+  double get patternWorldEndX => _uvWorldX(_patternEndUVx);
+
   @override
   double worldWidthForViewport(Vector2 viewportSize) {
     if (background.sprite?.srcSize != null &&
@@ -58,6 +68,18 @@ class CorridorScene extends GameScene {
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
       Vector2(180, viewportSize.y * 0.78);
 
+  static const _stressTriggerUVx = 0.1591;
+  static const _lockerPromptUVx = 0.2688;
+  static final _backpackMinUV = Vector2(0.2743, 0.6113);
+  static final _backpackMaxUV = Vector2(0.2919, 0.7063);
+  static const _patternStartUVx = 0.4545;
+  static const _patternEndUVx = 0.8648;
+  static const _patternStartUVy = 0.0909;
+  static const _patternEndUVy = 0.5261;
+
+  double _uvWorldX(double u) => background.position.x + u * background.size.x;
+  double _uvWorldY(double v) => background.position.y + v * background.size.y;
+
   @override
   void onTapDown(TapDownEvent event) {
     if (game.overlays.isActive('TapGame')) {
@@ -69,10 +91,10 @@ class CorridorScene extends GameScene {
     final zoom = game.worldRoot.scale.x;
     final worldPos = (screenPos - worldOffset) / zoom;
 
-    const minX = 1210.0;
-    const minY = 397.3;
-    const maxX = 1369.1;
-    const maxY = 494.5;
+    final minX = _uvWorldX(_backpackMinUV.x);
+    final minY = _uvWorldY(_backpackMinUV.y);
+    final maxX = _uvWorldX(_backpackMaxUV.x);
+    final maxY = _uvWorldY(_backpackMaxUV.y);
 
     if (worldPos.x >= minX &&
         worldPos.x <= maxX &&
@@ -129,18 +151,18 @@ class CorridorScene extends GameScene {
   }
 
   bool _stressSceneTriggered = false;
-  static const _stressTriggerX = 800.0;
 
   @override
   void update(double dt) {
     super.update(dt);
 
     final playerX = game.olya.position.x;
+    final stressTriggerX = _uvWorldX(_stressTriggerUVx);
 
     if (!_stressSceneTriggered &&
         !game.transitionManager.isTransitioning &&
         !game.hasTriggeredStressScene &&
-        playerX >= _stressTriggerX) {
+        playerX >= stressTriggerX) {
       _stressSceneTriggered = true;
       game.hasTriggeredStressScene = true;
       game.saveCorridorReturnPosition(playerX);
@@ -154,7 +176,7 @@ class CorridorScene extends GameScene {
       return;
     }
 
-    const lockerX = 1228.0;
+    final lockerX = _uvWorldX(_lockerPromptUVx);
     if (!_lockerPromptShown && playerX >= lockerX) {
       _lockerPromptShown = true;
       game.isFrozen = true;
@@ -183,11 +205,11 @@ class CorridorScene extends GameScene {
       final worldH = game.size.y;
       final patternSize = worldH * 0.11;
       final spacing = patternSize * 1.1;
-      final minY = worldH * 0.13;
-      final maxY = worldH * 0.5;
+      final minY = _uvWorldY(_patternStartUVy);
+      final maxY = _uvWorldY(_patternEndUVy);
 
-      final startX = 2100.0;
-      final endX = 3500.0;
+      final startX = _uvWorldX(_patternStartUVx);
+      final endX = _uvWorldX(_patternEndUVx);
       final areaWidth = endX - startX;
       final count = (areaWidth / spacing).floor();
 

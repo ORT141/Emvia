@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:emvia/game/emvia_types.dart';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:emvia/l10n/app_localizations.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/widgets.dart';
@@ -50,6 +49,19 @@ class PathChoiceScene extends GameScene {
 
   double get bgHeight => _bgHeight > 0 ? _bgHeight : game.size.y;
 
+  @override
+  void layoutToWorld() {
+    game.cameraManager.zoom = 1.0;
+    game.worldRoot.scale = Vector2.all(1.0);
+    game.worldRoot.size = game.size.clone();
+
+    if (_pathBgSrcSize != null && foreground?.opacity == 0) {
+      final covered = _coverSize(_pathBgSrcSize!, game.size);
+      background.size = covered;
+      background.position = _coverPosition(covered, game.size);
+    }
+  }
+
   Vector2 _coverSize(Vector2 src, Vector2 target) {
     final scale = math.max(target.x / src.x, target.y / src.y);
     return Vector2(src.x * scale, src.y * scale);
@@ -84,9 +96,9 @@ class PathChoiceScene extends GameScene {
     } catch (_) {}
 
     await showMarks([
-      Vector2(559.2 / game.size.x, 204.8 / game.size.y),
-      Vector2(624.1 / game.size.x, 260.8 / game.size.y),
-      Vector2(670.0 / game.size.x, 321.9 / game.size.y),
+      Vector2(0.4346, 0.3160),
+      Vector2(0.4865, 0.3793),
+      Vector2(0.5225, 0.4526),
     ]);
   }
 
@@ -122,7 +134,12 @@ class PathChoiceScene extends GameScene {
     _marks.addAll(marksNormalized);
 
     for (var i = 0; i < _marks.length; i++) {
-      final pos = Vector2(_marks[i].x * game.size.x, _marks[i].y * game.size.y);
+      final pos =
+          background.position +
+          Vector2(
+            _marks[i].x * background.size.x,
+            _marks[i].y * background.size.y,
+          );
       final mark = PathMark(
         index: i,
         position: pos,
@@ -213,26 +230,15 @@ class PathChoiceScene extends GameScene {
         _pathOverlay!.size = covered;
         _pathOverlay!.position = _coverPosition(covered, size);
       }
-      if (foreground?.opacity == 0 && _pathBgSrcSize != null) {
-        final covered = _coverSize(_pathBgSrcSize!, size);
-        background.size = covered;
-        background.position = _coverPosition(covered, size);
-      } else {
-        background.size = Vector2(game.worldRoot.size.x, bgHeight);
-        background.position = Vector2.zero();
-        foreground?.size = Vector2(game.worldRoot.size.x, bgHeight);
-      }
       for (var i = 0; i < _marks.length; i++) {
         final m = _marks[i];
-        final screenPos = Vector2(m.x * size.x, m.y * size.y);
         final mark = _markCircles.length > i ? _markCircles[i] : null;
         if (mark != null) {
-          mark.position = screenPos;
+          mark.position =
+              background.position +
+              Vector2(m.x * background.size.x, m.y * background.size.y);
         }
       }
     }
   }
-
-  @override
-  void onTapDown(TapDownEvent event) {}
 }

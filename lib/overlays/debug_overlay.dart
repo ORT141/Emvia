@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../game/emvia_game.dart';
 import '../game/scenes/classroom_scene.dart';
@@ -136,6 +137,49 @@ class DebugOverlay extends StatelessWidget {
                         game.startGameSkippingSurvey();
                       },
                       child: const Text('Skip Survey => Classroom'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                _buildSectionTitle('Debug Tools'),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        final p1 = game.olya.position.clone();
+                        await Future.delayed(const Duration(milliseconds: 120));
+                        final p2 = game.olya.position.clone();
+                        final dx = p2.x - p1.x;
+                        final dy = p2.y - p1.y;
+                        final dist = math.sqrt(dx * dx + dy * dy);
+                        final measuredSpeed = dist / 0.12;
+                        final zoom = game.worldRoot.scale.x;
+                        final worldOffset = game.worldRoot.position;
+                        final screenX =
+                            worldOffset.x + game.olya.position.x * zoom;
+                        final screenY =
+                            worldOffset.y + game.olya.position.y * zoom;
+                        debugPrint(
+                          'PLAYER world=(${game.olya.position.x.toStringAsFixed(1)}, ${game.olya.position.y.toStringAsFixed(1)}) size=(${game.olya.size.x.toStringAsFixed(1)}, ${game.olya.size.y.toStringAsFixed(1)})',
+                        );
+                        debugPrint(
+                          'PLAYER screen=(${screenX.toStringAsFixed(1)}, ${screenY.toStringAsFixed(1)}) zoom=${zoom.toStringAsFixed(3)} measured_speed=${measuredSpeed.toStringAsFixed(1)}',
+                        );
+                      },
+                      child: const Text('Print Player Info'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        game.setDebugTapEnabled(!game.debugTapEnabled);
+                        debugPrint('Debug tap mode: ${game.debugTapEnabled}');
+                      },
+                      child: Text(
+                        game.debugTapEnabled
+                            ? 'Disable Tap Debug'
+                            : 'Enable Tap Debug',
+                      ),
                     ),
                   ],
                 ),

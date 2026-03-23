@@ -212,6 +212,12 @@ class EmviaGame extends FlameGame
   bool get isBackpackOpen => overlays.isActive('Backpack');
   bool get isDebugOpen => overlays.isActive('Debug');
 
+  bool debugTapEnabled = false;
+
+  void setDebugTapEnabled(bool enabled) {
+    debugTapEnabled = enabled;
+  }
+
   void toggleBackpack() {
     if (!_canToggleBackpack()) return;
     if (isBackpackOpen) {
@@ -586,12 +592,36 @@ class EmviaGame extends FlameGame
 
   @override
   void onTapDown(TapDownEvent event) {
+    final pos = event.localPosition;
     if (!overlays.isActive('Pause') && !overlays.isActive('MainMenu')) {
-      final pos = event.localPosition;
       if (pos.x > size.x - 60 && pos.y < 60) {
         pauseGame();
       }
     }
+
+    if (debugTapEnabled) {
+      final local = event.localPosition;
+      final worldOffset = worldRoot.position;
+      final zoom = worldRoot.scale.x;
+      final worldPos = (local - worldOffset) / zoom;
+
+      String bgInfo = 'background not ready';
+      if (currentScene != null &&
+          currentScene!.background.sprite != null &&
+          currentScene!.background.size.x > 0 &&
+          currentScene!.background.size.y > 0) {
+        final bgPos = currentScene!.background.position;
+        final bgSize = currentScene!.background.size;
+        final u = (worldPos.x - bgPos.x) / bgSize.x;
+        final v = (worldPos.y - bgPos.y) / bgSize.y;
+        bgInfo = 'uv=(${u.toStringAsFixed(4)}, ${v.toStringAsFixed(4)})';
+      }
+
+      debugPrint(
+        'TAP $bgInfo screen=(${local.x.toStringAsFixed(1)}, ${local.y.toStringAsFixed(1)}) world=(${worldPos.x.toStringAsFixed(1)}, ${worldPos.y.toStringAsFixed(1)})',
+      );
+    }
+
     currentScene?.onTapDown(event);
   }
 

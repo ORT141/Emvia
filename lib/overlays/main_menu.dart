@@ -58,30 +58,35 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
     final choice = await showDialog<bool>(
       context: context,
       builder: (ctx) {
+        final isSmall = MediaQuery.of(ctx).size.shortestSide < 600;
         return AlertDialog(
           backgroundColor: theme.colorScheme.surface,
+          insetPadding: EdgeInsets.symmetric(
+            horizontal: isSmall ? 16.0 : 40.0,
+            vertical: isSmall ? 12.0 : 24.0,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
           content: Padding(
-            padding: const EdgeInsets.all(32),
+            padding: EdgeInsets.all(isSmall ? 16.0 : 32.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
                   Icons.volume_up_rounded,
-                  size: 64,
+                  size: isSmall ? 40.0 : 64.0,
                   color: theme.colorScheme.primary,
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: isSmall ? 12 : 24),
                 Text(
                   loc.sound_question_title,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.headlineSmall?.copyWith(
+                  style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 32),
+                SizedBox(height: isSmall ? 16 : 32),
                 Row(
                   children: [
                     Expanded(
@@ -89,7 +94,9 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.colorScheme.primary,
                           foregroundColor: theme.colorScheme.onPrimary,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: EdgeInsets.symmetric(
+                            vertical: isSmall ? 10.0 : 16.0,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
@@ -102,7 +109,9 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                     Expanded(
                       child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: EdgeInsets.symmetric(
+                            vertical: isSmall ? 10.0 : 16.0,
+                          ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),
@@ -135,8 +144,13 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (context, setModalState) {
+          final isSmall = MediaQuery.of(ctx).size.shortestSide < 600;
           return AlertDialog(
             backgroundColor: theme.colorScheme.surface,
+            insetPadding: EdgeInsets.symmetric(
+              horizontal: isSmall ? 12.0 : 40.0,
+              vertical: isSmall ? 8.0 : 24.0,
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -156,6 +170,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                     _CharacterSelectBar(
                       game: widget.game,
                       selectedCharacter: pendingCharacter,
+                      compact: isSmall,
                       onCharacterSelected: (character) {
                         setModalState(() {
                           pendingCharacter = character;
@@ -269,13 +284,18 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isSmallScreen = constraints.maxWidth < 650;
+          final isShortScreen = constraints.maxHeight < 500;
 
-          final double topButtonWidth = isSmallScreen ? 72.0 : 86.0;
-          final double topGap = isSmallScreen ? 16.0 : 16.0;
-          final double logoWidth = isSmallScreen ? 240.0 : 280.0;
-          final double menuButtonWidth = isSmallScreen ? 260.0 : 280.0;
-          final double menuButtonMinHeight = isSmallScreen ? 64.0 : 64.0;
-          final double footerFontSize = isSmallScreen ? 14.0 : 16.0;
+          final double topButtonWidth = isSmallScreen ? 64.0 : 86.0;
+          final double topGap = 12.0;
+          final double logoWidth = isShortScreen
+              ? 140.0
+              : isSmallScreen
+              ? 240.0
+              : 280.0;
+          final double menuButtonWidth = isSmallScreen ? 240.0 : 280.0;
+          final double menuButtonMinHeight = 56.0;
+          final double footerFontSize = isSmallScreen ? 13.0 : 16.0;
 
           return Stack(
             children: [
@@ -308,45 +328,56 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                     : Alignment.centerLeft,
                 child: SizedBox(
                   width: isSmallScreen ? constraints.maxWidth : 460.0,
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverFillRemaining(
-                        hasScrollBody: false,
+                  child: SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight,
+                      ),
+                      child: IntrinsicHeight(
                         child: SafeArea(
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                              horizontal: isSmallScreen ? 24.0 : 40.0,
-                              vertical: isSmallScreen ? 24.0 : 32.0,
+                              horizontal: isSmallScreen ? 20.0 : 40.0,
+                              vertical: isShortScreen
+                                  ? 6.0
+                                  : isSmallScreen
+                                  ? 20.0
+                                  : 32.0,
                             ),
                             child: Column(
+                              mainAxisSize: MainAxisSize.max,
                               crossAxisAlignment: isSmallScreen
                                   ? CrossAxisAlignment.center
                                   : CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  mainAxisAlignment: isSmallScreen
-                                      ? MainAxisAlignment.center
-                                      : MainAxisAlignment.start,
-                                  children: [
-                                    _TopImageButton(
-                                      onTap: _openSettings,
-                                      assetPath:
-                                          'assets/images/main-menu/settings-main-menu.png',
-                                      width: topButtonWidth,
-                                    ),
-                                    SizedBox(width: topGap),
-                                    _TopImageButton(
-                                      onTap: widget.onThemeToggled,
-                                      assetPath:
-                                          'assets/images/main-menu/theme-switch-main-menu.png',
-                                      width: topButtonWidth,
-                                    ),
-                                    SizedBox(width: topGap),
-                                    _LanguageButton(
-                                      onSelected: _switchLanguage,
-                                      width: topButtonWidth,
-                                    ),
-                                  ],
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: isSmallScreen
+                                      ? Alignment.center
+                                      : Alignment.centerLeft,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      _TopImageButton(
+                                        onTap: _openSettings,
+                                        assetPath:
+                                            'assets/images/main-menu/settings-main-menu.png',
+                                        width: topButtonWidth,
+                                      ),
+                                      SizedBox(width: topGap),
+                                      _TopImageButton(
+                                        onTap: widget.onThemeToggled,
+                                        assetPath:
+                                            'assets/images/main-menu/theme-switch-main-menu.png',
+                                        width: topButtonWidth,
+                                      ),
+                                      SizedBox(width: topGap),
+                                      _LanguageButton(
+                                        onSelected: _switchLanguage,
+                                        width: topButtonWidth,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 const Spacer(),
                                 Center(
@@ -367,7 +398,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 32),
+                                SizedBox(height: isShortScreen ? 6 : 32),
                                 Align(
                                   alignment: isSmallScreen
                                       ? Alignment.center
@@ -384,7 +415,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                                         width: menuButtonWidth,
                                         minHeight: menuButtonMinHeight,
                                       ),
-                                      const SizedBox(height: 16),
+                                      SizedBox(height: isShortScreen ? 8 : 16),
                                       _ImageMenuButton(
                                         assetPath:
                                             'assets/images/main-menu/continue-main-menu.png',
@@ -398,51 +429,55 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                                   ),
                                 ),
                                 const Spacer(flex: 2),
-                                Row(
-                                  mainAxisAlignment: isSmallScreen
-                                      ? MainAxisAlignment.center
-                                      : MainAxisAlignment.start,
-                                  children: [
-                                    TextButton(
-                                      onPressed: _openCredits,
-                                      style: TextButton.styleFrom(
-                                        foregroundColor: Colors.white70,
-                                        textStyle: TextStyle(
-                                          fontSize: footerFontSize,
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: isSmallScreen
+                                      ? Alignment.center
+                                      : Alignment.centerLeft,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextButton(
+                                        onPressed: _openCredits,
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: Colors.white70,
+                                          textStyle: TextStyle(
+                                            fontSize: footerFontSize,
+                                          ),
+                                        ),
+                                        child: Text(loc.credits),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.symmetric(
+                                          horizontal: topGap,
+                                        ),
+                                        width: 4,
+                                        height: 4,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white54,
+                                          shape: BoxShape.circle,
                                         ),
                                       ),
-                                      child: Text(loc.credits),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.symmetric(
-                                        horizontal: topGap,
-                                      ),
-                                      width: 4,
-                                      height: 4,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.white54,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: _confirmExit,
-                                      style: TextButton.styleFrom(
-                                        foregroundColor: Colors.redAccent
-                                            .withValues(alpha: 0.8),
-                                        textStyle: TextStyle(
-                                          fontSize: footerFontSize,
+                                      TextButton(
+                                        onPressed: _confirmExit,
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: Colors.redAccent
+                                              .withValues(alpha: 0.8),
+                                          textStyle: TextStyle(
+                                            fontSize: footerFontSize,
+                                          ),
                                         ),
+                                        child: Text(loc.exit),
                                       ),
-                                      child: Text(loc.exit),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -569,11 +604,13 @@ class _CharacterSelectBar extends StatefulWidget {
   final EmviaGame game;
   final PlayableCharacter? selectedCharacter;
   final ValueChanged<PlayableCharacter> onCharacterSelected;
+  final bool compact;
 
   const _CharacterSelectBar({
     required this.game,
     required this.selectedCharacter,
     required this.onCharacterSelected,
+    this.compact = false,
   });
 
   @override
@@ -623,8 +660,12 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
         ? _characterCardData(selectedCharacter)
         : null;
 
+    final bool compact = widget.compact;
+    final double ghostWidth = compact ? 68.0 : 84.0;
+    final double ghostImageHeight = compact ? 56.0 : 76.0;
+
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(compact ? 8 : 12),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(16),
@@ -636,14 +677,15 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
             'Герої',
             style: GoogleFonts.baloo2(
               fontWeight: FontWeight.w700,
+              fontSize: compact ? 13 : null,
               color: theme.colorScheme.onSurface,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: compact ? 8 : 12),
           Wrap(
             alignment: WrapAlignment.center,
-            spacing: 12,
-            runSpacing: 12,
+            spacing: compact ? 8 : 12,
+            runSpacing: compact ? 8 : 12,
             children: [
               _CharacterGhost(
                 imagePath: 'player-selecting/olya_ghost.png',
@@ -652,6 +694,8 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
                 selected: selectedCharacter == PlayableCharacter.olya,
                 hovered: _hoveredCharacter == PlayableCharacter.olya,
                 locked: false,
+                width: ghostWidth,
+                imageHeight: ghostImageHeight,
                 onHoverChanged: (isHovering) {
                   setState(() {
                     _hoveredCharacter = isHovering
@@ -681,6 +725,8 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
                 selected: selectedCharacter == PlayableCharacter.liam,
                 hovered: _hoveredCharacter == PlayableCharacter.liam,
                 locked: true,
+                width: ghostWidth,
+                imageHeight: ghostImageHeight,
                 onHoverChanged: (isHovering) {
                   setState(() {
                     _hoveredCharacter = isHovering
@@ -710,6 +756,8 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
                 selected: selectedCharacter == PlayableCharacter.olenka,
                 hovered: _hoveredCharacter == PlayableCharacter.olenka,
                 locked: true,
+                width: ghostWidth,
+                imageHeight: ghostImageHeight,
                 onHoverChanged: (isHovering) {
                   setState(() {
                     _hoveredCharacter = isHovering
@@ -740,6 +788,8 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
                 selected: selectedCharacter == PlayableCharacter.anton,
                 hovered: _hoveredCharacter == PlayableCharacter.anton,
                 locked: true,
+                width: ghostWidth,
+                imageHeight: ghostImageHeight,
                 onHoverChanged: (isHovering) {
                   setState(() {
                     _hoveredCharacter = isHovering
@@ -765,8 +815,8 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          _CharacterInfoCard(data: selectedCard),
+          SizedBox(height: compact ? 8 : 16),
+          _CharacterInfoCard(data: selectedCard, compact: compact),
         ],
       ),
     );
@@ -829,8 +879,9 @@ class _CharacterCardData {
 
 class _CharacterInfoCard extends StatelessWidget {
   final _CharacterCardData? data;
+  final bool compact;
 
-  const _CharacterInfoCard({required this.data});
+  const _CharacterInfoCard({required this.data, this.compact = false});
 
   @override
   Widget build(BuildContext context) {
@@ -838,7 +889,7 @@ class _CharacterInfoCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(compact ? 8 : 12),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
@@ -894,6 +945,8 @@ class _CharacterGhost extends StatelessWidget {
   final bool selected;
   final bool hovered;
   final bool locked;
+  final double width;
+  final double imageHeight;
   final ValueChanged<bool>? onHoverChanged;
   final VoidCallback? onTap;
 
@@ -904,6 +957,8 @@ class _CharacterGhost extends StatelessWidget {
     required this.selected,
     required this.hovered,
     required this.locked,
+    this.width = 84,
+    this.imageHeight = 76,
     this.onHoverChanged,
     this.onTap,
   });
@@ -923,8 +978,8 @@ class _CharacterGhost extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(12),
           child: Ink(
-            width: 84,
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            width: width,
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
@@ -952,7 +1007,7 @@ class _CharacterGhost extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  height: 76,
+                  height: imageHeight,
                   child: Stack(
                     children: [
                       Center(

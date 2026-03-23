@@ -78,6 +78,8 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
   }
 
   void _layoutScrolling(double viewportW, double viewportH) {
+    final worldW = worldWidthForViewport(game.size);
+
     if (background.sprite?.srcSize != null &&
         background.sprite!.srcSize.x > 0 &&
         background.sprite!.srcSize.y > 0) {
@@ -85,18 +87,22 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
 
       final scale = viewportH / src.y;
       final contentW = src.x * scale;
-      final worldW = worldWidthForViewport(game.size);
+
+      final double bgW = math.max(contentW, worldW.toDouble());
+      final double bgH = bgW > contentW
+          ? math.max(viewportH, bgW * src.y / src.x)
+          : viewportH;
 
       background
-        ..size = Vector2(contentW, viewportH)
+        ..size = Vector2(bgW, bgH)
         ..position = Vector2.zero();
 
-      game.worldRoot.size = Vector2(worldW, viewportH);
+      game.worldRoot.size = Vector2(worldW, math.max(viewportH, bgH));
     } else {
-      final w = worldWidthForViewport(game.size);
       background
-        ..size = Vector2(w, viewportH)
+        ..size = Vector2(worldW, viewportH)
         ..position = Vector2.zero();
+      game.worldRoot.size = Vector2(worldW, viewportH);
     }
 
     for (final foreground in foregrounds) {
@@ -106,13 +112,16 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
         final src = foreground.sprite!.srcSize;
         final scale = viewportH / src.y;
         final contentW = src.x * scale;
+        final double fgW = math.max(contentW, worldW.toDouble());
+        final double fgH = fgW > contentW
+            ? math.max(viewportH, fgW * src.y / src.x)
+            : viewportH;
         foreground
-          ..size = Vector2(contentW, viewportH)
+          ..size = Vector2(fgW, fgH)
           ..position = Vector2.zero();
       } else {
-        final w = worldWidthForViewport(game.size);
         foreground
-          ..size = Vector2(w, viewportH)
+          ..size = Vector2(worldW, viewportH)
           ..position = Vector2.zero();
       }
     }
