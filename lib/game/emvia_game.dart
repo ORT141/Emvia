@@ -61,6 +61,7 @@ class EmviaGame extends FlameGame
   }
 
   bool hasTriggeredStressScene = false;
+  double? _savedCorridorReturnX;
 
   int get sceneIndex => _session.sceneIndex;
   set sceneIndex(int value) => _session.sceneIndex = value;
@@ -164,11 +165,11 @@ class EmviaGame extends FlameGame
       CorridorScene(),
       onFullOpacity: () {
         overlays.remove('TapGame');
-        playerToCorridorEntrance();
       },
     );
     sceneIndex = 4;
     olya.opacity = 1;
+    restoreCorridorPosition();
     showMobileControls();
     isFrozen = false;
   }
@@ -457,6 +458,28 @@ class EmviaGame extends FlameGame
 
   void playerToCorridorEntrance() {
     olya.position.x = olya.size.x / 2 + 10;
+    cameraManager.snapToPlayer(force: true);
+  }
+
+  void saveCorridorReturnPosition(double x) {
+    _savedCorridorReturnX = x;
+  }
+
+  void restoreCorridorPosition() {
+    final savedX = _savedCorridorReturnX;
+    _savedCorridorReturnX = null;
+
+    if (savedX == null) {
+      playerToCorridorEntrance();
+      return;
+    }
+
+    final minX = olya.size.x / 2;
+    final maxX = worldRoot.size.x - olya.size.x / 2;
+    olya.position.x = savedX.clamp(minX, maxX).toDouble();
+    if (currentScene != null) {
+      olya.position.y = currentScene!.spawnPoint(size, worldRoot.size).y;
+    }
     cameraManager.snapToPlayer(force: true);
   }
 

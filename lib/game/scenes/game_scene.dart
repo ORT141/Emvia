@@ -9,20 +9,24 @@ enum SceneScalingMode { stretch, scrolling }
 
 abstract class GameScene extends Component with HasGameReference<EmviaGame> {
   final String backgroundPath;
-  final String? foregroundPath;
+  final List<String> foregroundPaths;
   final SceneScalingMode scalingMode;
 
   GameScene({
     required this.backgroundPath,
-    this.foregroundPath,
+    String? foregroundPath,
+    List<String>? foregroundPaths,
     this.scalingMode = SceneScalingMode.scrolling,
-  });
+  }) : foregroundPaths = [?foregroundPath, ...?foregroundPaths];
 
   final SpriteComponent background = SpriteComponent()
     ..anchor = Anchor.topLeft
     ..priority = 0;
 
-  SpriteComponent? foreground;
+  final List<SpriteComponent> foregrounds = <SpriteComponent>[];
+
+  SpriteComponent? get foreground =>
+      foregrounds.isNotEmpty ? foregrounds.first : null;
 
   double worldWidthForViewport(Vector2 viewportSize) => EmviaGame.worldWidth;
 
@@ -63,8 +67,9 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
       ..size = size
       ..position = Vector2((viewportW - size.x) / 2, (viewportH - size.y) / 2);
 
-    if (foreground != null && foreground!.sprite?.srcSize != null) {
-      foreground!
+    for (final foreground in foregrounds) {
+      if (foreground.sprite?.srcSize == null) continue;
+      foreground
         ..size = size
         ..position = background.position;
     }
@@ -94,19 +99,19 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
         ..position = Vector2.zero();
     }
 
-    if (foreground != null) {
-      if (foreground!.sprite?.srcSize != null &&
-          foreground!.sprite!.srcSize.x > 0 &&
-          foreground!.sprite!.srcSize.y > 0) {
-        final src = foreground!.sprite!.srcSize;
+    for (final foreground in foregrounds) {
+      if (foreground.sprite?.srcSize != null &&
+          foreground.sprite!.srcSize.x > 0 &&
+          foreground.sprite!.srcSize.y > 0) {
+        final src = foreground.sprite!.srcSize;
         final scale = viewportH / src.y;
         final contentW = src.x * scale;
-        foreground!
+        foreground
           ..size = Vector2(contentW, viewportH)
           ..position = Vector2.zero();
       } else {
         final w = worldWidthForViewport(game.size);
-        foreground!
+        foreground
           ..size = Vector2(w, viewportH)
           ..position = Vector2.zero();
       }
@@ -123,20 +128,19 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
       add(background);
     }
 
-    if (foregroundPath != null) {
-      foreground ??= SpriteComponent()
+    for (var i = 0; i < foregroundPaths.length; i++) {
+      final foreground = SpriteComponent()
         ..anchor = Anchor.topLeft
-        ..priority = 10;
+        ..priority = 10 + i;
 
-      foreground!.sprite = await game.loadSprite(foregroundPath!);
+      foreground.sprite = await game.loadSprite(foregroundPaths[i]);
 
-      foreground!.paint = Paint()
+      foreground.paint = Paint()
         ..isAntiAlias = true
         ..filterQuality = FilterQuality.high;
 
-      if (!children.contains(foreground)) {
-        add(foreground!);
-      }
+      foregrounds.add(foreground);
+      add(foreground);
     }
 
     layoutToWorld();
@@ -149,7 +153,10 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
 
   @override
   void onRemove() {
-    foreground?.removeFromParent();
+    for (final foreground in foregrounds) {
+      foreground.removeFromParent();
+    }
+    foregrounds.clear();
     super.onRemove();
   }
 

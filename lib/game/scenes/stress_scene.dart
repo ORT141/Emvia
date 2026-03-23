@@ -1,7 +1,8 @@
-import 'dart:math' as math;
 import 'dart:ui' show Paint;
 
 import 'package:flame/components.dart';
+import 'package:flame/rendering.dart';
+import 'package:flutter/foundation.dart';
 
 import 'game_scene.dart';
 
@@ -36,6 +37,8 @@ class StressScene extends GameScene {
       paint: Paint()..color = game.surveyProfile.safeColorValue.withAlpha(32),
     );
     add(_ambientOverlay!);
+
+    _applyBackgroundTint();
 
     foreground?.priority = 2;
 
@@ -76,18 +79,15 @@ class StressScene extends GameScene {
   void _startTransitionToCorridor() {
     if (_transitioning) return;
     _transitioning = true;
-    try {
-      game.olya.position.x = 800.0;
-    } catch (_) {}
     game.transitionToCorridor();
   }
 
   @override
   void layoutToWorld() {
-    super.layoutToWorld();
-
     final viewportW = game.size.x;
     final viewportH = game.size.y;
+
+    game.worldRoot.size = Vector2(viewportW, viewportH);
 
     _ambientOverlay
       ?..size = Vector2(viewportW, viewportH)
@@ -95,17 +95,42 @@ class StressScene extends GameScene {
 
     if (background.sprite?.srcSize != null) {
       final src = background.sprite!.srcSize;
-      final scale = math.max(viewportW / src.x, viewportH / src.y);
+      final scale = viewportW / src.x;
       final size = Vector2(src.x * scale, src.y * scale);
+      final position = Vector2(0, (viewportH - size.y) / 2);
+
+      background
+        ..size = size
+        ..position = position;
+
+      for (final foreground in foregrounds) {
+        foreground
+          ..size = size
+          ..position = position;
+      }
 
       for (final comp in [_silhouettesComponent, _olyaComponent]) {
         comp
           ?..size = size
-          ..position = Vector2(
-            (viewportW - size.x) / 2,
-            (viewportH - size.y) / 2,
-          );
+          ..position = position;
       }
     }
+  }
+
+  @override
+  @mustCallSuper
+  void redrawScene() {
+    _applyBackgroundTint();
+    super.redrawScene();
+  }
+
+  void _applyBackgroundTint() {
+    final color = game.surveyProfile.safeColorValue;
+    try {
+      background.decorator.removeLast();
+    } catch (_) {}
+    try {
+      background.decorator.addLast(PaintDecorator.tint(color));
+    } catch (_) {}
   }
 }

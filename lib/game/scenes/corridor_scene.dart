@@ -139,6 +139,7 @@ class CorridorScene extends GameScene {
         playerX >= _stressTriggerX) {
       _stressSceneTriggered = true;
       game.hasTriggeredStressScene = true;
+      game.saveCorridorReturnPosition(playerX);
       game.loadScene(
         StressScene(),
         onFullOpacity: () {

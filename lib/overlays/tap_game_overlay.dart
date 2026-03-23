@@ -91,6 +91,8 @@ class _TapGameOverlayState extends State<TapGameOverlay>
                   color: Colors.white.withValues(alpha: 0.9),
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none,
+                  decorationColor: Colors.transparent,
                   shadows: [
                     Shadow(
                       color: (isNearingEnd ? Colors.orange : Colors.cyan)
