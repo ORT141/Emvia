@@ -18,10 +18,6 @@ class TransitionManager {
 
     await game.fadeOverlay.fadeIn(0.4);
 
-    if (onFullOpacity != null) {
-      onFullOpacity();
-    }
-
     if (game.currentScene != null) {
       game.currentScene!.removeFromParent();
     }
@@ -62,6 +58,11 @@ class TransitionManager {
     }
 
     game.olya.position = game.sceneSpawnPoint(scene, game.size, game.worldRoot);
+
+    if (onFullOpacity != null) {
+      onFullOpacity();
+    }
+
     game.cameraManager.snapToPlayer(force: true);
 
     scene.onGameResize(game.size);

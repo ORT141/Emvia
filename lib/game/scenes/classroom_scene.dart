@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui' show BlendMode, Paint;
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -24,6 +25,7 @@ class ClassroomScene extends GameScene with TapCallbacks {
 
   SpriteComponent? _pathOverlay;
   Vector2? _pathBgSrcSize;
+  SpriteComponent? _shadowsOverlay;
 
   final List<Vector2> _marks = <Vector2>[];
   final List<PathMark> _markCircles = <PathMark>[];
@@ -72,6 +74,20 @@ class ClassroomScene extends GameScene with TapCallbacks {
     background.position = Vector2.zero();
     foreground?.size = Vector2(game.worldRoot.size.x, bgHeight);
     foreground?.position = Vector2.zero();
+
+    try {
+      final shadowsSprite = await game.loadSprite(
+        'scenes/classroom/shadows.png',
+      );
+      _shadowsOverlay = SpriteComponent(
+        sprite: shadowsSprite,
+        size: Vector2(game.worldRoot.size.x, bgHeight),
+        anchor: Anchor.topLeft,
+        position: Vector2.zero(),
+        paint: Paint()..blendMode = BlendMode.multiply,
+      );
+      background.add(_shadowsOverlay!);
+    } catch (_) {}
   }
 
   Future<void> showPathImage() async {
@@ -184,6 +200,10 @@ class ClassroomScene extends GameScene with TapCallbacks {
         final covered = _coverSize(overlaySprite.srcSize, size);
         _pathOverlay!.size = covered;
         _pathOverlay!.position = _coverPosition(covered, size);
+      }
+      if (_shadowsOverlay != null) {
+        _shadowsOverlay!.size = background.size;
+        _shadowsOverlay!.position = Vector2.zero();
       }
       if (foreground?.opacity == 0 && _pathBgSrcSize != null) {
         final covered = _coverSize(_pathBgSrcSize!, size);

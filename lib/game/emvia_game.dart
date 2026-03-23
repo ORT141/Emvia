@@ -180,11 +180,11 @@ class EmviaGame extends FlameGame
       CorridorScene(),
       onFullOpacity: () {
         overlays.remove('TapGame');
+        restoreCorridorPosition();
       },
     );
     sceneIndex = 4;
     olya.opacity = 1;
-    restoreCorridorPosition();
     showMobileControls();
     isFrozen = false;
   }
