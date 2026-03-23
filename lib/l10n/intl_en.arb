@@ -44,6 +44,10 @@
     "@stress_intro_caption": {
         "description": "Caption shown under the stress meter when it first appears in the corridor."
     },
+    "stress_intro_watch": "Keep an eye on it",
+    "@stress_intro_watch": {
+        "description": "Short reminder to monitor the stress meter."
+    },
     "inhale": "inhale",
     "@inhale": {
         "description": "Instruction or label for the breathing in action."

@@ -164,6 +164,12 @@ abstract class AppLocalizationsGen {
   /// **'This is your stress level.\nYou can reduce it with items.'**
   String get stress_intro_caption;
 
+  /// Short reminder to monitor the stress meter.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep an eye on it'**
+  String get stress_intro_watch;
+
   /// Instruction or label for the breathing in action.
   ///
   /// In en, this message translates to:

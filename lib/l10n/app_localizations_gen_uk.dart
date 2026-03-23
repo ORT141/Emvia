@@ -43,6 +43,9 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
       'Це ваш рівень стресу.\nЙого можна зменшити речами.';
 
   @override
+  String get stress_intro_watch => 'Слідкуйте за ним';
+
+  @override
   String get inhale => 'вдих';
 
   @override

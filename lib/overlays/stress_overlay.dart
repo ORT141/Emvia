@@ -258,6 +258,33 @@ class _StressOverlayState extends State<StressOverlay>
                                                 ),
                                               ),
                                             ),
+                                            const SizedBox(height: 8),
+                                            Opacity(
+                                              opacity: textOpacity,
+                                              child: IgnorePointer(
+                                                child: Text(
+                                                  l.stress_intro_watch,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.white
+                                                        .withValues(
+                                                          alpha: 0.86,
+                                                        ),
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    height: 1.15,
+                                                    decoration:
+                                                        TextDecoration.none,
+                                                    shadows: const [
+                                                      Shadow(
+                                                        blurRadius: 8,
+                                                        color: Colors.black45,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),

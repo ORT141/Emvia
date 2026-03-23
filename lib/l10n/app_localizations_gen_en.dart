@@ -43,6 +43,9 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
       'This is your stress level.\nYou can reduce it with items.';
 
   @override
+  String get stress_intro_watch => 'Keep an eye on it';
+
+  @override
   String get inhale => 'inhale';
 
   @override
