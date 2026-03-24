@@ -1,13 +1,12 @@
-import 'dart:math' as math;
-
 import 'package:emvia/game/emvia_types.dart';
 import 'package:flame/components.dart';
 import 'package:emvia/l10n/app_localizations.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/widgets.dart';
 
-import '../components/path_mark.dart';
-import 'game_scene.dart';
+import '../../utils/pos_util.dart';
+import 'path_mark.dart';
+import '../game_scene.dart';
 
 class PathChoiceScene extends GameScene {
   PathChoiceScene()
@@ -56,32 +55,26 @@ class PathChoiceScene extends GameScene {
     game.worldRoot.size = game.size.clone();
 
     if (_pathBgSrcSize != null && foreground?.opacity == 0) {
-      final covered = _coverSize(_pathBgSrcSize!, game.size);
+      final covered = calculateCoverSize(_pathBgSrcSize!, game.size);
       background.size = covered;
-      background.position = _coverPosition(covered, game.size);
+      background.position = calculateCoverPosition(covered, game.size);
     }
   }
-
-  Vector2 _coverSize(Vector2 src, Vector2 target) {
-    final scale = math.max(target.x / src.x, target.y / src.y);
-    return Vector2(src.x * scale, src.y * scale);
-  }
-
-  Vector2 _coverPosition(Vector2 covered, Vector2 target) =>
-      Vector2((target.x - covered.x) / 2, (target.y - covered.y) / 2);
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    game.isFrozen = true;
-
     final sprite = await game.loadSprite('scenes/classroom/path.png');
     background.sprite = sprite;
+
     _pathBgSrcSize = sprite.srcSize.clone();
-    final covered = _coverSize(_pathBgSrcSize!, game.size);
+
+    final covered = calculateCoverSize(_pathBgSrcSize!, game.size);
+
     background.size = covered;
-    background.position = _coverPosition(covered, game.size);
+    background.position = calculateCoverPosition(covered, game.size);
+
     foreground?.opacity = 0.0;
 
     background.opacity = 1.0;
@@ -104,8 +97,8 @@ class PathChoiceScene extends GameScene {
 
   Future<void> showPathOverlay(String asset) async {
     final sprite = await game.loadSprite(asset);
-    final covered = _coverSize(sprite.srcSize, game.size);
-    final pos = _coverPosition(covered, game.size);
+    final covered = calculateCoverSize(sprite.srcSize, game.size);
+    final pos = calculateCoverPosition(covered, game.size);
     if (_pathOverlay == null) {
       _pathOverlay = SpriteComponent(
         sprite: sprite,
@@ -226,9 +219,9 @@ class PathChoiceScene extends GameScene {
     if (isLoaded) {
       final overlaySprite = _pathOverlay?.sprite;
       if (overlaySprite != null) {
-        final covered = _coverSize(overlaySprite.srcSize, size);
+        final covered = calculateCoverSize(overlaySprite.srcSize, size);
         _pathOverlay!.size = covered;
-        _pathOverlay!.position = _coverPosition(covered, size);
+        _pathOverlay!.position = calculateCoverPosition(covered, size);
       }
       for (var i = 0; i < _marks.length; i++) {
         final m = _marks[i];

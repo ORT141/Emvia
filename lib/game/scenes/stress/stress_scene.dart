@@ -1,10 +1,8 @@
-import 'dart:ui' show Paint;
-
 import 'package:flame/components.dart';
 import 'package:flame/rendering.dart';
 import 'package:flutter/foundation.dart';
 
-import 'game_scene.dart';
+import '../game_scene.dart';
 
 class StressScene extends GameScene {
   StressScene()
@@ -29,15 +27,6 @@ class StressScene extends GameScene {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    game.isFrozen = true;
-
-    _ambientOverlay = RectangleComponent(
-      anchor: Anchor.topLeft,
-      priority: 1,
-      paint: Paint()..color = game.surveyProfile.safeColorValue.withAlpha(32),
-    );
-    add(_ambientOverlay!);
-
     _applyBackgroundTint();
 
     foreground?.priority = 2;
@@ -59,7 +48,6 @@ class StressScene extends GameScene {
     game.stressLevel = 100;
 
     game.overlays.add('TapGame');
-
     game.overlays.add('Stress');
 
     layoutToWorld();

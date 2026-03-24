@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../game/emvia_game.dart';
-import '../l10n/app_localizations_gen.dart';
+import '../emvia_game.dart';
+import '../../l10n/app_localizations_gen.dart';
 
 class CreditsOverlay extends StatelessWidget {
   final EmviaGame game;

@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flame/components.dart';
+import '../utils/pos_util.dart';
 import '../emvia_game.dart';
 import '../components/player.dart';
 
@@ -50,7 +51,12 @@ class CameraManager {
       final resolvedTargetY = (distY > deadZoneWorld) ? target.y : _cameraPos.y;
 
       final rawTarget = Vector2(resolvedTargetX, resolvedTargetY);
-      final clampedTarget = _clampTargetToWorldBounds(rawTarget);
+      final clampedTarget = clampTargetToWorldBounds(
+        rawTarget,
+        zoom,
+        game.size,
+        game.worldRoot,
+      );
 
       final alpha = 1 - math.exp(-_followSharpness * dt);
       _cameraPos.x += (clampedTarget.x - _cameraPos.x) * alpha;
@@ -83,7 +89,12 @@ class CameraManager {
     if (game.isFrozen && !force) return;
 
     final rawTarget = Vector2(game.olya.position.x, game.olya.position.y);
-    final clamped = _clampTargetToWorldBounds(rawTarget);
+    final clamped = clampTargetToWorldBounds(
+      rawTarget,
+      zoom,
+      game.size,
+      game.worldRoot,
+    );
     _cameraPos.setFrom(clamped);
     _applyToWorld(zoom, 0.0);
   }
@@ -93,42 +104,15 @@ class CameraManager {
 
     final screenCenter = Vector2(game.size.x / 2, game.size.y / 2);
 
-    final cameraWithBob = _clampTargetToWorldBounds(
+    final cameraWithBob = clampTargetToWorldBounds(
       _cameraPos + Vector2(0, bobWorld),
       effectiveZoom,
+      game.size,
+      game.worldRoot,
     );
 
     final worldPos = screenCenter - (cameraWithBob * effectiveZoom);
 
     game.worldRoot.position = worldPos;
-  }
-
-  Vector2 _clampTargetToWorldBounds(Vector2 target, [double? zoomOverride]) {
-    final usedZoom = zoomOverride ?? zoom;
-    final worldWidth = game.worldRoot.size.x;
-    final worldHeight = game.worldRoot.size.y;
-
-    final scaledWorldWidth = worldWidth * usedZoom;
-    final scaledWorldHeight = worldHeight * usedZoom;
-
-    double minX, maxX, minY, maxY;
-
-    if (scaledWorldWidth <= game.size.x) {
-      minX = maxX = worldWidth / 2;
-    } else {
-      final halfVisibleWidth = (game.size.x / 2) / usedZoom;
-      minX = halfVisibleWidth;
-      maxX = worldWidth - halfVisibleWidth;
-    }
-
-    if (scaledWorldHeight <= game.size.y) {
-      minY = maxY = worldHeight / 2;
-    } else {
-      final halfVisibleHeight = (game.size.y / 2) / usedZoom;
-      minY = halfVisibleHeight;
-      maxY = worldHeight - halfVisibleHeight;
-    }
-
-    return Vector2(target.x.clamp(minX, maxX), target.y.clamp(minY, maxY));
   }
 }

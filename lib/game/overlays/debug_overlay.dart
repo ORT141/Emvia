@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import '../game/emvia_game.dart';
-import '../game/scenes/classroom_scene.dart';
-import '../game/scenes/corridor_scene.dart';
+import '../emvia_game.dart';
+import '../scenes/classroom_scene.dart';
+import '../scenes/corridor_scene.dart';
 
 class DebugOverlay extends StatelessWidget {
   final EmviaGame game;
@@ -166,6 +166,9 @@ class DebugOverlay extends StatelessWidget {
                         );
                         debugPrint(
                           'PLAYER screen=(${screenX.toStringAsFixed(1)}, ${screenY.toStringAsFixed(1)}) zoom=${zoom.toStringAsFixed(3)} measured_speed=${measuredSpeed.toStringAsFixed(1)}',
+                        );
+                        debugPrint(
+                          'PLAYER isFrozen=(${game.isFrozen})',
                         );
                       },
                       child: const Text('Print Player Info'),

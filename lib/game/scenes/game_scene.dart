@@ -12,12 +12,21 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
   final List<String> foregroundPaths;
   final SceneScalingMode scalingMode;
 
+  final bool showControls;
+  final bool frozenPlayer;
+
   GameScene({
-    required this.backgroundPath,
+    this.backgroundPath = '',
     String? foregroundPath,
     List<String>? foregroundPaths,
     this.scalingMode = SceneScalingMode.scrolling,
-  }) : foregroundPaths = [?foregroundPath, ...?foregroundPaths];
+    this.showControls = false,
+    this.frozenPlayer = false,
+  }) : foregroundPaths = [
+          if (foregroundPath != null && foregroundPath.isNotEmpty)
+            foregroundPath,
+          ...?foregroundPaths,
+        ];
 
   final SpriteComponent background = SpriteComponent()
     ..anchor = Anchor.topLeft
@@ -129,11 +138,14 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
 
   @override
   Future<void> onLoad() async {
-    background.sprite = await game.loadSprite(backgroundPath);
+    if (backgroundPath.isNotEmpty) {
+      background.sprite = await game.loadSprite(backgroundPath);
+    }
+
     background.paint = Paint()
       ..isAntiAlias = true
       ..filterQuality = FilterQuality.high;
-    if (!children.contains(background)) {
+    if (background.sprite != null && !children.contains(background)) {
       add(background);
     }
 
@@ -153,6 +165,14 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
     }
 
     layoutToWorld();
+
+    if (showControls) {
+      game.showMobileControls();
+    } else {
+      game.hideMobileControls();
+    }
+
+    game.isFrozen = frozenPlayer;
   }
 
   @mustCallSuper

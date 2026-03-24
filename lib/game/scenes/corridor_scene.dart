@@ -4,17 +4,20 @@ import 'package:flame/events.dart';
 import 'package:flame/rendering.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/pos_util.dart';
 import 'game_scene.dart';
-import 'stress_scene.dart';
+import 'stress/stress_scene.dart';
 
 import 'package:emvia/l10n/app_localizations_gen.dart';
-import '../dialog_model.dart';
+import '../dialog/dialog_model.dart';
 
 class CorridorScene extends GameScene {
   CorridorScene()
     : super(
         backgroundPath: 'scenes/corridor/wall.png',
         foregroundPath: 'scenes/corridor/background.png',
+        showControls: true,
+        frozenPlayer: false,
       );
 
   bool _lockerPromptShown = false;
@@ -28,11 +31,13 @@ class CorridorScene extends GameScene {
       _patternSprites.map((sp) => sp.position.clone()).toList();
 
   Vector2 get backpackWorldMin =>
-      Vector2(_uvWorldX(_backpackMinUV.x), _uvWorldY(_backpackMinUV.y));
+      getWorldPosFromUV(_backpackMinUV, background.position, background.size);
   Vector2 get backpackWorldMax =>
-      Vector2(_uvWorldX(_backpackMaxUV.x), _uvWorldY(_backpackMaxUV.y));
-  double get patternWorldStartX => _uvWorldX(_patternStartUVx);
-  double get patternWorldEndX => _uvWorldX(_patternEndUVx);
+      getWorldPosFromUV(_backpackMaxUV, background.position, background.size);
+  double get patternWorldStartX =>
+      getWorldPosFromUV(Vector2(_patternStartUVx, 0), background.position, background.size).x;
+  double get patternWorldEndX =>
+      getWorldPosFromUV(Vector2(_patternEndUVx, 0), background.position, background.size).x;
 
   @override
   double worldWidthForViewport(Vector2 viewportSize) {
@@ -77,9 +82,6 @@ class CorridorScene extends GameScene {
   static const _patternStartUVy = 0.0909;
   static const _patternEndUVy = 0.5261;
 
-  double _uvWorldX(double u) => background.position.x + u * background.size.x;
-  double _uvWorldY(double v) => background.position.y + v * background.size.y;
-
   @override
   void onTapDown(TapDownEvent event) {
     if (game.overlays.isActive('TapGame')) {
@@ -91,15 +93,13 @@ class CorridorScene extends GameScene {
     final zoom = game.worldRoot.scale.x;
     final worldPos = (screenPos - worldOffset) / zoom;
 
-    final minX = _uvWorldX(_backpackMinUV.x);
-    final minY = _uvWorldY(_backpackMinUV.y);
-    final maxX = _uvWorldX(_backpackMaxUV.x);
-    final maxY = _uvWorldY(_backpackMaxUV.y);
+    final minPos = getWorldPosFromUV(_backpackMinUV, background.position, background.size);
+    final maxPos = getWorldPosFromUV(_backpackMaxUV, background.position, background.size);
 
-    if (worldPos.x >= minX &&
-        worldPos.x <= maxX &&
-        worldPos.y >= minY &&
-        worldPos.y <= maxY) {
+    if (worldPos.x >= minPos.x &&
+        worldPos.x <= maxPos.x &&
+        worldPos.y >= minPos.y &&
+        worldPos.y <= maxPos.y) {
       game.toggleBackpack();
       return;
     }
@@ -157,7 +157,7 @@ class CorridorScene extends GameScene {
     super.update(dt);
 
     final playerX = game.olya.position.x;
-    final stressTriggerX = _uvWorldX(_stressTriggerUVx);
+    final stressTriggerX = getWorldPosFromUV(Vector2(_stressTriggerUVx, 0), background.position, background.size).x;
 
     if (!_stressSceneTriggered &&
         !game.transitionManager.isTransitioning &&
@@ -176,7 +176,7 @@ class CorridorScene extends GameScene {
       return;
     }
 
-    final lockerX = _uvWorldX(_lockerPromptUVx);
+    final lockerX = getWorldPosFromUV(Vector2(_lockerPromptUVx, 0), background.position, background.size).x;
     if (!_lockerPromptShown && playerX >= lockerX) {
       _lockerPromptShown = true;
       game.isFrozen = true;
@@ -205,11 +205,11 @@ class CorridorScene extends GameScene {
       final worldH = game.size.y;
       final patternSize = worldH * 0.11;
       final spacing = patternSize * 1.1;
-      final minY = _uvWorldY(_patternStartUVy);
-      final maxY = _uvWorldY(_patternEndUVy);
+      final minY = getWorldPosFromUV(Vector2(0, _patternStartUVy), background.position, background.size).y;
+      final maxY = getWorldPosFromUV(Vector2(0, _patternEndUVy), background.position, background.size).y;
 
-      final startX = _uvWorldX(_patternStartUVx);
-      final endX = _uvWorldX(_patternEndUVx);
+      final startX = getWorldPosFromUV(Vector2(_patternStartUVx, 0), background.position, background.size).x;
+      final endX = getWorldPosFromUV(Vector2(_patternEndUVx, 0), background.position, background.size).x;
       final areaWidth = endX - startX;
       final count = (areaWidth / spacing).floor();
 

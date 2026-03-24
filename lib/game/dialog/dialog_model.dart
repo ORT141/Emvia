@@ -1,5 +1,5 @@
-import 'emvia_game.dart';
-import '../l10n/app_localizations_gen.dart';
+import '../emvia_game.dart';
+import '../../l10n/app_localizations_gen.dart';
 
 class DialogChoice {
   final String Function(AppLocalizationsGen loc) label;

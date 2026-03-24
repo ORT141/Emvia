@@ -29,13 +29,13 @@ class TransitionManager {
       game.size.y,
     );
 
-    if (scene is ClassroomScene) {
-      game.isFrozen = true;
-      game.classroomScene = scene;
-    } else {
-      game.classroomScene = null;
-      game.cameraManager.resetZoom();
-    }
+//    if (scene is ClassroomScene) {
+//      game.isFrozen = true;
+//      game.classroomScene = scene;
+//    } else {
+//      game.classroomScene = null;
+//      game.cameraManager.resetZoom();
+//    }
 
     await game.worldRoot.add(scene);
 
@@ -50,8 +50,6 @@ class TransitionManager {
     if (game.olya.parent != game.worldRoot) {
       await game.worldRoot.add(game.olya);
     }
-
-    game.olya.isFrozen = game.isFrozen;
 
     if (scene is CorridorScene) {
       game.olya.opacity = 1.0;

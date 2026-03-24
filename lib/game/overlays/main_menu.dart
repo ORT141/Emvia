@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flame_audio/flame_audio.dart';
 
-import '../game/emvia_game.dart';
-import '../game/emvia_types.dart';
-import '../l10n/app_localizations_gen.dart';
+import '../emvia_game.dart';
+import '../emvia_types.dart';
+import '../../l10n/app_localizations_gen.dart';
 
 class MainMenuOverlay extends StatefulWidget {
   final EmviaGame game;

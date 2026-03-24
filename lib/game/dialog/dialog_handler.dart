@@ -1,5 +1,5 @@
 import 'package:flame/game.dart';
-import '../dialog_model.dart';
+import 'dialog_model.dart';
 import '../emvia_game.dart';
 
 mixin DialogHandler on FlameGame {

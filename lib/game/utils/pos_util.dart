@@ -1,31 +1,13 @@
+import 'dart:math' as math;
 import 'package:flame/components.dart';
-import 'scenes/game_scene.dart';
-import 'scenes/classroom_scene.dart';
-import 'scenes/corridor_scene.dart';
 
-double sceneWorldWidth(double worldWidth) {
-  return worldWidth;
+Vector2 calculateCoverSize(Vector2 src, Vector2 target) {
+  final scale = math.max(target.x / src.x, target.y / src.y);
+  return Vector2(src.x * scale, src.y * scale);
 }
 
-typedef SceneSpawnPoint =
-    Vector2 Function(
-      GameScene scene,
-      Vector2 size,
-      PositionComponent worldRoot,
-    );
-
-Vector2 sceneSpawnPoint(
-  GameScene scene,
-  Vector2 size,
-  PositionComponent worldRoot,
-) {
-  if (scene is ClassroomScene) {
-    return Vector2(size.x * 0.2, worldRoot.size.y * 0.75);
-  }
-  if (scene is CorridorScene) {
-    return Vector2(80, worldRoot.size.y * 0.75);
-  }
-  return Vector2(worldRoot.size.x / 2, worldRoot.size.y * 0.75);
+Vector2 calculateCoverPosition(Vector2 covered, Vector2 target) {
+  return Vector2((target.x - covered.x) / 2, (target.y - covered.y) / 2);
 }
 
 Vector2 clampTargetToWorldBounds(
@@ -64,4 +46,8 @@ Vector2 clampTargetToWorldBounds(
   }
 
   return Vector2(clampedX, clampedY);
+}
+
+Vector2 getWorldPosFromUV(Vector2 uv, Vector2 bgPos, Vector2 bgSize) {
+  return bgPos + Vector2(uv.x * bgSize.x, uv.y * bgSize.y);
 }

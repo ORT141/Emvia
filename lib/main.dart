@@ -1,18 +1,17 @@
 // import 'package:device_preview/device_preview.dart';
 import 'package:emvia/game/emvia_game.dart';
-import 'package:emvia/game/components/path_detail_component.dart';
-import 'package:emvia/overlays/calm_map_overlay.dart';
-import 'package:emvia/overlays/credits_overlay.dart';
-import 'package:emvia/overlays/dialog.dart';
-import 'package:emvia/overlays/main_menu.dart';
-import 'package:emvia/overlays/mobile_controls_overlay.dart';
-import 'package:emvia/overlays/pause_overlay.dart';
-import 'package:emvia/overlays/backpack_overlay.dart';
-import 'package:emvia/overlays/settings_overlay.dart';
-import 'package:emvia/overlays/survey_overlay.dart';
-import 'package:emvia/overlays/debug_overlay.dart';
-import 'package:emvia/overlays/stress_overlay.dart';
-import 'package:emvia/overlays/tap_game_overlay.dart';
+import 'package:emvia/game/scenes/path/path_detail_component.dart';
+import 'package:emvia/game/overlays/calm_map_overlay.dart';
+import 'package:emvia/game/overlays/credits_overlay.dart';
+import 'package:emvia/game/overlays/dialog.dart';
+import 'package:emvia/game/overlays/main_menu.dart';
+import 'package:emvia/game/overlays/mobile_controls_overlay.dart';
+import 'package:emvia/game/backpack/backpack_overlay.dart';
+import 'package:emvia/game/overlays/settings_overlay.dart';
+import 'package:emvia/game/overlays/survey_overlay.dart';
+import 'package:emvia/game/overlays/debug_overlay.dart';
+import 'package:emvia/game/scenes/stress/stress_overlay.dart';
+import 'package:emvia/game/overlays/tap_game_overlay.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -24,10 +23,10 @@ import 'l10n/app_localizations_gen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FlameAudio.audioCache.prefix = 'assets/sounds/';
-  
+
   await Flame.device.fullScreen();
   await Flame.device.setLandscape();
-  
+
   //runApp(
   //  DevicePreview(
   //    builder: (context) => MyApp(),
@@ -124,7 +123,6 @@ class _MyAppState extends State<MyApp> {
             isDarkMode: _themeMode == ThemeMode.dark,
           ),
           'Credits': (_, game) => CreditsOverlay(game: game),
-          'Pause': (_, game) => PauseOverlay(game: game),
           'Survey': (_, game) => SurveyOverlay(game: game),
           'Backpack': (_, game) => BackpackOverlay(game: game),
           'MobileControls': (_, game) => MobileControlsOverlay(game: game),

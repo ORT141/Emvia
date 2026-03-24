@@ -1,9 +1,9 @@
-import 'package:emvia/game/dialog_model.dart';
+import 'package:emvia/game/dialog/dialog_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../game/emvia_game.dart';
-import '../l10n/app_localizations_gen.dart';
+import '../emvia_game.dart';
+import '../../l10n/app_localizations_gen.dart';
 
 class DialogOverlay extends StatelessWidget {
   final EmviaGame game;

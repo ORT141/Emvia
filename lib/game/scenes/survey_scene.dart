@@ -5,8 +5,6 @@ import 'game_scene.dart';
 class SurveyScene extends GameScene {
   SurveyScene()
     : super(
-        backgroundPath: 'scenes/classroom/classroom.png',
-        scalingMode: SceneScalingMode.stretch,
       );
 
   @override
@@ -23,8 +21,6 @@ class SurveyScene extends GameScene {
     background.opacity = 0;
     foreground?.opacity = 0;
 
-    game.isFrozen = true;
-    game.hideMobileControls();
     game.olya.opacity = 0;
 
     layoutToWorld();

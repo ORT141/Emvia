@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:emvia/l10n/app_localizations.dart';
 
-import '../game/emvia_game.dart';
-import '../game/inventory/backpack_item.dart';
-import '../game/scenes/corridor_scene.dart';
+import '../emvia_game.dart';
+import 'backpack_item.dart';
+import '../scenes/corridor_scene.dart';
 
 class BackpackOverlay extends StatefulWidget {
   const BackpackOverlay({super.key, required this.game});
@@ -270,7 +270,9 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                               IconButton(
                                 onPressed: _selectNextItem,
                                 icon: const Icon(Icons.chevron_right_rounded),
-                                tooltip: AppLocalizations.of(context)!.next_item,
+                                tooltip: AppLocalizations.of(
+                                  context,
+                                )!.next_item,
                               ),
                             ],
                           ),

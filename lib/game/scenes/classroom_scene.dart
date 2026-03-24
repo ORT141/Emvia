@@ -1,19 +1,21 @@
-import 'dart:math' as math;
 import 'dart:ui' show BlendMode, Paint;
 
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 
-import '../components/path_confirm_button.dart';
-import '../components/path_mark.dart';
+import '../utils/pos_util.dart';
+import 'path/path_confirm_button.dart';
+import 'path/path_mark.dart';
 import 'game_scene.dart';
-import 'path_choice_scene.dart';
+import 'path/path_choice_scene.dart';
 
 class ClassroomScene extends GameScene with TapCallbacks {
   ClassroomScene()
     : super(
         backgroundPath: 'scenes/classroom/classroom.png',
         foregroundPath: 'scenes/classroom/classmates.png',
+        showControls: false,
+        frozenPlayer: true,
       );
 
   @override
@@ -54,14 +56,6 @@ class ClassroomScene extends GameScene with TapCallbacks {
       game.loadScene(PathChoiceScene());
     }
   }
-
-  Vector2 _coverSize(Vector2 src, Vector2 target) {
-    final scale = math.max(target.x / src.x, target.y / src.y);
-    return Vector2(src.x * scale, src.y * scale);
-  }
-
-  Vector2 _coverPosition(Vector2 covered, Vector2 target) =>
-      Vector2((target.x - covered.x) / 2, (target.y - covered.y) / 2);
 
   @override
   Future<void> onLoad() async {
@@ -197,18 +191,18 @@ class ClassroomScene extends GameScene with TapCallbacks {
     if (isLoaded) {
       final overlaySprite = _pathOverlay?.sprite;
       if (overlaySprite != null) {
-        final covered = _coverSize(overlaySprite.srcSize, size);
+        final covered = calculateCoverSize(overlaySprite.srcSize, size);
         _pathOverlay!.size = covered;
-        _pathOverlay!.position = _coverPosition(covered, size);
+        _pathOverlay!.position = calculateCoverPosition(covered, size);
       }
       if (_shadowsOverlay != null) {
         _shadowsOverlay!.size = background.size;
         _shadowsOverlay!.position = Vector2.zero();
       }
       if (foreground?.opacity == 0 && _pathBgSrcSize != null) {
-        final covered = _coverSize(_pathBgSrcSize!, size);
+        final covered = calculateCoverSize(_pathBgSrcSize!, size);
         background.size = covered;
-        background.position = _coverPosition(covered, size);
+        background.position = calculateCoverPosition(covered, size);
       } else {
         background.size = Vector2(game.worldRoot.size.x, bgHeight);
         background.position = Vector2.zero();

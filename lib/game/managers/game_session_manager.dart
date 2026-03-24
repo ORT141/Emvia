@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 
-import '../dialog_model.dart';
+import '../dialog/dialog_model.dart';
 import '../emvia_types.dart';
 import '../survey_service.dart';
 

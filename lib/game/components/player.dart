@@ -37,8 +37,6 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
   final Vector2 _mobileVelocity = Vector2.zero();
   final double _speed = 230.0;
 
-  bool isFrozen = false;
-
   @override
   Future<void> onLoad() async {
     _updatePlayerSize();
@@ -99,7 +97,7 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
   void update(double dt) {
     _updateAnimations();
     super.update(dt);
-    if (isFrozen) {
+    if (game.isFrozen) {
       _velocity.setZero();
       _keyboardVelocity.setZero();
       _mobileVelocity.setZero();
@@ -146,7 +144,7 @@ class OlyaPlayer extends SpriteAnimationGroupComponent<PlayerState>
       }
     }
 
-    if (isFrozen) {
+    if (game.isFrozen) {
       _keyboardVelocity.setZero();
       return false;
     }

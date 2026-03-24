@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../game/emvia_game.dart';
-import '../l10n/app_localizations_gen.dart';
+import '../emvia_game.dart';
+import '../../l10n/app_localizations_gen.dart';
 
 class SettingsOverlay extends StatefulWidget {
   final EmviaGame game;
