@@ -88,7 +88,9 @@ class _MobileControlsOverlayState extends State<MobileControlsOverlay> {
                   heroTag: 'backpack_mobile_button',
                   onPressed: widget.game.toggleBackpack,
                   elevation: 6,
-                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer,
                   child: const Icon(Icons.backpack_rounded, size: 40),
                 ),
               ),

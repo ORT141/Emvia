@@ -23,10 +23,10 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
     this.showControls = false,
     this.frozenPlayer = false,
   }) : foregroundPaths = [
-          if (foregroundPath != null && foregroundPath.isNotEmpty)
-            foregroundPath,
-          ...?foregroundPaths,
-        ];
+         if (foregroundPath != null && foregroundPath.isNotEmpty)
+           foregroundPath,
+         ...?foregroundPaths,
+       ];
 
   final SpriteComponent background = SpriteComponent()
     ..anchor = Anchor.topLeft

@@ -29,13 +29,13 @@ class TransitionManager {
       game.size.y,
     );
 
-//    if (scene is ClassroomScene) {
-//      game.isFrozen = true;
-//      game.classroomScene = scene;
-//    } else {
-//      game.classroomScene = null;
-//      game.cameraManager.resetZoom();
-//    }
+    //    if (scene is ClassroomScene) {
+    //      game.isFrozen = true;
+    //      game.classroomScene = scene;
+    //    } else {
+    //      game.classroomScene = null;
+    //      game.cameraManager.resetZoom();
+    //    }
 
     await game.worldRoot.add(scene);
 

@@ -2,7 +2,6 @@
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/game/scenes/path/path_detail_component.dart';
 import 'package:emvia/game/overlays/calm_map_overlay.dart';
-import 'package:emvia/game/overlays/credits_overlay.dart';
 import 'package:emvia/game/overlays/dialog.dart';
 import 'package:emvia/game/overlays/main_menu.dart';
 import 'package:emvia/game/overlays/mobile_controls_overlay.dart';
@@ -122,7 +121,6 @@ class _MyAppState extends State<MyApp> {
             onThemeToggled: _toggleTheme,
             isDarkMode: _themeMode == ThemeMode.dark,
           ),
-          'Credits': (_, game) => CreditsOverlay(game: game),
           'Survey': (_, game) => SurveyOverlay(game: game),
           'Backpack': (_, game) => BackpackOverlay(game: game),
           'MobileControls': (_, game) => MobileControlsOverlay(game: game),

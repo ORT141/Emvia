@@ -167,9 +167,7 @@ class DebugOverlay extends StatelessWidget {
                         debugPrint(
                           'PLAYER screen=(${screenX.toStringAsFixed(1)}, ${screenY.toStringAsFixed(1)}) zoom=${zoom.toStringAsFixed(3)} measured_speed=${measuredSpeed.toStringAsFixed(1)}',
                         );
-                        debugPrint(
-                          'PLAYER isFrozen=(${game.isFrozen})',
-                        );
+                        debugPrint('PLAYER isFrozen=(${game.isFrozen})');
                       },
                       child: const Text('Print Player Info'),
                     ),

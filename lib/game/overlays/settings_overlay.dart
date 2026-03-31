@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
 import '../emvia_game.dart';
@@ -58,6 +60,58 @@ class _SettingsOverlayState extends State<SettingsOverlay>
 
   void _setLanguage(String code) {
     widget.onLocaleChanged?.call(Locale(code));
+  }
+
+  Future<void> _confirmExit() async {
+    final loc = AppLocalizationsGen.of(context)!;
+    final theme = Theme.of(context);
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+        title: Text(
+          loc.exit,
+          style: TextStyle(
+            color: theme.colorScheme.onSurface,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Text(
+          loc.exitConfirm,
+          style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(
+              loc.cancel,
+              style: TextStyle(color: theme.colorScheme.outline),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(
+              loc.exit,
+              style: TextStyle(color: theme.colorScheme.error),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (ok ?? false) {
+      try {
+        if (Platform.isAndroid) {
+          SystemNavigator.pop();
+        } else {
+          exit(0);
+        }
+      } catch (e) {
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).maybePop();
+      }
+    }
   }
 
   @override
@@ -198,6 +252,91 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                           fontWeight: FontWeight.w700,
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 12),
+                    ExpansionTile(
+                      collapsedIconColor: theme.colorScheme.onSurfaceVariant,
+                      tilePadding: EdgeInsets.zero,
+                      title: Text(
+                        loc.credits,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: theme.colorScheme.onSurface,
+                        ),
+                      ),
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              visualDensity: VisualDensity.compact,
+                              contentPadding: EdgeInsets.zero,
+                              leading: CircleAvatar(
+                                backgroundColor: theme.colorScheme.primaryContainer,
+                                child: Text(
+                                  'RD',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onPrimaryContainer,
+                                  ),
+                                ),
+                              ),
+                              title: Text(
+                                'Remez Devid',
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
+                                ),
+                              ),
+                              subtitle: Text(
+                                loc.leadDeveloper,
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ),
+                            ListTile(
+                              visualDensity: VisualDensity.compact,
+                              contentPadding: EdgeInsets.zero,
+                              leading: CircleAvatar(
+                                backgroundColor: theme.colorScheme.secondaryContainer,
+                                child: Text(
+                                  'AD',
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSecondaryContainer,
+                                  ),
+                                ),
+                              ),
+                              title: Text(
+                                'Alice Dudarok',
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
+                                ),
+                              ),
+                              subtitle: Text(
+                                loc.artistAndDesigner,
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                loc.thanksForPlaying,
+                                style: TextStyle(color: theme.colorScheme.onSurface),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    TextButton(
+                      onPressed: _confirmExit,
+                      style: TextButton.styleFrom(
+                        foregroundColor: theme.colorScheme.error,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      child: Text(loc.exit),
                     ),
                   ],
                 ),

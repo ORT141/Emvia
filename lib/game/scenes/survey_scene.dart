@@ -3,9 +3,7 @@ import 'package:flame/components.dart';
 import 'game_scene.dart';
 
 class SurveyScene extends GameScene {
-  SurveyScene()
-    : super(
-      );
+  SurveyScene() : super();
 
   @override
   double worldWidthForViewport(Vector2 viewportSize) => viewportSize.x;
