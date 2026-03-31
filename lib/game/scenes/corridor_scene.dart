@@ -1,11 +1,15 @@
 import 'dart:math' as math;
+import 'package:emvia/game/emvia_game.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
+import 'package:flame/particles.dart';
 import 'package:flame/rendering.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/pos_util.dart';
 import 'game_scene.dart';
+import 'notebook_scene.dart';
 import 'stress/stress_scene.dart';
 
 import 'package:emvia/l10n/app_localizations_gen.dart';
@@ -25,7 +29,8 @@ class CorridorScene extends GameScene {
   SpriteComponent? _peopleBackgroundOverlay;
   SpriteComponent? _peopleForegroundOverlay;
 
-  final List<SpriteComponent> _patternSprites = [];
+  final List<PatternSymbol> _patternSprites = [];
+  int _collectedPatterns = 0;
 
   List<Vector2> get patternPositions =>
       _patternSprites.map((sp) => sp.position.clone()).toList();
@@ -164,6 +169,19 @@ class CorridorScene extends GameScene {
     await _loadWallPattern();
   }
 
+  void _onPatternCollected() {
+    _collectedPatterns++;
+    if (_collectedPatterns >= _patternSprites.length) {
+      game.isFrozen = true;
+      game.loadScene(
+        NotebookScene(),
+        onFullOpacity: () {
+          game.sceneIndex = 5;
+        },
+      );
+    }
+  }
+
   bool _stressSceneTriggered = false;
 
   @override
@@ -214,19 +232,25 @@ class CorridorScene extends GameScene {
     if (_lockerPromptShown && game.isBackpackOpen) {
       game.isFrozen = false;
     }
+
+    final maxX = background.size.x - game.olya.size.x / 2;
+    if (_collectedPatterns < _patternSprites.length && playerX >= maxX - 50) {
+      game.olya.position.x = maxX - 55;
+    }
   }
 
   Future<void> _loadWallPattern() async {
     final pattern = game.surveyProfile.aiPattern;
     if (pattern.isEmpty) return;
 
+    _collectedPatterns = 0;
     const noRotatePatterns = {'cloud', 'tree', 'moon'};
 
     try {
       final sprite = await game.loadSprite('wall-patterns/$pattern.png');
       final worldH = game.size.y;
       final patternSize = worldH * 0.11;
-      final spacing = patternSize * 1.1;
+      final spacing = patternSize * 2.5;
       final minY = getWorldPosFromUV(
         Vector2(0, _patternStartUVy),
         background.position,
@@ -249,7 +273,7 @@ class CorridorScene extends GameScene {
         background.size,
       ).x;
       final areaWidth = endX - startX;
-      final count = (areaWidth / spacing).floor();
+      final count = (areaWidth / spacing).floor().clamp(8, 12);
 
       final random = math.Random();
       for (int i = 0; i < count; i++) {
@@ -257,17 +281,13 @@ class CorridorScene extends GameScene {
         final angle = noRotatePatterns.contains(pattern)
             ? 0.0
             : random.nextDouble() * math.pi * 2;
-        final sp = SpriteComponent()
-          ..sprite = sprite
-          ..size = Vector2.all(patternSize)
-          ..position = Vector2(startX + i * spacing + patternSize * 0.6, y)
-          ..anchor = Anchor.center
-          ..angle = angle
-          ..opacity = 0.50
-          ..priority = 1;
-        sp.paint = Paint()
-          ..isAntiAlias = true
-          ..filterQuality = FilterQuality.high;
+        final sp = PatternSymbol(
+          sprite: sprite,
+          size: Vector2.all(patternSize),
+          position: Vector2(startX + i * spacing + patternSize * 0.6, y),
+          angle: angle,
+          onCollected: _onPatternCollected,
+        );
         _patternSprites.add(sp);
         add(sp);
       }
@@ -278,11 +298,12 @@ class CorridorScene extends GameScene {
   @mustCallSuper
   void redrawScene() {
     try {
-      for (final sp in List<SpriteComponent>.from(_patternSprites)) {
+      for (final sp in List<PatternSymbol>.from(_patternSprites)) {
         sp.removeFromParent();
       }
     } catch (_) {}
     _patternSprites.clear();
+    _collectedPatterns = 0;
 
     final color = game.surveyProfile.safeColorValue;
     try {
@@ -307,5 +328,145 @@ class CorridorScene extends GameScene {
     _peopleForegroundOverlay = null;
 
     super.onRemove();
+  }
+}
+
+class PatternSymbol extends SpriteComponent
+    with TapCallbacks, HasGameReference<EmviaGame> {
+  final VoidCallback onCollected;
+  bool _isCollected = false;
+
+  PatternSymbol({
+    required Sprite sprite,
+    required Vector2 size,
+    required Vector2 position,
+    required double angle,
+    required this.onCollected,
+  }) : super(
+         sprite: sprite,
+         size: size,
+         position: position,
+         anchor: Anchor.center,
+         angle: angle,
+         priority: 1,
+       ) {
+    opacity = 0.50;
+    paint = Paint()
+      ..isAntiAlias = true
+      ..filterQuality = FilterQuality.high;
+  }
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    if (_isCollected) return;
+    _isCollected = true;
+
+    _spawnParticles();
+
+    final player = game.olya;
+    final targetPos = player.position - Vector2(0, player.size.y / 4);
+
+    add(
+      MoveToEffect(
+        targetPos,
+        EffectController(duration: 0.6, curve: Curves.easeInQuad),
+        onComplete: () {
+          onCollected();
+          removeFromParent();
+        },
+      ),
+    );
+    add(
+      OpacityEffect.to(
+        0.0,
+        EffectController(duration: 0.6, curve: Curves.easeIn),
+      ),
+    );
+    add(
+      ScaleEffect.to(
+        Vector2.all(0.1),
+        EffectController(duration: 0.6, curve: Curves.easeIn),
+      ),
+    );
+  }
+
+  void _spawnParticles() {
+    final random = math.Random();
+    final baseColor = game.surveyProfile.safeColorValue;
+    final baseHsv = HSVColor.fromColor(baseColor);
+
+    final player = game.olya;
+    final targetPos = player.position - Vector2(0, player.size.y / 4);
+    final relativeTarget = targetPos - position;
+
+    const particleDuration = 0.6;
+    final particleCurve = Curves.easeInQuad;
+
+    game.worldRoot.add(
+      ParticleSystemComponent(
+        position: position.clone(),
+        particle: Particle.generate(
+          count: 18,
+          lifespan: particleDuration,
+          generator: (i) {
+            final jitter = Vector2(
+              random.nextDouble() * 128 - 64,
+              random.nextDouble() * 128 - 64,
+            );
+            final endPosition = relativeTarget + jitter;
+
+            final hue =
+                (baseHsv.hue + 45 + random.nextDouble() * 20 - 30) % 360;
+            final saturation =
+                (baseHsv.saturation * 0.7 + random.nextDouble() * 0.5).clamp(
+                  0.0,
+                  1.0,
+                );
+            final value = (baseHsv.value * 0.7 + random.nextDouble() * 0.4)
+                .clamp(0.0, 1.0);
+            final particleColor = HSVColor.fromAHSV(
+              1.0,
+              hue,
+              saturation,
+              value,
+            ).toColor();
+
+            return MovingParticle(
+              from: Vector2.zero(),
+              to: endPosition,
+              lifespan: particleDuration,
+              curve: particleCurve,
+              child: FadingCircleParticle(
+                radius: 5.5 + random.nextDouble() * 3.5,
+                paint: Paint()
+                  ..color = particleColor.withAlpha((0.88 * 255).round()),
+                lifespan: particleDuration,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class FadingCircleParticle extends CircleParticle {
+  FadingCircleParticle({required super.paint, super.radius, super.lifespan});
+
+  @override
+  void render(Canvas canvas) {
+    final baseColor = paint.color;
+    final alpha = (baseColor.a * (1.0 - progress)).round().clamp(0, 255);
+    final fadingPaint = Paint()
+      ..color = baseColor.withAlpha(alpha)
+      ..blendMode = paint.blendMode
+      ..filterQuality = paint.filterQuality
+      ..isAntiAlias = paint.isAntiAlias
+      ..style = paint.style
+      ..strokeCap = paint.strokeCap
+      ..strokeJoin = paint.strokeJoin
+      ..strokeWidth = paint.strokeWidth;
+
+    canvas.drawCircle(Offset.zero, radius, fadingPaint);
   }
 }

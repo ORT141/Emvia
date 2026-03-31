@@ -129,14 +129,14 @@ class DebugOverlay extends StatelessWidget {
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
+                        backgroundColor: Colors.orangeAccent,
                         foregroundColor: Colors.white,
                       ),
                       onPressed: () async {
                         game.overlays.remove('Debug');
-                        game.startGameSkippingSurvey();
+                        await game.skipToCorridor();
                       },
-                      child: const Text('Skip Survey => Classroom'),
+                      child: const Text('Skip all => Corridor'),
                     ),
                   ],
                 ),

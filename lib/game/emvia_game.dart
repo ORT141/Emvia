@@ -366,6 +366,35 @@ class EmviaGame extends FlameGame
     _startGameFlow();
   }
 
+  Future<void> skipToCorridor() async {
+    final token = _session.beginSession();
+    final profile = await _surveyService.getProfile();
+
+    _session.resetForNewJourney(profile: profile);
+    backpack.clear();
+    hasTriggeredStressScene = false;
+
+    overlays.remove('MainMenu');
+    overlays.remove('Survey');
+    overlays.remove('CalmMap');
+    overlays.remove('TapGame');
+    overlays.remove('Backpack');
+    overlays.remove('Stress');
+
+    _clearGameplayOverlays();
+
+    await loadScene(
+      CorridorScene(),
+      onFullOpacity: () {
+        sceneIndex = 4;
+        overlays.remove('TapGame');
+        olya.opacity = 1;
+      },
+    );
+
+    if (!_session.isCurrentSession(token)) return;
+  }
+
   void showPathDetail(PathDetailInfo info) {
     _session.pathDetail = info;
     overlays.add('PathDetail');
