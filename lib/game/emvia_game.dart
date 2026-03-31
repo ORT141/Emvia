@@ -12,6 +12,9 @@ import 'scenes/game_scene.dart';
 import 'scenes/classroom_scene.dart';
 import 'scenes/corridor_scene.dart';
 import 'scenes/stress/stress_scene.dart';
+import 'scenes/stage_scene.dart';
+import 'utils/pos_util.dart';
+import 'scenes/notebook_scene.dart';
 import 'scenes/path/path_choice_scene.dart';
 import 'scenes/survey_scene.dart';
 import 'dialog/dialog_model.dart';
@@ -146,6 +149,75 @@ class EmviaGame extends FlameGame
     void Function()? onFullOpacity,
   }) async {
     await transitionManager.loadScene(scene, onFullOpacity: onFullOpacity);
+  }
+
+  Future<void> reloadCurrentScene() async {
+    final scene = currentScene;
+    if (scene == null) return;
+
+    final savedSceneIndex = sceneIndex;
+    overlays.remove('Debug');
+
+    if (scene is ClassroomScene) {
+      await loadScene(
+        ClassroomScene(),
+        onFullOpacity: () {
+          sceneIndex = savedSceneIndex;
+        },
+      );
+      return;
+    } else if (scene is CorridorScene) {
+      await loadScene(
+        CorridorScene(),
+        onFullOpacity: () {
+          sceneIndex = savedSceneIndex;
+        },
+      );
+      return;
+    } else if (scene is StageScene) {
+      await loadScene(
+        StageScene(),
+        onFullOpacity: () {
+          sceneIndex = savedSceneIndex;
+          olya.opacity = 1;
+        },
+      );
+      return;
+    } else if (scene is StressScene) {
+      await loadScene(
+        StressScene(),
+        onFullOpacity: () {
+          sceneIndex = savedSceneIndex;
+        },
+      );
+      return;
+    } else if (scene is PathChoiceScene) {
+      await loadScene(
+        PathChoiceScene(),
+        onFullOpacity: () {
+          sceneIndex = savedSceneIndex;
+        },
+      );
+      return;
+    } else if (scene is SurveyScene) {
+      await loadScene(
+        SurveyScene(),
+        onFullOpacity: () {
+          sceneIndex = savedSceneIndex;
+        },
+      );
+      return;
+    } else if (scene is NotebookScene) {
+      await loadScene(
+        NotebookScene(),
+        onFullOpacity: () {
+          sceneIndex = savedSceneIndex;
+        },
+      );
+      return;
+    }
+
+    currentScene?.redrawScene();
   }
 
   Future<void> goToCorridor() async {
@@ -489,6 +561,17 @@ class EmviaGame extends FlameGame
     );
   }
 
+  Future<void> _transitionToStageScene() async {
+    if (transitionManager.isTransitioning) return;
+    await loadScene(
+      StageScene(),
+      onFullOpacity: () {
+        sceneIndex = 6;
+        olya.opacity = 1;
+      },
+    );
+  }
+
   void completeCorridorStressIntro() {
     if (!_isCorridorStressIntroActive) return;
     _isCorridorStressIntroActive = false;
@@ -537,14 +620,25 @@ class EmviaGame extends FlameGame
     if (currentScene is CorridorScene &&
         !_session.journeyCompleted &&
         _hasReachedRightSceneEdge()) {
-      finishOlyaJourney();
+      _transitionToStageScene();
     }
 
     cameraManager.update(dt);
   }
 
   bool _hasReachedRightSceneEdge() {
-    return olya.position.x >= worldRoot.size.x - olya.size.x / 2 - 10;
+    final scene = currentScene;
+    if (scene != null && scene.background.size.x > 0) {
+      final uvTarget = getWorldPosFromUV(
+        Vector2(0.9, 0.5),
+        scene.background.position,
+        scene.background.size,
+      );
+      final thresholdX = uvTarget.x - olya.size.x / 2;
+      return olya.position.x >= thresholdX;
+    }
+    
+    return false;
   }
 
   @override

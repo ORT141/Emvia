@@ -402,51 +402,55 @@ class PatternSymbol extends SpriteComponent
     const particleDuration = 0.6;
     final particleCurve = Curves.easeInQuad;
 
-    game.worldRoot.add(
-      ParticleSystemComponent(
-        position: position.clone(),
-        particle: Particle.generate(
-          count: 18,
-          lifespan: particleDuration,
-          generator: (i) {
-            final jitter = Vector2(
-              random.nextDouble() * 128 - 64,
-              random.nextDouble() * 128 - 64,
-            );
-            final endPosition = relativeTarget + jitter;
+    final ps = ParticleSystemComponent(
+      position: position.clone(),
+      particle: Particle.generate(
+        count: 18,
+        lifespan: particleDuration,
+        generator: (i) {
+          final jitter = Vector2(
+            random.nextDouble() * 128 - 64,
+            random.nextDouble() * 128 - 64,
+          );
+          final endPosition = relativeTarget + jitter;
 
-            final hue =
-                (baseHsv.hue + 45 + random.nextDouble() * 20 - 30) % 360;
-            final saturation =
-                (baseHsv.saturation * 0.7 + random.nextDouble() * 0.5).clamp(
-                  0.0,
-                  1.0,
-                );
-            final value = (baseHsv.value * 0.7 + random.nextDouble() * 0.4)
-                .clamp(0.0, 1.0);
-            final particleColor = HSVColor.fromAHSV(
-              1.0,
-              hue,
-              saturation,
-              value,
-            ).toColor();
+          final hue = (baseHsv.hue + 45 + random.nextDouble() * 20 - 30) % 360;
+          final saturation =
+              (baseHsv.saturation * 0.7 + random.nextDouble() * 0.5).clamp(
+                0.0,
+                1.0,
+              );
+          final value = (baseHsv.value * 0.7 + random.nextDouble() * 0.4).clamp(
+            0.0,
+            1.0,
+          );
+          final particleColor = HSVColor.fromAHSV(
+            1.0,
+            hue,
+            saturation,
+            value,
+          ).toColor();
 
-            return MovingParticle(
-              from: Vector2.zero(),
-              to: endPosition,
+          return MovingParticle(
+            from: Vector2.zero(),
+            to: endPosition,
+            lifespan: particleDuration,
+            curve: particleCurve,
+            child: FadingCircleParticle(
+              radius: 5.5 + random.nextDouble() * 3.5,
+              paint: Paint()
+                ..color = particleColor.withAlpha((0.88 * 255).round()),
               lifespan: particleDuration,
-              curve: particleCurve,
-              child: FadingCircleParticle(
-                radius: 5.5 + random.nextDouble() * 3.5,
-                paint: Paint()
-                  ..color = particleColor.withAlpha((0.88 * 255).round()),
-                lifespan: particleDuration,
-              ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
+
+    try {
+      ps.priority = game.olya.priority + 1;
+    } catch (_) {}
+    (parent ?? game.worldRoot).add(ps);
   }
 }
 
@@ -456,7 +460,7 @@ class FadingCircleParticle extends CircleParticle {
   @override
   void render(Canvas canvas) {
     final baseColor = paint.color;
-    final alpha = (baseColor.a * (1.0 - progress)).round().clamp(0, 255);
+    final alpha = (baseColor.a * (1.0 - progress) * 255).round().clamp(0, 255);
     final fadingPaint = Paint()
       ..color = baseColor.withAlpha(alpha)
       ..blendMode = paint.blendMode

@@ -118,6 +118,17 @@ class DebugOverlay extends StatelessWidget {
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () async {
+                        game.overlays.remove('Debug');
+                        await game.reloadCurrentScene();
+                      },
+                      child: const Text('Reload Scene'),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
                         foregroundColor: Colors.white,
                       ),
