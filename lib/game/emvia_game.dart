@@ -351,6 +351,7 @@ class EmviaGame extends FlameGame
   }
 
   void startNewGameSurveyFlow() async {
+    await _surveyService.clearAiResults();
     _session.markStartGameAfterSurvey();
     closeMainMenu();
     await loadScene(

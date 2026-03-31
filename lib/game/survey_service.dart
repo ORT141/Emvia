@@ -292,6 +292,14 @@ class SurveyService {
     await prefs.setBool(_surveyCompletedKey, true);
   }
 
+  Future<void> clearAiResults() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(aiPatternKey);
+    await prefs.remove(aiWordsKey);
+    await prefs.remove(aiColorKey);
+    await prefs.remove(aiStressTypeKey);
+  }
+
   Future<Map<String, String>> getSurveyResults() async {
     final prefs = await SharedPreferences.getInstance();
 
