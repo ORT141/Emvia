@@ -272,7 +272,8 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                               visualDensity: VisualDensity.compact,
                               contentPadding: EdgeInsets.zero,
                               leading: CircleAvatar(
-                                backgroundColor: theme.colorScheme.primaryContainer,
+                                backgroundColor:
+                                    theme.colorScheme.primaryContainer,
                                 child: Text(
                                   'RD',
                                   style: TextStyle(
@@ -297,11 +298,13 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                               visualDensity: VisualDensity.compact,
                               contentPadding: EdgeInsets.zero,
                               leading: CircleAvatar(
-                                backgroundColor: theme.colorScheme.secondaryContainer,
+                                backgroundColor:
+                                    theme.colorScheme.secondaryContainer,
                                 child: Text(
                                   'AD',
                                   style: TextStyle(
-                                    color: theme.colorScheme.onSecondaryContainer,
+                                    color:
+                                        theme.colorScheme.onSecondaryContainer,
                                   ),
                                 ),
                               ),
@@ -319,10 +322,14 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8.0,
+                              ),
                               child: Text(
                                 loc.thanksForPlaying,
-                                style: TextStyle(color: theme.colorScheme.onSurface),
+                                style: TextStyle(
+                                  color: theme.colorScheme.onSurface,
+                                ),
                               ),
                             ),
                           ],

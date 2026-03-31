@@ -211,6 +211,15 @@ class PathChoiceScene extends GameScene {
     for (var i = 0; i < _markCircles.length; i++) {
       _markCircles[i].isSelected = false;
     }
+    _stopPathAudio?.call();
+    _stopPathAudio = null;
+  }
+
+  @override
+  void onRemove() {
+    _stopPathAudio?.call();
+    _stopPathAudio = null;
+    super.onRemove();
   }
 
   @override
