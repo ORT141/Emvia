@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flame_audio/flame_audio.dart';
 
@@ -213,69 +210,12 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
     widget.game.overlays.add('Settings');
   }
 
-  void _openCredits() {
-    widget.game.overlays.add('Credits');
-  }
-
   void _switchLanguage(String languageCode) {
     widget.onLocaleChanged?.call(Locale(languageCode));
   }
 
-  Future<void> _confirmExit() async {
-    final loc = AppLocalizationsGen.of(context)!;
-    final theme = Theme.of(context);
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: theme.colorScheme.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-        title: Text(
-          loc.exit,
-          style: GoogleFonts.baloo2(
-            fontWeight: FontWeight.bold,
-            color: theme.colorScheme.onSurface,
-          ),
-        ),
-        content: Text(
-          loc.exitConfirm,
-          style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text(
-              loc.cancel,
-              style: TextStyle(color: theme.colorScheme.outline),
-            ),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text(
-              loc.exit,
-              style: TextStyle(color: theme.colorScheme.error),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    if (ok ?? false) {
-      if (!mounted) return;
-      try {
-        if (Platform.isAndroid) {
-          SystemNavigator.pop();
-        } else {
-          exit(0);
-        }
-      } catch (e) {
-        Navigator.of(context).maybePop();
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizationsGen.of(context)!;
     final theme = Theme.of(context);
     final canContinue = widget.game.sceneIndex > 0;
 
@@ -295,7 +235,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
               : 280.0;
           final double menuButtonWidth = isSmallScreen ? 240.0 : 280.0;
           final double menuButtonMinHeight = 56.0;
-          final double footerFontSize = isSmallScreen ? 13.0 : 16.0;
 
           return Stack(
             children: [
@@ -429,49 +368,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                                   ),
                                 ),
                                 const Spacer(flex: 2),
-                                FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  alignment: isSmallScreen
-                                      ? Alignment.center
-                                      : Alignment.centerLeft,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      TextButton(
-                                        onPressed: _openCredits,
-                                        style: TextButton.styleFrom(
-                                          foregroundColor: Colors.white70,
-                                          textStyle: TextStyle(
-                                            fontSize: footerFontSize,
-                                          ),
-                                        ),
-                                        child: Text(loc.credits),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.symmetric(
-                                          horizontal: topGap,
-                                        ),
-                                        width: 4,
-                                        height: 4,
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white54,
-                                          shape: BoxShape.circle,
-                                        ),
-                                      ),
-                                      TextButton(
-                                        onPressed: _confirmExit,
-                                        style: TextButton.styleFrom(
-                                          foregroundColor: Colors.redAccent
-                                              .withValues(alpha: 0.8),
-                                          textStyle: TextStyle(
-                                            fontSize: footerFontSize,
-                                          ),
-                                        ),
-                                        child: Text(loc.exit),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                SizedBox.shrink(),
                               ],
                             ),
                           ),
