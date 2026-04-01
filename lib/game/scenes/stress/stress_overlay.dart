@@ -1,5 +1,5 @@
 import 'dart:math' as math;
-import 'dart:ui' show lerpDouble;
+import 'dart:ui' show ImageFilter, lerpDouble;
 
 import 'package:flutter/material.dart';
 import 'package:emvia/game/emvia_game.dart';
@@ -334,10 +334,144 @@ class _StressOverlayState extends State<StressOverlay>
         final stress = widget.game.stressLevel;
         final hasHeadphones = widget.game.selectedTools.contains('headphones');
 
-        if (hasHeadphones || stress < 30) return const SizedBox.shrink();
+        if (hasHeadphones || stress < 10) return const SizedBox.shrink();
 
-        return const IgnorePointer(child: SizedBox.shrink());
+        final panicStyle = widget.game.surveyProfile.panicStyle;
+        final intensity = stress / 100.0;
+
+        switch (panicStyle) {
+          case 'blur':
+            return IgnorePointer(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: intensity * 10,
+                  sigmaY: intensity * 10,
+                ),
+                child: Container(color: Colors.transparent),
+              ),
+            );
+          case 'acid':
+            return IgnorePointer(child: _AcidOverlay(intensity: intensity));
+          case 'noise':
+            return IgnorePointer(child: _NoiseOverlay(intensity: intensity));
+          case 'shake':
+          default:
+            return const SizedBox.shrink();
+        }
       },
     );
   }
+}
+
+class _AcidOverlay extends StatefulWidget {
+  final double intensity;
+  const _AcidOverlay({required this.intensity});
+
+  @override
+  State<_AcidOverlay> createState() => _AcidOverlayState();
+}
+
+class _AcidOverlayState extends State<_AcidOverlay>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, _) {
+        final hue = _controller.value * 360;
+        final color = HSVColor.fromAHSV(
+          widget.intensity * 0.38,
+          hue,
+          1.0,
+          1.0,
+        ).toColor();
+        return Container(color: color);
+      },
+    );
+  }
+}
+
+class _NoiseOverlay extends StatefulWidget {
+  final double intensity;
+  const _NoiseOverlay({required this.intensity});
+
+  @override
+  State<_NoiseOverlay> createState() => _NoiseOverlayState();
+}
+
+class _NoiseOverlayState extends State<_NoiseOverlay>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 80),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, _) {
+        return CustomPaint(
+          painter: _NoisePainter(
+            intensity: widget.intensity,
+            seed: _controller.value,
+          ),
+          size: Size.infinite,
+        );
+      },
+    );
+  }
+}
+
+class _NoisePainter extends CustomPainter {
+  final double intensity;
+  final double seed;
+
+  const _NoisePainter({required this.intensity, required this.seed});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final random = math.Random((seed * 10000).toInt());
+    final paint = Paint();
+    final count = (intensity * 600).toInt();
+    for (int i = 0; i < count; i++) {
+      final x = random.nextDouble() * size.width;
+      final y = random.nextDouble() * size.height;
+      final opacity = random.nextDouble() * intensity * 0.55;
+      paint.color = Colors.white.withValues(alpha: opacity);
+      canvas.drawRect(Rect.fromLTWH(x, y, 2, 2), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_NoisePainter old) => true;
 }

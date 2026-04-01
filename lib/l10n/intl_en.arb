@@ -502,5 +502,13 @@
     "third_path_description": "A detour through the inner courtyard and the back entrance. There are almost no people, but the path is longer and less safe — older students or other unpredictable situations might be encountered in the yard.",
     "map_of_calm_olya": "Map of Calm: Olya",
     "tap_game_title": "Tap the screen repeatedly to calm down",
-    "locker_prompt": "You're at your locker, open your backpack to continue."
+    "locker_prompt": "You're at your locker, open your backpack to continue.",
+    "wall_pattern_prompt": "Collect all {count} patterns on the wall — tap each one to gather them!",
+    "@wall_pattern_prompt": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    }
 }

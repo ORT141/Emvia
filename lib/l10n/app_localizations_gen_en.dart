@@ -565,4 +565,9 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   @override
   String get locker_prompt =>
       'You\'re at your locker, open your backpack to continue.';
+
+  @override
+  String wall_pattern_prompt(int count) {
+    return 'Collect all $count patterns on the wall — tap each one to gather them!';
+  }
 }

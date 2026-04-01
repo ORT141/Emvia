@@ -565,4 +565,9 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   @override
   String get locker_prompt =>
       'Ви біля своєї шафки — відкрийте рюкзак, щоб продовжити.';
+
+  @override
+  String wall_pattern_prompt(int count) {
+    return 'Збери всі $count патернів на стіні — торкнись кожного, щоб зібрати!';
+  }
 }
