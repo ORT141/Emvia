@@ -118,6 +118,8 @@ class _TapGameOverlayState extends State<TapGameOverlay>
       _pulseController.forward(from: 0);
 
       final progress = (_tapCount / _target).clamp(0.0, 1.0);
+      widget.game.stressLevel = (100 - (progress * 80)).round().clamp(0, 100);
+
       final targetVolume = (widget.game.volume * (1.0 - progress)).clamp(
         0.0,
         _initialVolume,
@@ -162,7 +164,7 @@ class _TapGameOverlayState extends State<TapGameOverlay>
     });
 
     if (_tapCount >= _target) {
-      widget.game.stressLevel = 60;
+      widget.game.stressLevel = 30;
       widget.game.overlays.remove('TapGame');
       widget.game.isFrozen = false;
     }
