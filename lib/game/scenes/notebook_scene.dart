@@ -5,11 +5,11 @@ import 'game_scene.dart';
 
 class NotebookScene extends GameScene {
   NotebookScene()
-    : super(
-        backgroundPath: 'scenes/corridor/wall.png',
-        showControls: false,
-        frozenPlayer: true,
-      );
+      : super(
+          backgroundPath: 'scenes/corridor/wall.png',
+          showControls: false,
+          frozenPlayer: true,
+        );
 
   @override
   Future<void> onLoad() async {

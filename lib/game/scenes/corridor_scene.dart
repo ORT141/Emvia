@@ -25,8 +25,6 @@ class CorridorScene extends GameScene {
       );
 
   bool _lockerPromptShown = false;
-  bool _patternPromptShown = false;
-  bool _patternDialogActive = false;
 
   SpriteComponent? _peopleBackgroundOverlay;
   SpriteComponent? _peopleForegroundOverlay;
@@ -235,31 +233,6 @@ class CorridorScene extends GameScene {
       game.isFrozen = false;
     }
 
-    if (!_patternPromptShown && _patternSprites.isNotEmpty) {
-      final startX = patternWorldStartX;
-      if (playerX >= startX) {
-        _patternPromptShown = true;
-        _patternDialogActive = true;
-        game.isFrozen = true;
-        final count = _patternSprites.length;
-        final tree = DialogTree(
-          nodes: {
-            'start': DialogNode(
-              id: 'start',
-              text: (loc) => loc.wall_pattern_prompt(count),
-            ),
-          },
-          startNodeId: 'start',
-        );
-        game.startDialog(tree);
-      }
-    }
-
-    if (_patternDialogActive && !game.overlays.isActive('Dialog')) {
-      _patternDialogActive = false;
-      game.isFrozen = false;
-    }
-
     final maxX = background.size.x - game.olya.size.x / 2;
     if (_collectedPatterns < _patternSprites.length && playerX >= maxX - 50) {
       game.olya.position.x = maxX - 55;
@@ -331,8 +304,6 @@ class CorridorScene extends GameScene {
     } catch (_) {}
     _patternSprites.clear();
     _collectedPatterns = 0;
-    _patternPromptShown = false;
-    _patternDialogActive = false;
 
     final color = game.surveyProfile.safeColorValue;
     try {

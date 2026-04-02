@@ -16,10 +16,6 @@ class StageScene extends GameScene {
   static const double _rockingChairHeightFactor = 0.8;
 
   @override
-  Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(viewportSize.x / 2, worldSize.y * 0.85);
-
-  @override
   Future<void> onLoad() async {
     await super.onLoad();
 

@@ -1105,12 +1105,6 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'You\'re at your locker, open your backpack to continue.'**
   String get locker_prompt;
-
-  /// No description provided for @wall_pattern_prompt.
-  ///
-  /// In en, this message translates to:
-  /// **'Collect all {count} patterns on the wall — tap each one to gather them!'**
-  String wall_pattern_prompt(int count);
 }
 
 class _AppLocalizationsGenDelegate
