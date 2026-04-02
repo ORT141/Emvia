@@ -344,6 +344,16 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get survey_save_continue => 'Save and Continue';
 
   @override
+  String get survey_post_modal_title => 'Your Mission';
+
+  @override
+  String get survey_post_modal_text =>
+      'Your mission: Today is a very important day. Olya must present her project on the school stage in the assembly hall. Her motto: \"I won\'t speak — I will show\". But to get to the stage and show her drawing, she needs to leave the quiet classroom and traverse the whole school. The road to the assembly hall is full of stressors: sudden bells, bright lights, and noisy crowds. Help Olya not get lost in this noisy world, build her own safe route, successfully reach the stage and create your own \"Map of Calm\"!';
+
+  @override
+  String get survey_post_modal_button => 'Okay';
+
+  @override
   String get path_choice_title => 'Choose Route';
 
   @override
@@ -568,4 +578,13 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   @override
   String get locker_prompt =>
       'You\'re at your locker, open your backpack to continue.';
+
+  @override
+  String get corridor_pattern_instruction =>
+      'Tap the patterns on the wall to collect them';
+
+  @override
+  String corridor_pattern_progress(Object current, Object total) {
+    return 'Collected: $current / $total';
+  }
 }

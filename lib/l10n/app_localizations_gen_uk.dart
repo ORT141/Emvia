@@ -343,6 +343,16 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get survey_save_continue => 'Зберегти та продовжити';
 
   @override
+  String get survey_post_modal_title => 'Ваша місія';
+
+  @override
+  String get survey_post_modal_text =>
+      'Ваша місія: Сьогодні дуже важливий день. Оля має презентувати свій проєкт на шкільній сцені в актовій залі. Її девіз: «Я не говоритиму — я покажу». Але щоб дістатися сцени і показати свій малюнок, їй потрібно вийти з тихого класу і пройти через усю школу. Дорога до актової зали сповнена стресових факторів: раптових дзвінків, яскравого світла та галасливих натовпів. Допоможіть Олі не загубитися в цьому галасливому світі, побудувати власний безпечний маршрут, успішно дістатися сцени та створіть свою власну \"Мапу спокою\"!';
+
+  @override
+  String get survey_post_modal_button => 'Добре';
+
+  @override
   String get path_choice_title => 'Обери маршрут';
 
   @override
@@ -568,4 +578,13 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   @override
   String get locker_prompt =>
       'Ви біля своєї шафки — відкрийте рюкзак, щоб продовжити.';
+
+  @override
+  String get corridor_pattern_instruction =>
+      'Торкніться візерунків на стіні, щоб зібрати їх';
+
+  @override
+  String corridor_pattern_progress(Object current, Object total) {
+    return 'Зібрано: $current / $total';
+  }
 }

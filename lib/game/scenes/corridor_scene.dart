@@ -24,12 +24,17 @@ class CorridorScene extends GameScene {
       );
 
   bool _lockerPromptShown = false;
+  bool _hudShown = false;
 
   SpriteComponent? _peopleBackgroundOverlay;
   SpriteComponent? _peopleForegroundOverlay;
 
   final List<PatternSymbol> _patternSprites = [];
   int _collectedPatterns = 0;
+  final ValueNotifier<int> collectedPatternsNotifier = ValueNotifier<int>(0);
+
+  int get collectedPatterns => _collectedPatterns;
+  int get totalPatterns => _patternSprites.length;
 
   List<Vector2> get patternPositions =>
       _patternSprites.map((sp) => sp.position.clone()).toList();
@@ -170,7 +175,9 @@ class CorridorScene extends GameScene {
 
   void _onPatternCollected() {
     _collectedPatterns++;
+    collectedPatternsNotifier.value = _collectedPatterns;
     if (_collectedPatterns >= _patternSprites.length) {
+      game.overlays.remove('PatternProgress');
       // TODO: when background for notebook scene is ready, uncomment this
       //game.isFrozen = true;
       //game.loadScene(
@@ -210,6 +217,18 @@ class CorridorScene extends GameScene {
         },
       );
       return;
+    }
+
+    if (!_hudShown && _patternSprites.isNotEmpty) {
+      final hudTriggerX = getWorldPosFromUV(
+        Vector2(_lockerPromptUVx + 0.15, 0),
+        background.position,
+        background.size,
+      ).x;
+      if (playerX >= hudTriggerX) {
+        _hudShown = true;
+        game.overlays.add('PatternProgress');
+      }
     }
 
     final lockerX = getWorldPosFromUV(
@@ -314,6 +333,8 @@ class CorridorScene extends GameScene {
     } catch (_) {}
 
     _loadWallPattern();
+    _hudShown = false;
+    game.overlays.remove('PatternProgress');
     layoutToWorld();
     super.redrawScene();
   }
@@ -326,6 +347,8 @@ class CorridorScene extends GameScene {
     _peopleBackgroundOverlay = null;
     _peopleForegroundOverlay?.removeFromParent();
     _peopleForegroundOverlay = null;
+
+    game.overlays.remove('PatternProgress');
 
     super.onRemove();
   }

@@ -710,6 +710,24 @@ abstract class AppLocalizationsGen {
   /// **'Save and Continue'**
   String get survey_save_continue;
 
+  /// No description provided for @survey_post_modal_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Mission'**
+  String get survey_post_modal_title;
+
+  /// No description provided for @survey_post_modal_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Your mission: Today is a very important day. Olya must present her project on the school stage in the assembly hall. Her motto: \"I won\'t speak — I will show\". But to get to the stage and show her drawing, she needs to leave the quiet classroom and traverse the whole school. The road to the assembly hall is full of stressors: sudden bells, bright lights, and noisy crowds. Help Olya not get lost in this noisy world, build her own safe route, successfully reach the stage and create your own \"Map of Calm\"!'**
+  String get survey_post_modal_text;
+
+  /// No description provided for @survey_post_modal_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Okay'**
+  String get survey_post_modal_button;
+
   /// No description provided for @path_choice_title.
   ///
   /// In en, this message translates to:
@@ -1111,6 +1129,18 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'You\'re at your locker, open your backpack to continue.'**
   String get locker_prompt;
+
+  /// No description provided for @corridor_pattern_instruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the patterns on the wall to collect them'**
+  String get corridor_pattern_instruction;
+
+  /// No description provided for @corridor_pattern_progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Collected: {current} / {total}'**
+  String corridor_pattern_progress(Object current, Object total);
 }
 
 class _AppLocalizationsGenDelegate

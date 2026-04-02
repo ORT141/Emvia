@@ -366,6 +366,9 @@
     "survey_calibration_title": "Sensory Profile Calibration",
     "survey_calibration_subtitle": "Answers will personalize Olya's story and the final \"Map of Calm\".",
     "survey_save_continue": "Save and Continue",
+    "survey_post_modal_title": "Your Mission",
+    "survey_post_modal_text": "Your mission: Today is a very important day. Olya must present her project on the school stage in the assembly hall. Her motto: \"I won't speak — I will show\". But to get to the stage and show her drawing, she needs to leave the quiet classroom and traverse the whole school. The road to the assembly hall is full of stressors: sudden bells, bright lights, and noisy crowds. Help Olya not get lost in this noisy world, build her own safe route, successfully reach the stage and create your own \"Map of Calm\"!",
+    "survey_post_modal_button": "Okay",
     "path_choice_title": "Choose Route",
     "path_first": "Main corridor",
     "path_second": "Through the library",
@@ -506,5 +509,7 @@
     "third_path_description": "A detour through the inner courtyard and the back entrance. There are almost no people, but the path is longer and less safe — older students or other unpredictable situations might be encountered in the yard.",
     "map_of_calm_olya": "Map of Calm: Olya",
     "tap_game_title": "Tap the screen repeatedly to calm down",
-    "locker_prompt": "You're at your locker, open your backpack to continue."
+    "locker_prompt": "You're at your locker, open your backpack to continue.",
+    "corridor_pattern_instruction": "Tap the patterns on the wall to collect them",
+    "corridor_pattern_progress": "Collected: {current} / {total}"
 }

@@ -11,6 +11,8 @@ import 'package:emvia/game/overlays/survey_overlay.dart';
 import 'package:emvia/game/overlays/debug_overlay.dart';
 import 'package:emvia/game/scenes/stress/stress_overlay.dart';
 import 'package:emvia/game/overlays/tap_game_overlay.dart';
+import 'package:emvia/game/overlays/pattern_progress_overlay.dart';
+import 'package:emvia/game/scenes/corridor_scene.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -128,6 +130,22 @@ class _MyAppState extends State<MyApp> {
           'Stress': (_, game) => StressOverlay(game: game),
           'TapGame': (_, game) => TapGameOverlay(game: game),
           'CalmMap': (_, game) => CalmMapOverlay(game: game),
+          'PatternProgress': (_, game) {
+            final scene = game.currentScene;
+            if (scene is CorridorScene) {
+              return ValueListenableBuilder<int>(
+                valueListenable: scene.collectedPatternsNotifier,
+                builder: (context, value, _) {
+                  return PatternProgressOverlay(
+                    game: game,
+                    collected: value,
+                    total: scene.totalPatterns,
+                  );
+                },
+              );
+            }
+            return const SizedBox.shrink();
+          },
           'PathDetail': (_, game) => ValueListenableBuilder(
             valueListenable: game.pathDetailNotifier,
             builder: (context, value, child) {

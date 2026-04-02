@@ -283,6 +283,7 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
       if (mounted) setState(() => _isLoading = false);
     }
     if (!mounted) return;
+    await _showPostSurveyModal();
     final shouldStartGame = widget.game.consumeStartGameAfterSurvey();
     widget.game.overlays.remove('Survey');
     _resetState();
@@ -307,6 +308,7 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
 
     final shouldStartGame = widget.game.consumeStartGameAfterSurvey();
 
+    await _showPostSurveyModal();
     widget.game.overlays.remove('Survey');
     _resetState();
 
@@ -315,5 +317,61 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
     } else {
       await widget.game.returnToMainMenuAfterSurvey();
     }
+  }
+
+  Future<void> _showPostSurveyModal() async {
+    final l = AppLocalizations.of(context)!;
+    await showGeneralDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierLabel: l.continueLabel,
+      transitionDuration: const Duration(milliseconds: 280),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return Scaffold(
+          backgroundColor: Colors.black.withOpacity(0.6),
+          body: SafeArea(
+            child: Center(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(24),
+                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l.survey_post_modal_title,
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      l.survey_post_modal_text,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 24),
+                    Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(l.survey_post_modal_button),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
