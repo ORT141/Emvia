@@ -170,6 +170,12 @@ abstract class AppLocalizationsGen {
   /// **'Keep an eye on it'**
   String get stress_intro_watch;
 
+  /// Tip shown when the tap stress mini-game starts.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap fast to calm down'**
+  String get tap_game_tip;
+
   /// Instruction or label for the breathing in action.
   ///
   /// In en, this message translates to:

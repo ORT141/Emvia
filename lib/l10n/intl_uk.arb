@@ -48,6 +48,10 @@
     "@stress_intro_watch": {
         "description": "Short reminder to monitor the stress meter."
     },
+    "tap_game_tip": "Натискайте швидко, щоб заспокоїтись",
+    "@tap_game_tip": {
+        "description": "Tip shown when the tap stress mini-game starts."
+    },
     "inhale": "вдих",
     "@inhale": {
         "description": "Instruction or label for the breathing in action."

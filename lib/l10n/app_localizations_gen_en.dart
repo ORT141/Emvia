@@ -46,6 +46,9 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get stress_intro_watch => 'Keep an eye on it';
 
   @override
+  String get tap_game_tip => 'Tap fast to calm down';
+
+  @override
   String get inhale => 'inhale';
 
   @override

@@ -46,6 +46,9 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get stress_intro_watch => 'Слідкуйте за ним';
 
   @override
+  String get tap_game_tip => 'Натискайте швидко, щоб заспокоїтись';
+
+  @override
   String get inhale => 'вдих';
 
   @override

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
+import 'package:emvia/l10n/app_localizations_gen.dart';
 import 'package:emvia/game/emvia_game.dart';
 
 class TapGameOverlay extends StatefulWidget {
@@ -180,6 +181,31 @@ class _TapGameOverlayState extends State<TapGameOverlay>
       onTap: _handleTap,
       child: Stack(
         children: [
+          Positioned(
+            top: 40,
+            left: 20,
+            right: 20,
+            child: Center(
+              child: Text(
+                AppLocalizationsGen.of(context)?.tap_game_tip ??
+                    'Tap as fast as you can!',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.none,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black45,
+                      blurRadius: 4,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           ..._words.map(
             (word) => Positioned(
               left: word.position.dx + (word.offset.dx * word.controller.value),
