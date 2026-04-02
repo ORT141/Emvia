@@ -114,7 +114,7 @@ class StressScene extends GameScene {
   }
 
   void _handleShake() {
-    final intensity = math.max(1.0, 24.0 * _stressFactor);
+    final intensity = math.max(1.0, 12.0 * _stressFactor);
     final offsetX = (_random.nextDouble() - 0.5) * intensity;
     final offsetY = (_random.nextDouble() - 0.5) * intensity;
 
