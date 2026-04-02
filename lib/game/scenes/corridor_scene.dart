@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 
 import '../utils/pos_util.dart';
 import 'game_scene.dart';
-import 'notebook_scene.dart';
 import 'stress/stress_scene.dart';
 
 import 'package:emvia/l10n/app_localizations_gen.dart';
@@ -172,13 +171,14 @@ class CorridorScene extends GameScene {
   void _onPatternCollected() {
     _collectedPatterns++;
     if (_collectedPatterns >= _patternSprites.length) {
-      game.isFrozen = true;
-      game.loadScene(
-        NotebookScene(),
-        onFullOpacity: () {
-          game.sceneIndex = 5;
-        },
-      );
+      // TODO: when background for notebook scene is ready, uncomment this
+      //game.isFrozen = true;
+      //game.loadScene(
+      //  NotebookScene(),
+      //  onFullOpacity: () {
+      //    game.sceneIndex = 5;
+      //  },
+      //);
     }
   }
 
