@@ -8,6 +8,7 @@ import 'package:emvia/game/overlays/mobile_controls_overlay.dart';
 import 'package:emvia/game/backpack/backpack_overlay.dart';
 import 'package:emvia/game/overlays/settings_overlay.dart';
 import 'package:emvia/game/overlays/survey_overlay.dart';
+import 'package:emvia/game/overlays/stage_item_card_overlay.dart';
 import 'package:emvia/game/overlays/debug_overlay.dart';
 import 'package:emvia/game/scenes/stress/stress_overlay.dart';
 import 'package:emvia/game/overlays/tap_game_overlay.dart';
@@ -125,6 +126,7 @@ class _MyAppState extends State<MyApp> {
           ),
           'Survey': (_, game) => SurveyOverlay(game: game),
           'Backpack': (_, game) => BackpackOverlay(game: game),
+          'StageItemCard': (_, game) => StageItemCardOverlay(game: game),
           'MobileControls': (_, game) => MobileControlsOverlay(game: game),
           'Debug': (_, game) => DebugOverlay(game: game),
           'Stress': (_, game) => StressOverlay(game: game),

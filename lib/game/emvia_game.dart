@@ -21,6 +21,7 @@ import 'scenes/survey_scene.dart';
 import 'dialog/dialog_model.dart';
 import 'backpack/backpack_inventory.dart';
 import 'backpack/backpack_item.dart';
+import 'stage_item_card_data.dart';
 
 import 'dialog/dialog_handler.dart';
 import 'emvia_types.dart';
@@ -104,8 +105,26 @@ class EmviaGame extends FlameGame
   DialogNode? get currentNode => _session.currentNode;
   set currentNode(DialogNode? value) => _session.currentNode = value;
 
+  final ValueNotifier<StageItemCardData?> selectedStageItemNotifier =
+      ValueNotifier<StageItemCardData?>(null);
+
   bool get isBackpackOpen => overlays.isActive('Backpack');
   bool get isDebugOpen => overlays.isActive('Debug');
+
+  bool get isStageItemCardOpen => overlays.isActive('StageItemCard');
+
+  void showStageItemCard(StageItemCardData item) {
+    selectedStageItemNotifier.value = item;
+    overlays.add('StageItemCard');
+  }
+
+  void hideStageItemCard() {
+    overlays.remove('StageItemCard');
+    selectedStageItemNotifier.value = null;
+    if (currentScene is StageScene) {
+      (currentScene as StageScene).clearSelectedItem();
+    }
+  }
 
   bool debugTapEnabled = false;
 
@@ -652,7 +671,7 @@ class EmviaGame extends FlameGame
       final thresholdX = uvTarget.x - player.size.x / 2;
       return player.position.x >= thresholdX;
     }
-    
+
     return false;
   }
 

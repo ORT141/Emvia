@@ -33,13 +33,13 @@ class PathChoiceScene extends GameScene with CoverScaling {
 
   static const _pathSoundFiles = {
     'en': [
-      'main corridor.mp3',
       'through the library.mp3',
+      'main corridor.mp3',
       'through the schoolyard.mp3',
     ],
     'uk': [
-      'головн��й коридор.mp3',
       'через бібліотеку.mp3',
+      'головний коридор.mp3',
       'через шкільний двір.mp3',
     ],
   };
@@ -167,15 +167,15 @@ class PathChoiceScene extends GameScene with CoverScaling {
     final info = PathDetailInfo(
       index: index,
       name: index == 0
-          ? (l?.path_first ?? 'First Path')
-          : index == 1
           ? (l?.path_second ?? 'Second Path')
+          : index == 1
+          ? (l?.path_first ?? 'First Path')
           : (l?.path_third ?? 'Third Path'),
       title: l?.map_of_calm_olya ?? 'Map of Calm: Olya',
       description: index == 0
-          ? (l?.first_path_description ?? '')
-          : index == 1
           ? (l?.second_path_description ?? '')
+          : index == 1
+          ? (l?.first_path_description ?? '')
           : (l?.third_path_description ?? ''),
       confirmLabel: l?.confirm ?? 'Confirm',
       cancelLabel: l?.cancel ?? 'Cancel',

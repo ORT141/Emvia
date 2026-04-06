@@ -1,3 +1,4 @@
+import 'package:emvia/l10n/app_localizations_gen.dart';
 import 'package:flutter/material.dart';
 
 class PathDetailComponent extends StatefulWidget {
@@ -80,6 +81,7 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                   ? constraints.maxWidth
                   : MediaQuery.of(context).size.width;
               final dialogWidth = maxWidth * 0.9 < 600 ? maxWidth * 0.9 : 600.0;
+              final isUnlocked = widget.index == 1;
 
               return Material(
                 color: Colors.transparent,
@@ -124,6 +126,18 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                           ),
                         ),
                         const SizedBox(height: 14),
+                        if (!isUnlocked)
+                          Text(
+                            AppLocalizationsGen.of(context)!.too_dangerous,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.redAccent.withValues(alpha: 0.9),
+                              height: 1.4,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        if (!isUnlocked) const SizedBox(height: 14),
+
                         Text(
                           widget.description,
                           style: TextStyle(
@@ -179,7 +193,9 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                               constraints: const BoxConstraints(maxWidth: 160),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF2E7D32),
+                                  backgroundColor: const Color(
+                                    0xFF2E7D32,
+                                  ).withValues(alpha: isUnlocked ? 1.0 : 0.4),
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 12,
                                     horizontal: 16,
@@ -188,15 +204,17 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                                     borderRadius: BorderRadius.circular(14),
                                   ),
                                 ),
-                                onPressed: widget.onConfirm,
+                                onPressed: isUnlocked ? widget.onConfirm : null,
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
                                     widget.confirmLabel,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w800,
-                                      color: Colors.white,
+                                      color: Colors.white.withValues(
+                                        alpha: isUnlocked ? 1.0 : 0.5,
+                                      ),
                                     ),
                                   ),
                                 ),

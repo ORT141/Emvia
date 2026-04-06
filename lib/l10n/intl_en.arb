@@ -217,6 +217,14 @@
     "item_lunchbox_name": "Lunch box",
     "item_lunchbox_status": "Not the right time",
     "item_lunchbox_desc": "Familiar and safe food in your own box is important for comfort away from home. But right now the problem isn't hunger, it's the noise level! This item won't help here.",
+    "stage_item_book_title": "Thick book",
+    "stage_item_book_description": "Page turning can be very soothing. Repeated motions create a sense of control. Tactile sensations like paper rustle and texture help regulate the nervous system. A good calming resource.",
+    "stage_item_bag_of_rocks_title": "Pouch with smooth pebbles",
+    "stage_item_bag_of_rocks_description": "Works as a self-regulation tool through tactile sensation and repetitive motion. Touching smooth pebbles reduces tension. A good calming resource.",
+    "stage_item_hibuki_title": "Hibuki",
+    "stage_item_hibuki_description": "A soft therapy toy dog used for emotional support, especially for children recovering from stress or trauma. Anxiety goes down with hugs because deep pressure soothes the nervous system. A good calming resource.",
+    "stage_item_rocking_chair_title": "Rocking chair",
+    "stage_item_rocking_chair_description": "Helps calm, release tension, and regulate movement through rocking. Swaying lets the nervous system switch gears and lower anxiety. A good calming resource.",
     "use_item": "Use Item",
     "@use_item": {
         "description": "Label for using an item from the backpack."

@@ -464,6 +464,54 @@ abstract class AppLocalizationsGen {
   /// **'Familiar and safe food in your own box is important for comfort away from home. But right now the problem isn\'t hunger, it\'s the noise level! This item won\'t help here.'**
   String get item_lunchbox_desc;
 
+  /// No description provided for @stage_item_book_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Thick book'**
+  String get stage_item_book_title;
+
+  /// No description provided for @stage_item_book_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Page turning can be very soothing. Repeated motions create a sense of control. Tactile sensations like paper rustle and texture help regulate the nervous system. A good calming resource.'**
+  String get stage_item_book_description;
+
+  /// No description provided for @stage_item_bag_of_rocks_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Pouch with smooth pebbles'**
+  String get stage_item_bag_of_rocks_title;
+
+  /// No description provided for @stage_item_bag_of_rocks_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Works as a self-regulation tool through tactile sensation and repetitive motion. Touching smooth pebbles reduces tension. A good calming resource.'**
+  String get stage_item_bag_of_rocks_description;
+
+  /// No description provided for @stage_item_hibuki_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Hibuki'**
+  String get stage_item_hibuki_title;
+
+  /// No description provided for @stage_item_hibuki_description.
+  ///
+  /// In en, this message translates to:
+  /// **'A soft therapy toy dog used for emotional support, especially for children recovering from stress or trauma. Anxiety goes down with hugs because deep pressure soothes the nervous system. A good calming resource.'**
+  String get stage_item_hibuki_description;
+
+  /// No description provided for @stage_item_rocking_chair_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Rocking chair'**
+  String get stage_item_rocking_chair_title;
+
+  /// No description provided for @stage_item_rocking_chair_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Helps calm, release tension, and regulate movement through rocking. Swaying lets the nervous system switch gears and lower anxiety. A good calming resource.'**
+  String get stage_item_rocking_chair_description;
+
   /// Label for using an item from the backpack.
   ///
   /// In en, this message translates to:
