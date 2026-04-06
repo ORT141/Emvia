@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:emvia/l10n/app_localizations_gen.dart';
 
 class PathDetailComponent extends StatefulWidget {
   final int index;
@@ -125,17 +124,6 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                           ),
                         ),
                         const SizedBox(height: 14),
-                        if (widget.index != 0)
-                          Text(
-                            AppLocalizationsGen.of(context)!.too_dangerous,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.redAccent.withValues(alpha: 0.9),
-                              height: 1.4,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        if (widget.index != 0) const SizedBox(height: 14),
                         Text(
                           widget.description,
                           style: TextStyle(
@@ -191,10 +179,7 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                               constraints: const BoxConstraints(maxWidth: 160),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF2E7D32)
-                                      .withValues(
-                                        alpha: widget.index == 0 ? 1.0 : 0.4,
-                                      ),
+                                  backgroundColor: const Color(0xFF2E7D32),
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 12,
                                     horizontal: 16,
@@ -203,19 +188,15 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                                     borderRadius: BorderRadius.circular(14),
                                   ),
                                 ),
-                                onPressed: widget.index == 0
-                                    ? widget.onConfirm
-                                    : null,
+                                onPressed: widget.onConfirm,
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
                                     widget.confirmLabel,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w800,
-                                      color: Colors.white.withValues(
-                                        alpha: widget.index == 0 ? 1.0 : 0.5,
-                                      ),
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),

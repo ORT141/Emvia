@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:flame/components.dart';
 import '../utils/pos_util.dart';
 import '../emvia_game.dart';
-import '../components/player.dart';
+import '../characters/base_player.dart';
 
 class CameraManager {
   final EmviaGame game;
@@ -27,6 +27,7 @@ class CameraManager {
   }
 
   void update(double dt) {
+    if (!game.isPlayerInitialized) return;
     if (game.isFrozen && game.overlays.isActive('PathChoice')) {
       final sceneCenter = Vector2(
         game.worldRoot.size.x / 2,
@@ -38,8 +39,8 @@ class CameraManager {
       return;
     }
 
-    final target = Vector2(game.olya.position.x, game.olya.position.y);
-    final isWalking = game.olya.current == PlayerState.walking;
+    final target = Vector2(game.player.position.x, game.player.position.y);
+    final isWalking = game.player.current == PlayerState.walking;
 
     if (isWalking) {
       final deadZoneWorld = _deadZonePx / zoom;
@@ -86,9 +87,10 @@ class CameraManager {
   }
 
   void snapToPlayer({bool force = false}) {
+    if (!game.isPlayerInitialized) return;
     if (game.isFrozen && !force) return;
 
-    final rawTarget = Vector2(game.olya.position.x, game.olya.position.y);
+    final rawTarget = Vector2(game.player.position.x, game.player.position.y);
     final clamped = clampTargetToWorldBounds(
       rawTarget,
       zoom,

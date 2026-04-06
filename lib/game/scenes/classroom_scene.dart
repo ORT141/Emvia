@@ -4,12 +4,13 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 
 import '../utils/pos_util.dart';
+import '../utils/cover_scaling.dart';
 import 'path/path_confirm_button.dart';
 import 'path/path_mark.dart';
 import 'game_scene.dart';
 import 'path/path_choice_scene.dart';
 
-class ClassroomScene extends GameScene with TapCallbacks {
+class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
   ClassroomScene()
     : super(
         backgroundPath: 'scenes/classroom/classroom.png',
@@ -19,14 +20,13 @@ class ClassroomScene extends GameScene with TapCallbacks {
       );
 
   @override
-  double worldWidthForViewport(Vector2 viewportSize) => 1920.0;
+  double worldWidthForViewport(Vector2 viewportSize) => viewportSize.x;
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(worldSize.x / 2, worldSize.y * 0.75);
+      Vector2(viewportSize.x / 2, viewportSize.y / 2);
 
   SpriteComponent? _pathOverlay;
-  Vector2? _pathBgSrcSize;
   SpriteComponent? _shadowsOverlay;
 
   final List<Vector2> _marks = <Vector2>[];
@@ -34,9 +34,24 @@ class ClassroomScene extends GameScene with TapCallbacks {
   int? _selectedMarkIndex;
   PathConfirmButton? _confirmButton;
 
-  double _bgHeight = 0;
+  final double _bgHeight = 0;
 
   double get bgHeight => _bgHeight > 0 ? _bgHeight : game.size.y;
+
+  @override
+  void layoutToWorld() {
+    setupCoverWorld();
+
+    applyCoverScaling(background);
+
+    if (foreground != null) {
+      applyCoverScaling(foreground!);
+    }
+
+    if (_shadowsOverlay != null) {
+      applyCoverScaling(_shadowsOverlay!);
+    }
+  }
 
   @override
   void onTapDown(TapDownEvent event) {
@@ -60,14 +75,12 @@ class ClassroomScene extends GameScene with TapCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    final src = background.sprite?.srcSize;
-    if (src != null && src.x > 0 && src.y > 0) {
-      _bgHeight = (game.worldRoot.size.x * src.y / src.x).ceilToDouble();
+
+    background.priority = 0;
+
+    if (foreground != null) {
+      foreground!.priority = 1;
     }
-    background.size = Vector2(game.worldRoot.size.x, bgHeight);
-    background.position = Vector2.zero();
-    foreground?.size = Vector2(game.worldRoot.size.x, bgHeight);
-    foreground?.position = Vector2.zero();
 
     try {
       final shadowsSprite = await game.loadSprite(
@@ -75,52 +88,44 @@ class ClassroomScene extends GameScene with TapCallbacks {
       );
       _shadowsOverlay = SpriteComponent(
         sprite: shadowsSprite,
-        size: Vector2(game.worldRoot.size.x, bgHeight),
         anchor: Anchor.topLeft,
-        position: Vector2.zero(),
         paint: Paint()..blendMode = BlendMode.multiply,
+        priority: 10,
       );
-      background.add(_shadowsOverlay!);
+      add(_shadowsOverlay!);
     } catch (_) {}
+
+    layoutToWorld();
   }
 
   Future<void> showPathImage() async {
     final sprite = await game.loadSprite('scenes/classroom/path.png');
     background.sprite = sprite;
-    _pathBgSrcSize = sprite.srcSize.clone();
-    background.size = Vector2(game.worldRoot.size.x, bgHeight);
-    background.position = Vector2.zero();
+    layoutToWorld();
     foreground?.opacity = 0.0;
     await clearPathOverlay();
   }
 
   Future<void> showClassroomImage() async {
     background.sprite = await game.loadSprite(backgroundPath);
-    _pathBgSrcSize = null;
-    background.size = Vector2(game.worldRoot.size.x, bgHeight);
-    background.position = Vector2.zero();
-    foreground?.size = Vector2(game.worldRoot.size.x, bgHeight);
+    layoutToWorld();
     foreground?.opacity = 1.0;
     await clearPathOverlay();
   }
 
   Future<void> showPathOverlay(String asset) async {
     final sprite = await game.loadSprite(asset);
-    final pos = Vector2.zero();
-    final covered = Vector2(game.worldRoot.size.x, bgHeight);
     if (_pathOverlay == null) {
       _pathOverlay = SpriteComponent(
         sprite: sprite,
-        size: covered,
         anchor: Anchor.topLeft,
-        position: pos,
+        priority: 5,
       );
       add(_pathOverlay!);
     } else {
       _pathOverlay!.sprite = sprite;
-      _pathOverlay!.size = covered;
-      _pathOverlay!.position = pos;
     }
+    applyCoverScaling(_pathOverlay!);
   }
 
   Future<void> clearPathOverlay() async {
@@ -189,34 +194,22 @@ class ClassroomScene extends GameScene with TapCallbacks {
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     if (isLoaded) {
+      layoutToWorld();
+
       final overlaySprite = _pathOverlay?.sprite;
       if (overlaySprite != null) {
         final covered = calculateCoverSize(overlaySprite.srcSize, size);
         _pathOverlay!.size = covered;
         _pathOverlay!.position = calculateCoverPosition(covered, size);
       }
-      if (_shadowsOverlay != null) {
-        _shadowsOverlay!.size = background.size;
-        _shadowsOverlay!.position = Vector2.zero();
-      }
-      if (foreground?.opacity == 0 && _pathBgSrcSize != null) {
-        final covered = calculateCoverSize(_pathBgSrcSize!, size);
-        background.size = covered;
-        background.position = calculateCoverPosition(covered, size);
-      } else {
-        background.size = Vector2(game.worldRoot.size.x, bgHeight);
-        background.position = Vector2.zero();
-        foreground?.size = Vector2(game.worldRoot.size.x, bgHeight);
-        foreground?.position = Vector2.zero();
-      }
+
       for (var i = 0; i < _marks.length; i++) {
         final m = _marks[i];
-        final bgPos = background.position.clone();
-        final bgSize = background.size;
-        final screenPos = bgPos + Vector2(m.x * bgSize.x, m.y * bgSize.y);
         final mark = _markCircles.length > i ? _markCircles[i] : null;
         if (mark != null) {
-          mark.position = screenPos;
+          mark.position =
+              background.position +
+              Vector2(m.x * background.size.x, m.y * background.size.y);
         }
       }
       _confirmButton?.position = Vector2(size.x / 2, size.y - 80);

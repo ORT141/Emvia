@@ -82,6 +82,14 @@ class PathConfirmButton extends PositionComponent
   }
 
   @override
+  bool containsLocalPoint(Vector2 point) {
+    if (!isEnabled) {
+      return false;
+    }
+    return super.containsLocalPoint(point);
+  }
+
+  @override
   void onTapDown(TapDownEvent event) {
     if (isEnabled) {
       onConfirm();

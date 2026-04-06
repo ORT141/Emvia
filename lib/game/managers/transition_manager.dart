@@ -33,23 +33,21 @@ class TransitionManager {
 
     scene.onGameResize(game.size);
 
-    if (scene is ClassroomScene) {
-      updateClassroomZoom();
-    } else {
+    if (scene is! ClassroomScene) {
       game.worldRoot.scale = Vector2.all(game.cameraManager.zoom);
     }
 
-    if (game.olya.parent != game.worldRoot) {
-      await game.worldRoot.add(game.olya);
+    if (game.player.parent != game.worldRoot) {
+      await game.worldRoot.add(game.player);
     }
 
     if (scene is CorridorScene) {
-      game.olya.opacity = 1.0;
+      game.player.opacity = 1.0;
     } else {
-      game.olya.opacity = 0.0;
+      game.player.opacity = 0.0;
     }
 
-    game.olya.position = game.sceneSpawnPoint(scene, game.size, game.worldRoot);
+    game.player.position = game.sceneSpawnPoint(scene, game.size, game.worldRoot);
 
     if (onFullOpacity != null) {
       onFullOpacity();

@@ -195,7 +195,7 @@ class CorridorScene extends GameScene {
   void update(double dt) {
     super.update(dt);
 
-    final playerX = game.olya.position.x;
+    final playerX = game.player.position.x;
     final stressTriggerX = getWorldPosFromUV(
       Vector2(_stressTriggerUVx, 0),
       background.position,
@@ -213,7 +213,7 @@ class CorridorScene extends GameScene {
         StressScene(),
         onFullOpacity: () {
           game.sceneIndex = 3;
-          game.olya.opacity = 0;
+          game.player.opacity = 0;
         },
       );
       return;
@@ -252,9 +252,9 @@ class CorridorScene extends GameScene {
       game.isFrozen = false;
     }
 
-    final maxX = background.size.x - game.olya.size.x / 2;
+    final maxX = background.size.x - game.player.size.x / 2;
     if (_collectedPatterns < _patternSprites.length && playerX >= maxX - 50) {
-      game.olya.position.x = maxX - 55;
+      game.player.position.x = maxX - 55;
     }
   }
 
@@ -386,7 +386,7 @@ class PatternSymbol extends SpriteComponent
 
     _spawnParticles();
 
-    final player = game.olya;
+    final player = game.player;
     final targetPos = player.position - Vector2(0, player.size.y / 4);
 
     add(
@@ -418,7 +418,7 @@ class PatternSymbol extends SpriteComponent
     final baseColor = game.surveyProfile.safeColorValue;
     final baseHsv = HSVColor.fromColor(baseColor);
 
-    final player = game.olya;
+    final player = game.player;
     final targetPos = player.position - Vector2(0, player.size.y / 4);
     final relativeTarget = targetPos - position;
 
@@ -471,7 +471,7 @@ class PatternSymbol extends SpriteComponent
     );
 
     try {
-      ps.priority = game.olya.priority + 1;
+      ps.priority = game.player.priority + 1;
     } catch (_) {}
     (parent ?? game.worldRoot).add(ps);
   }

@@ -4,11 +4,11 @@ import 'package:emvia/l10n/app_localizations.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../utils/pos_util.dart';
+import '../../utils/cover_scaling.dart';
 import 'path_mark.dart';
 import '../game_scene.dart';
 
-class PathChoiceScene extends GameScene {
+class PathChoiceScene extends GameScene with CoverScaling {
   PathChoiceScene()
     : super(
         backgroundPath: 'scenes/classroom/classroom.png',
@@ -38,7 +38,7 @@ class PathChoiceScene extends GameScene {
       'through the schoolyard.mp3',
     ],
     'uk': [
-      'головний коридор.mp3',
+      'головн��й коридор.mp3',
       'через бібліотеку.mp3',
       'через шкільний двір.mp3',
     ],
@@ -50,14 +50,10 @@ class PathChoiceScene extends GameScene {
 
   @override
   void layoutToWorld() {
-    game.cameraManager.zoom = 1.0;
-    game.worldRoot.scale = Vector2.all(1.0);
-    game.worldRoot.size = game.size.clone();
+    setupCoverWorld();
 
     if (_pathBgSrcSize != null && foreground?.opacity == 0) {
-      final covered = calculateCoverSize(_pathBgSrcSize!, game.size);
-      background.size = covered;
-      background.position = calculateCoverPosition(covered, game.size);
+      applyCoverScaling(background, srcSize: _pathBgSrcSize);
     }
   }
 
@@ -70,10 +66,7 @@ class PathChoiceScene extends GameScene {
 
     _pathBgSrcSize = sprite.srcSize.clone();
 
-    final covered = calculateCoverSize(_pathBgSrcSize!, game.size);
-
-    background.size = covered;
-    background.position = calculateCoverPosition(covered, game.size);
+    applyCoverScaling(background, srcSize: _pathBgSrcSize);
 
     foreground?.opacity = 0.0;
 
@@ -97,22 +90,17 @@ class PathChoiceScene extends GameScene {
 
   Future<void> showPathOverlay(String asset) async {
     final sprite = await game.loadSprite(asset);
-    final covered = calculateCoverSize(sprite.srcSize, game.size);
-    final pos = calculateCoverPosition(covered, game.size);
     if (_pathOverlay == null) {
       _pathOverlay = SpriteComponent(
         sprite: sprite,
-        size: covered,
         anchor: Anchor.topLeft,
-        position: pos,
         priority: 5,
       );
       add(_pathOverlay!);
     } else {
       _pathOverlay!.sprite = sprite;
-      _pathOverlay!.size = covered;
-      _pathOverlay!.position = pos;
     }
+    applyCoverScaling(_pathOverlay!);
   }
 
   Future<void> clearPathOverlay() async {
@@ -226,11 +214,9 @@ class PathChoiceScene extends GameScene {
   void onGameResize(Vector2 size) {
     super.onGameResize(size);
     if (isLoaded) {
-      final overlaySprite = _pathOverlay?.sprite;
-      if (overlaySprite != null) {
-        final covered = calculateCoverSize(overlaySprite.srcSize, size);
-        _pathOverlay!.size = covered;
-        _pathOverlay!.position = calculateCoverPosition(covered, size);
+      layoutToWorld();
+      if (_pathOverlay != null) {
+        applyCoverScaling(_pathOverlay!);
       }
       for (var i = 0; i < _marks.length; i++) {
         final m = _marks[i];

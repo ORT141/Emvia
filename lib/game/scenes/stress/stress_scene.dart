@@ -14,10 +14,11 @@ class StressScene extends GameScene {
         backgroundPath: 'stress/stress-scene/panic_background.png',
         foregroundPath: 'stress/stress-scene/panic_foreground.png',
         scalingMode: SceneScalingMode.stretch,
+        frozenPlayer: true,
       );
 
   RectangleComponent? _ambientOverlay;
-  SpriteComponent? _olyaComponent;
+  SpriteComponent? _playerComponent;
   SpriteComponent? _silhouettesComponent;
   NoiseOverlay? _noiseOverlay;
 
@@ -50,11 +51,11 @@ class StressScene extends GameScene {
       ..priority = 5;
     add(_silhouettesComponent!);
 
-    _olyaComponent = SpriteComponent()
-      ..sprite = await game.loadSprite('stress/stress-scene/panic_olya.png')
+    _playerComponent = SpriteComponent()
+      ..sprite = await game.loadSprite(game.player.stressPanicSprite)
       ..anchor = Anchor.topLeft
       ..priority = 10;
-    add(_olyaComponent!);
+    add(_playerComponent!);
 
     final style = game.surveyProfile.panicStyle;
     if (style == 'noise') {
@@ -80,7 +81,7 @@ class StressScene extends GameScene {
         fg.paint.imageFilter = null;
       }
       _silhouettesComponent?.paint.imageFilter = null;
-      _olyaComponent?.paint.imageFilter = null;
+      _playerComponent?.paint.imageFilter = null;
     } else {
       final blur = ui.ImageFilter.blur(sigmaX: sigma, sigmaY: sigma);
       background.paint.imageFilter = blur;
@@ -88,7 +89,7 @@ class StressScene extends GameScene {
         fg.paint.imageFilter = blur;
       }
       _silhouettesComponent?.paint.imageFilter = blur;
-      _olyaComponent?.paint.imageFilter = blur;
+      _playerComponent?.paint.imageFilter = blur;
     }
   }
 
@@ -124,7 +125,7 @@ class StressScene extends GameScene {
       fg.position = pos;
     }
     _silhouettesComponent?.position = pos;
-    _olyaComponent?.position = pos;
+    _playerComponent?.position = pos;
   }
 
   void _handleAcid(double dt) {
@@ -177,7 +178,7 @@ class StressScene extends GameScene {
           ..position = _basePosition;
       }
 
-      for (final comp in [_silhouettesComponent, _olyaComponent]) {
+      for (final comp in [_silhouettesComponent, _playerComponent]) {
         comp
           ?..size = size
           ..position = _basePosition;

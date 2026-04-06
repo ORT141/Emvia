@@ -10,20 +10,23 @@ class PathMark extends CircleComponent with TapCallbacks, HoverCallbacks {
   @override
   bool isHovered = false;
 
+  final double visualRadius;
+
   PathMark({
     required this.index,
     required this.onSelected,
     required Vector2 position,
-    double radius = 16.0,
+    this.visualRadius = 16.0,
     Color? color,
     Color? explicitColor,
   }) : _explicitColor = explicitColor,
        super(
-         radius: radius,
+         radius: visualRadius,
          position: position,
          anchor: Anchor.center,
          priority: 30,
        );
+
   Paint get _basePaint {
     final base = _resolvedBaseColor;
     return Paint()..color = base.withValues(alpha: 0.5);
@@ -65,7 +68,8 @@ class PathMark extends CircleComponent with TapCallbacks, HoverCallbacks {
   @override
   void render(Canvas canvas) {
     final offset = (size / 2).toOffset();
-    final currentRadius = radius * (isSelected ? 1.6 : 1.0);
+
+    final currentRadius = visualRadius * (isSelected ? 1.6 : 1.0);
 
     if (isHovered || isSelected) {
       final glowPaint = Paint()
@@ -108,12 +112,5 @@ class PathMark extends CircleComponent with TapCallbacks, HoverCallbacks {
   @override
   void onTapDown(TapDownEvent event) {
     onSelected(index);
-  }
-
-  @override
-  bool containsLocalPoint(Vector2 point) {
-    final assistRadius = radius + 15.0;
-    final center = size / 2;
-    return point.distanceToSquared(center) <= assistRadius * assistRadius;
   }
 }

@@ -7,7 +7,8 @@ import 'package:emvia/l10n/app_localizations_gen.dart';
 
 import 'survey_service.dart';
 import 'components/fade_overlay.dart';
-import 'components/player.dart';
+import 'characters/base_player.dart';
+import 'characters/olya/olya_player.dart';
 import 'scenes/game_scene.dart';
 import 'scenes/classroom_scene.dart';
 import 'scenes/corridor_scene.dart';
@@ -40,7 +41,10 @@ class EmviaGame extends FlameGame
   late final CameraManager cameraManager;
   late final TransitionManager transitionManager;
 
-  late final OlyaPlayer olya = OlyaPlayer();
+  BasePlayer? _player;
+  BasePlayer get player => _player!;
+  bool get isPlayerInitialized => _player != null;
+
   late FadeOverlay fadeOverlay;
   final PositionComponent worldRoot = PositionComponent();
 
@@ -118,6 +122,7 @@ class EmviaGame extends FlameGame
   Future<void> onLoad() async {
     await _preferences.load();
 
+    _initializePlayer();
     _configureWorldRoot();
 
     add(worldRoot);
@@ -127,6 +132,16 @@ class EmviaGame extends FlameGame
     await _loadMenuScene();
 
     overlays.add('MainMenu');
+  }
+
+  void _initializePlayer() {
+    switch (selectedCharacter) {
+      case PlayableCharacter.olya:
+        _player = OlyaPlayer();
+        break;
+      default:
+        _player = OlyaPlayer();
+    }
   }
 
   void _configureWorldRoot() {
@@ -139,7 +154,7 @@ class EmviaGame extends FlameGame
     await loadScene(
       SurveyScene(),
       onFullOpacity: () {
-        olya.opacity = 0;
+        player.opacity = 0;
       },
     );
   }
@@ -179,7 +194,7 @@ class EmviaGame extends FlameGame
         StageScene(),
         onFullOpacity: () {
           sceneIndex = savedSceneIndex;
-          olya.opacity = 1;
+          player.opacity = 1;
         },
       );
       return;
@@ -248,7 +263,7 @@ class EmviaGame extends FlameGame
       },
     );
     sceneIndex = 4;
-    olya.opacity = 1;
+    player.opacity = 1;
   }
 
   double currentSceneWorldWidth() {
@@ -275,14 +290,14 @@ class EmviaGame extends FlameGame
     await loadScene(
       ClassroomScene(),
       onFullOpacity: () {
-        olya.opacity = 0;
+        player.opacity = 0;
       },
     );
 
     if (!_session.isCurrentSession(token)) return;
   }
 
-  void finishOlyaJourney() {
+  void finishJourney() {
     if (_session.journeyCompleted) return;
     _session.journeyCompleted = true;
     hideMobileControls();
@@ -377,7 +392,7 @@ class EmviaGame extends FlameGame
   void setMobileMoveX(double direction) {
     if (isFrozen) return;
     _mobileMoveX = direction.clamp(-1.0, 1.0);
-    olya.setMobileDirection(_mobileMoveX);
+    player.setMobileDirection(_mobileMoveX);
   }
 
   void showMobileControls() {
@@ -404,7 +419,7 @@ class EmviaGame extends FlameGame
   void closeMainMenu() {
     overlays.remove('MainMenu');
     if (sceneIndex == 0 && currentScene is CorridorScene) {
-      olya.opacity = 1;
+      player.opacity = 1;
     }
     if (!paused && sceneIndex > 0) {
       showMobileControls();
@@ -460,7 +475,7 @@ class EmviaGame extends FlameGame
       onFullOpacity: () {
         sceneIndex = 4;
         overlays.remove('TapGame');
-        olya.opacity = 1;
+        player.opacity = 1;
       },
     );
 
@@ -516,7 +531,7 @@ class EmviaGame extends FlameGame
 
   void _finishPathChoice() {
     sceneIndex = 2;
-    olya.opacity = 1;
+    player.opacity = 1;
     classroomScene?.showClassroomImage();
     classroomScene?.clearMarks();
     transitionManager.updateClassroomZoom();
@@ -556,7 +571,7 @@ class EmviaGame extends FlameGame
       StressScene(),
       onFullOpacity: () {
         sceneIndex = 3;
-        olya.opacity = 0;
+        player.opacity = 0;
       },
     );
   }
@@ -567,7 +582,7 @@ class EmviaGame extends FlameGame
       StageScene(),
       onFullOpacity: () {
         sceneIndex = 6;
-        olya.opacity = 1;
+        player.opacity = 1;
       },
     );
   }
@@ -580,7 +595,7 @@ class EmviaGame extends FlameGame
   }
 
   void playerToCorridorEntrance() {
-    olya.position.x = olya.size.x / 2 + 10;
+    player.position.x = player.size.x / 2 + 10;
     cameraManager.snapToPlayer(force: true);
   }
 
@@ -597,11 +612,11 @@ class EmviaGame extends FlameGame
       return;
     }
 
-    final minX = olya.size.x / 2;
-    final maxX = worldRoot.size.x - olya.size.x / 2;
-    olya.position.x = savedX.clamp(minX, maxX).toDouble();
+    final minX = player.size.x / 2;
+    final maxX = worldRoot.size.x - player.size.x / 2;
+    player.position.x = savedX.clamp(minX, maxX).toDouble();
     if (currentScene != null) {
-      olya.position.y = currentScene!.spawnPoint(size, worldRoot.size).y;
+      player.position.y = currentScene!.spawnPoint(size, worldRoot.size).y;
     }
     cameraManager.snapToPlayer(force: true);
   }
@@ -611,7 +626,7 @@ class EmviaGame extends FlameGame
     dt = dt.clamp(0, 0.05);
     super.update(dt);
 
-    if (olya.parent == null) return;
+    if (_player == null || _player!.parent == null) return;
 
     if (currentScene is ClassroomScene && _hasReachedRightSceneEdge()) {
       _transitionToStressScene();
@@ -634,8 +649,8 @@ class EmviaGame extends FlameGame
         scene.background.position,
         scene.background.size,
       );
-      final thresholdX = uvTarget.x - olya.size.x / 2;
-      return olya.position.x >= thresholdX;
+      final thresholdX = uvTarget.x - player.size.x / 2;
+      return player.position.x >= thresholdX;
     }
     
     return false;
@@ -652,7 +667,7 @@ class EmviaGame extends FlameGame
       worldRoot.size = Vector2(currentSceneWorldWidth(), size.y);
     }
 
-    if (olya.parent != null) {
+    if (_player != null && _player!.parent != null) {
       _clampPlayerToWorld(scene);
     }
 
@@ -660,17 +675,17 @@ class EmviaGame extends FlameGame
   }
 
   void _clampPlayerToWorld(GameScene? scene) {
-    final minX = olya.size.x / 2;
-    final maxX = worldRoot.size.x - olya.size.x / 2;
+    final minX = player.size.x / 2;
+    final maxX = worldRoot.size.x - player.size.x / 2;
 
     if (minX <= maxX) {
-      olya.position.x = olya.position.x.clamp(minX, maxX).toDouble();
+      player.position.x = player.position.x.clamp(minX, maxX).toDouble();
     } else {
-      olya.position.x = worldRoot.size.x / 2;
+      player.position.x = worldRoot.size.x / 2;
     }
 
     if (scene != null) {
-      olya.position.y = scene.spawnPoint(size, worldRoot.size).y;
+      player.position.y = scene.spawnPoint(size, worldRoot.size).y;
     }
   }
 

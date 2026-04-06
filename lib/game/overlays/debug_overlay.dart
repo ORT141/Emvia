@@ -159,9 +159,9 @@ class DebugOverlay extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        final p1 = game.olya.position.clone();
+                        final p1 = game.player.position.clone();
                         await Future.delayed(const Duration(milliseconds: 120));
-                        final p2 = game.olya.position.clone();
+                        final p2 = game.player.position.clone();
                         final dx = p2.x - p1.x;
                         final dy = p2.y - p1.y;
                         final dist = math.sqrt(dx * dx + dy * dy);
@@ -169,11 +169,11 @@ class DebugOverlay extends StatelessWidget {
                         final zoom = game.worldRoot.scale.x;
                         final worldOffset = game.worldRoot.position;
                         final screenX =
-                            worldOffset.x + game.olya.position.x * zoom;
+                            worldOffset.x + game.player.position.x * zoom;
                         final screenY =
-                            worldOffset.y + game.olya.position.y * zoom;
+                            worldOffset.y + game.player.position.y * zoom;
                         debugPrint(
-                          'PLAYER world=(${game.olya.position.x.toStringAsFixed(1)}, ${game.olya.position.y.toStringAsFixed(1)}) size=(${game.olya.size.x.toStringAsFixed(1)}, ${game.olya.size.y.toStringAsFixed(1)})',
+                          'PLAYER world=(${game.player.position.x.toStringAsFixed(1)}, ${game.player.position.y.toStringAsFixed(1)}) size=(${game.player.size.x.toStringAsFixed(1)}, ${game.player.size.y.toStringAsFixed(1)})',
                         );
                         debugPrint(
                           'PLAYER screen=(${screenX.toStringAsFixed(1)}, ${screenY.toStringAsFixed(1)}) zoom=${zoom.toStringAsFixed(3)} measured_speed=${measuredSpeed.toStringAsFixed(1)}',

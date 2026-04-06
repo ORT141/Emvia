@@ -19,7 +19,7 @@ class SurveyScene extends GameScene {
     background.opacity = 0;
     foreground?.opacity = 0;
 
-    game.olya.opacity = 0;
+    game.player.opacity = 0;
 
     layoutToWorld();
   }
