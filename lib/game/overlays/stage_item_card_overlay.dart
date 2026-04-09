@@ -125,15 +125,8 @@ class _StageItemCardOverlayState extends State<StageItemCardOverlay> {
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(24),
-                                  child: Image.asset(
-                                    'assets/images/${item.normalSpritePath}',
-                                    fit: BoxFit.contain,
-                                    height: 220,
-                                  ),
-                                ),
                                 Positioned(
+                                  bottom: 7,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(24),
                                     child: Image.asset(
@@ -141,6 +134,14 @@ class _StageItemCardOverlayState extends State<StageItemCardOverlay> {
                                       fit: BoxFit.contain,
                                       height: 220,
                                     ),
+                                  ),
+                                ),
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: Image.asset(
+                                    'assets/images/${item.normalSpritePath}',
+                                    fit: BoxFit.contain,
+                                    height: 220,
                                   ),
                                 ),
                               ],
