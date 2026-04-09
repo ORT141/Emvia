@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../emvia_game.dart';
 import '../scenes/classroom_scene.dart';
 import '../scenes/corridor_scene.dart';
+import '../scenes/stage_scene.dart';
 
 class DebugOverlay extends StatelessWidget {
   final EmviaGame game;
@@ -134,9 +135,20 @@ class DebugOverlay extends StatelessWidget {
                       ),
                       onPressed: () async {
                         game.overlays.remove('Debug');
-                        await game.skipToCorridor();
+                        await game.skipToScene(CorridorScene());
                       },
                       child: const Text('Skip all => Corridor'),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purpleAccent,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () async {
+                        game.overlays.remove('Debug');
+                        await game.skipToScene(StageScene());
+                      },
+                      child: const Text('Skip all => Stage'),
                     ),
                   ],
                 ),

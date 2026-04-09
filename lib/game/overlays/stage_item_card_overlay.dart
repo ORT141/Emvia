@@ -126,7 +126,7 @@ class _StageItemCardOverlayState extends State<StageItemCardOverlay> {
                               alignment: Alignment.center,
                               children: [
                                 Positioned(
-                                  bottom: 7,
+                                  bottom: 10,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(24),
                                     child: Image.asset(

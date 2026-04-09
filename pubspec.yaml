@@ -48,6 +48,7 @@ flutter:
         - assets/images/scenes/classroom/
         - assets/images/scenes/corridor/
         - assets/images/scenes/stage/
+        - assets/images/scenes/scene/
         - assets/images/wall-patterns/
         - assets/sounds/paths/
         - assets/sounds/survey/

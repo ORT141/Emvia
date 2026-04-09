@@ -38,7 +38,7 @@ class StageScene extends GameScene {
       id: 'book',
       normalSpritePath: 'scenes/stage/books.png',
       selectedSpritePath: 'scenes/stage/books_selected.png',
-      uv: Vector2(0.7978, 0.61),
+      uv: Vector2(0.7355, 0.595),
       heightFactor: _booksHeightFactor,
       soundAssetEn: 'items/stage/thick book.mp3',
       soundAssetUk: 'items/stage/товста книжка.mp3',
@@ -49,7 +49,7 @@ class StageScene extends GameScene {
       id: 'bag_of_rocks',
       normalSpritePath: 'scenes/stage/bag_of_rocks.png',
       selectedSpritePath: 'scenes/stage/bag_of_rocks_selected.png',
-      uv: Vector2(0.8109, 0.6222),
+      uv: Vector2(0.7450, 0.6195),
       heightFactor: _bagOfRocksHeightFactor,
       soundAssetEn: 'items/stage/pouch with smooth pebbles.mp3',
       soundAssetUk: 'items/stage/мішечок з камінчиками.mp3',
@@ -60,7 +60,7 @@ class StageScene extends GameScene {
       id: 'hibuki',
       normalSpritePath: 'scenes/stage/hibuki.png',
       selectedSpritePath: 'scenes/stage/hibuki_selected.png',
-      uv: Vector2(0.835, 0.49),
+      uv: Vector2(0.775, 0.4975),
       heightFactor: _hibukiHeightFactor,
       soundAssetEn: 'items/stage/hug-dog.mp3',
       soundAssetUk: 'items/stage/собака обіймака.mp3',
@@ -129,15 +129,16 @@ class StageScene extends GameScene {
       return;
     }
 
-    final halfWorldX = game.worldRoot.size.x / 2;
-    if (game.player.position.x >= halfWorldX) {
+    final sceneEdgeX = game.worldRoot.size.x - game.player.size.x - 50;
+    if (game.player.position.x >= sceneEdgeX) {
       _hasShownCalmingPrompt = true;
 
       clearSelectedItem();
       try {
         game.player.endInteraction();
       } catch (_) {}
-      game.overlays.add('CalmingItemPrompt');
+
+      game.playRightSideScene();
     }
   }
 

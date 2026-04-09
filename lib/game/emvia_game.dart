@@ -14,6 +14,7 @@ import 'scenes/classroom_scene.dart';
 import 'scenes/corridor_scene.dart';
 import 'scenes/stress/stress_scene.dart';
 import 'scenes/stage_scene.dart';
+import 'scenes/scene_scene.dart';
 import 'utils/pos_util.dart';
 import 'scenes/notebook_scene.dart';
 import 'scenes/path/path_choice_scene.dart';
@@ -319,6 +320,20 @@ class EmviaGame extends FlameGame
     player.opacity = 1;
   }
 
+  Future<void> playRightSideScene() async {
+    await loadScene(SceneScene(), onFullOpacity: () {});
+  }
+
+  Future<void> loadStageScene() async {
+    await loadScene(
+      StageScene(),
+      onFullOpacity: () {
+        sceneIndex = 6;
+        player.opacity = 1;
+      },
+    );
+  }
+
   double currentSceneWorldWidth() {
     final scene = currentScene;
     return scene?.worldWidthForViewport(size) ?? worldWidth;
@@ -506,7 +521,7 @@ class EmviaGame extends FlameGame
     _startGameFlow();
   }
 
-  Future<void> skipToCorridor() async {
+  Future<void> skipToScene(GameScene scene) async {
     final token = _session.beginSession();
     final profile = await _surveyService.getProfile();
 
@@ -524,15 +539,28 @@ class EmviaGame extends FlameGame
     _clearGameplayOverlays();
 
     await loadScene(
-      CorridorScene(),
+      scene,
       onFullOpacity: () {
-        sceneIndex = 4;
+        sceneIndex = _sceneIndexForScene(scene);
         overlays.remove('TapGame');
-        player.opacity = 1;
+        if (scene is CorridorScene || scene is StageScene) {
+          player.opacity = 1;
+        }
       },
     );
 
     if (!_session.isCurrentSession(token)) return;
+  }
+
+  int _sceneIndexForScene(GameScene scene) {
+    if (scene is ClassroomScene) return 1;
+    if (scene is PathChoiceScene) return 2;
+    if (scene is StressScene) return 3;
+    if (scene is CorridorScene) return 4;
+    if (scene is StageScene) return 6;
+    if (scene is SurveyScene) return 0;
+    if (scene is NotebookScene) return 0;
+    return sceneIndex;
   }
 
   void showPathDetail(PathDetailInfo info) {

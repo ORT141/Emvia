@@ -206,10 +206,15 @@ class StressScene extends GameScene {
   }
 }
 
-class NoiseOverlay extends Component with HasGameReference<EmviaGame> {
+class NoiseOverlay extends PositionComponent with HasGameReference<EmviaGame> {
   final math.Random _random = math.Random();
-  Vector2 size = Vector2.zero();
   double intensity = 1.0;
+
+  NoiseOverlay() : super(anchor: Anchor.topLeft);
+  double _opacityValue = 1.0;
+  bool _fading = false;
+  double _fadeDuration = 0.6;
+  double _fadeElapsed = 0.0;
 
   @override
   void render(ui.Canvas canvas) {
@@ -217,14 +222,34 @@ class NoiseOverlay extends Component with HasGameReference<EmviaGame> {
     final h = size.y;
     if (w <= 0 || h <= 0) return;
 
-    final alpha = (0x66 * intensity).round().clamp(0, 255);
-    final paint = ui.Paint()..color = ui.Color.fromARGB(alpha, 255, 255, 255);
+    final baseAlpha = (0x66 * intensity).round().clamp(0, 255);
+    final totalAlpha = (baseAlpha * _opacityValue).round().clamp(0, 255);
+    final paint = ui.Paint()..color = ui.Color.fromARGB(totalAlpha, 255, 255, 255);
 
     for (var i = 0; i < 1000; i++) {
       final x = _random.nextDouble() * w;
       final y = _random.nextDouble() * h;
-      final size = _random.nextDouble() * 3 + 1;
-      canvas.drawRect(ui.Rect.fromLTWH(x, y, size, size), paint);
+      final s = _random.nextDouble() * 3 + 1;
+      canvas.drawRect(ui.Rect.fromLTWH(x, y, s, s), paint);
     }
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (_fading) {
+      _fadeElapsed += dt;
+      final t = (_fadeElapsed / _fadeDuration).clamp(0.0, 1.0);
+      _opacityValue = 1.0 - t;
+      if (t >= 1.0) {
+        removeFromParent();
+      }
+    }
+  }
+
+  void fadeOut(Duration duration) {
+    _fadeDuration = duration.inMilliseconds / 1000.0;
+    _fadeElapsed = 0.0;
+    _fading = true;
   }
 }
