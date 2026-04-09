@@ -129,17 +129,6 @@ class DebugOverlay extends StatelessWidget {
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        foregroundColor: Colors.white,
-                      ),
-                      onPressed: () {
-                        game.overlays.remove('Debug');
-                        game.toggleBackpack();
-                      },
-                      child: const Text('Toggle Inventory'),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.orangeAccent,
                         foregroundColor: Colors.white,
                       ),

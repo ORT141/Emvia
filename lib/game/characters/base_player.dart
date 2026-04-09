@@ -16,6 +16,7 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
   final Vector2 keyboardVelocity = Vector2.zero();
   final Vector2 mobileVelocity = Vector2.zero();
   final double speed = 230.0;
+  double? interactionY;
 
   void updatePlayerSize() {
     final height = game.size.y * 0.42;
@@ -68,7 +69,7 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
       size.x / 2,
       game.worldRoot.size.x - size.x / 2,
     );
-    position.y = game.worldRoot.size.y * 0.58;
+    position.y = interactionY ?? game.worldRoot.size.y * 0.58;
   }
 
   @override
@@ -115,5 +116,9 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
       ..y = 0;
   }
 
+  Future<void> interactWithItem(String itemId);
+
   String get stressPanicSprite;
+
+  void endInteraction() {}
 }

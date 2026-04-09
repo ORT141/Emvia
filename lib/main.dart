@@ -2,6 +2,8 @@
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/game/scenes/path/path_detail_component.dart';
 import 'package:emvia/game/overlays/calm_map_overlay.dart';
+import 'package:emvia/game/overlays/calm_effect_overlay.dart';
+import 'package:emvia/game/overlays/calm_item_prompt_overlay.dart';
 import 'package:emvia/game/overlays/dialog.dart';
 import 'package:emvia/game/overlays/main_menu.dart';
 import 'package:emvia/game/overlays/mobile_controls_overlay.dart';
@@ -127,6 +129,8 @@ class _MyAppState extends State<MyApp> {
           'Survey': (_, game) => SurveyOverlay(game: game),
           'Backpack': (_, game) => BackpackOverlay(game: game),
           'StageItemCard': (_, game) => StageItemCardOverlay(game: game),
+          'CalmingItemPrompt': (_, game) => CalmingItemPromptOverlay(game: game),
+          'CalmingEffect': (_, game) => CalmEffectOverlay(game: game),
           'MobileControls': (_, game) => MobileControlsOverlay(game: game),
           'Debug': (_, game) => DebugOverlay(game: game),
           'Stress': (_, game) => StressOverlay(game: game),

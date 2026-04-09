@@ -39,6 +39,9 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get calmed => 'Фух... стало тихіше. йду далі';
 
   @override
+  String get calming => 'Заспокоююсь...';
+
+  @override
   String get stress_intro_caption =>
       'Це ваш рівень стресу.\nЙого можна зменшити речами.';
 
@@ -77,6 +80,16 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get cancel => 'Скасувати';
+
+  @override
+  String get useItem => 'Використати';
+
+  @override
+  String get calmingItemTooltipTitle => 'Заспокійливий предмет попереду';
+
+  @override
+  String get calmingItemTooltipBody =>
+      'Торкнись заспокійливого предмета на екрані, щоб розслабитись і знизити стрес.';
 
   @override
   String get backToMenu => 'Головне меню';
@@ -200,7 +213,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get item_lunchbox_desc =>
-      'Знайома та безпечна їжа у своєму боксі — це важливо для комфорту поза домом. Але зараз проблема не в голоді, а в рівні шуму! Цей предмет тут не допоможе.';
+      'Знайома та безпечна їжа у своєму боксі - це важливо для комфорту поза домом. Але зараз проблема не в голоді, а в рівні шуму! Цей предмет тут не допоможе.';
 
   @override
   String get stage_item_book_title => 'Книжка';
@@ -214,7 +227,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get stage_item_bag_of_rocks_description =>
-      'Працює як інструмент саморегуляції — через тактильні відчуття та повторювані рухи. Дотик до гладких камінців знижує напруження. Правильний ресурс.';
+      'Працює як інструмент саморегуляції - через тактильні відчуття та повторювані рухи. Дотик до гладких камінців знижує напруження. Правильний ресурс.';
 
   @override
   String get stage_item_hibuki_title => 'Хібукі';
@@ -241,7 +254,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
       'Поки що порожньо. Досліджуй світ, щоб знайти щось корисне.';
 
   @override
-  String get dialog_stranger_rude => 'Коли кажу — не говори, що не попереджав.';
+  String get dialog_stranger_rude => 'Коли кажу - не говори, що не попереджав.';
 
   @override
   String get dialog_calmed_you_feel_better => 'Ти почуваєшся набагато краще.';
@@ -291,7 +304,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get character_olya_title => 'Оля, 14 років';
 
   @override
-  String get character_olya_quote => '\"Я не говоритиму — я покажу\"';
+  String get character_olya_quote => '\"Я не говоритиму - я покажу\"';
 
   @override
   String get character_olya_trait =>
@@ -320,7 +333,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get character_liam_description =>
-      'Бореться за безбар’єрність і показує, що доступність — це свобода обирати свій маршрут.';
+      'Бореться за безбар’єрність і показує, що доступність - це свобода обирати свій маршрут.';
 
   @override
   String get character_olenka_title => 'Оленка, 15 років';
@@ -354,11 +367,11 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get character_anton_superPower =>
-      'Графічний дизайн та спостережливість. Вміє «чути очима» — безпомилково зчитує найтонші емоції з обличчя (навіть сарказм чи розгубленість).';
+      'Графічний дизайн та спостережливість. Вміє «чути очима» - безпомилково зчитує найтонші емоції з обличчя (навіть сарказм чи розгубленість).';
 
   @override
   String get character_anton_description =>
-      'Впевнений, креативний підліток із тонким почуттям гумору, який мріє створити власну манґу. Антон доводить, що комунікація не обмежується голосом. Його історія вчить тому, що жестова мова — це повноцінна мова, а мистецтво та емодзі можуть пояснити те, для чого не вистачає слів';
+      'Впевнений, креативний підліток із тонким почуттям гумору, який мріє створити власну манґу. Антон доводить, що комунікація не обмежується голосом. Його історія вчить тому, що жестова мова - це повноцінна мова, а мистецтво та емодзі можуть пояснити те, для чого не вистачає слів';
 
   @override
   String get survey_calibration_title => 'Калібрування сенсорного профілю';
@@ -375,7 +388,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get survey_post_modal_text =>
-      'Ваша місія: Сьогодні дуже важливий день. Оля має презентувати свій проєкт на шкільній сцені в актовій залі. Її девіз: «Я не говоритиму — я покажу». Але щоб дістатися сцени і показати свій малюнок, їй потрібно вийти з тихого класу і пройти через усю школу. Дорога до актової зали сповнена стресових факторів: раптових дзвінків, яскравого світла та галасливих натовпів. Допоможіть Олі не загубитися в цьому галасливому світі, побудувати власний безпечний маршрут, успішно дістатися сцени та створіть свою власну \"Мапу спокою\"!';
+      'Ваша місія: Сьогодні дуже важливий день. Оля має презентувати свій проєкт на шкільній сцені в актовій залі. Її девіз: «Я не говоритиму - я покажу». Але щоб дістатися сцени і показати свій малюнок, їй потрібно вийти з тихого класу і пройти через усю школу. Дорога до актової зали сповнена стресових факторів: раптових дзвінків, яскравого світла та галасливих натовпів. Допоможіть Олі не загубитися в цьому галасливому світі, побудувати власний безпечний маршрут, успішно дістатися сцени та створіть свою власну \"Мапу спокою\"!';
 
   @override
   String get survey_post_modal_button => 'Добре';
@@ -430,7 +443,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get play_again => 'Зіграти ще раз';
 
   @override
-  String get survey_safe_color_title => '1. Який колір для тебе — безпечний?';
+  String get survey_safe_color_title => '1. Який колір для тебе - безпечний?';
 
   @override
   String get survey_mint => 'М’ятний';
@@ -529,7 +542,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get survey_support_grounding =>
-      'Твій світ — це твоя сила, покажи його';
+      'Твій світ - це твоя сила, покажи його';
 
   @override
   String get survey_support_visualization =>
@@ -590,11 +603,11 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get second_path_description =>
-      'Тихі коридори біля бібліотеки. Тут розташовані шкільні шафки — Оля може зупинитися і взяти щось зі своїх речей. Маршрут трохи довший, але спокійніший.';
+      'Тихі коридори біля бібліотеки. Тут розташовані шкільні шафки - Оля може зупинитися і взяти щось зі своїх речей. Маршрут трохи довший, але спокійніший.';
 
   @override
   String get third_path_description =>
-      'Обхід через внутрішній двір і запасний вхід. Людей майже немає, але шлях довший і менш безпечний — у дворі можуть трапитися старші учні або інші непередбачувані ситуації.';
+      'Обхід через внутрішній двір і запасний вхід. Людей майже немає, але шлях довший і менш безпечний - у дворі можуть трапитися старші учні або інші непередбачувані ситуації.';
 
   @override
   String get map_of_calm_olya => 'Мапа спокою: Оля';
@@ -605,7 +618,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get locker_prompt =>
-      'Ви біля своєї шафки — відкрийте рюкзак, щоб продовжити.';
+      'Ви біля своєї шафки - відкрийте рюкзак, щоб продовжити.';
 
   @override
   String get corridor_pattern_instruction =>

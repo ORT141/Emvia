@@ -190,7 +190,7 @@ class _CalmMapOverlayState extends State<CalmMapOverlay> {
         values.add(label);
       }
     }
-    return values.isEmpty ? '—' : values.join(' • ');
+    return values.isEmpty ? '-' : values.join(' • ');
   }
 }
 

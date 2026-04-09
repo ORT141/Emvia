@@ -149,6 +149,12 @@ class _StageItemCardOverlayState extends State<StageItemCardOverlay> {
                         ],
                       ),
                       const SizedBox(height: 24),
+                      FilledButton.icon(
+                        onPressed: () => widget.game.useStageItem(item),
+                        icon: const Icon(Icons.self_improvement_rounded),
+                        label: Text(l.useItem),
+                      ),
+                      const SizedBox(height: 16),
                       Text(
                         description,
                         style: Theme.of(

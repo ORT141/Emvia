@@ -40,6 +40,10 @@
     "@calmed": {
         "description": "Player's statement after successfully calming down, noting the quieter environment."
     },
+    "calming": "Calming...",
+    "@calming": {
+        "description": "Status label shown while the calming effect is active."
+    },
     "stress_intro_caption": "This is your stress level.\nYou can reduce it with items.",
     "@stress_intro_caption": {
         "description": "Caption shown under the stress meter when it first appears in the corridor."
@@ -91,6 +95,18 @@
     "cancel": "Cancel",
     "@cancel": {
         "description": "Label for canceling an action or closing a dialog."
+    },
+    "useItem": "Use Item",
+    "@useItem": {
+        "description": "Label for using an item from the stage item card."
+    },
+    "calmingItemTooltipTitle": "Calming item ahead",
+    "@calmingItemTooltipTitle": {
+        "description": "Tooltip title prompting the player to use the calming item."
+    },
+    "calmingItemTooltipBody": "Tap the calming item on the screen to relax and lower your stress.",
+    "@calmingItemTooltipBody": {
+        "description": "Tooltip text explaining that the player should tap the calming item."
     },
     "backToMenu": "Main Menu",
     "@backToMenu": {
@@ -295,7 +311,7 @@
     "@character_olya_title": {
         "description": "Olya name + age"
     },
-    "character_olya_quote": "\"I won't speak — I will show\"",
+    "character_olya_quote": "\"I won't speak - I will show\"",
     "@character_olya_quote": {
         "description": "Olya short quote"
     },
@@ -363,7 +379,7 @@
     "@character_anton_trait": {
         "description": "Anton trait description"
     },
-    "character_anton_superPower": "Graphic design and observation skills. Knows how to \"hear with his eyes\" — flawlessly reads the most subtle emotions from a face (even sarcasm or confusion).",
+    "character_anton_superPower": "Graphic design and observation skills. Knows how to \"hear with his eyes\" - flawlessly reads the most subtle emotions from a face (even sarcasm or confusion).",
     "@character_anton_superPower": {
         "description": "Anton super power"
     },
@@ -375,7 +391,7 @@
     "survey_calibration_subtitle": "Answers will personalize Olya's story and the final \"Map of Calm\".",
     "survey_save_continue": "Save and Continue",
     "survey_post_modal_title": "Your Mission",
-    "survey_post_modal_text": "Your mission: Today is a very important day. Olya must present her project on the school stage in the assembly hall. Her motto: \"I won't speak — I will show\". But to get to the stage and show her drawing, she needs to leave the quiet classroom and traverse the whole school. The road to the assembly hall is full of stressors: sudden bells, bright lights, and noisy crowds. Help Olya not get lost in this noisy world, build her own safe route, successfully reach the stage and create your own \"Map of Calm\"!",
+    "survey_post_modal_text": "Your mission: Today is a very important day. Olya must present her project on the school stage in the assembly hall. Her motto: \"I won't speak - I will show\". But to get to the stage and show her drawing, she needs to leave the quiet classroom and traverse the whole school. The road to the assembly hall is full of stressors: sudden bells, bright lights, and noisy crowds. Help Olya not get lost in this noisy world, build her own safe route, successfully reach the stage and create your own \"Map of Calm\"!",
     "survey_post_modal_button": "Okay",
     "path_choice_title": "Choose Route",
     "path_first": "Main corridor",
@@ -513,8 +529,8 @@
     "calm_map_export_failed": "Could not export the calm map PNG.",
     "classroom": "Classroom",
     "first_path_description": "The shortest route. Crowded, noisy, many students. You will have to quickly make your way through the crowd.",
-    "second_path_description": "Quiet corridors near the library. School lockers are located here — Olya can stop and take something from her belongings. The route is a bit longer, but calmer.",
-    "third_path_description": "A detour through the inner courtyard and the back entrance. There are almost no people, but the path is longer and less safe — older students or other unpredictable situations might be encountered in the yard.",
+    "second_path_description": "Quiet corridors near the library. School lockers are located here - Olya can stop and take something from her belongings. The route is a bit longer, but calmer.",
+    "third_path_description": "A detour through the inner courtyard and the back entrance. There are almost no people, but the path is longer and less safe - older students or other unpredictable situations might be encountered in the yard.",
     "map_of_calm_olya": "Map of Calm: Olya",
     "tap_game_title": "Tap the screen repeatedly to calm down",
     "locker_prompt": "You're at your locker, open your backpack to continue.",

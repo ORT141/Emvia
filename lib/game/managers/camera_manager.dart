@@ -8,12 +8,15 @@ class CameraManager {
   final EmviaGame game;
 
   final Vector2 _cameraPos = Vector2.zero();
-  double zoom = 1.1;
+  double _zoom = 1.1;
+  double _targetZoom = 1.1;
   static const double _defaultZoom = 1.1;
+  static const double _zoomSharpness = 5.0;
   static const double _followSharpness = 5.0;
   static const double _deadZonePx = 10.0;
   double _time = 0.0;
   bool liveEnabled = true;
+  bool _focusOnPlayer = false;
   final double _bobAmplitude = 1.0;
   final double _bobFrequency = 0.7;
   final double _breathAmplitude = 0.004;
@@ -22,8 +25,28 @@ class CameraManager {
 
   CameraManager(this.game);
 
+  double get zoom => _zoom;
+  set zoom(double value) => animateZoomTo(value);
+
+  void instantZoom(double value) {
+    _zoom = value;
+    _targetZoom = value;
+  }
+
+  void animateZoomTo(double value) {
+    _targetZoom = value;
+  }
+
+  void beginFocusOnPlayer() {
+    _focusOnPlayer = true;
+  }
+
+  void endFocusOnPlayer() {
+    _focusOnPlayer = false;
+  }
+
   void resetZoom() {
-    zoom = _defaultZoom;
+    animateZoomTo(_defaultZoom);
   }
 
   void update(double dt) {
@@ -41,8 +64,9 @@ class CameraManager {
 
     final target = Vector2(game.player.position.x, game.player.position.y);
     final isWalking = game.player.current == PlayerState.walking;
+    final shouldFollow = isWalking || _focusOnPlayer;
 
-    if (isWalking) {
+    if (shouldFollow) {
       final deadZoneWorld = _deadZonePx / zoom;
 
       final distX = (target.x - _cameraPos.x).abs();
@@ -66,6 +90,8 @@ class CameraManager {
 
     _time += dt;
 
+    _zoom += (_targetZoom - _zoom) * (1 - math.exp(-_zoomSharpness * dt));
+
     final targetAmount = isWalking ? 1.0 : 0.0;
     _bobAmount += (targetAmount - _bobAmount) * (1 - math.exp(-3.0 * dt));
 
@@ -74,7 +100,7 @@ class CameraManager {
               _breathAmplitude *
               _bobAmount
         : 0.0;
-    final effectiveZoom = zoom * (1.0 + breath);
+    final effectiveZoom = _zoom * (1.0 + breath);
 
     final bobPixels = (liveEnabled)
         ? math.sin(_time * (2 * math.pi) * _bobFrequency) *
@@ -91,14 +117,15 @@ class CameraManager {
     if (game.isFrozen && !force) return;
 
     final rawTarget = Vector2(game.player.position.x, game.player.position.y);
+    final effectiveZoom = force ? _targetZoom : zoom;
     final clamped = clampTargetToWorldBounds(
       rawTarget,
-      zoom,
+      effectiveZoom,
       game.size,
       game.worldRoot,
     );
     _cameraPos.setFrom(clamped);
-    _applyToWorld(zoom, 0.0);
+    _applyToWorld(effectiveZoom, 0.0);
   }
 
   void _applyToWorld(double effectiveZoom, double bobWorld) {

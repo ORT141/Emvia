@@ -158,6 +158,12 @@ abstract class AppLocalizationsGen {
   /// **'Phew... it\'s quieter now. moving on'**
   String get calmed;
 
+  /// Status label shown while the calming effect is active.
+  ///
+  /// In en, this message translates to:
+  /// **'Calming...'**
+  String get calming;
+
   /// Caption shown under the stress meter when it first appears in the corridor.
   ///
   /// In en, this message translates to:
@@ -235,6 +241,24 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// Label for using an item from the stage item card.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Item'**
+  String get useItem;
+
+  /// Tooltip title prompting the player to use the calming item.
+  ///
+  /// In en, this message translates to:
+  /// **'Calming item ahead'**
+  String get calmingItemTooltipTitle;
+
+  /// Tooltip text explaining that the player should tap the calming item.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the calming item on the screen to relax and lower your stress.'**
+  String get calmingItemTooltipBody;
 
   /// Label to return to the main menu screen.
   ///
@@ -629,7 +653,7 @@ abstract class AppLocalizationsGen {
   /// Olya short quote
   ///
   /// In en, this message translates to:
-  /// **'\"I won\'t speak — I will show\"'**
+  /// **'\"I won\'t speak - I will show\"'**
   String get character_olya_quote;
 
   /// Olya trait description
@@ -731,7 +755,7 @@ abstract class AppLocalizationsGen {
   /// Anton super power
   ///
   /// In en, this message translates to:
-  /// **'Graphic design and observation skills. Knows how to \"hear with his eyes\" — flawlessly reads the most subtle emotions from a face (even sarcasm or confusion).'**
+  /// **'Graphic design and observation skills. Knows how to \"hear with his eyes\" - flawlessly reads the most subtle emotions from a face (even sarcasm or confusion).'**
   String get character_anton_superPower;
 
   /// Anton long description
@@ -767,7 +791,7 @@ abstract class AppLocalizationsGen {
   /// No description provided for @survey_post_modal_text.
   ///
   /// In en, this message translates to:
-  /// **'Your mission: Today is a very important day. Olya must present her project on the school stage in the assembly hall. Her motto: \"I won\'t speak — I will show\". But to get to the stage and show her drawing, she needs to leave the quiet classroom and traverse the whole school. The road to the assembly hall is full of stressors: sudden bells, bright lights, and noisy crowds. Help Olya not get lost in this noisy world, build her own safe route, successfully reach the stage and create your own \"Map of Calm\"!'**
+  /// **'Your mission: Today is a very important day. Olya must present her project on the school stage in the assembly hall. Her motto: \"I won\'t speak - I will show\". But to get to the stage and show her drawing, she needs to leave the quiet classroom and traverse the whole school. The road to the assembly hall is full of stressors: sudden bells, bright lights, and noisy crowds. Help Olya not get lost in this noisy world, build her own safe route, successfully reach the stage and create your own \"Map of Calm\"!'**
   String get survey_post_modal_text;
 
   /// No description provided for @survey_post_modal_button.
@@ -1151,13 +1175,13 @@ abstract class AppLocalizationsGen {
   /// No description provided for @second_path_description.
   ///
   /// In en, this message translates to:
-  /// **'Quiet corridors near the library. School lockers are located here — Olya can stop and take something from her belongings. The route is a bit longer, but calmer.'**
+  /// **'Quiet corridors near the library. School lockers are located here - Olya can stop and take something from her belongings. The route is a bit longer, but calmer.'**
   String get second_path_description;
 
   /// No description provided for @third_path_description.
   ///
   /// In en, this message translates to:
-  /// **'A detour through the inner courtyard and the back entrance. There are almost no people, but the path is longer and less safe — older students or other unpredictable situations might be encountered in the yard.'**
+  /// **'A detour through the inner courtyard and the back entrance. There are almost no people, but the path is longer and less safe - older students or other unpredictable situations might be encountered in the yard.'**
   String get third_path_description;
 
   /// No description provided for @map_of_calm_olya.

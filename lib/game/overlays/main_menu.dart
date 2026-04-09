@@ -586,7 +586,7 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
             children: [
               _CharacterGhost(
                 imagePath: 'player-selecting/olya_ghost.png',
-                realImagePath: 'player/standing.png',
+                realImagePath: 'player/olya/standing.png',
                 label: 'Оля',
                 selected: selectedCharacter == PlayableCharacter.olya,
                 hovered: _hoveredCharacter == PlayableCharacter.olya,

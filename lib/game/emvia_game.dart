@@ -114,6 +114,7 @@ class EmviaGame extends FlameGame
   bool get isStageItemCardOpen => overlays.isActive('StageItemCard');
 
   void showStageItemCard(StageItemCardData item) {
+    overlays.remove('CalmingItemPrompt');
     selectedStageItemNotifier.value = item;
     overlays.add('StageItemCard');
   }
@@ -124,6 +125,39 @@ class EmviaGame extends FlameGame
     if (currentScene is StageScene) {
       (currentScene as StageScene).clearSelectedItem();
     }
+  }
+
+  Future<void> useStageItem(StageItemCardData item) async {
+    if (!isPlayerInitialized) return;
+
+    isFrozen = true;
+    hideMobileControls();
+    overlays.add('CalmingEffect');
+    hideStageItemCard();
+
+    cameraManager.animateZoomTo(1.45);
+    cameraManager.beginFocusOnPlayer();
+
+    if (item.id == 'rocking_chair' && currentScene is StageScene) {
+      final chairPos = (currentScene as StageScene).chairWorldPosition;
+      if (chairPos != null) {
+        player.position.x = chairPos.x;
+        // player.interactionY = chairPos.y + player.size.y * 0.1;
+      }
+    } else {
+      player.interactionY = null;
+    }
+
+    await player.interactWithItem(item.id);
+
+    stressLevel = (stressLevel - 10).clamp(0, 100);
+
+    overlays.remove('CalmingEffect');
+    cameraManager.animateZoomTo(1.1);
+    cameraManager.endFocusOnPlayer();
+    player.interactionY = null;
+    isFrozen = false;
+    showMobileControls();
   }
 
   bool debugTapEnabled = false;

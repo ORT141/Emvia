@@ -24,10 +24,7 @@ class PatternProgressOverlay extends StatelessWidget {
       child: TweenAnimationBuilder<Offset>(
         duration: const Duration(milliseconds: 800),
         curve: Curves.easeOutBack,
-        tween: Tween<Offset>(
-          begin: const Offset(0, 1.5),
-          end: Offset.zero,
-        ),
+        tween: Tween<Offset>(begin: const Offset(0, 1.5), end: Offset.zero),
         builder: (context, offset, child) {
           return Transform.translate(
             offset: Offset(0, offset.dy * 100),
@@ -46,7 +43,10 @@ class PatternProgressOverlay extends StatelessWidget {
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.black.withAlpha((0.35 * 255).round()),
                         border: Border.all(
@@ -77,10 +77,15 @@ class PatternProgressOverlay extends StatelessWidget {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            l.corridor_pattern_progress(collected.toString(), total.toString()),
+                            l.corridor_pattern_progress(
+                              collected.toString(),
+                              total.toString(),
+                            ),
                             style: TextStyle(
                               fontSize: 15,
-                              color: colorScheme.primary.withAlpha((0.95 * 255).round()),
+                              color: colorScheme.primary.withAlpha(
+                                (0.95 * 255).round(),
+                              ),
                               fontWeight: FontWeight.w900,
                               letterSpacing: 1.2,
                               shadows: const [

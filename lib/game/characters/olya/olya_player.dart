@@ -12,34 +12,41 @@ class OlyaPlayer extends BasePlayer {
   late final SpriteAnimation _walkingHeadphonesAnimation;
   late final SpriteAnimation _wearingHeadphonesAnimation;
 
+  late SpriteAnimation _chosenBooksAnimation;
+  late SpriteAnimation _chosenHibukiAnimation;
+  late SpriteAnimation _chosenBagOfRocksAnimation;
+  late SpriteAnimation _chosenSittingInChairAnimation;
+
+  bool _isInteracting = false;
+
   @override
   Future<void> onLoad() async {
     updatePlayerSize();
 
     _standingAnimation = SpriteAnimation.spriteList([
-      await game.loadSprite('player/standing.png'),
+      await game.loadSprite('player/olya/standing.png'),
     ], stepTime: 1);
 
     _walkingAnimation = SpriteAnimation.spriteList([
       for (int i = 1; i <= 26; i++)
-        await game.loadSprite('player/walking_$i.png'),
+        await game.loadSprite('player/olya/walking_$i.png'),
     ], stepTime: 0.1);
 
     try {
       _standingHeadphonesAnimation = SpriteAnimation.spriteList([
-        await game.loadSprite('player/standing_headphones.png'),
+        await game.loadSprite('player/olya/standing_headphones.png'),
       ], stepTime: 1);
       _walkingHeadphonesAnimation = SpriteAnimation.spriteList([
         for (int i = 1; i <= 29; i++)
-          await game.loadSprite('player/walking_headphones_$i.png'),
+          await game.loadSprite('player/olya/walking_headphones_$i.png'),
       ], stepTime: 0.1);
 
       try {
         final wearingSprite = await game.loadSprite(
-          'player/headphones_wearing.png',
+          'player/olya/headphones_wearing.png',
         );
         final wearedSprite = await game.loadSprite(
-          'player/headphones_weared.png',
+          'player/olya/headphones_weared.png',
         );
         _wearingHeadphonesAnimation = SpriteAnimation.spriteList(
           [wearingSprite, wearedSprite],
@@ -54,6 +61,19 @@ class OlyaPlayer extends BasePlayer {
       _walkingHeadphonesAnimation = _walkingAnimation;
       _wearingHeadphonesAnimation = _standingAnimation;
     }
+
+    _chosenBooksAnimation = SpriteAnimation.spriteList([
+      await game.loadSprite('player/olya/chosen_books.png'),
+    ], stepTime: 1);
+    _chosenHibukiAnimation = SpriteAnimation.spriteList([
+      await game.loadSprite('player/olya/chosen_hibuki.png'),
+    ], stepTime: 1);
+    _chosenBagOfRocksAnimation = SpriteAnimation.spriteList([
+      await game.loadSprite('player/olya/chosen_bag_of_rocks.png'),
+    ], stepTime: 1);
+    _chosenSittingInChairAnimation = SpriteAnimation.spriteList([
+      await game.loadSprite('player/olya/chosen_sitting_in_chair.png'),
+    ], stepTime: 1);
 
     _updateAnimations();
     current = PlayerState.standing;
@@ -77,7 +97,48 @@ class OlyaPlayer extends BasePlayer {
 
   bool _hasHeadphones = false;
 
+  @override
+  Future<void> interactWithItem(String itemId) async {
+    _isInteracting = true;
+    final SpriteAnimation interactionAnim;
+    switch (itemId) {
+      case 'rocking_chair':
+        interactionAnim = _chosenSittingInChairAnimation;
+        break;
+      case 'book':
+        interactionAnim = _chosenBooksAnimation;
+        break;
+      case 'bag_of_rocks':
+        interactionAnim = _chosenBagOfRocksAnimation;
+        break;
+      case 'hibuki':
+        interactionAnim = _chosenHibukiAnimation;
+        break;
+      default:
+        _isInteracting = false;
+        return;
+    }
+    animations = {
+      PlayerState.standing: interactionAnim,
+      PlayerState.walking: interactionAnim,
+    };
+    current = PlayerState.standing;
+    if (current != null) current = current;
+    await Future.delayed(const Duration(milliseconds: 2500));
+    endInteraction();
+  }
+
+  @override
+  void endInteraction() {
+    _isInteracting = false;
+    animations = null;
+    _hasHeadphones = game.selectedTools.contains('headphones');
+    _updateAnimations();
+    if (current != null) current = current;
+  }
+
   void _updateAnimations() {
+    if (_isInteracting) return;
     final prev = _hasHeadphones;
     final hasHeadphones = game.selectedTools.contains('headphones');
     if (hasHeadphones == prev && animations != null) {

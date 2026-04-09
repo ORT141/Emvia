@@ -71,6 +71,7 @@ class StageScene extends GameScene {
 
   final List<_StageItem> _items = [];
   _StageItem? _selectedItem;
+  bool _hasShownCalmingPrompt = false;
 
   @override
   double worldWidthForViewport(Vector2 viewportSize) {
@@ -117,6 +118,30 @@ class StageScene extends GameScene {
   }
 
   @override
+  void update(double dt) {
+    super.update(dt);
+
+    if (_hasShownCalmingPrompt) {
+      return;
+    }
+
+    if (!game.isPlayerInitialized) {
+      return;
+    }
+
+    final halfWorldX = game.worldRoot.size.x / 2;
+    if (game.player.position.x >= halfWorldX) {
+      _hasShownCalmingPrompt = true;
+
+      clearSelectedItem();
+      try {
+        game.player.endInteraction();
+      } catch (_) {}
+      game.overlays.add('CalmingItemPrompt');
+    }
+  }
+
+  @override
   void onRemove() {
     _selectedItem = null;
     _items.clear();
@@ -126,6 +151,22 @@ class StageScene extends GameScene {
   void clearSelectedItem() {
     _selectedItem?.setSelected(false);
     _selectedItem = null;
+  }
+
+  Vector2? get chairWorldPosition {
+    try {
+      final chair = _items.firstWhere(
+        (item) => item.data.id == 'rocking_chair',
+      );
+
+      final pos = chair.position.clone()
+        ..y -= chair.size.y * 0.5
+        ..y += game.player.size.y * 0.5;
+
+      return pos;
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<void> _addItem(StageItemCardData data) async {

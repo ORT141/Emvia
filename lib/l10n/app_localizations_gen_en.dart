@@ -39,6 +39,9 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get calmed => 'Phew... it\'s quieter now. moving on';
 
   @override
+  String get calming => 'Calming...';
+
+  @override
   String get stress_intro_caption =>
       'This is your stress level.\nYou can reduce it with items.';
 
@@ -77,6 +80,16 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get useItem => 'Use Item';
+
+  @override
+  String get calmingItemTooltipTitle => 'Calming item ahead';
+
+  @override
+  String get calmingItemTooltipBody =>
+      'Tap the calming item on the screen to relax and lower your stress.';
 
   @override
   String get backToMenu => 'Main Menu';
@@ -291,7 +304,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get character_olya_title => 'Olya, 14 years';
 
   @override
-  String get character_olya_quote => '\"I won\'t speak — I will show\"';
+  String get character_olya_quote => '\"I won\'t speak - I will show\"';
 
   @override
   String get character_olya_trait =>
@@ -355,7 +368,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get character_anton_superPower =>
-      'Graphic design and observation skills. Knows how to \"hear with his eyes\" — flawlessly reads the most subtle emotions from a face (even sarcasm or confusion).';
+      'Graphic design and observation skills. Knows how to \"hear with his eyes\" - flawlessly reads the most subtle emotions from a face (even sarcasm or confusion).';
 
   @override
   String get character_anton_description =>
@@ -376,7 +389,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get survey_post_modal_text =>
-      'Your mission: Today is a very important day. Olya must present her project on the school stage in the assembly hall. Her motto: \"I won\'t speak — I will show\". But to get to the stage and show her drawing, she needs to leave the quiet classroom and traverse the whole school. The road to the assembly hall is full of stressors: sudden bells, bright lights, and noisy crowds. Help Olya not get lost in this noisy world, build her own safe route, successfully reach the stage and create your own \"Map of Calm\"!';
+      'Your mission: Today is a very important day. Olya must present her project on the school stage in the assembly hall. Her motto: \"I won\'t speak - I will show\". But to get to the stage and show her drawing, she needs to leave the quiet classroom and traverse the whole school. The road to the assembly hall is full of stressors: sudden bells, bright lights, and noisy crowds. Help Olya not get lost in this noisy world, build her own safe route, successfully reach the stage and create your own \"Map of Calm\"!';
 
   @override
   String get survey_post_modal_button => 'Okay';
@@ -591,11 +604,11 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get second_path_description =>
-      'Quiet corridors near the library. School lockers are located here — Olya can stop and take something from her belongings. The route is a bit longer, but calmer.';
+      'Quiet corridors near the library. School lockers are located here - Olya can stop and take something from her belongings. The route is a bit longer, but calmer.';
 
   @override
   String get third_path_description =>
-      'A detour through the inner courtyard and the back entrance. There are almost no people, but the path is longer and less safe — older students or other unpredictable situations might be encountered in the yard.';
+      'A detour through the inner courtyard and the back entrance. There are almost no people, but the path is longer and less safe - older students or other unpredictable situations might be encountered in the yard.';
 
   @override
   String get map_of_calm_olya => 'Map of Calm: Olya';

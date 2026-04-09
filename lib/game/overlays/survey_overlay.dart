@@ -328,13 +328,16 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
       transitionDuration: const Duration(milliseconds: 280),
       pageBuilder: (context, animation, secondaryAnimation) {
         return Scaffold(
-          backgroundColor: Colors.black.withOpacity(0.6),
+          backgroundColor: Colors.black.withValues(alpha: 0.6),
           body: SafeArea(
             child: Center(
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(24),
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
                   borderRadius: BorderRadius.circular(20),
@@ -345,7 +348,8 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
                   children: [
                     Text(
                       l.survey_post_modal_title,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     Text(
@@ -356,8 +360,13 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
                     Center(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();

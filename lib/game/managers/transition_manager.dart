@@ -47,7 +47,11 @@ class TransitionManager {
       game.player.opacity = 0.0;
     }
 
-    game.player.position = game.sceneSpawnPoint(scene, game.size, game.worldRoot);
+    game.player.position = game.sceneSpawnPoint(
+      scene,
+      game.size,
+      game.worldRoot,
+    );
 
     if (onFullOpacity != null) {
       onFullOpacity();
