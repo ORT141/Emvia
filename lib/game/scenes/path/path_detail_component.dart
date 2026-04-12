@@ -193,9 +193,7 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                               constraints: const BoxConstraints(maxWidth: 160),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(
-                                    0xFF2E7D32,
-                                  ).withValues(alpha: isUnlocked ? 1.0 : 0.4),
+                                  backgroundColor: const Color(0xFF2E7D32),
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 12,
                                     horizontal: 16,
@@ -204,7 +202,7 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                                     borderRadius: BorderRadius.circular(14),
                                   ),
                                 ),
-                                onPressed: isUnlocked ? widget.onConfirm : null,
+                                onPressed: widget.onConfirm,
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
                                   child: Text(
@@ -212,9 +210,7 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w800,
-                                      color: Colors.white.withValues(
-                                        alpha: isUnlocked ? 1.0 : 0.5,
-                                      ),
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),

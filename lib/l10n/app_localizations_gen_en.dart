@@ -73,6 +73,40 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get breathing => 'Breathing';
 
   @override
+  String get breathing_title => 'Breathing Exercise';
+
+  @override
+  String get breathing_cycle => 'Cycle';
+
+  @override
+  String get breathing_tap_to_advance => 'Tap to advance to the next step';
+
+  @override
+  String get breathing_done => 'Well done!';
+
+  @override
+  String get breathing_back_to_map => 'Back to map';
+
+  @override
+  String get breathing_inhale => 'inhale';
+
+  @override
+  String get breathing_exhale => 'exhale';
+
+  @override
+  String get breathing_hold => 'hold';
+
+  @override
+  String get breathing_inhale_instruction => 'Slowly inhale through your nose.';
+
+  @override
+  String get breathing_hold_instruction => 'Hold your breath.';
+
+  @override
+  String get breathing_exhale_instruction =>
+      'Slowly exhale through your mouth like a straw.';
+
+  @override
   String get credits => 'Credits';
 
   @override

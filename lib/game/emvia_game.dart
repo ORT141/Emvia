@@ -18,6 +18,8 @@ import 'scenes/scene_scene.dart';
 import 'utils/pos_util.dart';
 import 'scenes/notebook_scene.dart';
 import 'scenes/path/path_choice_scene.dart';
+import 'scenes/second_corridor_scene.dart';
+import 'scenes/outside_scene.dart';
 import 'scenes/survey_scene.dart';
 import 'dialog/dialog_model.dart';
 import 'backpack/backpack_inventory.dart';
@@ -465,7 +467,11 @@ class EmviaGame extends FlameGame
 
   void showMobileControls() {
     if (!isMobilePlatform) return;
-    if (currentScene is! CorridorScene) return;
+    if (currentScene is! CorridorScene &&
+        currentScene is! SecondCorridorScene &&
+        currentScene is! OutsideScene) {
+      return;
+    }
     if (!overlays.isActive('MobileControls')) {
       overlays.add('MobileControls');
     }
@@ -579,10 +585,6 @@ class EmviaGame extends FlameGame
     }
   }
 
-  void showPathBackground() {
-    classroomScene?.showPathImage();
-  }
-
   void clearPathOverlay() {
     classroomScene?.clearPathOverlay();
   }
@@ -627,7 +629,53 @@ class EmviaGame extends FlameGame
     final l = AppLocalizationsGen.of(context)!;
     _recordPathChoice(l, index);
 
-    await goToCorridor();
+    if (index == 0) {
+      await goToSecondCorridor();
+    } else if (index == 2) {
+      await goToOutside();
+    } else {
+      await goToCorridor();
+    }
+  }
+
+  Future<void> goToSecondCorridor() async {
+    await loadScene(
+      SecondCorridorScene(),
+      onFullOpacity: () {
+        sceneIndex = 4;
+        player.opacity = 1;
+        showMobileControls();
+      },
+    );
+  }
+
+  Future<void> goToOutside() async {
+    await loadScene(
+      OutsideScene(),
+      onFullOpacity: () {
+        sceneIndex = 4;
+        player.opacity = 1;
+        showMobileControls();
+      },
+    );
+  }
+
+  void showBreathingExercise() {
+    isFrozen = true;
+    hideMobileControls();
+    overlays.add('BreathingExercise');
+  }
+
+  Future<void> finishBreathingExercise() async {
+    overlays.remove('BreathingExercise');
+    isFrozen = false;
+    await loadScene(
+      PathChoiceScene(),
+      onFullOpacity: () {
+        sceneIndex = 2;
+        player.opacity = 0;
+      },
+    );
   }
 
   void _recordPathChoice(AppLocalizationsGen l, int index) {
@@ -697,7 +745,7 @@ class EmviaGame extends FlameGame
     final maxX = worldRoot.size.x - player.size.x / 2;
     player.position.x = savedX.clamp(minX, maxX).toDouble();
     if (currentScene != null) {
-      player.position.y = currentScene!.spawnPoint(size, worldRoot.size).y;
+      player.position.y = sceneSpawnPoint(currentScene!, size, worldRoot).y;
     }
     cameraManager.snapToPlayer(force: true);
   }
@@ -766,7 +814,7 @@ class EmviaGame extends FlameGame
     }
 
     if (scene != null) {
-      player.position.y = scene.spawnPoint(size, worldRoot.size).y;
+      player.position.y = sceneSpawnPoint(scene, size, worldRoot).y;
     }
   }
 
@@ -803,6 +851,7 @@ class EmviaGame extends FlameGame
     Vector2 screenSize,
     PositionComponent root,
   ) {
-    return scene.spawnPoint(screenSize, root.size);
+    final p = scene.spawnPoint(screenSize, root.size);
+    return Vector2(p.x, p.y + scene.playerYOffset);
   }
 }

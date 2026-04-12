@@ -15,6 +15,7 @@ import 'package:emvia/game/overlays/debug_overlay.dart';
 import 'package:emvia/game/scenes/stress/stress_overlay.dart';
 import 'package:emvia/game/overlays/tap_game_overlay.dart';
 import 'package:emvia/game/overlays/pattern_progress_overlay.dart';
+import 'package:emvia/game/overlays/breathing_exercise_overlay.dart';
 import 'package:emvia/game/scenes/corridor_scene.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
@@ -135,6 +136,7 @@ class _MyAppState extends State<MyApp> {
           'Debug': (_, game) => DebugOverlay(game: game),
           'Stress': (_, game) => StressOverlay(game: game),
           'TapGame': (_, game) => TapGameOverlay(game: game),
+          'BreathingExercise': (_, game) => BreathingExerciseOverlay(game: game),
           'CalmMap': (_, game) => CalmMapOverlay(game: game),
           'PatternProgress': (_, game) {
             final scene = game.currentScene;

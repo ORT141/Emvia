@@ -46,7 +46,9 @@ flutter:
         - assets/images/player-selecting/
         - assets/images/scenes/
         - assets/images/scenes/classroom/
+        - assets/images/scenes/outside/
         - assets/images/scenes/corridor/
+        - assets/images/scenes/second-corridor/
         - assets/images/scenes/stage/
         - assets/images/scenes/scene/
         - assets/images/wall-patterns/

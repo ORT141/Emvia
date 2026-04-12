@@ -14,6 +14,7 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
 
   final bool showControls;
   final bool frozenPlayer;
+  final double playerYOffset;
 
   GameScene({
     this.backgroundPath = '',
@@ -22,6 +23,7 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
     this.scalingMode = SceneScalingMode.scrolling,
     this.showControls = false,
     this.frozenPlayer = false,
+    this.playerYOffset = 0.0,
   }) : foregroundPaths = [
          if (foregroundPath != null && foregroundPath.isNotEmpty)
            foregroundPath,

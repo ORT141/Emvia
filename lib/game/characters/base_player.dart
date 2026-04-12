@@ -69,7 +69,17 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
       size.x / 2,
       game.worldRoot.size.x - size.x / 2,
     );
-    position.y = interactionY ?? game.worldRoot.size.y * 0.58;
+    position.y =
+        interactionY ??
+        (game.currentScene != null
+            ? game
+                  .sceneSpawnPoint(
+                    game.currentScene!,
+                    game.size,
+                    game.worldRoot,
+                  )
+                  .y
+            : game.worldRoot.size.y * 0.58);
   }
 
   @override

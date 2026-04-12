@@ -224,6 +224,72 @@ abstract class AppLocalizationsGen {
   /// **'Breathing'**
   String get breathing;
 
+  /// Title shown at the start of the breathing exercise overlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Breathing Exercise'**
+  String get breathing_title;
+
+  /// Label for the current breathing cycle count.
+  ///
+  /// In en, this message translates to:
+  /// **'Cycle'**
+  String get breathing_cycle;
+
+  /// Instruction shown on the breathing overlay to tap the screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to advance to the next step'**
+  String get breathing_tap_to_advance;
+
+  /// Text shown when the breathing exercise is complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Well done!'**
+  String get breathing_done;
+
+  /// Button label for returning to the path choice map.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to map'**
+  String get breathing_back_to_map;
+
+  /// Label for the inhale phase of the breathing exercise.
+  ///
+  /// In en, this message translates to:
+  /// **'inhale'**
+  String get breathing_inhale;
+
+  /// Label for the exhale phase of the breathing exercise.
+  ///
+  /// In en, this message translates to:
+  /// **'exhale'**
+  String get breathing_exhale;
+
+  /// Instruction or label for holding the breath.
+  ///
+  /// In en, this message translates to:
+  /// **'hold'**
+  String get breathing_hold;
+
+  /// Guidance text for the inhale phase.
+  ///
+  /// In en, this message translates to:
+  /// **'Slowly inhale through your nose.'**
+  String get breathing_inhale_instruction;
+
+  /// Guidance text for the hold phase.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold your breath.'**
+  String get breathing_hold_instruction;
+
+  /// Guidance text for the exhale phase.
+  ///
+  /// In en, this message translates to:
+  /// **'Slowly exhale through your mouth like a straw.'**
+  String get breathing_exhale_instruction;
+
   /// Label for the credits screen.
   ///
   /// In en, this message translates to:

@@ -1,5 +1,3 @@
-import 'dart:ui' show BlendMode, Paint;
-
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 
@@ -14,7 +12,6 @@ class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
   ClassroomScene()
     : super(
         backgroundPath: 'scenes/classroom/classroom.png',
-        foregroundPath: 'scenes/classroom/classmates.png',
         showControls: false,
         frozenPlayer: true,
       );
@@ -27,7 +24,6 @@ class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
       Vector2(viewportSize.x / 2, viewportSize.y / 2);
 
   SpriteComponent? _pathOverlay;
-  SpriteComponent? _shadowsOverlay;
 
   final List<Vector2> _marks = <Vector2>[];
   final List<PathMark> _markCircles = <PathMark>[];
@@ -46,10 +42,6 @@ class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
 
     if (foreground != null) {
       applyCoverScaling(foreground!);
-    }
-
-    if (_shadowsOverlay != null) {
-      applyCoverScaling(_shadowsOverlay!);
     }
   }
 
@@ -82,28 +74,7 @@ class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
       foreground!.priority = 1;
     }
 
-    try {
-      final shadowsSprite = await game.loadSprite(
-        'scenes/classroom/shadows.png',
-      );
-      _shadowsOverlay = SpriteComponent(
-        sprite: shadowsSprite,
-        anchor: Anchor.topLeft,
-        paint: Paint()..blendMode = BlendMode.multiply,
-        priority: 10,
-      );
-      add(_shadowsOverlay!);
-    } catch (_) {}
-
     layoutToWorld();
-  }
-
-  Future<void> showPathImage() async {
-    final sprite = await game.loadSprite('scenes/classroom/path.png');
-    background.sprite = sprite;
-    layoutToWorld();
-    foreground?.opacity = 0.0;
-    await clearPathOverlay();
   }
 
   Future<void> showClassroomImage() async {

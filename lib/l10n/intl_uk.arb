@@ -84,6 +84,50 @@
     "@breathing": {
         "description": "Label for the breathing exercise section or setting."
     },
+    "breathing_title": "Дихальна вправа",
+    "@breathing_title": {
+        "description": "Title shown at the start of the breathing exercise overlay."
+    },
+    "breathing_cycle": "Цикл",
+    "@breathing_cycle": {
+        "description": "Label for the current breathing cycle count."
+    },
+    "breathing_tap_to_advance": "Торкніться, щоб перейти до наступного кроку",
+    "@breathing_tap_to_advance": {
+        "description": "Instruction shown on the breathing overlay to tap the screen."
+    },
+    "breathing_done": "Чудово!",
+    "@breathing_done": {
+        "description": "Text shown when the breathing exercise is complete."
+    },
+    "breathing_back_to_map": "Повернутися до мапи",
+    "@breathing_back_to_map": {
+        "description": "Button label for returning to the path choice map."
+    },
+    "breathing_inhale": "вдих",
+    "@breathing_inhale": {
+        "description": "Label for the inhale phase of the breathing exercise."
+    },
+    "breathing_exhale": "видих",
+    "@breathing_exhale": {
+        "description": "Label for the exhale phase of the breathing exercise."
+    },
+    "breathing_hold": "затримка",
+    "@breathing_hold": {
+        "description": "Instruction or label for holding the breath."
+    },
+    "breathing_inhale_instruction": "Повільно вдихніть через ніс.",
+    "@breathing_inhale_instruction": {
+        "description": "Guidance text for the inhale phase."
+    },
+    "breathing_hold_instruction": "Затримайте дихання.",
+    "@breathing_hold_instruction": {
+        "description": "Guidance text for the hold phase."
+    },
+    "breathing_exhale_instruction": "Повільно видихайте через рот, наче через соломинку.",
+    "@breathing_exhale_instruction": {
+        "description": "Guidance text for the exhale phase."
+    },
     "credits": "Автори",
     "@credits": {
         "description": "Label for the credits screen."

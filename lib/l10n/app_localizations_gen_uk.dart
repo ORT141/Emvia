@@ -73,6 +73,41 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get breathing => 'Дихання';
 
   @override
+  String get breathing_title => 'Дихальна вправа';
+
+  @override
+  String get breathing_cycle => 'Цикл';
+
+  @override
+  String get breathing_tap_to_advance =>
+      'Торкніться, щоб перейти до наступного кроку';
+
+  @override
+  String get breathing_done => 'Чудово!';
+
+  @override
+  String get breathing_back_to_map => 'Повернутися до мапи';
+
+  @override
+  String get breathing_inhale => 'вдих';
+
+  @override
+  String get breathing_exhale => 'видих';
+
+  @override
+  String get breathing_hold => 'затримка';
+
+  @override
+  String get breathing_inhale_instruction => 'Повільно вдихніть через ніс.';
+
+  @override
+  String get breathing_hold_instruction => 'Затримайте дихання.';
+
+  @override
+  String get breathing_exhale_instruction =>
+      'Повільно видихайте через рот, наче через соломинку.';
+
+  @override
   String get credits => 'Автори';
 
   @override

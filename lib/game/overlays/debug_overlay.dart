@@ -135,6 +135,17 @@ class DebugOverlay extends StatelessWidget {
                       ),
                       onPressed: () async {
                         game.overlays.remove('Debug');
+                        await game.skipToScene(ClassroomScene());
+                      },
+                      child: const Text('Skip all => Classroom'),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orangeAccent,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () async {
+                        game.overlays.remove('Debug');
                         await game.skipToScene(CorridorScene());
                       },
                       child: const Text('Skip all => Corridor'),

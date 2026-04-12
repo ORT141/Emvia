@@ -9,11 +9,7 @@ import 'path_mark.dart';
 import '../game_scene.dart';
 
 class PathChoiceScene extends GameScene with CoverScaling {
-  PathChoiceScene()
-    : super(
-        backgroundPath: 'scenes/classroom/classroom.png',
-        foregroundPath: 'scenes/classroom/classmates.png',
-      );
+  PathChoiceScene() : super(backgroundPath: 'scenes/classroom/path.png');
 
   @override
   double worldWidthForViewport(Vector2 viewportSize) => viewportSize.x;
@@ -21,9 +17,6 @@ class PathChoiceScene extends GameScene with CoverScaling {
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
       Vector2(viewportSize.x / 2, viewportSize.y / 2);
-
-  SpriteComponent? _pathOverlay;
-  Vector2? _pathBgSrcSize;
 
   final List<Vector2> _marks = <Vector2>[];
   final List<PathMark> _markCircles = <PathMark>[];
@@ -52,21 +45,16 @@ class PathChoiceScene extends GameScene with CoverScaling {
   void layoutToWorld() {
     setupCoverWorld();
 
-    if (_pathBgSrcSize != null && foreground?.opacity == 0) {
-      applyCoverScaling(background, srcSize: _pathBgSrcSize);
+    applyCoverScaling(background);
+
+    if (foreground != null) {
+      applyCoverScaling(foreground!);
     }
   }
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
-    final sprite = await game.loadSprite('scenes/classroom/path.png');
-    background.sprite = sprite;
-
-    _pathBgSrcSize = sprite.srcSize.clone();
-
-    applyCoverScaling(background, srcSize: _pathBgSrcSize);
 
     foreground?.opacity = 0.0;
 
@@ -86,28 +74,6 @@ class PathChoiceScene extends GameScene with CoverScaling {
       Vector2(0.4865, 0.3793),
       Vector2(0.5225, 0.4526),
     ]);
-  }
-
-  Future<void> showPathOverlay(String asset) async {
-    final sprite = await game.loadSprite(asset);
-    if (_pathOverlay == null) {
-      _pathOverlay = SpriteComponent(
-        sprite: sprite,
-        anchor: Anchor.topLeft,
-        priority: 5,
-      );
-      add(_pathOverlay!);
-    } else {
-      _pathOverlay!.sprite = sprite;
-    }
-    applyCoverScaling(_pathOverlay!);
-  }
-
-  Future<void> clearPathOverlay() async {
-    if (_pathOverlay != null) {
-      _pathOverlay!.removeFromParent();
-      _pathOverlay = null;
-    }
   }
 
   Future<void> showMarks(List<Vector2> marksNormalized) async {
@@ -208,25 +174,5 @@ class PathChoiceScene extends GameScene with CoverScaling {
     _stopPathAudio?.call();
     _stopPathAudio = null;
     super.onRemove();
-  }
-
-  @override
-  void onGameResize(Vector2 size) {
-    super.onGameResize(size);
-    if (isLoaded) {
-      layoutToWorld();
-      if (_pathOverlay != null) {
-        applyCoverScaling(_pathOverlay!);
-      }
-      for (var i = 0; i < _marks.length; i++) {
-        final m = _marks[i];
-        final mark = _markCircles.length > i ? _markCircles[i] : null;
-        if (mark != null) {
-          mark.position =
-              background.position +
-              Vector2(m.x * background.size.x, m.y * background.size.y);
-        }
-      }
-    }
   }
 }

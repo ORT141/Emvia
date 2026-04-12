@@ -84,6 +84,50 @@
     "@breathing": {
         "description": "Label for the breathing exercise section or setting."
     },
+    "breathing_title": "Breathing Exercise",
+    "@breathing_title": {
+        "description": "Title shown at the start of the breathing exercise overlay."
+    },
+    "breathing_cycle": "Cycle",
+    "@breathing_cycle": {
+        "description": "Label for the current breathing cycle count."
+    },
+    "breathing_tap_to_advance": "Tap to advance to the next step",
+    "@breathing_tap_to_advance": {
+        "description": "Instruction shown on the breathing overlay to tap the screen."
+    },
+    "breathing_done": "Well done!",
+    "@breathing_done": {
+        "description": "Text shown when the breathing exercise is complete."
+    },
+    "breathing_back_to_map": "Back to map",
+    "@breathing_back_to_map": {
+        "description": "Button label for returning to the path choice map."
+    },
+    "breathing_inhale": "inhale",
+    "@breathing_inhale": {
+        "description": "Label for the inhale phase of the breathing exercise."
+    },
+    "breathing_exhale": "exhale",
+    "@breathing_exhale": {
+        "description": "Label for the exhale phase of the breathing exercise."
+    },
+    "breathing_hold": "hold",
+    "@breathing_hold": {
+        "description": "Instruction or label for holding the breath."
+    },
+    "breathing_inhale_instruction": "Slowly inhale through your nose.",
+    "@breathing_inhale_instruction": {
+        "description": "Guidance text for the inhale phase."
+    },
+    "breathing_hold_instruction": "Hold your breath.",
+    "@breathing_hold_instruction": {
+        "description": "Guidance text for the hold phase."
+    },
+    "breathing_exhale_instruction": "Slowly exhale through your mouth like a straw.",
+    "@breathing_exhale_instruction": {
+        "description": "Guidance text for the exhale phase."
+    },
     "credits": "Credits",
     "@credits": {
         "description": "Label for the credits screen."
