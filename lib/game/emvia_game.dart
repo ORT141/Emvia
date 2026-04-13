@@ -629,6 +629,10 @@ class EmviaGame extends FlameGame
     final l = AppLocalizationsGen.of(context)!;
     _recordPathChoice(l, index);
 
+    if (index == 1 || index == 2) {
+      stressLevel = 100;
+    }
+
     if (index == 0) {
       await goToCorridor();
     } else if (index == 1) {

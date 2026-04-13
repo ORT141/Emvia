@@ -102,6 +102,10 @@ class OutsideScene extends GameScene {
       _stressTriggered = true;
       game.showBreathingExercise();
     }
+
+    if (game.stressLevel >= 30 && !game.overlays.isActive('Stress')) {
+      game.overlays.add('Stress');
+    }
   }
 
   @override
