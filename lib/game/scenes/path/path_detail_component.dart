@@ -81,7 +81,7 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                   ? constraints.maxWidth
                   : MediaQuery.of(context).size.width;
               final dialogWidth = maxWidth * 0.9 < 600 ? maxWidth * 0.9 : 600.0;
-              final isUnlocked = widget.index == 1;
+              final isUnlocked = widget.index == 0;
 
               return Material(
                 color: Colors.transparent,

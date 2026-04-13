@@ -87,7 +87,7 @@ class CorridorScene extends GameScene {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(180, viewportSize.y * 0.78);
+      Vector2(180, viewportSize.y * 0.6);
 
   static const _stressTriggerUVx = 0.1591;
   static const _lockerPromptUVx = 0.2688;

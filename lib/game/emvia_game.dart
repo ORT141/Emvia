@@ -630,11 +630,11 @@ class EmviaGame extends FlameGame
     _recordPathChoice(l, index);
 
     if (index == 0) {
-      await goToSecondCorridor();
-    } else if (index == 2) {
-      await goToOutside();
-    } else {
       await goToCorridor();
+    } else if (index == 1) {
+      await goToSecondCorridor();
+    } else {
+      await goToOutside();
     }
   }
 
