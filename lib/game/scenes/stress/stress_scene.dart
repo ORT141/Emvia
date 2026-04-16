@@ -224,7 +224,8 @@ class NoiseOverlay extends PositionComponent with HasGameReference<EmviaGame> {
 
     final baseAlpha = (0x66 * intensity).round().clamp(0, 255);
     final totalAlpha = (baseAlpha * _opacityValue).round().clamp(0, 255);
-    final paint = ui.Paint()..color = ui.Color.fromARGB(totalAlpha, 255, 255, 255);
+    final paint = ui.Paint()
+      ..color = ui.Color.fromARGB(totalAlpha, 255, 255, 255);
 
     for (var i = 0; i < 1000; i++) {
       final x = _random.nextDouble() * w;

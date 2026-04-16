@@ -63,6 +63,10 @@ class _StageItemCardOverlayState extends State<StageItemCardOverlay> {
         );
         _maybePlayAudio(item.id, soundPath);
 
+        final size = MediaQuery.of(context).size;
+        final isSmall = size.shortestSide < 600;
+        final isShort = size.height < 500;
+
         return GestureDetector(
           onTap: widget.game.hideStageItemCard,
           behavior: HitTestBehavior.opaque,
@@ -72,97 +76,124 @@ class _StageItemCardOverlayState extends State<StageItemCardOverlay> {
             child: GestureDetector(
               onTap: () {},
               child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxWidth: 900,
-                  maxHeight: 700,
+                constraints: BoxConstraints(
+                  maxWidth: isSmall ? size.width * 0.9 : 900,
+                  maxHeight: isSmall ? size.height * 0.9 : 700,
                 ),
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 24),
-                  padding: const EdgeInsets.all(28),
+                  margin: EdgeInsets.symmetric(horizontal: isSmall ? 16 : 24),
+                  padding: EdgeInsets.all(isSmall ? 16 : 28),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
-                    borderRadius: BorderRadius.circular(32),
+                    borderRadius: BorderRadius.circular(isSmall ? 24 : 32),
                     border: Border.all(
                       color: Theme.of(
                         context,
                       ).colorScheme.primary.withValues(alpha: 0.3),
-                      width: 3,
+                      width: isSmall ? 2 : 3,
                     ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.25),
-                        blurRadius: 34,
-                        offset: const Offset(0, 12),
+                        blurRadius: isSmall ? 20 : 34,
+                        offset: Offset(0, isSmall ? 6 : 12),
                       ),
                     ],
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              title,
-                              style: Theme.of(context).textTheme.headlineSmall
-                                  ?.copyWith(fontWeight: FontWeight.w900),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                title,
+                                style: Theme.of(context).textTheme.headlineSmall
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: isSmall ? 18 : null,
+                                    ),
+                              ),
                             ),
-                          ),
-                          IconButton(
-                            onPressed: widget.game.hideStageItemCard,
-                            icon: const Icon(Icons.close_rounded),
-                            tooltip: AppLocalizations.of(context)!.cancel,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 240,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Positioned(
-                                  bottom: 10,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(24),
-                                    child: Image.asset(
-                                      'assets/images/${item.selectedSpritePath}',
-                                      fit: BoxFit.contain,
-                                      height: 220,
+                            IconButton(
+                              onPressed: widget.game.hideStageItemCard,
+                              icon: const Icon(Icons.close_rounded),
+                              tooltip: AppLocalizations.of(context)!.cancel,
+                              iconSize: isSmall ? 20 : 24,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: isSmall ? 8 : 16),
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: isShort ? 140 : (isSmall ? 180 : 240),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Positioned(
+                                    bottom: isSmall ? 5 : 10,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                        isSmall ? 16 : 24,
+                                      ),
+                                      child: Image.asset(
+                                        'assets/images/${item.selectedSpritePath}',
+                                        fit: BoxFit.contain,
+                                        height: isShort
+                                            ? 120
+                                            : (isSmall ? 160 : 220),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(24),
-                                  child: Image.asset(
-                                    'assets/images/${item.normalSpritePath}',
-                                    fit: BoxFit.contain,
-                                    height: 220,
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                      isSmall ? 16 : 24,
+                                    ),
+                                    child: Image.asset(
+                                      'assets/images/${item.normalSpritePath}',
+                                      fit: BoxFit.contain,
+                                      height: isShort
+                                          ? 120
+                                          : (isSmall ? 160 : 220),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: isSmall ? 12 : 24),
+                        FilledButton.icon(
+                          onPressed: () => widget.game.useStageItem(item),
+                          icon: Icon(
+                            Icons.self_improvement_rounded,
+                            size: isSmall ? 18 : 24,
+                          ),
+                          label: Text(
+                            l.useItem,
+                            style: TextStyle(fontSize: isSmall ? 14 : 16),
+                          ),
+                          style: FilledButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              vertical: isSmall ? 12 : 16,
                             ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 24),
-                      FilledButton.icon(
-                        onPressed: () => widget.game.useStageItem(item),
-                        icon: const Icon(Icons.self_improvement_rounded),
-                        label: Text(l.useItem),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        description,
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyLarge?.copyWith(height: 1.6),
-                      ),
-                    ],
+                        ),
+                        SizedBox(height: isSmall ? 12 : 16),
+                        Text(
+                          description,
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
+                                height: 1.6,
+                                fontSize: isSmall ? 14 : 16,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

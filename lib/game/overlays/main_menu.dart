@@ -786,6 +786,7 @@ class _CharacterInfoCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
+      constraints: BoxConstraints(maxHeight: compact ? 120 : 200),
       padding: EdgeInsets.all(compact ? 8 : 12),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
@@ -797,39 +798,53 @@ class _CharacterInfoCard extends StatelessWidget {
               'Обери героя, щоб побачити опис',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
+                fontSize: compact ? 11 : 12,
               ),
             )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  data!.title,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: theme.colorScheme.onSurface,
+          : SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data!.title,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: theme.colorScheme.onSurface,
+                      fontSize: compact ? 13 : 14,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  data!.quote,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    fontStyle: FontStyle.italic,
-                    color: theme.colorScheme.onSurfaceVariant,
+                  const SizedBox(height: 2),
+                  Text(
+                    data!.quote,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontStyle: FontStyle.italic,
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontSize: compact ? 11 : 12,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Особливість: ${data!.trait}',
-                  style: theme.textTheme.bodySmall,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Суперсила: ${data!.superPower}',
-                  style: theme.textTheme.bodySmall,
-                ),
-                const SizedBox(height: 4),
-                Text(data!.description, style: theme.textTheme.bodySmall),
-              ],
+                  SizedBox(height: compact ? 4 : 8),
+                  Text(
+                    'Особливість: ${data!.trait}',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontSize: compact ? 11 : 12,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'Суперсила: ${data!.superPower}',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontSize: compact ? 11 : 12,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    data!.description,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontSize: compact ? 11 : 12,
+                    ),
+                  ),
+                ],
+              ),
             ),
     );
   }

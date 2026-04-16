@@ -78,6 +78,8 @@ class _CalmMapOverlayState extends State<CalmMapOverlay> {
     final l = AppLocalizations.of(context)!;
     final profile = widget.game.surveyProfile;
     final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.shortestSide < 600;
 
     return Focus(
       autofocus: true,
@@ -93,9 +95,11 @@ class _CalmMapOverlayState extends State<CalmMapOverlay> {
         backgroundColor: Colors.transparent,
         body: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 820),
+            constraints: BoxConstraints(
+              maxWidth: isSmall ? size.width * 0.95 : 820,
+            ),
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(isSmall ? 8 : 16),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -130,41 +134,62 @@ class _CalmMapOverlayState extends State<CalmMapOverlay> {
                         selectedPathLabel: l.calm_map_selected_path(
                           _selectedToolsLabel(context),
                         ),
+                        isSmall: isSmall,
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: isSmall ? 10 : 14),
                     Text(
                       l.calm_map_export_hint,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: Colors.white.withValues(alpha: 0.82),
+                        fontSize: isSmall ? 12 : 14,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: isSmall ? 8 : 12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         FilledButton.icon(
                           onPressed: _isExporting ? null : _exportPng,
                           icon: _isExporting
-                              ? const SizedBox(
-                                  width: 18,
-                                  height: 18,
-                                  child: CircularProgressIndicator(
+                              ? SizedBox(
+                                  width: isSmall ? 14 : 18,
+                                  height: isSmall ? 14 : 18,
+                                  child: const CircularProgressIndicator(
                                     strokeWidth: 2,
                                   ),
                                 )
-                              : const Icon(Icons.image_outlined),
-                          label: Text(l.calm_map_export_png),
+                              : Icon(
+                                  Icons.image_outlined,
+                                  size: isSmall ? 18 : 24,
+                                ),
+                          label: Text(
+                            l.calm_map_export_png,
+                            style: TextStyle(fontSize: isSmall ? 13 : 14),
+                          ),
+                          style: FilledButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isSmall ? 12 : 16,
+                              vertical: isSmall ? 8 : 12,
+                            ),
+                          ),
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: isSmall ? 8 : 12),
                         OutlinedButton(
                           onPressed: () =>
                               widget.game.returnToMainMenuAfterJourney(),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: Colors.white,
                             side: const BorderSide(color: Colors.white54),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isSmall ? 12 : 16,
+                              vertical: isSmall ? 8 : 12,
+                            ),
                           ),
-                          child: Text(l.play_again),
+                          child: Text(
+                            l.play_again,
+                            style: TextStyle(fontSize: isSmall ? 13 : 14),
+                          ),
                         ),
                       ],
                     ),
@@ -207,6 +232,7 @@ class _CalmMapCard extends StatelessWidget {
     required this.supportMessageLabel,
     required this.supportSymbolLabel,
     required this.selectedPathLabel,
+    this.isSmall = false,
   });
 
   final EmviaGame game;
@@ -220,6 +246,7 @@ class _CalmMapCard extends StatelessWidget {
   final String supportMessageLabel;
   final String supportSymbolLabel;
   final String selectedPathLabel;
+  final bool isSmall;
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +256,7 @@ class _CalmMapCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(28),
+      padding: EdgeInsets.all(isSmall ? 16 : 28),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -239,17 +266,17 @@ class _CalmMapCard extends StatelessWidget {
             Color.lerp(baseColor, const Color(0xFF173047), 0.52)!,
           ],
         ),
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(isSmall ? 24 : 32),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.18),
-            blurRadius: 32,
-            offset: const Offset(0, 16),
+            blurRadius: isSmall ? 20 : 32,
+            offset: Offset(0, isSmall ? 8 : 16),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(isSmall ? 16 : 24),
         child: CustomPaint(
           painter: _PatternPainter(
             patternId: profile.calmingPattern,
@@ -257,7 +284,7 @@ class _CalmMapCard extends StatelessWidget {
             accentColor: accentColor.withValues(alpha: 0.20),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(28),
+            padding: EdgeInsets.all(isSmall ? 16 : 28),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -270,18 +297,18 @@ class _CalmMapCard extends StatelessWidget {
                         children: [
                           Text(
                             artifactLabel.toUpperCase(),
-                            style: const TextStyle(
-                              fontSize: 14,
+                            style: TextStyle(
+                              fontSize: isSmall ? 11 : 14,
                               fontWeight: FontWeight.w700,
-                              letterSpacing: 1.6,
+                              letterSpacing: isSmall ? 1.2 : 1.6,
                               color: Colors.white70,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          SizedBox(height: isSmall ? 4 : 8),
                           Text(
                             title,
-                            style: const TextStyle(
-                              fontSize: 38,
+                            style: TextStyle(
+                              fontSize: isSmall ? 26 : 38,
                               height: 1.05,
                               fontWeight: FontWeight.w900,
                               color: Colors.white,
@@ -291,89 +318,92 @@ class _CalmMapCard extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      width: 86,
-                      height: 86,
+                      width: isSmall ? 64 : 86,
+                      height: isSmall ? 64 : 86,
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.18),
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: Colors.white.withValues(alpha: 0.34),
-                          width: 2,
+                          width: isSmall ? 1.5 : 2,
                         ),
                       ),
                       alignment: Alignment.center,
                       child: Text(
                         profile.supportSymbolEmoji,
-                        style: const TextStyle(fontSize: 42),
+                        style: TextStyle(fontSize: isSmall ? 32 : 42),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 22),
+                SizedBox(height: isSmall ? 16 : 22),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(isSmall ? 14 : 20),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(24),
+                    borderRadius: BorderRadius.circular(isSmall ? 16 : 24),
                     border: Border.all(
                       color: Colors.white.withValues(alpha: 0.18),
                     ),
                   ),
                   child: Text(
                     supportMessageLabel,
-                    style: const TextStyle(
-                      fontSize: 28,
+                    style: TextStyle(
+                      fontSize: isSmall ? 20 : 28,
                       height: 1.2,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
                     ),
                   ),
                 ),
-                const SizedBox(height: 22),
+                SizedBox(height: isSmall ? 16 : 22),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: Column(
                         children: [
-                          _InfoPill(label: safeColorLabel),
-                          const SizedBox(height: 12),
-                          _InfoPill(label: patternLabel),
-                          const SizedBox(height: 12),
-                          _InfoPill(label: itemLabel),
+                          _InfoPill(label: safeColorLabel, isSmall: isSmall),
+                          SizedBox(height: isSmall ? 8 : 12),
+                          _InfoPill(label: patternLabel, isSmall: isSmall),
+                          SizedBox(height: isSmall ? 8 : 12),
+                          _InfoPill(label: itemLabel, isSmall: isSmall),
                         ],
                       ),
                     ),
-                    const SizedBox(width: 14),
+                    SizedBox(width: isSmall ? 10 : 14),
                     Expanded(
                       child: Column(
                         children: [
-                          _InfoPill(label: actionLabel),
-                          const SizedBox(height: 12),
-                          _InfoPill(label: soundLabel),
-                          const SizedBox(height: 12),
-                          _InfoPill(label: supportSymbolLabel),
+                          _InfoPill(label: actionLabel, isSmall: isSmall),
+                          SizedBox(height: isSmall ? 8 : 12),
+                          _InfoPill(label: soundLabel, isSmall: isSmall),
+                          SizedBox(height: isSmall ? 8 : 12),
+                          _InfoPill(
+                            label: supportSymbolLabel,
+                            isSmall: isSmall,
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 18),
+                SizedBox(height: isSmall ? 14 : 18),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(18),
+                  padding: EdgeInsets.all(isSmall ? 12 : 18),
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.18),
-                    borderRadius: BorderRadius.circular(22),
+                    borderRadius: BorderRadius.circular(isSmall ? 16 : 22),
                     border: Border.all(
                       color: Colors.white.withValues(alpha: 0.14),
                     ),
                   ),
                   child: Text(
                     selectedPathLabel,
-                    style: const TextStyle(
-                      fontSize: 18,
+                    style: TextStyle(
+                      fontSize: isSmall ? 14 : 18,
                       height: 1.35,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -390,24 +420,28 @@ class _CalmMapCard extends StatelessWidget {
 }
 
 class _InfoPill extends StatelessWidget {
-  const _InfoPill({required this.label});
+  const _InfoPill({required this.label, this.isSmall = false});
 
   final String label;
+  final bool isSmall;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: EdgeInsets.symmetric(
+        horizontal: isSmall ? 10 : 16,
+        vertical: isSmall ? 10 : 14,
+      ),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(isSmall ? 12 : 18),
         border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
       ),
       child: Text(
         label,
-        style: const TextStyle(
-          fontSize: 18,
+        style: TextStyle(
+          fontSize: isSmall ? 13 : 18,
           height: 1.25,
           fontWeight: FontWeight.w600,
           color: Colors.white,

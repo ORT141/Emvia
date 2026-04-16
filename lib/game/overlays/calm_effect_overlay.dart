@@ -22,6 +22,9 @@ class _CalmEffectOverlayState extends State<CalmEffectOverlay> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.shortestSide < 600;
+
     return IgnorePointer(
       child: Stack(
         children: [
@@ -47,12 +50,12 @@ class _CalmEffectOverlayState extends State<CalmEffectOverlay> {
           Positioned(
             left: 24,
             right: 24,
-            top: 24,
+            top: isSmall ? 12 : 24,
             child: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 20,
+                padding: EdgeInsets.symmetric(
+                  vertical: isSmall ? 8 : 10,
+                  horizontal: isSmall ? 16 : 20,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.18),
@@ -64,10 +67,14 @@ class _CalmEffectOverlayState extends State<CalmEffectOverlay> {
                 ),
                 child: Text(
                   L10n.of(context).calming,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style:
+                      (isSmall
+                              ? Theme.of(context).textTheme.titleMedium
+                              : Theme.of(context).textTheme.titleLarge)
+                          ?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
                 ),
               ),
             ),

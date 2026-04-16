@@ -58,43 +58,62 @@ class _MobileControlsOverlayState extends State<MobileControlsOverlay> {
         },
         child: SafeArea(
           minimum: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Stack(
-            children: [
-              Positioned(
-                left: 24,
-                bottom: 24,
-                child: Row(
-                  children: [
-                    _HoldMoveButton(
-                      icon: Icons.arrow_left_rounded,
-                      onPressChanged: (isPressed) {
-                        widget.game.setMobileMoveX(isPressed ? -1 : 0);
-                      },
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isSmall =
+                  constraints.maxHeight < 400 || constraints.maxWidth < 600;
+              final buttonSize = isSmall ? 64.0 : 84.0;
+              final iconSize = isSmall ? 36.0 : 48.0;
+              final fabSize = isSmall ? 64.0 : 84.0;
+              final fabIconSize = isSmall ? 28.0 : 40.0;
+
+              return Stack(
+                children: [
+                  Positioned(
+                    left: isSmall ? 12 : 24,
+                    bottom: isSmall ? 12 : 24,
+                    child: Row(
+                      children: [
+                        _HoldMoveButton(
+                          icon: Icons.arrow_left_rounded,
+                          size: buttonSize,
+                          iconSize: iconSize,
+                          onPressChanged: (isPressed) {
+                            widget.game.setMobileMoveX(isPressed ? -1 : 0);
+                          },
+                        ),
+                        SizedBox(width: isSmall ? 16 : 24),
+                        _HoldMoveButton(
+                          icon: Icons.arrow_right_rounded,
+                          size: buttonSize,
+                          iconSize: iconSize,
+                          onPressChanged: (isPressed) {
+                            widget.game.setMobileMoveX(isPressed ? 1 : 0);
+                          },
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 24),
-                    _HoldMoveButton(
-                      icon: Icons.arrow_right_rounded,
-                      onPressChanged: (isPressed) {
-                        widget.game.setMobileMoveX(isPressed ? 1 : 0);
-                      },
+                  ),
+                  Positioned(
+                    right: isSmall ? 12 : 24,
+                    bottom: isSmall ? 12 : 28,
+                    child: SizedBox(
+                      width: fabSize,
+                      height: fabSize,
+                      child: FloatingActionButton(
+                        heroTag: 'backpack_mobile_button',
+                        onPressed: widget.game.toggleBackpack,
+                        elevation: 6,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.primaryContainer,
+                        child: Icon(Icons.backpack_rounded, size: fabIconSize),
+                      ),
                     ),
-                  ],
-                ),
-              ),
-              Positioned(
-                right: 24,
-                bottom: 28,
-                child: FloatingActionButton.large(
-                  heroTag: 'backpack_mobile_button',
-                  onPressed: widget.game.toggleBackpack,
-                  elevation: 6,
-                  backgroundColor: Theme.of(
-                    context,
-                  ).colorScheme.primaryContainer,
-                  child: const Icon(Icons.backpack_rounded, size: 40),
-                ),
-              ),
-            ],
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),
@@ -103,10 +122,17 @@ class _MobileControlsOverlayState extends State<MobileControlsOverlay> {
 }
 
 class _HoldMoveButton extends StatefulWidget {
-  const _HoldMoveButton({required this.icon, required this.onPressChanged});
+  const _HoldMoveButton({
+    required this.icon,
+    required this.onPressChanged,
+    this.size = 84,
+    this.iconSize = 48,
+  });
 
   final IconData icon;
   final ValueChanged<bool> onPressChanged;
+  final double size;
+  final double iconSize;
 
   @override
   State<_HoldMoveButton> createState() => _HoldMoveButtonState();
@@ -133,13 +159,13 @@ class _HoldMoveButtonState extends State<_HoldMoveButton> {
       onLongPressEnd: (_) => _setPressed(false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 90),
-        width: 84,
-        height: 84,
+        width: widget.size,
+        height: widget.size,
         decoration: BoxDecoration(
           color: _pressed
               ? theme.colorScheme.primary.withValues(alpha: 0.9)
               : theme.colorScheme.primaryContainer.withValues(alpha: 0.7),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(widget.size * 0.24),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.2),
@@ -150,7 +176,7 @@ class _HoldMoveButtonState extends State<_HoldMoveButton> {
         ),
         child: Icon(
           widget.icon,
-          size: 48,
+          size: widget.iconSize,
           color: _pressed
               ? theme.colorScheme.onPrimary
               : theme.colorScheme.onPrimaryContainer,

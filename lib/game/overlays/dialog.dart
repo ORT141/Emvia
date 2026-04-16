@@ -23,12 +23,16 @@ class DialogOverlay extends StatelessWidget {
         }
 
         final loc = AppLocalizationsGen.of(context)!;
+        final size = MediaQuery.of(context).size;
+        final isSmall = size.shortestSide < 600;
+        final isVerySmall = size.width < 400;
 
         return Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).padding.bottom + 16,
+              bottom:
+                  MediaQuery.of(context).padding.bottom + (isSmall ? 8 : 16),
             ),
             child: Material(
               type: MaterialType.transparency,
@@ -36,19 +40,19 @@ class DialogOverlay extends StatelessWidget {
                 context: context,
                 locale: const Locale('uk'),
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 800),
+                  constraints: BoxConstraints(maxWidth: isSmall ? 600 : 800),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (node.choices != null && node.choices!.isNotEmpty)
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isSmall ? 8 : 16,
+                            vertical: isSmall ? 4 : 8,
                           ),
                           child: Wrap(
-                            spacing: 12,
-                            runSpacing: 12,
+                            spacing: isSmall ? 8 : 12,
+                            runSpacing: isSmall ? 8 : 12,
                             alignment: WrapAlignment.center,
                             children: node.choices!.map((choice) {
                               return ElevatedButton(
@@ -58,12 +62,14 @@ class DialogOverlay extends StatelessWidget {
                                       theme.colorScheme.primaryContainer,
                                   foregroundColor:
                                       theme.colorScheme.onPrimaryContainer,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                    vertical: 16,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: isSmall ? 16 : 24,
+                                    vertical: isSmall ? 12 : 16,
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(
+                                      isSmall ? 16 : 20,
+                                    ),
                                   ),
                                   elevation: 4,
                                   shadowColor: Colors.black.withValues(
@@ -76,7 +82,7 @@ class DialogOverlay extends StatelessWidget {
                                   softWrap: true,
                                   style: GoogleFonts.baloo2(
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 18,
+                                    fontSize: isSmall ? 16 : 18,
                                     height: 1.3,
                                   ),
                                 ),
@@ -86,16 +92,20 @@ class DialogOverlay extends StatelessWidget {
                         ),
 
                       Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 20,
+                        margin: EdgeInsets.symmetric(
+                          horizontal: isSmall ? 8 : 16,
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isSmall ? 16 : 24,
+                          vertical: isSmall ? 14 : 20,
                         ),
                         decoration: BoxDecoration(
                           color: theme.colorScheme.surface.withValues(
                             alpha: 0.95,
                           ),
-                          borderRadius: BorderRadius.circular(32),
+                          borderRadius: BorderRadius.circular(
+                            isSmall ? 24 : 32,
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withValues(
@@ -109,28 +119,30 @@ class DialogOverlay extends StatelessWidget {
                             color: theme.colorScheme.primary.withValues(
                               alpha: 0.28,
                             ),
-                            width: 2.5,
+                            width: isSmall ? 1.5 : 2.5,
                           ),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              width: 56,
-                              height: 56,
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.secondary.withValues(
-                                  alpha: 0.18,
+                            if (!isVerySmall) ...[
+                              Container(
+                                width: isSmall ? 44 : 56,
+                                height: isSmall ? 44 : 56,
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.secondary.withValues(
+                                    alpha: 0.18,
+                                  ),
+                                  shape: BoxShape.circle,
                                 ),
-                                shape: BoxShape.circle,
+                                child: Icon(
+                                  Icons.face_retouching_natural_rounded,
+                                  color: theme.colorScheme.primary,
+                                  size: isSmall ? 24 : 32,
+                                ),
                               ),
-                              child: Icon(
-                                Icons.face_retouching_natural_rounded,
-                                color: theme.colorScheme.primary,
-                                size: 32,
-                              ),
-                            ),
-                            const SizedBox(width: 20),
+                              SizedBox(width: isSmall ? 12 : 20),
+                            ],
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,12 +150,12 @@ class DialogOverlay extends StatelessWidget {
                                 children: [
                                   if (node.speakerName != null)
                                     Padding(
-                                      padding: const EdgeInsets.only(bottom: 6),
+                                      padding: const EdgeInsets.only(bottom: 4),
                                       child: Text(
                                         node.speakerName!(loc),
                                         style: GoogleFonts.baloo2(
                                           color: theme.colorScheme.primary,
-                                          fontSize: 17,
+                                          fontSize: isSmall ? 15 : 17,
                                           fontWeight: FontWeight.w800,
                                           height: 1.2,
                                         ),
@@ -155,7 +167,7 @@ class DialogOverlay extends StatelessWidget {
                                     textWidthBasis: TextWidthBasis.longestLine,
                                     style: GoogleFonts.baloo2(
                                       color: theme.colorScheme.onSurface,
-                                      fontSize: 18.5,
+                                      fontSize: isSmall ? 16 : 18.5,
                                       fontWeight: FontWeight.w600,
                                       height: 1.38,
                                     ),

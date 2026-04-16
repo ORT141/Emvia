@@ -130,13 +130,15 @@ class _MyAppState extends State<MyApp> {
           'Survey': (_, game) => SurveyOverlay(game: game),
           'Backpack': (_, game) => BackpackOverlay(game: game),
           'StageItemCard': (_, game) => StageItemCardOverlay(game: game),
-          'CalmingItemPrompt': (_, game) => CalmingItemPromptOverlay(game: game),
+          'CalmingItemPrompt': (_, game) =>
+              CalmingItemPromptOverlay(game: game),
           'CalmingEffect': (_, game) => CalmEffectOverlay(game: game),
           'MobileControls': (_, game) => MobileControlsOverlay(game: game),
           'Debug': (_, game) => DebugOverlay(game: game),
           'Stress': (_, game) => StressOverlay(game: game),
           'TapGame': (_, game) => TapGameOverlay(game: game),
-          'BreathingExercise': (_, game) => BreathingExerciseOverlay(game: game),
+          'BreathingExercise': (_, game) =>
+              BreathingExerciseOverlay(game: game),
           'CalmMap': (_, game) => CalmMapOverlay(game: game),
           'PatternProgress': (_, game) {
             final scene = game.currentScene;

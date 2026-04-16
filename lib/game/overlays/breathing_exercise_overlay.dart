@@ -49,9 +49,10 @@ class _BreathingExerciseOverlayState extends State<BreathingExerciseOverlay>
       vsync: this,
       duration: const Duration(milliseconds: 280),
     );
-    _fadeAnim = Tween<double>(begin: 0.0, end: 0.85).animate(
-      CurvedAnimation(parent: _fadeController, curve: Curves.easeOut),
-    );
+    _fadeAnim = Tween<double>(
+      begin: 0.0,
+      end: 0.85,
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeOut));
     _fadeController.forward();
 
     _startTimer();

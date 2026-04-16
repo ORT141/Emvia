@@ -10,27 +10,37 @@ class CalmingItemPromptOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizationsGen.of(context)!;
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.shortestSide < 600;
+
     return IgnorePointer(
       ignoring: true,
       child: Container(
         alignment: Alignment.topCenter,
-        margin: const EdgeInsets.only(top: 28),
+        margin: EdgeInsets.only(top: isSmall ? 12 : 28),
         child: FractionallySizedBox(
-          widthFactor: 0.92,
+          widthFactor: isSmall ? 0.95 : 0.92,
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+            padding: EdgeInsets.symmetric(
+              vertical: isSmall ? 10 : 14,
+              horizontal: isSmall ? 14 : 18,
+            ),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.82),
-              borderRadius: BorderRadius.circular(24),
+              color: Theme.of(
+                context,
+              ).colorScheme.surface.withValues(alpha: 0.82),
+              borderRadius: BorderRadius.circular(isSmall ? 16 : 24),
               border: Border.all(
-                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.18),
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.18),
                 width: 1.2,
               ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.18),
-                  blurRadius: 18,
-                  offset: const Offset(0, 8),
+                  blurRadius: isSmall ? 12 : 18,
+                  offset: Offset(0, isSmall ? 4 : 8),
                 ),
               ],
             ),
@@ -40,16 +50,18 @@ class CalmingItemPromptOverlay extends StatelessWidget {
                 Text(
                   l.calmingItemTooltipTitle,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                      ),
+                    fontWeight: FontWeight.w800,
+                    fontSize: isSmall ? 14 : null,
+                  ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: isSmall ? 4 : 8),
                 Text(
                   l.calmingItemTooltipBody,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        height: 1.5,
-                      ),
+                    height: 1.5,
+                    fontSize: isSmall ? 12 : null,
+                  ),
                 ),
               ],
             ),

@@ -119,6 +119,8 @@ class _SettingsOverlayState extends State<SettingsOverlay>
     final loc = AppLocalizationsGen.of(context)!;
     final theme = Theme.of(context);
     final currentLanguage = Localizations.localeOf(context).languageCode;
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.shortestSide < 600;
 
     return FadeTransition(
       opacity: _fadeAnimation,
@@ -127,9 +129,11 @@ class _SettingsOverlayState extends State<SettingsOverlay>
         child: Align(
           alignment: Alignment.centerRight,
           child: Container(
-            margin: MediaQuery.of(context).padding + const EdgeInsets.all(16),
-            padding: const EdgeInsets.all(16),
-            width: 320,
+            margin:
+                MediaQuery.of(context).padding +
+                EdgeInsets.all(isSmall ? 8 : 16),
+            padding: EdgeInsets.all(isSmall ? 12 : 16),
+            width: isSmall ? (size.width * 0.85).clamp(280.0, 320.0) : 320,
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(20),
@@ -160,7 +164,7 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                           loc.settings,
                           style: TextStyle(
                             color: theme.colorScheme.primary,
-                            fontSize: 20,
+                            fontSize: isSmall ? 18 : 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -168,13 +172,17 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                           icon: const Icon(Icons.close),
                           onPressed: _close,
                           color: theme.colorScheme.onSurfaceVariant,
+                          iconSize: isSmall ? 20 : 24,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: isSmall ? 8 : 12),
                     Text(
                       loc.sound,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: isSmall ? 13 : 14,
+                      ),
                     ),
                     Slider(
                       value: widget.game.volume,
@@ -183,10 +191,13 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                       max: 1,
                       activeColor: theme.colorScheme.primary,
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: isSmall ? 8 : 12),
                     Text(
                       loc.language,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: isSmall ? 13 : 14,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Wrap(
@@ -198,19 +209,24 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                           code: 'uk',
                           selected: currentLanguage == 'uk',
                           onTap: _setLanguage,
+                          compact: isSmall,
                         ),
                         _LangChip(
                           label: loc.lang_en,
                           code: 'en',
                           selected: currentLanguage == 'en',
                           onTap: _setLanguage,
+                          compact: isSmall,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: isSmall ? 12 : 16),
                     Text(
                       loc.theme,
-                      style: const TextStyle(fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: isSmall ? 13 : 14,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Wrap(
@@ -224,6 +240,7 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                           onTap: !widget.isDarkMode
                               ? null
                               : widget.onThemeToggled,
+                          compact: isSmall,
                         ),
                         _ThemeChip(
                           label: loc.dark,
@@ -232,28 +249,31 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                           onTap: widget.isDarkMode
                               ? null
                               : widget.onThemeToggled,
+                          compact: isSmall,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: isSmall ? 16 : 24),
                     FilledButton(
                       onPressed: _close,
                       style: FilledButton.styleFrom(
                         backgroundColor: theme.colorScheme.primary,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        padding: EdgeInsets.symmetric(
+                          vertical: isSmall ? 12 : 14,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       child: Text(
                         loc.done,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: TextStyle(
+                          fontSize: isSmall ? 14 : 16,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    SizedBox(height: isSmall ? 8 : 12),
                     ExpansionTile(
                       collapsedIconColor: theme.colorScheme.onSurfaceVariant,
                       tilePadding: EdgeInsets.zero,
@@ -261,6 +281,7 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                         loc.credits,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
+                          fontSize: isSmall ? 13 : 14,
                           color: theme.colorScheme.onSurface,
                         ),
                       ),
@@ -272,11 +293,13 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                               visualDensity: VisualDensity.compact,
                               contentPadding: EdgeInsets.zero,
                               leading: CircleAvatar(
+                                radius: isSmall ? 16 : 20,
                                 backgroundColor:
                                     theme.colorScheme.primaryContainer,
                                 child: Text(
                                   'RD',
                                   style: TextStyle(
+                                    fontSize: isSmall ? 10 : 12,
                                     color: theme.colorScheme.onPrimaryContainer,
                                   ),
                                 ),
@@ -284,12 +307,14 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                               title: Text(
                                 'Remez Devid',
                                 style: TextStyle(
+                                  fontSize: isSmall ? 13 : 14,
                                   color: theme.colorScheme.onSurface,
                                 ),
                               ),
                               subtitle: Text(
                                 loc.leadDeveloper,
                                 style: TextStyle(
+                                  fontSize: isSmall ? 11 : 12,
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
                               ),
@@ -298,11 +323,13 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                               visualDensity: VisualDensity.compact,
                               contentPadding: EdgeInsets.zero,
                               leading: CircleAvatar(
+                                radius: isSmall ? 16 : 20,
                                 backgroundColor:
                                     theme.colorScheme.secondaryContainer,
                                 child: Text(
                                   'AD',
                                   style: TextStyle(
+                                    fontSize: isSmall ? 10 : 12,
                                     color:
                                         theme.colorScheme.onSecondaryContainer,
                                   ),
@@ -311,12 +338,14 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                               title: Text(
                                 'Alice Dudarok',
                                 style: TextStyle(
+                                  fontSize: isSmall ? 13 : 14,
                                   color: theme.colorScheme.onSurface,
                                 ),
                               ),
                               subtitle: Text(
                                 loc.artistAndDesigner,
                                 style: TextStyle(
+                                  fontSize: isSmall ? 11 : 12,
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
                               ),
@@ -328,6 +357,7 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                               child: Text(
                                 loc.thanksForPlaying,
                                 style: TextStyle(
+                                  fontSize: isSmall ? 12 : 13,
                                   color: theme.colorScheme.onSurface,
                                 ),
                               ),
@@ -341,9 +371,14 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                       onPressed: _confirmExit,
                       style: TextButton.styleFrom(
                         foregroundColor: theme.colorScheme.error,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: EdgeInsets.symmetric(
+                          vertical: isSmall ? 8 : 12,
+                        ),
                       ),
-                      child: Text(loc.exit),
+                      child: Text(
+                        loc.exit,
+                        style: TextStyle(fontSize: isSmall ? 13 : 14),
+                      ),
                     ),
                   ],
                 ),
@@ -361,12 +396,14 @@ class _LangChip extends StatelessWidget {
   final String code;
   final bool selected;
   final void Function(String) onTap;
+  final bool compact;
 
   const _LangChip({
     required this.label,
     required this.code,
     required this.selected,
     required this.onTap,
+    this.compact = false,
   });
 
   @override
@@ -375,7 +412,10 @@ class _LangChip extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(code),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+        padding: EdgeInsets.symmetric(
+          vertical: compact ? 8 : 10,
+          horizontal: compact ? 10 : 14,
+        ),
         decoration: BoxDecoration(
           color: selected
               ? theme.colorScheme.primaryContainer
@@ -390,6 +430,7 @@ class _LangChip extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
+            fontSize: compact ? 12 : 14,
             color: selected
                 ? theme.colorScheme.onPrimaryContainer
                 : theme.colorScheme.onSurfaceVariant,
@@ -406,12 +447,14 @@ class _ThemeChip extends StatelessWidget {
   final bool isDark;
   final bool selected;
   final VoidCallback? onTap;
+  final bool compact;
 
   const _ThemeChip({
     required this.label,
     required this.isDark,
     required this.selected,
     this.onTap,
+    this.compact = false,
   });
 
   @override
@@ -420,7 +463,10 @@ class _ThemeChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+        padding: EdgeInsets.symmetric(
+          vertical: compact ? 8 : 10,
+          horizontal: compact ? 10 : 14,
+        ),
         decoration: BoxDecoration(
           color: selected
               ? theme.colorScheme.primaryContainer
@@ -437,15 +483,16 @@ class _ThemeChip extends StatelessWidget {
           children: [
             Icon(
               isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
-              size: 16,
+              size: compact ? 14 : 16,
               color: selected
-                  ? theme.colorScheme.onPrimaryContainer
+                  ? theme.colorScheme.primary
                   : theme.colorScheme.onSurfaceVariant,
             ),
             const SizedBox(width: 6),
             Text(
               label,
               style: TextStyle(
+                fontSize: compact ? 12 : 14,
                 color: selected
                     ? theme.colorScheme.onPrimaryContainer
                     : theme.colorScheme.onSurfaceVariant,

@@ -87,6 +87,9 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.shortestSide < 600;
+
     return Material(
       color: Colors.black.withValues(alpha: 0.55),
       child: Stack(
@@ -103,12 +106,12 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
           ),
 
           Positioned(
-            top: 40,
-            right: 40,
+            top: isSmall ? 16 : 40,
+            right: isSmall ? 16 : 40,
             child: IconButton.filledTonal(
               onPressed: widget.game.toggleBackpack,
-              iconSize: 32,
-              padding: const EdgeInsets.all(12),
+              iconSize: isSmall ? 24 : 32,
+              padding: EdgeInsets.all(isSmall ? 8 : 12),
               icon: const Icon(Icons.close_rounded),
             ),
           ),
@@ -122,6 +125,8 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
       listenable: widget.game.backpack.itemsListenable,
       builder: (context, _) {
         final items = widget.game.backpack.items;
+        final size = MediaQuery.of(context).size;
+        final isSmall = size.shortestSide < 600;
 
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -131,9 +136,9 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
               child: Hero(
                 tag: 'backpack_main',
                 child: SizedBox.square(
-                  dimension: (MediaQuery.of(context).size.height * 0.5).clamp(
+                  dimension: (size.height * (isSmall ? 0.4 : 0.5)).clamp(
                     0.0,
-                    360.0,
+                    isSmall ? 240.0 : 360.0,
                   ),
                   child: GestureDetector(
                     onTap: () => _selectItem(items.first),
@@ -145,13 +150,13 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: isSmall ? 8 : 16),
             Text(
               AppLocalizations.of(context)!.backpack_title,
               style: GoogleFonts.baloo2(
-                fontSize: (MediaQuery.of(context).size.height * 0.065).clamp(
-                  28.0,
-                  48.0,
+                fontSize: (size.height * (isSmall ? 0.05 : 0.065)).clamp(
+                  isSmall ? 24.0 : 28.0,
+                  isSmall ? 36.0 : 48.0,
                 ),
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
@@ -177,24 +182,29 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
     final total = items.length;
     final isCorridor = widget.game.currentScene is CorridorScene;
     final isBlocked = isCorridor && item.id != 'headphones';
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.shortestSide < 600;
 
     return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 800, maxHeight: 600),
+      constraints: BoxConstraints(
+        maxWidth: isSmall ? size.width * 0.9 : 800,
+        maxHeight: isSmall ? size.height * 0.85 : 600,
+      ),
       child: Container(
-        margin: const EdgeInsets.all(24),
-        padding: const EdgeInsets.all(32),
+        margin: EdgeInsets.all(isSmall ? 16 : 24),
+        padding: EdgeInsets.all(isSmall ? 20 : 32),
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(isSmall ? 24 : 40),
           border: Border.all(
             color: theme.colorScheme.primary.withValues(alpha: 0.3),
-            width: 3,
+            width: isSmall ? 2 : 3,
           ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.3),
-              blurRadius: 40,
-              offset: const Offset(0, 15),
+              blurRadius: isSmall ? 20 : 40,
+              offset: Offset(0, isSmall ? 8 : 15),
             ),
           ],
         ),
@@ -210,8 +220,10 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                     Text(
                       item.name,
                       style: GoogleFonts.baloo2(
-                        fontSize: (MediaQuery.of(context).size.height * 0.05)
-                            .clamp(22.0, 36.0),
+                        fontSize: (size.height * (isSmall ? 0.04 : 0.05)).clamp(
+                          isSmall ? 20.0 : 22.0,
+                          isSmall ? 28.0 : 36.0,
+                        ),
                         fontWeight: FontWeight.w900,
                         color: theme.colorScheme.onSurface,
                       ),
@@ -223,6 +235,7 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                           : item.status,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
+                        fontSize: isSmall ? 14 : 16,
                         color: isBlocked
                             ? theme.colorScheme.error
                             : (widget.game.selectedTools.contains(item.id)
@@ -230,20 +243,21 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                                   : theme.colorScheme.secondary),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: isSmall ? 12 : 24),
                     Text(
                       item.description,
                       style: theme.textTheme.bodyLarge?.copyWith(
                         height: 1.5,
+                        fontSize: isSmall ? 14 : 16,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    SizedBox(height: isSmall ? 16 : 32),
                     Center(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: SizedBox(
-                          width: 160,
+                          width: isSmall ? 140 : 160,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -252,6 +266,7 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                                 onPressed: _selectPrevItem,
                                 icon: const Icon(Icons.chevron_left_rounded),
                                 tooltip: 'Previous item',
+                                iconSize: isSmall ? 20 : 24,
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -263,7 +278,7 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                                       : '0 / 0',
                                   style: theme.textTheme.bodyLarge?.copyWith(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                                    fontSize: isSmall ? 16 : 18,
                                   ),
                                 ),
                               ),
@@ -273,13 +288,14 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                                 tooltip: AppLocalizations.of(
                                   context,
                                 )!.next_item,
+                                iconSize: isSmall ? 20 : 24,
                               ),
                             ],
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: isSmall ? 16 : 24),
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton(
@@ -310,9 +326,11 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                                 } catch (_) {}
                               },
                         style: FilledButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          textStyle: const TextStyle(
-                            fontSize: 18,
+                          padding: EdgeInsets.symmetric(
+                            vertical: isSmall ? 14 : 20,
+                          ),
+                          textStyle: TextStyle(
+                            fontSize: isSmall ? 16 : 18,
                             fontWeight: FontWeight.bold,
                           ),
                           backgroundColor: isBlocked
