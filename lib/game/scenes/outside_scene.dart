@@ -131,9 +131,7 @@ class OutsideScene extends GameScene {
     _peopleBackgroundOverlay = null;
     _peopleForegroundOverlay?.removeFromParent();
     _peopleForegroundOverlay = null;
-    try {
-      game.player.interactionY = null;
-    } catch (_) {}
+
     super.onRemove();
   }
 }

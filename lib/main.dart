@@ -32,11 +32,11 @@ void main() async {
   await Flame.device.fullScreen();
   await Flame.device.setLandscape();
 
-  //runApp(
+  // runApp(
   //  DevicePreview(
   //    builder: (context) => MyApp(),
   //  ),
-  //);
+  // );
 
   runApp(const MyApp());
 }

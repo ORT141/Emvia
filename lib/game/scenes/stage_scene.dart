@@ -160,9 +160,7 @@ class StageScene extends GameScene {
         (item) => item.data.id == 'rocking_chair',
       );
 
-      final pos = chair.position.clone()
-        ..y -= chair.size.y * 0.5
-        ..y += game.player.size.y * 0.5;
+      final pos = chair.position.clone()..y += chair.size.y * 0.05;
 
       return pos;
     } catch (_) {

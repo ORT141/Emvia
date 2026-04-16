@@ -142,13 +142,12 @@ class EmviaGame extends FlameGame
     cameraManager.beginFocusOnPlayer();
 
     if (item.id == 'rocking_chair' && currentScene is StageScene) {
-      final chairPos = (currentScene as StageScene).chairWorldPosition;
+      player.isInteracting = true;
+      var chairPos = (currentScene as StageScene).chairWorldPosition;
+      chairPos = chairPos?.clone()?..y += player.size.y * 0.3;
       if (chairPos != null) {
-        player.position.x = chairPos.x;
-        // player.interactionY = chairPos.y + player.size.y * 0.1;
+        player.position.setFrom(chairPos);
       }
-    } else {
-      player.interactionY = null;
     }
 
     await player.interactWithItem(item.id);
@@ -158,7 +157,6 @@ class EmviaGame extends FlameGame
     overlays.remove('CalmingEffect');
     cameraManager.animateZoomTo(1.1);
     cameraManager.endFocusOnPlayer();
-    player.interactionY = null;
     isFrozen = false;
     showMobileControls();
   }
@@ -332,6 +330,7 @@ class EmviaGame extends FlameGame
       onFullOpacity: () {
         sceneIndex = 6;
         player.opacity = 1;
+        showMobileControls();
       },
     );
   }
@@ -469,7 +468,8 @@ class EmviaGame extends FlameGame
     if (!isMobilePlatform) return;
     if (currentScene is! CorridorScene &&
         currentScene is! SecondCorridorScene &&
-        currentScene is! OutsideScene) {
+        currentScene is! OutsideScene &&
+        currentScene is! StageScene) {
       return;
     }
     if (!overlays.isActive('MobileControls')) {
@@ -716,6 +716,7 @@ class EmviaGame extends FlameGame
       onFullOpacity: () {
         sceneIndex = 6;
         player.opacity = 1;
+        showMobileControls();
       },
     );
   }
@@ -817,7 +818,7 @@ class EmviaGame extends FlameGame
       player.position.x = worldRoot.size.x / 2;
     }
 
-    if (scene != null) {
+    if (scene != null && !player.isInteracting) {
       player.position.y = sceneSpawnPoint(scene, size, worldRoot).y;
     }
   }

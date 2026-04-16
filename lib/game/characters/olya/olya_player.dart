@@ -17,8 +17,6 @@ class OlyaPlayer extends BasePlayer {
   late SpriteAnimation _chosenBagOfRocksAnimation;
   late SpriteAnimation _chosenSittingInChairAnimation;
 
-  bool _isInteracting = false;
-
   @override
   Future<void> onLoad() async {
     updatePlayerSize();
@@ -99,7 +97,7 @@ class OlyaPlayer extends BasePlayer {
 
   @override
   Future<void> interactWithItem(String itemId) async {
-    _isInteracting = true;
+    isInteracting = true;
     final SpriteAnimation interactionAnim;
     switch (itemId) {
       case 'rocking_chair':
@@ -115,7 +113,7 @@ class OlyaPlayer extends BasePlayer {
         interactionAnim = _chosenHibukiAnimation;
         break;
       default:
-        _isInteracting = false;
+        isInteracting = false;
         return;
     }
     animations = {
@@ -130,7 +128,7 @@ class OlyaPlayer extends BasePlayer {
 
   @override
   void endInteraction() {
-    _isInteracting = false;
+    isInteracting = false;
     animations = null;
     _hasHeadphones = game.selectedTools.contains('headphones');
     _updateAnimations();
@@ -138,7 +136,7 @@ class OlyaPlayer extends BasePlayer {
   }
 
   void _updateAnimations() {
-    if (_isInteracting) return;
+    if (isInteracting) return;
     final prev = _hasHeadphones;
     final hasHeadphones = game.selectedTools.contains('headphones');
     if (hasHeadphones == prev && animations != null) {

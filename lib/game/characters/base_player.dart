@@ -12,11 +12,12 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
   @override
   int priority = 15;
 
+  bool isInteracting = false;
+
   final Vector2 velocity = Vector2.zero();
   final Vector2 keyboardVelocity = Vector2.zero();
   final Vector2 mobileVelocity = Vector2.zero();
   final double speed = 230.0;
-  double? interactionY;
 
   void updatePlayerSize() {
     final height = game.size.y * 0.42;
@@ -69,17 +70,12 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
       size.x / 2,
       game.worldRoot.size.x - size.x / 2,
     );
-    position.y =
-        interactionY ??
-        (game.currentScene != null
-            ? game
-                  .sceneSpawnPoint(
-                    game.currentScene!,
-                    game.size,
-                    game.worldRoot,
-                  )
-                  .y
-            : game.worldRoot.size.y * 0.58);
+
+    if (!isInteracting) {
+      position.y = game.currentScene != null
+          ? game.sceneSpawnPoint(game.currentScene!, game.size, game.worldRoot).y
+          : game.worldRoot.size.y * 0.58;
+    }
   }
 
   @override
