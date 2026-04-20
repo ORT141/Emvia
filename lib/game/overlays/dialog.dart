@@ -1,10 +1,11 @@
-import 'dart:ui';
 import 'package:emvia/game/dialog/dialog_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../emvia_game.dart';
 import '../../l10n/app_localizations_gen.dart';
+
+import 'glass_ui.dart';
 
 class DialogOverlay extends StatelessWidget {
   final EmviaGame game;
@@ -19,25 +20,29 @@ class DialogOverlay extends StatelessWidget {
     return ValueListenableBuilder<DialogNode?>(
       valueListenable: game.currentNodeNotifier,
       builder: (context, node, child) {
-        return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 400),
-          switchInCurve: Curves.easeOutBack,
-          switchOutCurve: Curves.easeIn,
-          transitionBuilder: (Widget child, Animation<double> animation) {
-            return FadeTransition(
-              opacity: animation,
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 0.1),
-                  end: Offset.zero,
-                ).animate(animation),
-                child: child,
-              ),
-            );
-          },
-          child: node == null
-              ? const SizedBox.shrink()
-              : _buildDialogContent(context, node, theme, isDark),
+        return Stack(
+          children: [
+              AnimatedSwitcher(
+              duration: const Duration(milliseconds: 400),
+              switchInCurve: Curves.easeOutBack,
+              switchOutCurve: Curves.easeIn,
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, 0.1),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  ),
+                );
+              },
+              child: node == null
+                  ? const SizedBox.shrink()
+                  : _buildDialogContent(context, node, theme, isDark),
+            ),
+          ],
         );
       },
     );
@@ -94,98 +99,68 @@ class DialogOverlay extends StatelessWidget {
                     ),
                   GestureDetector(
                     onTap: () => game.nextDialog(),
-                    child: Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: isSmall ? 8 : 16,
+                    child: GlassPanel(
+                      borderRadius: BorderRadius.circular(isSmall ? 24 : 32),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isSmall ? 16 : 24,
+                        vertical: isSmall ? 14 : 20,
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(isSmall ? 24 : 32),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: isSmall ? 16 : 24,
-                              vertical: isSmall ? 14 : 20,
-                            ),
-                            decoration: BoxDecoration(
-                              color: (isDark ? Colors.black : Colors.white)
-                                  .withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(
-                                isSmall ? 24 : 32,
-                              ),
-                              border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.2),
-                                width: isSmall ? 1.5 : 2.5,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.2),
-                                  blurRadius: 20,
-                                  offset: const Offset(0, 6),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (!isVerySmall) ...[
+                            Container(
+                              width: isSmall ? 44 : 56,
+                              height: isSmall ? 44 : 56,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(
+                                  alpha: 0.1,
                                 ),
-                              ],
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.face_retouching_natural_rounded,
+                                color: Colors.white,
+                                size: isSmall ? 24 : 32,
+                              ),
                             ),
-                            child: Row(
+                            SizedBox(width: isSmall ? 12 : 20),
+                          ],
+                          Expanded(
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                if (!isVerySmall) ...[
-                                  Container(
-                                    width: isSmall ? 44 : 56,
-                                    height: isSmall ? 44 : 56,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(
-                                        alpha: 0.1,
-                                      ),
-                                      shape: BoxShape.circle,
+                                if (node.speakerName != null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 4,
                                     ),
-                                    child: Icon(
-                                      Icons.face_retouching_natural_rounded,
-                                      color: Colors.white,
-                                      size: isSmall ? 24 : 32,
+                                    child: Text(
+                                      node.speakerName!(loc),
+                                      style: GoogleFonts.baloo2(
+                                        color: Colors.white,
+                                        fontSize: isSmall ? 15 : 17,
+                                        fontWeight: FontWeight.w800,
+                                        height: 1.2,
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(width: isSmall ? 12 : 20),
-                                ],
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      if (node.speakerName != null)
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            bottom: 4,
-                                          ),
-                                          child: Text(
-                                            node.speakerName!(loc),
-                                            style: GoogleFonts.baloo2(
-                                              color: Colors.white,
-                                              fontSize: isSmall ? 15 : 17,
-                                              fontWeight: FontWeight.w800,
-                                              height: 1.2,
-                                            ),
-                                          ),
-                                        ),
-                                      Text(
-                                        node.text(loc),
-                                        softWrap: true,
-                                        textWidthBasis:
-                                            TextWidthBasis.longestLine,
-                                        style: GoogleFonts.baloo2(
-                                          color: Colors.white,
-                                          fontSize: isSmall ? 16 : 18.5,
-                                          fontWeight: FontWeight.w600,
-                                          height: 1.38,
-                                        ),
-                                      ),
-                                    ],
+                                Text(
+                                  node.text(loc),
+                                  softWrap: true,
+                                  textWidthBasis: TextWidthBasis.longestLine,
+                                  style: GoogleFonts.baloo2(
+                                    color: Colors.white,
+                                    fontSize: isSmall ? 16 : 18.5,
+                                    fontWeight: FontWeight.w600,
+                                    height: 1.38,
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
