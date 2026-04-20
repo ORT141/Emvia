@@ -24,6 +24,10 @@
     "@resume": {
         "description": "Label for resuming a paused activity."
     },
+    "return_to_menu": "Return to menu",
+    "@return_to_menu": {
+        "description": "Label for returning to the main menu from a pause screen."
+    },
     "too_dangerous": "This way are too dangerous",
     "@too_dangerous": {
         "description": "Warning message when a path is locked."

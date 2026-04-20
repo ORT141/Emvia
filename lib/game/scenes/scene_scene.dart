@@ -41,6 +41,8 @@ class SceneScene extends GameScene {
       ..position = Vector2.zero();
     add(_noiseOverlay!);
 
+    game.stressLevel = 100;
+
     try {
       await FlameAudio.play('other/people-talking.mp3', volume: game.volume);
     } catch (_) {}

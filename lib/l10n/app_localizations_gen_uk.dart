@@ -27,6 +27,9 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get resume => 'Продовжити';
 
   @override
+  String get return_to_menu => 'Повернутися в меню';
+
+  @override
   String get too_dangerous => 'Цей шлях надто небезпечний';
 
   @override

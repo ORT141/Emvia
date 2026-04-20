@@ -3,12 +3,13 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';
 
 import 'survey_service.dart';
 import 'components/fade_overlay.dart';
 import 'characters/base_player.dart';
-import 'characters/olya/olya_player.dart';
+import 'characters/character_factory.dart';
 import 'scenes/game_scene.dart';
 import 'scenes/classroom_scene.dart';
 import 'scenes/corridor_scene.dart';
@@ -57,7 +58,6 @@ class EmviaGame extends FlameGame
 
   bool isFrozen = false;
   bool hasTriggeredStressScene = false;
-  double? _savedCorridorReturnX;
   bool _hasShownCorridorStressIntro = false;
   bool _isCorridorStressIntroActive = false;
 
@@ -74,19 +74,30 @@ class EmviaGame extends FlameGame
   }
 
   int get sceneIndex => _session.sceneIndex;
-  set sceneIndex(int value) => _session.sceneIndex = value;
+  set sceneIndex(int value) {
+    _session.sceneIndex = value;
+    _session.save();
+  }
 
   int get stressLevel => _session.stressLevel;
-  set stressLevel(int value) => _session.stressLevel = value;
+  set stressLevel(int value) {
+    _session.stressLevel = value;
+    _session.save();
+  }
 
   ValueNotifier<int> get stressNotifier => _session.stressNotifier;
 
   PlayableCharacter get selectedCharacter => _session.selectedCharacter;
-  set selectedCharacter(PlayableCharacter value) =>
-      _session.selectedCharacter = value;
+  set selectedCharacter(PlayableCharacter value) {
+    _session.selectedCharacter = value;
+    _session.save();
+  }
 
   SurveyProfile get surveyProfile => _session.surveyProfile;
-  set surveyProfile(SurveyProfile value) => _session.surveyProfile = value;
+  set surveyProfile(SurveyProfile value) {
+    _session.surveyProfile = value;
+    _session.save();
+  }
 
   double get volume => _preferences.volume;
   set volume(double value) => _preferences.volume = value;
@@ -162,12 +173,23 @@ class EmviaGame extends FlameGame
   }
 
   bool debugTapEnabled = false;
-
-  // bool get isMobilePlatform => true;
+  bool _spoofMobile = false;
 
   bool get isMobilePlatform {
+    if (_spoofMobile) return true;
     return defaultTargetPlatform == TargetPlatform.android ||
         defaultTargetPlatform == TargetPlatform.iOS;
+  }
+
+  bool get isMobileSpoofed => _spoofMobile;
+
+  void toggleMobileSpoof() {
+    _spoofMobile = !_spoofMobile;
+    if (_spoofMobile) {
+      showMobileControls();
+    } else {
+      hideMobileControls();
+    }
   }
 
   bool get isCorridorStressIntroActive => _isCorridorStressIntroActive;
@@ -175,6 +197,7 @@ class EmviaGame extends FlameGame
   @override
   Future<void> onLoad() async {
     await _preferences.load();
+    await _session.load();
 
     _initializePlayer();
     _configureWorldRoot();
@@ -189,13 +212,7 @@ class EmviaGame extends FlameGame
   }
 
   void _initializePlayer() {
-    switch (selectedCharacter) {
-      case PlayableCharacter.olya:
-        _player = OlyaPlayer();
-        break;
-      default:
-        _player = OlyaPlayer();
-    }
+    _player = CharacterFactory.createPlayer(selectedCharacter);
   }
 
   void _configureWorldRoot() {
@@ -218,6 +235,81 @@ class EmviaGame extends FlameGame
     void Function()? onFullOpacity,
   }) async {
     await transitionManager.loadScene(scene, onFullOpacity: onFullOpacity);
+  }
+
+  @override
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    if (event is KeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.f3 ||
+          (event.logicalKey == LogicalKeyboardKey.keyD &&
+              keysPressed.contains(LogicalKeyboardKey.controlLeft))) {
+        toggleDebug();
+        return KeyEventResult.handled;
+      }
+
+      if (event.logicalKey == LogicalKeyboardKey.escape ||
+          event.logicalKey == LogicalKeyboardKey.keyP) {
+        if (sceneIndex > 0 && !overlays.isActive('MainMenu')) {
+          if (paused) {
+            resumeGame();
+          } else {
+            pauseGame();
+          }
+          return KeyEventResult.handled;
+        }
+      }
+    }
+    return super.onKeyEvent(event, keysPressed);
+  }
+
+  void pauseGame() {
+    if (paused) return;
+    pauseEngine();
+    overlays.add('PauseMenu');
+    hideMobileControls();
+  }
+
+  void resumeGame() {
+    if (!paused) return;
+    resumeEngine();
+    overlays.remove('PauseMenu');
+    if (sceneIndex > 0) {
+      showMobileControls();
+    }
+  }
+
+  Future<void> continueGame() async {
+    _clearGameplayOverlays();
+    _initializePlayer();
+
+    switch (sceneIndex) {
+      case 1:
+        await loadScene(
+          ClassroomScene(),
+          onFullOpacity: () {
+            player.opacity = 0;
+          },
+        );
+        break;
+      case 2:
+        await loadScene(PathChoiceScene(), onFullOpacity: () {});
+        break;
+      case 3:
+        await loadScene(StressScene(), onFullOpacity: () {});
+        break;
+      case 4:
+        await transitionToCorridor();
+        break;
+      case 6:
+        await loadStageScene();
+        break;
+      default:
+        await _startGameFlow();
+    }
+    closeMainMenu();
   }
 
   Future<void> reloadCurrentScene() async {
@@ -466,12 +558,8 @@ class EmviaGame extends FlameGame
 
   void showMobileControls() {
     if (!isMobilePlatform) return;
-    if (currentScene is! CorridorScene &&
-        currentScene is! SecondCorridorScene &&
-        currentScene is! OutsideScene &&
-        currentScene is! StageScene) {
-      return;
-    }
+    if (sceneIndex == 0) return;
+
     if (!overlays.isActive('MobileControls')) {
       overlays.add('MobileControls');
     }
@@ -490,6 +578,15 @@ class EmviaGame extends FlameGame
     overlays.add('MainMenu');
   }
 
+  Future<void> returnToMainMenu() async {
+    await fadeOverlay.fadeIn(0.4);
+    resumeEngine();
+    overlays.remove('PauseMenu');
+    await _loadMenuScene();
+    overlays.add('MainMenu');
+    await fadeOverlay.fadeOut(0.4);
+  }
+
   void closeMainMenu() {
     overlays.remove('MainMenu');
     if (sceneIndex == 0 && currentScene is CorridorScene) {
@@ -503,7 +600,8 @@ class EmviaGame extends FlameGame
   bool consumeStartGameAfterSurvey() => _session.consumeStartGameAfterSurvey();
 
   bool isCharacterUnlocked(PlayableCharacter character) {
-    return character == PlayableCharacter.olya;
+    return character == PlayableCharacter.olya ||
+        character == PlayableCharacter.liam;
   }
 
   void selectCharacter(PlayableCharacter character) {
@@ -734,12 +832,14 @@ class EmviaGame extends FlameGame
   }
 
   void saveCorridorReturnPosition(double x) {
-    _savedCorridorReturnX = x;
+    _session.savedCorridorReturnX = x;
+    _session.save();
   }
 
   void restoreCorridorPosition() {
-    final savedX = _savedCorridorReturnX;
-    _savedCorridorReturnX = null;
+    final savedX = _session.savedCorridorReturnX;
+    _session.savedCorridorReturnX = null;
+    _session.save();
 
     if (savedX == null) {
       playerToCorridorEntrance();

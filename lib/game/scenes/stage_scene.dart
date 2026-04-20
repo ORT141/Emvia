@@ -38,7 +38,7 @@ class StageScene extends GameScene {
       id: 'book',
       normalSpritePath: 'scenes/stage/books.png',
       selectedSpritePath: 'scenes/stage/books_selected.png',
-      uv: Vector2(0.7355, 0.595),
+      uv: Vector2(0.7355, 0.6),
       heightFactor: _booksHeightFactor,
       soundAssetEn: 'items/stage/thick book.mp3',
       soundAssetUk: 'items/stage/товста книжка.mp3',
@@ -74,14 +74,8 @@ class StageScene extends GameScene {
   bool _hasShownCalmingPrompt = false;
 
   @override
-  double worldWidthForViewport(Vector2 viewportSize) {
-    if (background.sprite?.srcSize != null &&
-        background.sprite!.srcSize.y > 0) {
-      final src = background.sprite!.srcSize;
-      final scale = viewportSize.y / src.y;
-      return src.x * scale;
-    }
-    return viewportSize.x * 2;
+  Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) {
+    return Vector2(viewportSize.x * 0.25, worldSize.y * 0.65);
   }
 
   @override

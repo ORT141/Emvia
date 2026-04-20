@@ -134,6 +134,12 @@ abstract class AppLocalizationsGen {
   /// **'Resume'**
   String get resume;
 
+  /// Label for returning to the main menu from a pause screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Return to menu'**
+  String get return_to_menu;
+
   /// Warning message when a path is locked.
   ///
   /// In en, this message translates to:

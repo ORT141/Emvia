@@ -6,6 +6,7 @@ import 'package:emvia/game/overlays/calm_effect_overlay.dart';
 import 'package:emvia/game/overlays/calm_item_prompt_overlay.dart';
 import 'package:emvia/game/overlays/dialog.dart';
 import 'package:emvia/game/overlays/main_menu.dart';
+import 'package:emvia/game/overlays/pause_menu.dart';
 import 'package:emvia/game/overlays/mobile_controls_overlay.dart';
 import 'package:emvia/game/backpack/backpack_overlay.dart';
 import 'package:emvia/game/overlays/settings_overlay.dart';
@@ -121,6 +122,7 @@ class _MyAppState extends State<MyApp> {
             onThemeToggled: _toggleTheme,
             isDarkMode: _themeMode == ThemeMode.dark,
           ),
+          'PauseMenu': (_, game) => PauseMenuOverlay(game: game),
           'Settings': (_, game) => SettingsOverlay(
             game: game,
             onLocaleChanged: _setLocale,

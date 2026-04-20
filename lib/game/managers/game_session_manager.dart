@@ -1,6 +1,8 @@
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../dialog/dialog_model.dart';
 import '../emvia_types.dart';
@@ -8,6 +10,7 @@ import '../survey_service.dart';
 
 class GameSessionManager {
   int sceneIndex = 0;
+  double? savedCorridorReturnX;
 
   int _stressLevel = 100;
   final ValueNotifier<int> stressNotifier = ValueNotifier<int>(100);
@@ -55,16 +58,19 @@ class GameSessionManager {
 
   void addSelectedTool(String toolId) {
     _selectedTools.add(toolId);
+    save();
   }
 
   void toggleSelectedTool(String toolId) {
     if (!_selectedTools.remove(toolId)) {
       _selectedTools.add(toolId);
     }
+    save();
   }
 
   void clearSelectedTools() {
     _selectedTools.clear();
+    save();
   }
 
   void resetForNewJourney({required SurveyProfile profile}) {
@@ -75,5 +81,64 @@ class GameSessionManager {
     clearSelectedTools();
     currentNode = null;
     pathDetail = null;
+    save();
+  }
+
+  Future<void> save() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('sceneIndex', sceneIndex);
+      if (savedCorridorReturnX != null) {
+        await prefs.setDouble('savedCorridorReturnX', savedCorridorReturnX!);
+      } else {
+        await prefs.remove('savedCorridorReturnX');
+      }
+      await prefs.setInt('stressLevel', _stressLevel);
+      await prefs.setString('selectedCharacter', selectedCharacter.name);
+      await prefs.setString(
+        'surveyProfile',
+        jsonEncode(surveyProfile.answers),
+      );
+      await prefs.setStringList('selectedTools', _selectedTools.toList());
+      await prefs.setBool('journeyCompleted', journeyCompleted);
+    } catch (_) {}
+  }
+
+  Future<bool> load() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (!prefs.containsKey('sceneIndex')) return false;
+
+      sceneIndex = prefs.getInt('sceneIndex') ?? 0;
+      savedCorridorReturnX = prefs.getDouble('savedCorridorReturnX');
+      _stressLevel = prefs.getInt('stressLevel') ?? 100;
+      stressNotifier.value = _stressLevel;
+
+      final charName = prefs.getString('selectedCharacter');
+      if (charName != null) {
+        selectedCharacter = PlayableCharacter.values.firstWhere(
+          (e) => e.name == charName,
+          orElse: () => PlayableCharacter.olya,
+        );
+      }
+
+      final surveyJson = prefs.getString('surveyProfile');
+      if (surveyJson != null) {
+        surveyProfile = SurveyProfile(
+          Map<String, String>.from(jsonDecode(surveyJson)),
+        );
+      }
+
+      final tools = prefs.getStringList('selectedTools');
+      if (tools != null) {
+        _selectedTools.clear();
+        _selectedTools.addAll(tools);
+      }
+
+      journeyCompleted = prefs.getBool('journeyCompleted') ?? false;
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 }

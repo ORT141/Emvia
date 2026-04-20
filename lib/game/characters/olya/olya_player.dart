@@ -2,9 +2,19 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import '../../scenes/classroom_scene.dart';
 import '../base_player.dart';
+import '../character_data.dart';
 
 class OlyaPlayer extends BasePlayer {
-  OlyaPlayer() : super();
+  static const CharacterData olyaData = CharacterData(
+    name: 'olya',
+    assetPath: 'player/olya',
+    walkingFrames: 26,
+    extraAssets: {
+      'stressPanic': 'stress/stress-scene/panic_olya.png',
+    },
+  );
+
+  OlyaPlayer() : super(characterData: olyaData);
 
   late final SpriteAnimation _standingAnimation;
   late final SpriteAnimation _walkingAnimation;
@@ -21,30 +31,23 @@ class OlyaPlayer extends BasePlayer {
   Future<void> onLoad() async {
     updatePlayerSize();
 
-    _standingAnimation = SpriteAnimation.spriteList([
-      await game.loadSprite('player/olya/standing.png'),
-    ], stepTime: 1);
-
-    _walkingAnimation = SpriteAnimation.spriteList([
-      for (int i = 1; i <= 26; i++)
-        await game.loadSprite('player/olya/walking_$i.png'),
-    ], stepTime: 0.1);
+    _standingAnimation = await loadSingleFrameAnimation('standing.png');
+    _walkingAnimation = await loadWalkingAnimation();
 
     try {
-      _standingHeadphonesAnimation = SpriteAnimation.spriteList([
-        await game.loadSprite('player/olya/standing_headphones.png'),
-      ], stepTime: 1);
-      _walkingHeadphonesAnimation = SpriteAnimation.spriteList([
-        for (int i = 1; i <= 29; i++)
-          await game.loadSprite('player/olya/walking_headphones_$i.png'),
-      ], stepTime: 0.1);
+      _standingHeadphonesAnimation =
+          await loadSingleFrameAnimation('standing_headphones.png');
+      _walkingHeadphonesAnimation = await loadWalkingAnimation(
+        prefix: 'walking_headphones',
+        frames: 29,
+      );
 
       try {
         final wearingSprite = await game.loadSprite(
-          'player/olya/headphones_wearing.png',
+          '${characterData.assetPath}/headphones_wearing.png',
         );
         final wearedSprite = await game.loadSprite(
-          'player/olya/headphones_weared.png',
+          '${characterData.assetPath}/headphones_weared.png',
         );
         _wearingHeadphonesAnimation = SpriteAnimation.spriteList(
           [wearingSprite, wearedSprite],
@@ -60,18 +63,12 @@ class OlyaPlayer extends BasePlayer {
       _wearingHeadphonesAnimation = _standingAnimation;
     }
 
-    _chosenBooksAnimation = SpriteAnimation.spriteList([
-      await game.loadSprite('player/olya/chosen_books.png'),
-    ], stepTime: 1);
-    _chosenHibukiAnimation = SpriteAnimation.spriteList([
-      await game.loadSprite('player/olya/chosen_hibuki.png'),
-    ], stepTime: 1);
-    _chosenBagOfRocksAnimation = SpriteAnimation.spriteList([
-      await game.loadSprite('player/olya/chosen_bag_of_rocks.png'),
-    ], stepTime: 1);
-    _chosenSittingInChairAnimation = SpriteAnimation.spriteList([
-      await game.loadSprite('player/olya/chosen_sitting_in_chair.png'),
-    ], stepTime: 1);
+    _chosenBooksAnimation = await loadSingleFrameAnimation('chosen_books.png');
+    _chosenHibukiAnimation = await loadSingleFrameAnimation('chosen_hibuki.png');
+    _chosenBagOfRocksAnimation =
+        await loadSingleFrameAnimation('chosen_bag_of_rocks.png');
+    _chosenSittingInChairAnimation =
+        await loadSingleFrameAnimation('chosen_sitting_in_chair.png');
 
     _updateAnimations();
     current = PlayerState.standing;
@@ -83,9 +80,6 @@ class OlyaPlayer extends BasePlayer {
       return;
     }
   }
-
-  @override
-  String get stressPanicSprite => 'stress/stress-scene/panic_olya.png';
 
   @override
   void update(double dt) {

@@ -203,7 +203,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
   }
 
   void _continueGame() {
-    widget.game.closeMainMenu();
+    widget.game.continueGame();
   }
 
   void _openSettings() {
@@ -621,7 +621,7 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
                 label: 'Ліам',
                 selected: selectedCharacter == PlayableCharacter.liam,
                 hovered: _hoveredCharacter == PlayableCharacter.liam,
-                locked: true,
+                locked: false,
                 width: ghostWidth,
                 imageHeight: ghostImageHeight,
                 onHoverChanged: (isHovering) {

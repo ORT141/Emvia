@@ -325,7 +325,9 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
       if (mounted) setState(() => _isLoading = false);
     }
     if (!mounted) return;
-    await _showPostSurveyModal();
+
+    // await _showPostSurveyModal();
+
     final shouldStartGame = widget.game.consumeStartGameAfterSurvey();
     widget.game.overlays.remove('Survey');
     _resetState();
@@ -350,7 +352,7 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
 
     final shouldStartGame = widget.game.consumeStartGameAfterSurvey();
 
-    await _showPostSurveyModal();
+    // await _showPostSurveyModal();
     widget.game.overlays.remove('Survey');
     _resetState();
 
@@ -361,6 +363,7 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
     }
   }
 
+  // ignore: unused_element
   Future<void> _showPostSurveyModal() async {
     final l = AppLocalizations.of(context)!;
     await showGeneralDialog(

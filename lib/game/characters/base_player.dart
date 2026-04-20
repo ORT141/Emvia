@@ -2,26 +2,55 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
 import '../emvia_game.dart';
+import 'character_data.dart';
 
 enum PlayerState { standing, walking }
 
 abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
     with HasGameReference<EmviaGame>, KeyboardHandler, TapCallbacks {
-  BasePlayer() : super(anchor: Anchor.center);
+  final CharacterData characterData;
+
+  BasePlayer({required this.characterData}) : super(anchor: Anchor.center);
 
   @override
   int priority = 15;
+
+  Future<SpriteAnimation> loadWalkingAnimation({
+    String? prefix,
+    int? frames,
+    double stepTime = 0.1,
+  }) async {
+    final frameCount = frames ?? characterData.walkingFrames;
+    final pathPrefix = prefix ?? "walking";
+    return SpriteAnimation.spriteList([
+      for (int i = 1; i <= frameCount; i++)
+        await game.loadSprite(
+          "${characterData.assetPath}/${pathPrefix}_$i.png",
+        ),
+    ], stepTime: stepTime);
+  }
+
+  Future<SpriteAnimation> loadSingleFrameAnimation(String fileName) async {
+    return SpriteAnimation.spriteList([
+      await game.loadSprite("${characterData.assetPath}/$fileName"),
+    ], stepTime: 1);
+  }
 
   bool isInteracting = false;
 
   final Vector2 velocity = Vector2.zero();
   final Vector2 keyboardVelocity = Vector2.zero();
   final Vector2 mobileVelocity = Vector2.zero();
-  final double speed = 230.0;
+
+  double get speed => game.size.y * (300.0 / 1080.0);
 
   void updatePlayerSize() {
     final height = game.size.y * 0.42;
-    size = Vector2(height * 0.5, height);
+    if (characterData.name == "olya") {
+      size = Vector2(height * 0.5, height);
+    } else {
+      size = Vector2(height, height);
+    }
   }
 
   @override
@@ -57,6 +86,9 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
 
     if (velocity.isZero()) {
       current = PlayerState.standing;
+      if (characterData.name == "olya") {
+        scale.x = 1;
+      }
     } else {
       current = PlayerState.walking;
       if (velocity.x < 0) {
@@ -73,7 +105,9 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
 
     if (!isInteracting) {
       position.y = game.currentScene != null
-          ? game.sceneSpawnPoint(game.currentScene!, game.size, game.worldRoot).y
+          ? game
+                .sceneSpawnPoint(game.currentScene!, game.size, game.worldRoot)
+                .y
           : game.worldRoot.size.y * 0.58;
     }
   }
@@ -83,10 +117,6 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
     if (event is KeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.tab) {
         game.toggleBackpack();
-        return true;
-      }
-      if (event.logicalKey == LogicalKeyboardKey.f3) {
-        game.toggleDebug();
         return true;
       }
     }
@@ -123,8 +153,6 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
   }
 
   Future<void> interactWithItem(String itemId);
-
-  String get stressPanicSprite;
 
   void endInteraction() {}
 }

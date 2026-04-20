@@ -93,10 +93,10 @@ class CorridorScene extends GameScene {
   static const _lockerPromptUVx = 0.2688;
   static final _backpackMinUV = Vector2(0.2743, 0.6113);
   static final _backpackMaxUV = Vector2(0.2919, 0.7063);
-  static const _patternStartUVx = 0.4545;
-  static const _patternEndUVx = 0.8648;
+  static const _patternStartUVx = 0.47;
   static const _patternStartUVy = 0.0909;
-  static const _patternEndUVy = 0.5261;
+  static const _patternEndUVx = 0.8648;
+  static const _patternEndUVy = 0.50;
 
   @override
   void onTapDown(TapDownEvent event) {

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui' as ui;
+import 'dart:ui';
 
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/l10n/app_localizations.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
@@ -77,7 +79,6 @@ class _CalmMapOverlayState extends State<CalmMapOverlay> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     final profile = widget.game.surveyProfile;
-    final theme = Theme.of(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.shortestSide < 600;
 
@@ -93,111 +94,158 @@ class _CalmMapOverlayState extends State<CalmMapOverlay> {
       },
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: isSmall ? size.width * 0.95 : 820,
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(color: Colors.black.withValues(alpha: 0.4)),
+              ),
             ),
-            child: Padding(
-              padding: EdgeInsets.all(isSmall ? 8 : 16),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    RepaintBoundary(
-                      key: _exportKey,
-                      child: _CalmMapCard(
-                        game: widget.game,
-                        title: l.calm_map_title,
-                        artifactLabel: l.calm_map_personal_artifact,
-                        safeColorLabel: l.calm_map_safe_color(
-                          profile.safeColorLabel(context),
-                        ),
-                        patternLabel: l.calm_map_pattern(
-                          profile.calmingPatternLabel(context),
-                        ),
-                        itemLabel: l.calm_map_item(
-                          profile.calmingItemLabel(context),
-                        ),
-                        actionLabel: l.calm_map_calming_action(
-                          profile.calmingActionLabel(context),
-                        ),
-                        soundLabel: l.calm_map_sound_trigger(
-                          profile.soundTriggerLabel(context),
-                        ),
-                        supportMessageLabel: l.calm_map_support_message(
-                          profile.supportMessageLabel(context),
-                        ),
-                        supportSymbolLabel: l.calm_map_support_symbol(
-                          profile.supportSymbolLabel(context),
-                        ),
-                        selectedPathLabel: l.calm_map_selected_path(
-                          _selectedToolsLabel(context),
-                        ),
-                        isSmall: isSmall,
-                      ),
-                    ),
-                    SizedBox(height: isSmall ? 10 : 14),
-                    Text(
-                      l.calm_map_export_hint,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.white.withValues(alpha: 0.82),
-                        fontSize: isSmall ? 12 : 14,
-                      ),
-                    ),
-                    SizedBox(height: isSmall ? 8 : 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            Center(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: isSmall ? size.width * 0.95 : 820,
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(isSmall ? 8 : 16),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        FilledButton.icon(
-                          onPressed: _isExporting ? null : _exportPng,
-                          icon: _isExporting
-                              ? SizedBox(
-                                  width: isSmall ? 14 : 18,
-                                  height: isSmall ? 14 : 18,
-                                  child: const CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : Icon(
-                                  Icons.image_outlined,
-                                  size: isSmall ? 18 : 24,
-                                ),
-                          label: Text(
-                            l.calm_map_export_png,
-                            style: TextStyle(fontSize: isSmall ? 13 : 14),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            isSmall ? 24 : 32,
                           ),
-                          style: FilledButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: isSmall ? 12 : 16,
-                              vertical: isSmall ? 8 : 12,
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(
+                                  isSmall ? 24 : 32,
+                                ),
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.2),
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: RepaintBoundary(
+                                key: _exportKey,
+                                child: _CalmMapCard(
+                                  game: widget.game,
+                                  title: l.calm_map_title,
+                                  artifactLabel: l.calm_map_personal_artifact,
+                                  safeColorLabel: l.calm_map_safe_color(
+                                    profile.safeColorLabel(context),
+                                  ),
+                                  patternLabel: l.calm_map_pattern(
+                                    profile.calmingPatternLabel(context),
+                                  ),
+                                  itemLabel: l.calm_map_item(
+                                    profile.calmingItemLabel(context),
+                                  ),
+                                  actionLabel: l.calm_map_calming_action(
+                                    profile.calmingActionLabel(context),
+                                  ),
+                                  soundLabel: l.calm_map_sound_trigger(
+                                    profile.soundTriggerLabel(context),
+                                  ),
+                                  supportMessageLabel: l
+                                      .calm_map_support_message(
+                                        profile.supportMessageLabel(context),
+                                      ),
+                                  supportSymbolLabel: l.calm_map_support_symbol(
+                                    profile.supportSymbolLabel(context),
+                                  ),
+                                  selectedPathLabel: l.calm_map_selected_path(
+                                    _selectedToolsLabel(context),
+                                  ),
+                                  isSmall: isSmall,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                        SizedBox(width: isSmall ? 8 : 12),
-                        OutlinedButton(
-                          onPressed: () =>
-                              widget.game.returnToMainMenuAfterJourney(),
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            side: const BorderSide(color: Colors.white54),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: isSmall ? 12 : 16,
-                              vertical: isSmall ? 8 : 12,
+                        SizedBox(height: isSmall ? 16 : 24),
+                        Text(
+                          l.calm_map_export_hint,
+                          style: GoogleFonts.baloo2(
+                            color: Colors.white70,
+                            fontSize: isSmall ? 13 : 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: isSmall ? 16 : 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: _isExporting ? null : _exportPng,
+                              icon: _isExporting
+                                  ? SizedBox(
+                                      width: isSmall ? 14 : 18,
+                                      height: isSmall ? 14 : 18,
+                                      child: const CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : Icon(
+                                      Icons.image_outlined,
+                                      size: isSmall ? 18 : 24,
+                                    ),
+                              label: Text(
+                                l.calm_map_export_png.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: isSmall ? 13 : 14,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white.withValues(
+                                  alpha: 0.2,
+                                ),
+                                foregroundColor: Colors.white,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isSmall ? 20 : 28,
+                                  vertical: isSmall ? 12 : 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  side: const BorderSide(color: Colors.white24),
+                                ),
+                                elevation: 0,
+                              ),
                             ),
-                          ),
-                          child: Text(
-                            l.play_again,
-                            style: TextStyle(fontSize: isSmall ? 13 : 14),
-                          ),
+                            SizedBox(width: isSmall ? 12 : 16),
+                            TextButton(
+                              onPressed: () =>
+                                  widget.game.returnToMainMenuAfterJourney(),
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.white70,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isSmall ? 20 : 28,
+                                  vertical: isSmall ? 12 : 16,
+                                ),
+                              ),
+                              child: Text(
+                                l.play_again.toUpperCase(),
+                                style: GoogleFonts.baloo2(
+                                  fontSize: isSmall ? 14 : 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

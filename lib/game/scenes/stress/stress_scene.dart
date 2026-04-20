@@ -52,7 +52,7 @@ class StressScene extends GameScene {
     add(_silhouettesComponent!);
 
     _playerComponent = SpriteComponent()
-      ..sprite = await game.loadSprite(game.player.stressPanicSprite)
+      ..sprite = await game.loadSprite('stress/stress-scene/panic_olya.png')
       ..anchor = Anchor.topLeft
       ..priority = 10;
     add(_playerComponent!);

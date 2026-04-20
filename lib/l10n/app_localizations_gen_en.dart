@@ -27,6 +27,9 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get resume => 'Resume';
 
   @override
+  String get return_to_menu => 'Return to menu';
+
+  @override
   String get too_dangerous => 'This way are too dangerous';
 
   @override
