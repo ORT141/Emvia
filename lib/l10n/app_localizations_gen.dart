@@ -173,7 +173,7 @@ abstract class AppLocalizationsGen {
   /// Caption shown under the stress meter when it first appears in the corridor.
   ///
   /// In en, this message translates to:
-  /// **'This is your stress level.\nYou can reduce it with items.'**
+  /// **'Olya stress level.'**
   String get stress_intro_caption;
 
   /// Short reminder to monitor the stress meter.
@@ -845,7 +845,7 @@ abstract class AppLocalizationsGen {
   /// No description provided for @survey_calibration_subtitle.
   ///
   /// In en, this message translates to:
-  /// **'Answers will personalize Olya\'s story and the final \"Map of Calm\".'**
+  /// **'Answers will personalize character story and the final \"Map of Calm\".'**
   String get survey_calibration_subtitle;
 
   /// No description provided for @survey_save_continue.

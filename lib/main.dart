@@ -129,7 +129,11 @@ class _MyAppState extends State<MyApp> {
               CalmingItemPromptOverlay(game: game),
           'CalmingEffect': (_, game) => CalmEffectOverlay(game: game),
           'MobileControls': (_, game) => MobileControlsOverlay(game: game),
-          'Debug': (_, game) => DebugOverlay(game: game),
+          'Debug': (_, game) => DebugOverlay(
+            game: game,
+            onThemeToggled: _toggleTheme,
+            isDarkMode: _themeMode == ThemeMode.dark,
+          ),
           'Stress': (_, game) => StressOverlay(game: game),
           'TapGame': (_, game) => TapGameOverlay(game: game),
           'BreathingExercise': (_, game) =>

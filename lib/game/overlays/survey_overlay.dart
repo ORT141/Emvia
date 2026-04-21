@@ -14,17 +14,38 @@ class SurveyOverlay extends StatefulWidget {
   State<SurveyOverlay> createState() => _SurveyOverlayState();
 }
 
-const bool kAllowSurveySkip = bool.fromEnvironment(
-  'ALLOW_SURVEY_SKIP',
-  defaultValue: false,
-);
-
-class _SurveyOverlayState extends State<SurveyOverlay> {
+class _SurveyOverlayState extends State<SurveyOverlay>
+    with SingleTickerProviderStateMixin {
   final SurveyService _surveyService = SurveyService();
   final Map<String, String> _answers = {};
   bool _isLoading = false;
   int _currentIndex = 0;
   Future<void> Function()? _stopQuestionAudio;
+
+  late AnimationController _entranceController;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _entranceController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _entranceController,
+      curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+    );
+
+    _scaleAnimation = CurvedAnimation(
+      parent: _entranceController,
+      curve: const Interval(0.0, 1.0, curve: Curves.elasticOut),
+    );
+
+    _entranceController.forward();
+  }
 
   static const _soundFiles = {
     'en': [
@@ -70,6 +91,7 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
   @override
   void dispose() {
     _stopQuestionAudio?.call();
+    _entranceController.dispose();
     super.dispose();
   }
 
@@ -87,208 +109,249 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
 
     return Stack(
       children: [
-        const GlassOverlayScrim(),
         Center(
-          child: GlassPanel(
-            width: isSmall ? size.width * 0.95 : 840,
-            constraints: BoxConstraints(maxHeight: size.height * 0.9),
-            padding: EdgeInsets.symmetric(
-              horizontal: isSmall ? 16 : 24,
-              vertical: isSmall ? 16 : 24,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l.survey_calibration_title,
-                    style:
-                        (isSmall
-                                ? theme.textTheme.titleLarge
-                                : theme.textTheme.headlineSmall)
-                            ?.copyWith(
-                              fontWeight: FontWeight.w800,
-                              color: theme.colorScheme.primary,
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              child: GlassPanel(
+                width: isSmall ? size.width * 0.95 : 840,
+                constraints: BoxConstraints(maxHeight: size.height * 0.9),
+                padding: EdgeInsets.symmetric(
+                  horizontal: isSmall ? 16 : 24,
+                  vertical: isSmall ? 16 : 24,
+                ),
+                child: ClipRect(
+                  child: AnimatedSize(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 400),
+                      layoutBuilder:
+                          (
+                            Widget? currentChild,
+                            List<Widget> previousChildren,
+                          ) {
+                            return Stack(
+                              alignment: Alignment.topCenter,
+                              children: <Widget>[
+                                ...previousChildren,
+                                ?currentChild,
+                              ],
+                            );
+                          },
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(0.05, 0),
+                                  end: Offset.zero,
+                                ).animate(animation),
+                                child: child,
+                              ),
+                            );
+                          },
+                      child: SingleChildScrollView(
+                        key: ValueKey<int>(_currentIndex),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 4),
+                            Text(
+                              l.survey_calibration_subtitle,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                                fontSize: isSmall ? 13 : 14,
+                              ),
                             ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    l.survey_calibration_subtitle,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                      fontSize: isSmall ? 13 : 14,
-                    ),
-                  ),
-                  SizedBox(height: isSmall ? 12 : 16),
+                            SizedBox(height: isSmall ? 12 : 16),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: LinearProgressIndicator(
-                            value: (_currentIndex + 1) / questions.length,
-                            minHeight: isSmall ? 4 : 6,
-                            backgroundColor:
-                                theme.colorScheme.surfaceContainerHighest,
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        '${_currentIndex + 1} / ${questions.length}',
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: isSmall ? 16 : 24),
-
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          question.title,
-                          style:
-                              (isSmall
-                                      ? theme.textTheme.titleMedium
-                                      : theme.textTheme.titleLarge)
-                                  ?.copyWith(fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                      IconButton(
-                        tooltip: 'Play again',
-                        icon: const Icon(Icons.volume_up_rounded),
-                        color: theme.colorScheme.primary,
-                        onPressed: () => _playQuestionSound(_currentIndex),
-                        iconSize: isSmall ? 20 : 24,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: isSmall ? 12 : 16),
-
-                  Wrap(
-                    spacing: isSmall ? 8 : 10,
-                    runSpacing: isSmall ? 8 : 10,
-                    children: question.options.map((option) {
-                      final isSelected = selected == option.id;
-                      return ChoiceChip(
-                        key: ValueKey(option.id),
-                        label: Text(
-                          option.label,
-                          style: TextStyle(fontSize: isSmall ? 13 : 14),
-                        ),
-                        selected: isSelected,
-                        avatar: isSelected
-                            ? Icon(
-                                Icons.check,
-                                size: isSmall ? 14 : 16,
-                                color: theme.colorScheme.primary,
-                              )
-                            : null,
-                        selectedColor: theme.colorScheme.primary.withValues(
-                          alpha: 0.14,
-                        ),
-                        backgroundColor:
-                            theme.colorScheme.surfaceContainerHighest,
-                        elevation: isSelected ? 2 : 0,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: isSmall ? 4 : 8,
-                          vertical: isSmall ? 4 : 8,
-                        ),
-                        onSelected: (value) {
-                          if (!value) return;
-                          setState(() {
-                            _answers[question.id] = option.id;
-                          });
-                        },
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(height: isSmall ? 20 : 28),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.primary,
-                            foregroundColor: theme.colorScheme.onPrimary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              vertical: isSmall ? 12 : 14,
-                            ),
-                            elevation: 0,
-                          ),
-                          onPressed: selected != null && !_isLoading
-                              ? (isLast ? _submit : _goNext)
-                              : null,
-                          child: _isLoading
-                              ? SizedBox(
-                                  height: isSmall ? 16 : 20,
-                                  width: isSmall ? 16 : 20,
-                                  child: const CircularProgressIndicator(
-                                    strokeWidth: 2,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(4),
+                                    child: LayoutBuilder(
+                                      builder: (context, constraints) {
+                                        return Stack(
+                                          children: [
+                                            Container(
+                                              height: isSmall ? 4 : 6,
+                                              color: theme.colorScheme.onSurface
+                                                  .withValues(alpha: 0.1),
+                                            ),
+                                            AnimatedContainer(
+                                              duration: const Duration(
+                                                milliseconds: 500,
+                                              ),
+                                              curve: Curves.easeInOut,
+                                              height: isSmall ? 4 : 6,
+                                              width:
+                                                  constraints.maxWidth *
+                                                  ((_currentIndex + 1) /
+                                                      questions.length),
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    theme.colorScheme.primary,
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: theme
+                                                        .colorScheme
+                                                        .primary
+                                                        .withValues(alpha: 0.4),
+                                                    blurRadius: 8,
+                                                    offset: const Offset(0, 2),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
                                   ),
-                                )
-                              : Text(
-                                  isLast ? l.survey_save_continue : '→',
-                                  style: TextStyle(
-                                    fontSize: isSmall ? 16 : 18,
+                                ),
+                                const SizedBox(width: 12),
+                                Text(
+                                  '${_currentIndex + 1} / ${questions.length}',
+                                  style: theme.textTheme.labelMedium?.copyWith(
+                                    color: theme.colorScheme.onSurface
+                                        .withValues(alpha: 0.7),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                        ),
-                      ),
-                      if (_currentIndex > 0) const SizedBox(width: 12),
-                      if (_currentIndex > 0)
-                        Expanded(
-                          child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                vertical: isSmall ? 12 : 14,
-                              ),
+                              ],
                             ),
-                            onPressed: _goBack,
-                            child: const Text(
-                              '←',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                            SizedBox(height: isSmall ? 16 : 24),
 
-                  if (kAllowSurveySkip) ...[
-                    SizedBox(height: isSmall ? 6 : 10),
-                    SizedBox(
-                      width: double.infinity,
-                      child: TextButton(
-                        onPressed: _isLoading ? null : _skip,
-                        child: Text(
-                          'Skip',
-                          style: TextStyle(
-                            color: theme.colorScheme.onSurfaceVariant,
-                            fontSize: isSmall ? 12 : 14,
-                          ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    question.title,
+                                    style:
+                                        (isSmall
+                                                ? theme.textTheme.titleMedium
+                                                : theme.textTheme.titleLarge)
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w800,
+                                              letterSpacing: -0.5,
+                                            ),
+                                  ),
+                                ),
+                                _AnimatedIconButton(
+                                  icon: Icons.volume_up_rounded,
+                                  onPressed: () =>
+                                      _playQuestionSound(_currentIndex),
+                                  size: isSmall ? 20 : 24,
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: isSmall ? 12 : 16),
+
+                            Wrap(
+                              spacing: isSmall ? 8 : 10,
+                              runSpacing: isSmall ? 8 : 10,
+                              children: question.options.asMap().entries.map((
+                                entry,
+                              ) {
+                                final index = entry.key;
+                                final option = entry.value;
+                                final isSelected = selected == option.id;
+
+                                return TweenAnimationBuilder<double>(
+                                  duration: Duration(
+                                    milliseconds: 600 + (index * 150),
+                                  ),
+                                  tween: Tween(begin: 0.0, end: 1.0),
+                                  curve: Curves.easeOutBack,
+                                  builder: (context, entranceValue, child) {
+                                    return TweenAnimationBuilder<double>(
+                                      duration:
+                                          const Duration(milliseconds: 400),
+                                      tween: Tween(
+                                        begin: 1.0,
+                                        end: isSelected ? 1.05 : 1.0,
+                                      ),
+                                      curve: Curves.easeOutBack,
+                                      builder:
+                                          (context, selectionValue, child) {
+                                            return Transform.scale(
+                                              scale:
+                                                  entranceValue *
+                                                  selectionValue,
+                                              child: Opacity(
+                                                opacity: entranceValue.clamp(
+                                                  0.0,
+                                                  1.0,
+                                                ),
+                                                child: child,
+                                              ),
+                                            );
+                                          },
+                                      child: child,
+                                    );
+                                  },
+                                  child: GlassOptionChip(
+                                    key: ValueKey(option.id),
+                                    label: option.label,
+                                    selected: isSelected,
+                                    compact: isSmall,
+                                    onTap: () {
+                                      setState(() {
+                                        _answers[question.id] = option.id;
+                                      });
+                                    },
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                            SizedBox(height: isSmall ? 20 : 28),
+
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: AnimatedOpacity(
+                                    duration: const Duration(milliseconds: 300),
+                                    opacity: selected != null ? 1.0 : 0.5,
+                                    child: GlassButton(
+                                      label: isLast
+                                          ? l.survey_save_continue
+                                          : l.continueLabel,
+                                      onPressed: selected != null && !_isLoading
+                                          ? (isLast ? _submit : _goNext)
+                                          : null,
+                                      loading: _isLoading,
+                                      compact: isSmall,
+                                    ),
+                                  ),
+                                ),
+                                if (_currentIndex > 0)
+                                  const SizedBox(width: 12),
+                                if (_currentIndex > 0)
+                                  Expanded(
+                                    child: GlassButton(
+                                      label: '←',
+                                      onPressed: _goBack,
+                                      primary: false,
+                                      compact: isSmall,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -336,23 +399,6 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
     _isLoading = false;
     _stopQuestionAudio?.call();
     _stopQuestionAudio = null;
-  }
-
-  Future<void> _skip() async {
-    if (_isLoading) return;
-    setState(() => _isLoading = true);
-
-    final shouldStartGame = widget.game.consumeStartGameAfterSurvey();
-
-    // await _showPostSurveyModal();
-    widget.game.overlays.remove('Survey');
-    _resetState();
-
-    if (shouldStartGame) {
-      widget.game.startGame();
-    } else {
-      await widget.game.returnToMainMenuAfterSurvey();
-    }
   }
 
   // ignore: unused_element
@@ -418,6 +464,63 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
           ),
         );
       },
+    );
+  }
+}
+
+class _AnimatedIconButton extends StatefulWidget {
+  final IconData icon;
+  final VoidCallback onPressed;
+  final double size;
+
+  const _AnimatedIconButton({
+    required this.icon,
+    required this.onPressed,
+    required this.size,
+  });
+
+  @override
+  State<_AnimatedIconButton> createState() => _AnimatedIconButtonState();
+}
+
+class _AnimatedIconButtonState extends State<_AnimatedIconButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.2,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return ScaleTransition(
+      scale: _scaleAnimation,
+      child: IconButton(
+        icon: Icon(widget.icon),
+        color: theme.colorScheme.primary,
+        onPressed: () {
+          _controller.forward().then((_) => _controller.reverse());
+          widget.onPressed();
+        },
+        iconSize: widget.size,
+      ),
     );
   }
 }

@@ -67,6 +67,13 @@ class _StageItemCardOverlayState extends State<StageItemCardOverlay> {
         final isSmall = size.shortestSide < 600;
         final isShort = size.height < 500;
 
+        final profile = widget.game.surveyProfile;
+        final selectedItemId = profile.calmingItem;
+        final isChosenItem = item.id == selectedItemId ||
+            (selectedItemId == 'stones' && item.id == 'bag_of_rocks') ||
+            (selectedItemId == 'toy' && item.id == 'hibuki') ||
+            (item.id == 'rocking_chair');
+
         return GestureDetector(
           onTap: widget.game.hideStageItemCard,
           behavior: HitTestBehavior.opaque,
@@ -167,22 +174,40 @@ class _StageItemCardOverlayState extends State<StageItemCardOverlay> {
                           ],
                         ),
                         SizedBox(height: isSmall ? 12 : 24),
-                        FilledButton.icon(
-                          onPressed: () => widget.game.useStageItem(item),
-                          icon: Icon(
-                            Icons.self_improvement_rounded,
-                            size: isSmall ? 18 : 24,
-                          ),
-                          label: Text(
-                            l.useItem,
-                            style: TextStyle(fontSize: isSmall ? 14 : 16),
-                          ),
-                          style: FilledButton.styleFrom(
+                        if (isChosenItem)
+                          FilledButton.icon(
+                            onPressed: () => widget.game.useStageItem(item),
+                            icon: Icon(
+                              Icons.self_improvement_rounded,
+                              size: isSmall ? 18 : 24,
+                            ),
+                            label: Text(
+                              l.useItem,
+                              style: TextStyle(fontSize: isSmall ? 14 : 16),
+                            ),
+                            style: FilledButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                vertical: isSmall ? 12 : 16,
+                              ),
+                            ),
+                          )
+                        else
+                          Padding(
                             padding: EdgeInsets.symmetric(
                               vertical: isSmall ? 12 : 16,
                             ),
+                            child: Text(
+                              l.item_lunchbox_status,
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.outline,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                            ),
                           ),
-                        ),
                         SizedBox(height: isSmall ? 12 : 16),
                         Text(
                           description,

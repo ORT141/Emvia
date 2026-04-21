@@ -45,8 +45,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get calming => 'Calming...';
 
   @override
-  String get stress_intro_caption =>
-      'This is your stress level.\nYou can reduce it with items.';
+  String get stress_intro_caption => 'Olya stress level.';
 
   @override
   String get stress_intro_watch => 'Keep an eye on it';
@@ -416,7 +415,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get survey_calibration_subtitle =>
-      'Answers will personalize Olya\'s story and the final \"Map of Calm\".';
+      'Answers will personalize character story and the final \"Map of Calm\".';
 
   @override
   String get survey_save_continue => 'Save and Continue';

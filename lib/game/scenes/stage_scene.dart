@@ -3,7 +3,6 @@ import 'package:flame/events.dart';
 import 'dart:ui' show FilterQuality, Paint, Rect;
 
 import '../scenes/game_scene.dart';
-import '../survey_service.dart';
 import '../stage_item_card_data.dart';
 import '../utils/pos_util.dart';
 
@@ -82,24 +81,8 @@ class StageScene extends GameScene {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    final surveyService = SurveyService();
-    final profile = await surveyService.getProfile();
-
-    final rockingChair = _itemDefinitions.firstWhere(
-      (item) => item.id == 'rocking_chair',
-    );
-    await _addItem(rockingChair);
-
-    final selectedItemId = profile.calmingItem;
-    final selectedItem = _itemDefinitions.firstWhere(
-      (item) =>
-          item.id == selectedItemId ||
-          (selectedItemId == 'stones' && item.id == 'bag_of_rocks') ||
-          (selectedItemId == 'toy' && item.id == 'hibuki'),
-      orElse: () => rockingChair,
-    );
-    if (selectedItem != rockingChair) {
-      await _addItem(selectedItem);
+    for (final itemDef in _itemDefinitions) {
+      await _addItem(itemDef);
     }
   }
 

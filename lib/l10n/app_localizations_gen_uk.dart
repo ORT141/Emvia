@@ -45,8 +45,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get calming => 'Заспокоююсь...';
 
   @override
-  String get stress_intro_caption =>
-      'Це ваш рівень стресу.\nЙого можна зменшити речами.';
+  String get stress_intro_caption => 'Рівень стресу олі.';
 
   @override
   String get stress_intro_watch => 'Слідкуйте за ним';
@@ -416,7 +415,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get survey_calibration_subtitle =>
-      'Відповіді персоналізують історію Олі та фінальну «Мапу спокою».';
+      'Відповіді персоналізують історію персонажа та фінальну «Мапу спокою».';
 
   @override
   String get survey_save_continue => 'Зберегти та продовжити';

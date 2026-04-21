@@ -1,5 +1,5 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'glass_ui.dart';
 import '../emvia_game.dart';
 import '../dialog/dialog_model.dart';
 import '../scenes/classroom_scene.dart';
@@ -12,8 +12,15 @@ import '../scenes/survey_scene.dart';
 
 class DebugOverlay extends StatefulWidget {
   final EmviaGame game;
+  final VoidCallback? onThemeToggled;
+  final bool isDarkMode;
 
-  const DebugOverlay({super.key, required this.game});
+  const DebugOverlay({
+    super.key,
+    required this.game,
+    this.onThemeToggled,
+    this.isDarkMode = false,
+  });
 
   @override
   State<DebugOverlay> createState() => _DebugOverlayState();
@@ -22,43 +29,22 @@ class DebugOverlay extends StatefulWidget {
 class _DebugOverlayState extends State<DebugOverlay> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: () => widget.game.overlays.remove('Debug'),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                child: Container(color: Colors.black26),
-              ),
+    return Stack(
+      children: [
+        GestureDetector(onTap: () => widget.game.overlays.remove('Debug')),
+        Center(
+          child: GlassPanel(
+            width: 450,
+            padding: EdgeInsets.zero,
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.8,
             ),
-          ),
-          Center(
-            child: Container(
-              width: 450,
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.8,
-              ),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1A1A1A).withValues(alpha: 0.9),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white10, width: 1.5),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.5),
-                    blurRadius: 20,
-                    spreadRadius: 5,
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Column(
+            child: Builder(
+              builder: (context) {
+                return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildHeader(),
+                    _buildHeader(context),
                     Expanded(
                       child: SingleChildScrollView(
                         padding: const EdgeInsets.all(20),
@@ -66,28 +52,34 @@ class _DebugOverlayState extends State<DebugOverlay> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _buildSection(
+                              context,
                               title: 'Game State',
                               icon: Icons.info_outline,
                               children: [
                                 _buildInfoRow(
+                                  context,
                                   'Current Scene',
                                   widget.game.currentScene?.runtimeType
                                           .toString() ??
                                       'None',
                                 ),
                                 _buildInfoRow(
+                                  context,
                                   'Scene Index',
                                   widget.game.sceneIndex.toString(),
                                 ),
                                 _buildInfoRow(
+                                  context,
                                   'Stress Level',
                                   widget.game.stressLevel.toString(),
                                 ),
                                 _buildInfoRow(
+                                  context,
                                   'Character',
                                   widget.game.selectedCharacter.name,
                                 ),
                                 _buildInfoRow(
+                                  context,
                                   'Is Frozen',
                                   widget.game.isFrozen.toString(),
                                 ),
@@ -95,10 +87,12 @@ class _DebugOverlayState extends State<DebugOverlay> {
                             ),
                             const SizedBox(height: 20),
                             _buildSection(
+                              context,
                               title: 'AI Analysis',
                               icon: Icons.psychology_outlined,
                               children: [
                                 _buildInfoRow(
+                                  context,
                                   'AI Words',
                                   widget.game.surveyProfile.aiWords.isEmpty
                                       ? 'None'
@@ -107,18 +101,21 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                         ),
                                 ),
                                 _buildInfoRow(
+                                  context,
                                   'AI Color',
                                   widget.game.surveyProfile.aiColor.isEmpty
                                       ? 'None'
                                       : widget.game.surveyProfile.aiColor,
                                 ),
                                 _buildInfoRow(
+                                  context,
                                   'AI Pattern',
                                   widget.game.surveyProfile.aiPattern.isEmpty
                                       ? 'None'
                                       : widget.game.surveyProfile.aiPattern,
                                 ),
                                 _buildInfoRow(
+                                  context,
                                   'AI Stress Type',
                                   widget.game.surveyProfile.aiStressType.isEmpty
                                       ? 'None'
@@ -126,9 +123,9 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                 ),
                               ],
                             ),
-
                             const SizedBox(height: 20),
                             _buildSection(
+                              context,
                               title: 'Scene Manager',
                               icon: Icons.map_outlined,
                               children: [
@@ -138,15 +135,11 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                   children: [
                                     _buildSceneButton(
                                       'Classroom',
-                                      () => widget.game.loadScene(
-                                        ClassroomScene(),
-                                      ),
+                                      () => widget.game.loadScene(ClassroomScene()),
                                     ),
                                     _buildSceneButton(
                                       'Corridor',
-                                      () => widget.game.loadScene(
-                                        CorridorScene(),
-                                      ),
+                                      () => widget.game.loadScene(CorridorScene()),
                                     ),
                                     _buildSceneButton(
                                       'Corridor 2',
@@ -156,13 +149,11 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                     ),
                                     _buildSceneButton(
                                       'Outside',
-                                      () =>
-                                          widget.game.loadScene(OutsideScene()),
+                                      () => widget.game.loadScene(OutsideScene()),
                                     ),
                                     _buildSceneButton(
                                       'Survey',
-                                      () =>
-                                          widget.game.loadScene(SurveyScene()),
+                                      () => widget.game.loadScene(SurveyScene()),
                                     ),
                                     _buildSceneButton(
                                       'Test',
@@ -175,6 +166,7 @@ class _DebugOverlayState extends State<DebugOverlay> {
                             ),
                             const SizedBox(height: 20),
                             _buildSection(
+                              context,
                               title: 'Quick Actions',
                               icon: Icons.bolt_outlined,
                               children: [
@@ -184,8 +176,7 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                   children: [
                                     _buildActionButton(
                                       'Redraw',
-                                      () => widget.game.currentScene
-                                          ?.redrawScene(),
+                                      () => widget.game.currentScene?.redrawScene(),
                                       Icons.refresh,
                                     ),
                                     _buildActionButton(
@@ -195,33 +186,40 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                     ),
                                     _buildActionButton(
                                       'Skip => Classroom',
-                                      () => widget.game.skipToScene(
-                                        ClassroomScene(),
-                                      ),
+                                      () =>
+                                          widget.game.skipToScene(ClassroomScene()),
                                       Icons.fast_forward,
                                       color: Colors.orangeAccent,
                                     ),
                                     _buildActionButton(
                                       'Skip => Corridor',
-                                      () => widget.game.skipToScene(
-                                        CorridorScene(),
-                                      ),
+                                      () =>
+                                          widget.game.skipToScene(CorridorScene()),
                                       Icons.fast_forward,
                                       color: Colors.orangeAccent,
                                     ),
                                     _buildActionButton(
                                       'Skip => Stage',
-                                      () =>
-                                          widget.game.skipToScene(StageScene()),
+                                      () => widget.game.skipToScene(StageScene()),
                                       Icons.fast_forward,
                                       color: Colors.purpleAccent,
                                     ),
+                                    if (widget.onThemeToggled != null)
+                                      _buildActionButton(
+                                        'Toggle Theme',
+                                        widget.onThemeToggled!,
+                                        widget.isDarkMode
+                                            ? Icons.light_mode
+                                            : Icons.dark_mode,
+                                        color: Colors.blueAccent,
+                                      ),
                                   ],
                                 ),
                               ],
                             ),
                             const SizedBox(height: 20),
                             _buildSection(
+                              context,
                               title: 'Debug Tools',
                               icon: Icons.bug_report_outlined,
                               children: [
@@ -233,8 +231,7 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                       await Future.delayed(
                                         const Duration(milliseconds: 120),
                                       );
-                                      final zoom =
-                                          widget.game.worldRoot.scale.x;
+                                      final zoom = widget.game.worldRoot.scale.x;
                                       final worldOffset =
                                           widget.game.worldRoot.position;
                                       final screenX =
@@ -290,8 +287,7 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                                 ),
                                                 DialogChoice(
                                                   label: (loc) => 'Закрити',
-                                                  onSelect: (game) => game
-                                                      .overlays
+                                                  onSelect: (game) => game.overlays
                                                       .remove('Dialog'),
                                                 ),
                                               ],
@@ -317,33 +313,38 @@ class _DebugOverlayState extends State<DebugOverlay> {
                       ),
                     ),
                   ],
-                ),
-              ),
+                );
+              },
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        border: const Border(bottom: BorderSide(color: Colors.white10)),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
+        border: Border(
+          bottom: BorderSide(
+            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.2),
+          ),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.terminal, color: Colors.blueAccent, size: 24),
-              SizedBox(width: 12),
+              Icon(Icons.terminal, color: theme.colorScheme.primary, size: 24),
+              const SizedBox(width: 12),
               Text(
                 'DEBUG CONSOLE',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: theme.colorScheme.onSurface,
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 1.2,
@@ -351,21 +352,41 @@ class _DebugOverlayState extends State<DebugOverlay> {
               ),
             ],
           ),
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.white54),
-            onPressed: () => widget.game.overlays.remove('Debug'),
-            hoverColor: Colors.redAccent.withValues(alpha: 0.2),
+          Row(
+            children: [
+              if (widget.onThemeToggled != null)
+                IconButton(
+                  icon: Icon(
+                    widget.isDarkMode
+                        ? Icons.light_mode_rounded
+                        : Icons.dark_mode_rounded,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                  onPressed: widget.onThemeToggled,
+                  tooltip: 'Toggle Theme',
+                ),
+              IconButton(
+                icon: Icon(
+                  Icons.close,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
+                ),
+                onPressed: () => widget.game.overlays.remove('Debug'),
+                hoverColor: Colors.redAccent.withValues(alpha: 0.2),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSection({
+  Widget _buildSection(
+    BuildContext context, {
     required String title,
     required IconData icon,
     required List<Widget> children,
   }) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -374,13 +395,13 @@ class _DebugOverlayState extends State<DebugOverlay> {
             Icon(
               icon,
               size: 18,
-              color: Colors.blueAccent.withValues(alpha: 0.8),
+              color: theme.colorScheme.primary.withValues(alpha: 0.8),
             ),
             const SizedBox(width: 8),
             Text(
               title.toUpperCase(),
               style: TextStyle(
-                color: Colors.blueAccent.withValues(alpha: 0.8),
+                color: theme.colorScheme.primary.withValues(alpha: 0.8),
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 1.1,
@@ -392,9 +413,11 @@ class _DebugOverlayState extends State<DebugOverlay> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.03),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.03),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+            border: Border.all(
+              color: theme.colorScheme.outlineVariant.withValues(alpha: 0.1),
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -405,7 +428,8 @@ class _DebugOverlayState extends State<DebugOverlay> {
     );
   }
 
-  Widget _buildInfoRow(String label, String value) {
+  Widget _buildInfoRow(BuildContext context, String label, String value) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -413,15 +437,22 @@ class _DebugOverlayState extends State<DebugOverlay> {
         children: [
           Text(
             label,
-            style: const TextStyle(color: Colors.white54, fontSize: 13),
-          ),
-          Text(
-            value,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               fontSize: 13,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'monospace',
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                color: theme.colorScheme.onSurface,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'monospace',
+              ),
             ),
           ),
         ],
@@ -432,20 +463,16 @@ class _DebugOverlayState extends State<DebugOverlay> {
   Widget _buildSceneButton(
     String label,
     VoidCallback onPressed, {
-    Color color = Colors.blueAccent,
+    Color? color,
   }) {
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: color,
-        side: BorderSide(color: color.withValues(alpha: 0.5)),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
+    return GlassButton(
+      label: label,
       onPressed: () {
         widget.game.overlays.remove('Debug');
         onPressed();
       },
-      child: Text(label, style: const TextStyle(fontSize: 12)),
+      primary: false,
+      compact: true,
     );
   }
 
@@ -453,19 +480,13 @@ class _DebugOverlayState extends State<DebugOverlay> {
     String label,
     VoidCallback onPressed,
     IconData icon, {
-    Color color = Colors.blueAccent,
+    Color? color,
   }) {
-    return ElevatedButton.icon(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color.withValues(alpha: 0.1),
-        foregroundColor: color,
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
+    return GlassButton(
+      label: label,
       onPressed: onPressed,
-      icon: Icon(icon, size: 16),
-      label: Text(label, style: const TextStyle(fontSize: 12)),
+      primary: color != null,
+      compact: true,
     );
   }
 
@@ -474,25 +495,11 @@ class _DebugOverlayState extends State<DebugOverlay> {
     VoidCallback onPressed, {
     bool active = false,
   }) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: active
-            ? Colors.green.withValues(alpha: 0.2)
-            : Colors.white.withValues(alpha: 0.05),
-        foregroundColor: active ? Colors.greenAccent : Colors.white70,
-        elevation: 0,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: BorderSide(
-            color: active
-                ? Colors.greenAccent.withValues(alpha: 0.5)
-                : Colors.white10,
-          ),
-        ),
-      ),
-      onPressed: onPressed,
-      child: Text(label, style: const TextStyle(fontSize: 12)),
+    return GlassOptionChip(
+      label: label,
+      selected: active,
+      onTap: onPressed,
+      compact: true,
     );
   }
 }

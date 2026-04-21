@@ -63,7 +63,7 @@ class _PauseMenuOverlayState extends State<PauseMenuOverlay>
         children: [
           FadeTransition(
             opacity: _fadeAnimation,
-            child: GlassOverlayScrim(onTap: _handleResume),
+            child: GestureDetector(onTap: _handleResume),
           ),
           Center(
             child: FadeTransition(

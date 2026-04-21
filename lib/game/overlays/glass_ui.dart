@@ -1,6 +1,83 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+class _GlassTheme {
+  final ColorScheme colors;
+  final bool isDark;
+
+  _GlassTheme(BuildContext context)
+    : colors = Theme.of(context).colorScheme,
+      isDark = Theme.of(context).brightness == Brightness.dark;
+
+  Color get panelBackground => isDark
+      ? colors.surface.withValues(alpha: 0.12)
+      : colors.surface.withValues(alpha: 0.6);
+
+  Color get panelBorder => isDark
+      ? colors.outline.withValues(alpha: 0.15)
+      : colors.outline.withValues(alpha: 0.1);
+
+  Color get panelText => colors.onSurface;
+  Color get panelTextSecondary => colors.onSurfaceVariant;
+
+  Color get buttonPrimaryBackground => colors.primary;
+  Color get buttonPrimaryForeground => colors.onPrimary;
+
+  Color get buttonSecondaryForeground => colors.onSurface;
+  Color get buttonSecondaryBorder =>
+      colors.outline.withValues(alpha: isDark ? 0.3 : 0.2);
+
+  Color chipBackground(bool selected) => selected
+      ? colors.primaryContainer
+      : colors.surfaceContainerHighest.withValues(alpha: isDark ? 0.4 : 0.5);
+
+  Color chipBorder(bool selected) =>
+      selected ? colors.primary : colors.outlineVariant.withValues(alpha: 0.5);
+
+  Color chipText(bool selected) =>
+      selected ? colors.onPrimaryContainer : colors.onSurfaceVariant;
+}
+
+class _GlassBase extends StatelessWidget {
+  final Widget child;
+  final BorderRadius borderRadius;
+  final double blurSigma;
+  final Color backgroundColor;
+  final Color borderColor;
+  final EdgeInsetsGeometry? padding;
+
+  const _GlassBase({
+    required this.child,
+    required this.borderRadius,
+    required this.blurSigma,
+    required this.backgroundColor,
+    required this.borderColor,
+    this.padding,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(borderRadius: borderRadius),
+      child: ClipRRect(
+        borderRadius: borderRadius,
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
+          child: Container(
+            padding: padding,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: borderRadius,
+              border: Border.all(color: borderColor, width: 1.5),
+            ),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class GlassPanel extends StatelessWidget {
   final Widget child;
   final double? width;
@@ -8,7 +85,7 @@ class GlassPanel extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final BorderRadius borderRadius;
   final double blurSigma;
-  final double alphaValue;
+  final double? alphaValue;
   final BoxConstraints? constraints;
 
   const GlassPanel({
@@ -19,55 +96,45 @@ class GlassPanel extends StatelessWidget {
     this.padding,
     this.borderRadius = const BorderRadius.all(Radius.circular(24)),
     this.blurSigma = 12,
-    this.alphaValue = 0.15,
+    this.alphaValue,
     this.constraints,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final panelTextColor = isDark
-        ? theme.colorScheme.onSurface
-        : Colors.white.withOpacity(0.95);
-    final borderColor = isDark
-        ? theme.colorScheme.outline.withOpacity(0.2)
-        : Colors.white.withOpacity(0.25);
-    final backgroundColor = isDark
-        ? theme.colorScheme.surface.withOpacity(alphaValue)
-        : Colors.black.withOpacity(0.2);
+    final glassTheme = _GlassTheme(context);
+
+    final backgroundColor = alphaValue != null
+        ? glassTheme.colors.surface.withValues(alpha: alphaValue!)
+        : glassTheme.panelBackground;
 
     return Container(
       width: width,
       height: height,
       constraints: constraints,
-      decoration: BoxDecoration(
+      child: _GlassBase(
         borderRadius: borderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.16),
-            blurRadius: 24,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: borderRadius,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
-          child: Container(
-            padding: padding ?? const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: borderRadius,
-              border: Border.all(color: borderColor, width: 1.5),
+        blurSigma: blurSigma,
+        backgroundColor: backgroundColor,
+        borderColor: glassTheme.panelBorder,
+        padding: padding ?? const EdgeInsets.all(24),
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: glassTheme.colors.copyWith(
+              onSurface: glassTheme.panelText,
+              onSurfaceVariant: glassTheme.panelTextSecondary,
             ),
-            child: Material(
-              color: Colors.transparent,
-              child: DefaultTextStyle.merge(
-                style: TextStyle(color: panelTextColor),
-                child: child,
-              ),
+            textTheme: Theme.of(context).textTheme.apply(
+              bodyColor: glassTheme.panelText,
+              displayColor: glassTheme.panelText,
+              decorationColor: glassTheme.panelText,
+            ),
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: DefaultTextStyle.merge(
+              style: TextStyle(color: glassTheme.panelText),
+              child: child,
             ),
           ),
         ),
@@ -81,6 +148,7 @@ class GlassButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool primary;
   final bool compact;
+  final bool loading;
 
   const GlassButton({
     super.key,
@@ -88,60 +156,60 @@ class GlassButton extends StatelessWidget {
     this.onPressed,
     this.primary = true,
     this.compact = false,
+    this.loading = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final glassTheme = _GlassTheme(context);
+    final padding = EdgeInsets.symmetric(
+      vertical: compact ? 12 : 14,
+      horizontal: 24,
+    );
+    final shape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    );
+
+    final child = loading
+        ? SizedBox(
+            height: compact ? 16 : 20,
+            width: compact ? 16 : 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: primary
+                  ? glassTheme.buttonPrimaryForeground
+                  : glassTheme.buttonSecondaryForeground,
+            ),
+          )
+        : Text(
+            label,
+            style: TextStyle(
+              fontSize: compact ? 14 : 16,
+              fontWeight: primary ? FontWeight.w700 : FontWeight.w600,
+            ),
+          );
 
     if (primary) {
       return FilledButton(
-        onPressed: onPressed,
+        onPressed: loading ? null : onPressed,
         style: FilledButton.styleFrom(
-          backgroundColor: theme.colorScheme.primary,
-          foregroundColor:
-              isDark ? theme.colorScheme.onPrimary : Colors.black87,
-          padding: EdgeInsets.symmetric(
-            vertical: compact ? 12 : 14,
-            horizontal: 24,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          backgroundColor: glassTheme.buttonPrimaryBackground,
+          foregroundColor: glassTheme.buttonPrimaryForeground,
+          padding: padding,
+          shape: shape,
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: compact ? 14 : 16,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        child: child,
       );
     } else {
       return OutlinedButton(
-        onPressed: onPressed,
+        onPressed: loading ? null : onPressed,
         style: OutlinedButton.styleFrom(
-          foregroundColor: isDark ? Colors.white : Colors.black87,
-          side: BorderSide(
-            color: isDark ? Colors.white24 : Colors.black26,
-            width: 1.5,
-          ),
-          padding: EdgeInsets.symmetric(
-            vertical: compact ? 12 : 14,
-            horizontal: 24,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
+          foregroundColor: glassTheme.buttonSecondaryForeground,
+          side: BorderSide(color: glassTheme.buttonSecondaryBorder, width: 1.5),
+          padding: padding,
+          shape: shape,
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: compact ? 14 : 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        child: child,
       );
     }
   }
@@ -165,49 +233,67 @@ class GlassOptionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    final backgroundColor = selected
-        ? theme.colorScheme.primaryContainer
-        : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4);
-
-    final borderColor = selected
-        ? theme.colorScheme.primary
-        : theme.colorScheme.outlineVariant.withValues(alpha: 0.5);
-
-    final textColor = selected
-        ? theme.colorScheme.onPrimaryContainer
-        : theme.colorScheme.onSurfaceVariant;
+    final glassTheme = _GlassTheme(context);
 
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeOutCubic,
         padding: EdgeInsets.symmetric(
           vertical: compact ? 8 : 10,
           horizontal: compact ? 10 : 14,
         ),
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: glassTheme.chipBackground(selected),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: borderColor),
+          border: Border.all(
+            color: glassTheme.chipBorder(selected),
+            width: selected ? 2.0 : 1.0,
+          ),
+          boxShadow: [
+            if (selected)
+              BoxShadow(
+                color: glassTheme.colors.primary.withValues(alpha: 0.2),
+                blurRadius: 8,
+                spreadRadius: 1,
+              ),
+          ],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (icon != null) ...[
-              IconTheme(
-                data: IconThemeData(color: textColor, size: compact ? 14 : 16),
-                child: icon!,
+            if (icon != null || selected) ...[
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 200),
+                child: selected
+                    ? Icon(
+                        Icons.check_circle_rounded,
+                        key: const ValueKey('check'),
+                        color: glassTheme.chipText(selected),
+                        size: compact ? 14 : 16,
+                      )
+                    : (icon != null
+                        ? IconTheme(
+                            data: IconThemeData(
+                              color: glassTheme.chipText(selected),
+                              size: compact ? 14 : 16,
+                            ),
+                            child: icon!,
+                          )
+                        : const SizedBox.shrink()),
               ),
               const SizedBox(width: 6),
             ],
-            Text(
-              label,
+            AnimatedDefaultTextStyle(
+              duration: const Duration(milliseconds: 200),
               style: TextStyle(
                 fontSize: compact ? 12 : 14,
-                color: textColor,
-                fontWeight: FontWeight.w600,
+                color: glassTheme.chipText(selected),
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w600,
+                fontFamily: Theme.of(context).textTheme.bodyMedium?.fontFamily,
               ),
+              child: Text(label),
             ),
           ],
         ),
@@ -220,11 +306,7 @@ class GlassDialog extends StatelessWidget {
   final Widget child;
   final double maxWidth;
 
-  const GlassDialog({
-    super.key,
-    required this.child,
-    this.maxWidth = 400,
-  });
+  const GlassDialog({super.key, required this.child, this.maxWidth = 400});
 
   @override
   Widget build(BuildContext context) {
@@ -233,39 +315,7 @@ class GlassDialog extends StatelessWidget {
         padding: const EdgeInsets.all(24.0),
         child: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: maxWidth),
-          child: GlassPanel(
-            padding: const EdgeInsets.all(32),
-            child: Material(
-              color: Colors.transparent,
-              child: child,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class GlassOverlayScrim extends StatelessWidget {
-  final VoidCallback? onTap;
-  final double blurSigma;
-  final double alphaValue;
-
-  const GlassOverlayScrim({
-    super.key,
-    this.onTap,
-    this.blurSigma = 8,
-    this.alphaValue = 0.3,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: GestureDetector(
-        onTap: onTap,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
-          child: Container(color: Colors.black.withValues(alpha: alphaValue)),
+          child: GlassPanel(padding: const EdgeInsets.all(32), child: child),
         ),
       ),
     );

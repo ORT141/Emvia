@@ -51,7 +51,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
 
   Future<void> _askEnableSounds() async {
     final loc = AppLocalizationsGen.of(context)!;
-    final theme = Theme.of(context);
 
     final choice = await showDialog<bool>(
       context: context,
@@ -59,44 +58,50 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
         final isSmall = MediaQuery.of(ctx).size.shortestSide < 600;
         return GlassDialog(
           maxWidth: isSmall ? 320 : 420,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.volume_up_rounded,
-                size: isSmall ? 40.0 : 64.0,
-                color: theme.colorScheme.primary,
-              ),
-              SizedBox(height: isSmall ? 12 : 24),
-              Text(
-                loc.sound_question_title,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              SizedBox(height: isSmall ? 16 : 32),
-              Row(
+          child: Builder(
+            builder: (context) {
+              final theme = Theme.of(context);
+              return Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: GlassButton(
-                      label: loc.sound_on,
-                      onPressed: () => Navigator.of(ctx).pop(true),
-                      compact: isSmall,
+                  Icon(
+                    Icons.volume_up_rounded,
+                    size: isSmall ? 40.0 : 64.0,
+                    color: theme.colorScheme.primary,
+                  ),
+                  SizedBox(height: isSmall ? 12 : 24),
+                  Text(
+                    loc.sound_question_title,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: GlassButton(
-                      label: loc.sound_off,
-                      onPressed: () => Navigator.of(ctx).pop(false),
-                      primary: false,
-                      compact: isSmall,
-                    ),
+                  SizedBox(height: isSmall ? 16 : 32),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GlassButton(
+                          label: loc.sound_on,
+                          onPressed: () => Navigator.of(ctx).pop(true),
+                          compact: isSmall,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: GlassButton(
+                          label: loc.sound_off,
+                          onPressed: () => Navigator.of(ctx).pop(false),
+                          primary: false,
+                          compact: isSmall,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ],
+              );
+            },
           ),
         );
       },
@@ -110,7 +115,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
 
   Future<void> _openNewGameModal() async {
     final loc = AppLocalizationsGen.of(context)!;
-    final theme = Theme.of(context);
     PlayableCharacter? pendingCharacter;
 
     await showDialog<void>(
@@ -118,28 +122,24 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
       builder: (ctx) => StatefulBuilder(
         builder: (context, setModalState) {
           final isSmall = MediaQuery.of(ctx).size.shortestSide < 600;
-          return AlertDialog(
-            backgroundColor: theme.colorScheme.surface,
-            insetPadding: EdgeInsets.symmetric(
-              horizontal: isSmall ? 12.0 : 40.0,
-              vertical: isSmall ? 8.0 : 24.0,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            title: Text(
-              loc.play,
-              style: GoogleFonts.baloo2(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
-              ),
-            ),
-            content: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 420),
-              child: SingleChildScrollView(
-                child: Column(
+          return GlassDialog(
+            maxWidth: 480,
+            child: Builder(
+              builder: (context) {
+                final theme = Theme.of(context);
+                return Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      loc.play,
+                      style: GoogleFonts.baloo2(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                     _CharacterSelectBar(
                       game: widget.game,
                       selectedCharacter: pendingCharacter,
@@ -150,28 +150,40 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                         });
                       },
                     ),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GlassButton(
+                          label: loc.cancel,
+                          onPressed: () => Navigator.of(ctx).pop(),
+                          primary: false,
+                          compact: isSmall,
+                        ),
+                        const SizedBox(width: 12),
+                        GlassButton(
+                          label: loc.play,
+                          onPressed:
+                              (pendingCharacter != null &&
+                                  widget.game.isCharacterUnlocked(
+                                    pendingCharacter!,
+                                  ))
+                              ? () {
+                                  widget.game.selectCharacter(
+                                    pendingCharacter!,
+                                  );
+                                  Navigator.of(ctx).pop();
+                                  widget.game.startNewGameSurveyFlow();
+                                }
+                              : null,
+                          compact: isSmall,
+                        ),
+                      ],
+                    ),
                   ],
-                ),
-              ),
+                );
+              },
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(ctx).pop(),
-                child: Text(loc.cancel),
-              ),
-              ElevatedButton(
-                onPressed:
-                    (pendingCharacter != null &&
-                        widget.game.isCharacterUnlocked(pendingCharacter!))
-                    ? () {
-                        widget.game.selectCharacter(pendingCharacter!);
-                        Navigator.of(ctx).pop();
-                        widget.game.startNewGameSurveyFlow();
-                      }
-                    : null,
-                child: Text(loc.play),
-              ),
-            ],
           );
         },
       ),
@@ -184,10 +196,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
 
   void _openSettings() {
     widget.game.overlays.add('Settings');
-  }
-
-  void _switchLanguage(String languageCode) {
-    widget.onLocaleChanged?.call(Locale(languageCode));
   }
 
   @override
@@ -203,7 +211,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
           final isShortScreen = constraints.maxHeight < 500;
 
           final double topButtonWidth = isSmallScreen ? 64.0 : 86.0;
-          final double topGap = 12.0;
           final double logoWidth = isShortScreen
               ? 140.0
               : isSmallScreen
@@ -277,18 +284,6 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                                         onTap: _openSettings,
                                         assetPath:
                                             'assets/images/main-menu/settings-main-menu.png',
-                                        width: topButtonWidth,
-                                      ),
-                                      SizedBox(width: topGap),
-                                      _TopImageButton(
-                                        onTap: widget.onThemeToggled,
-                                        assetPath:
-                                            'assets/images/main-menu/theme-switch-main-menu.png',
-                                        width: topButtonWidth,
-                                      ),
-                                      SizedBox(width: topGap),
-                                      _LanguageButton(
-                                        onSelected: _switchLanguage,
                                         width: topButtonWidth,
                                       ),
                                     ],
@@ -384,45 +379,6 @@ class _TopImageButton extends StatelessWidget {
           opacity: onTap != null ? 1.0 : 0.45,
           child: Image.asset(assetPath, width: width, fit: BoxFit.contain),
         ),
-      ),
-    );
-  }
-}
-
-class _LanguageButton extends StatelessWidget {
-  final ValueChanged<String> onSelected;
-  final double width;
-
-  const _LanguageButton({required this.onSelected, this.width = 96});
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<String>(
-      onSelected: onSelected,
-      offset: const Offset(0, 45),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      position: PopupMenuPosition.under,
-      child: Image.asset(
-        'assets/images/main-menu/lang-switch-main-menu.png',
-        width: width,
-        fit: BoxFit.contain,
-      ),
-      itemBuilder: (context) {
-        final loc = AppLocalizationsGen.of(context)!;
-        return [
-          _buildLanguageItem('en', '🇺🇸 ${loc.lang_en}'),
-          _buildLanguageItem('uk', '🇺🇦 ${loc.lang_uk}'),
-        ];
-      },
-    );
-  }
-
-  PopupMenuItem<String> _buildLanguageItem(String value, String label) {
-    return PopupMenuItem(
-      value: value,
-      child: Text(
-        label,
-        style: GoogleFonts.baloo2(fontWeight: FontWeight.w500),
       ),
     );
   }
@@ -544,9 +500,11 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
     return Container(
       padding: EdgeInsets.all(compact ? 8 : 12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withValues(alpha: 0.9),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
+        border: Border.all(
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+        ),
       ),
       child: Column(
         children: [
@@ -770,9 +728,11 @@ class _CharacterInfoCard extends StatelessWidget {
       constraints: BoxConstraints(maxHeight: compact ? 120 : 200),
       padding: EdgeInsets.all(compact ? 8 : 12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
+        border: Border.all(
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+        ),
       ),
       child: data == null
           ? Text(
@@ -893,8 +853,8 @@ class _CharacterGhost extends StatelessWidget {
                     ]
                   : null,
               color: selected
-                  ? theme.colorScheme.primaryContainer.withValues(alpha: 0.3)
-                  : theme.colorScheme.surface,
+                  ? theme.colorScheme.primary.withValues(alpha: 0.2)
+                  : Colors.transparent,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,

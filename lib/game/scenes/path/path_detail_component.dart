@@ -1,5 +1,6 @@
 import 'package:emvia/l10n/app_localizations_gen.dart';
 import 'package:flutter/material.dart';
+import '../../overlays/glass_ui.dart';
 
 class PathDetailComponent extends StatefulWidget {
   final int index;
@@ -87,22 +88,7 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                 color: Colors.transparent,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: dialogWidth),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF121212).withValues(alpha: 0.5),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.12),
-                        width: 1.2,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.5),
-                          blurRadius: 14,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
+                  child: GlassPanel(
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -113,7 +99,6 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
                           ),
                         ),
                         const SizedBox(height: 6),
@@ -122,7 +107,6 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w900,
-                            color: Colors.white,
                           ),
                         ),
                         const SizedBox(height: 14),
@@ -137,83 +121,31 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                             ),
                           ),
                         if (!isUnlocked) const SizedBox(height: 14),
-
                         Text(
                           widget.description,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 15,
-                            color: Colors.white.withValues(alpha: 0.9),
                             height: 1.4,
                           ),
                         ),
                         const SizedBox(height: 18),
-                        Divider(color: Colors.white.withValues(alpha: 0.08)),
+                        const Divider(),
                         const SizedBox(height: 12),
                         Row(
                           children: [
                             Expanded(
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: ConstrainedBox(
-                                  constraints: const BoxConstraints(
-                                    maxWidth: 160,
-                                  ),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.white.withValues(
-                                        alpha: 0.06,
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 12,
-                                        horizontal: 14,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      elevation: 0,
-                                    ),
-                                    onPressed: widget.onCancel,
-                                    child: FittedBox(
-                                      fit: BoxFit.scaleDown,
-                                      child: Text(
-                                        widget.cancelLabel,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w800,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                              child: GlassButton(
+                                label: widget.cancelLabel,
+                                onPressed: widget.onCancel,
+                                primary: false,
                               ),
                             ),
                             const SizedBox(width: 12),
-                            ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 160),
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF2E7D32),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 12,
-                                    horizontal: 16,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                ),
+                            Expanded(
+                              child: GlassButton(
+                                label: widget.confirmLabel,
                                 onPressed: widget.onConfirm,
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    widget.confirmLabel,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
+                                primary: true,
                               ),
                             ),
                           ],

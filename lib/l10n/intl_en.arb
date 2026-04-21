@@ -48,7 +48,7 @@
     "@calming": {
         "description": "Status label shown while the calming effect is active."
     },
-    "stress_intro_caption": "This is your stress level.\nYou can reduce it with items.",
+    "stress_intro_caption": "Olya stress level.",
     "@stress_intro_caption": {
         "description": "Caption shown under the stress meter when it first appears in the corridor."
     },
@@ -436,7 +436,7 @@
         "description": "Anton long description"
     },
     "survey_calibration_title": "Sensory Profile Calibration",
-    "survey_calibration_subtitle": "Answers will personalize Olya's story and the final \"Map of Calm\".",
+    "survey_calibration_subtitle": "Answers will personalize character story and the final \"Map of Calm\".",
     "survey_save_continue": "Save and Continue",
     "survey_post_modal_title": "Your Mission",
     "survey_post_modal_text": "Your mission: Today is a very important day. Olya must present her project on the school stage in the assembly hall. Her motto: \"I won't speak - I will show\". But to get to the stage and show her drawing, she needs to leave the quiet classroom and traverse the whole school. The road to the assembly hall is full of stressors: sudden bells, bright lights, and noisy crowds. Help Olya not get lost in this noisy world, build her own safe route, successfully reach the stage and create your own \"Map of Calm\"!",
