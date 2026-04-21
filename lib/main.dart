@@ -21,12 +21,18 @@ import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'l10n/app_localizations_gen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  SchedulerBinding.instance.addPersistentFrameCallback((_) {
+    SchedulerBinding.instance.scheduleFrame();
+  });
+
   FlameAudio.audioCache.prefix = 'assets/sounds/';
 
   await Flame.device.fullScreen();

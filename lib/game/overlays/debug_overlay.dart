@@ -135,11 +135,15 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                   children: [
                                     _buildSceneButton(
                                       'Classroom',
-                                      () => widget.game.loadScene(ClassroomScene()),
+                                      () => widget.game.loadScene(
+                                        ClassroomScene(),
+                                      ),
                                     ),
                                     _buildSceneButton(
                                       'Corridor',
-                                      () => widget.game.loadScene(CorridorScene()),
+                                      () => widget.game.loadScene(
+                                        CorridorScene(),
+                                      ),
                                     ),
                                     _buildSceneButton(
                                       'Corridor 2',
@@ -149,11 +153,13 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                     ),
                                     _buildSceneButton(
                                       'Outside',
-                                      () => widget.game.loadScene(OutsideScene()),
+                                      () =>
+                                          widget.game.loadScene(OutsideScene()),
                                     ),
                                     _buildSceneButton(
                                       'Survey',
-                                      () => widget.game.loadScene(SurveyScene()),
+                                      () =>
+                                          widget.game.loadScene(SurveyScene()),
                                     ),
                                     _buildSceneButton(
                                       'Test',
@@ -176,7 +182,8 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                   children: [
                                     _buildActionButton(
                                       'Redraw',
-                                      () => widget.game.currentScene?.redrawScene(),
+                                      () => widget.game.currentScene
+                                          ?.redrawScene(),
                                       Icons.refresh,
                                     ),
                                     _buildActionButton(
@@ -186,21 +193,24 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                     ),
                                     _buildActionButton(
                                       'Skip => Classroom',
-                                      () =>
-                                          widget.game.skipToScene(ClassroomScene()),
+                                      () => widget.game.skipToScene(
+                                        ClassroomScene(),
+                                      ),
                                       Icons.fast_forward,
                                       color: Colors.orangeAccent,
                                     ),
                                     _buildActionButton(
                                       'Skip => Corridor',
-                                      () =>
-                                          widget.game.skipToScene(CorridorScene()),
+                                      () => widget.game.skipToScene(
+                                        CorridorScene(),
+                                      ),
                                       Icons.fast_forward,
                                       color: Colors.orangeAccent,
                                     ),
                                     _buildActionButton(
                                       'Skip => Stage',
-                                      () => widget.game.skipToScene(StageScene()),
+                                      () =>
+                                          widget.game.skipToScene(StageScene()),
                                       Icons.fast_forward,
                                       color: Colors.purpleAccent,
                                     ),
@@ -231,7 +241,8 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                       await Future.delayed(
                                         const Duration(milliseconds: 120),
                                       );
-                                      final zoom = widget.game.worldRoot.scale.x;
+                                      final zoom =
+                                          widget.game.worldRoot.scale.x;
                                       final worldOffset =
                                           widget.game.worldRoot.position;
                                       final screenX =
@@ -287,7 +298,8 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                                 ),
                                                 DialogChoice(
                                                   label: (loc) => 'Закрити',
-                                                  onSelect: (game) => game.overlays
+                                                  onSelect: (game) => game
+                                                      .overlays
                                                       .remove('Dialog'),
                                                 ),
                                               ],

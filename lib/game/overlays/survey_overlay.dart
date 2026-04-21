@@ -41,7 +41,7 @@ class _SurveyOverlayState extends State<SurveyOverlay>
 
     _scaleAnimation = CurvedAnimation(
       parent: _entranceController,
-      curve: const Interval(0.0, 1.0, curve: Curves.elasticOut),
+      curve: const Interval(0.0, 1.0, curve: Curves.easeOutQuint),
     );
 
     _entranceController.forward();
@@ -118,236 +118,231 @@ class _SurveyOverlayState extends State<SurveyOverlay>
                 width: isSmall ? size.width * 0.95 : 840,
                 constraints: BoxConstraints(maxHeight: size.height * 0.9),
                 padding: EdgeInsets.symmetric(
-                  horizontal: isSmall ? 16 : 24,
-                  vertical: isSmall ? 16 : 24,
+                  horizontal: isSmall ? 20 : 32,
+                  vertical: isSmall ? 20 : 32,
                 ),
-                child: ClipRect(
-                  child: AnimatedSize(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 400),
-                      layoutBuilder:
-                          (
-                            Widget? currentChild,
-                            List<Widget> previousChildren,
-                          ) {
-                            return Stack(
-                              alignment: Alignment.topCenter,
-                              children: <Widget>[
-                                ...previousChildren,
-                                ?currentChild,
-                              ],
-                            );
-                          },
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: SlideTransition(
-                                position: Tween<Offset>(
-                                  begin: const Offset(0.05, 0),
-                                  end: Offset.zero,
-                                ).animate(animation),
-                                child: child,
-                              ),
-                            );
-                          },
-                      child: SingleChildScrollView(
-                        key: ValueKey<int>(_currentIndex),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 4),
-                            Text(
-                              l.survey_calibration_subtitle,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
-                                fontSize: isSmall ? 13 : 14,
-                              ),
+                child: AnimatedSize(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  clipBehavior: Clip.none,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 400),
+                    layoutBuilder:
+                        (Widget? currentChild, List<Widget> previousChildren) {
+                          return Stack(
+                            alignment: Alignment.topCenter,
+                            clipBehavior: Clip.none,
+                            children: <Widget>[
+                              ...previousChildren,
+                              ?currentChild,
+                            ],
+                          );
+                        },
+                    transitionBuilder:
+                        (Widget child, Animation<double> animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin: const Offset(0.05, 0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
                             ),
-                            SizedBox(height: isSmall ? 12 : 16),
-
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(4),
-                                    child: LayoutBuilder(
-                                      builder: (context, constraints) {
-                                        return Stack(
-                                          children: [
-                                            Container(
-                                              height: isSmall ? 4 : 6,
-                                              color: theme.colorScheme.onSurface
-                                                  .withValues(alpha: 0.1),
-                                            ),
-                                            AnimatedContainer(
-                                              duration: const Duration(
-                                                milliseconds: 500,
-                                              ),
-                                              curve: Curves.easeInOut,
-                                              height: isSmall ? 4 : 6,
-                                              width:
-                                                  constraints.maxWidth *
-                                                  ((_currentIndex + 1) /
-                                                      questions.length),
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    theme.colorScheme.primary,
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: theme
-                                                        .colorScheme
-                                                        .primary
-                                                        .withValues(alpha: 0.4),
-                                                    blurRadius: 8,
-                                                    offset: const Offset(0, 2),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Text(
-                                  '${_currentIndex + 1} / ${questions.length}',
-                                  style: theme.textTheme.labelMedium?.copyWith(
-                                    color: theme.colorScheme.onSurface
-                                        .withValues(alpha: 0.7),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                          );
+                        },
+                    child: SingleChildScrollView(
+                      key: ValueKey<int>(_currentIndex),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 0,
+                      ).copyWith(bottom: 16),
+                      clipBehavior: Clip.none,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 12),
+                          Text(
+                            l.survey_calibration_subtitle,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: Colors.white.withValues(alpha: 0.7),
+                              fontSize: isSmall ? 13 : 14,
                             ),
-                            SizedBox(height: isSmall ? 16 : 24),
-
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    question.title,
-                                    style:
-                                        (isSmall
-                                                ? theme.textTheme.titleMedium
-                                                : theme.textTheme.titleLarge)
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w800,
-                                              letterSpacing: -0.5,
+                          ),
+                          SizedBox(height: isSmall ? 12 : 16),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(4),
+                                  child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      return Stack(
+                                        children: [
+                                          Container(
+                                            height: isSmall ? 4 : 6,
+                                            color: Colors.white.withValues(
+                                              alpha: 0.1,
                                             ),
-                                  ),
-                                ),
-                                _AnimatedIconButton(
-                                  icon: Icons.volume_up_rounded,
-                                  onPressed: () =>
-                                      _playQuestionSound(_currentIndex),
-                                  size: isSmall ? 20 : 24,
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: isSmall ? 12 : 16),
-
-                            Wrap(
-                              spacing: isSmall ? 8 : 10,
-                              runSpacing: isSmall ? 8 : 10,
-                              children: question.options.asMap().entries.map((
-                                entry,
-                              ) {
-                                final index = entry.key;
-                                final option = entry.value;
-                                final isSelected = selected == option.id;
-
-                                return TweenAnimationBuilder<double>(
-                                  duration: Duration(
-                                    milliseconds: 600 + (index * 150),
-                                  ),
-                                  tween: Tween(begin: 0.0, end: 1.0),
-                                  curve: Curves.easeOutBack,
-                                  builder: (context, entranceValue, child) {
-                                    return TweenAnimationBuilder<double>(
-                                      duration:
-                                          const Duration(milliseconds: 400),
-                                      tween: Tween(
-                                        begin: 1.0,
-                                        end: isSelected ? 1.05 : 1.0,
-                                      ),
-                                      curve: Curves.easeOutBack,
-                                      builder:
-                                          (context, selectionValue, child) {
-                                            return Transform.scale(
-                                              scale:
-                                                  entranceValue *
-                                                  selectionValue,
-                                              child: Opacity(
-                                                opacity: entranceValue.clamp(
-                                                  0.0,
-                                                  1.0,
+                                          ),
+                                          AnimatedContainer(
+                                            duration: const Duration(
+                                              milliseconds: 500,
+                                            ),
+                                            curve: Curves.easeInOut,
+                                            height: isSmall ? 4 : 6,
+                                            width:
+                                                constraints.maxWidth *
+                                                ((_currentIndex + 1) /
+                                                    questions.length),
+                                            decoration: BoxDecoration(
+                                              color: theme.colorScheme.primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: theme
+                                                      .colorScheme
+                                                      .primary
+                                                      .withValues(alpha: 0.4),
+                                                  blurRadius: 8,
+                                                  offset: const Offset(0, 2),
                                                 ),
-                                                child: child,
-                                              ),
-                                            );
-                                          },
-                                      child: child,
-                                    );
-                                  },
-                                  child: GlassOptionChip(
-                                    key: ValueKey(option.id),
-                                    label: option.label,
-                                    selected: isSelected,
-                                    compact: isSmall,
-                                    onTap: () {
-                                      setState(() {
-                                        _answers[question.id] = option.id;
-                                      });
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      );
                                     },
                                   ),
-                                );
-                              }).toList(),
-                            ),
-                            SizedBox(height: isSmall ? 20 : 28),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                '${_currentIndex + 1} / ${questions.length}',
+                                style: theme.textTheme.labelMedium?.copyWith(
+                                  color: Colors.white.withValues(alpha: 0.7),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: isSmall ? 16 : 24),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  question.title,
+                                  style:
+                                      (isSmall
+                                              ? theme.textTheme.titleMedium
+                                              : theme.textTheme.titleLarge)
+                                          ?.copyWith(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w800,
+                                            letterSpacing: -0.5,
+                                          ),
+                                ),
+                              ),
+                              _AnimatedIconButton(
+                                icon: Icons.volume_up_rounded,
+                                onPressed: () =>
+                                    _playQuestionSound(_currentIndex),
+                                size: isSmall ? 20 : 24,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: isSmall ? 12 : 16),
+                          Wrap(
+                            spacing: isSmall ? 8 : 10,
+                            runSpacing: isSmall ? 8 : 10,
+                            clipBehavior: Clip.none,
+                            children: question.options.asMap().entries.map((
+                              entry,
+                            ) {
+                              final index = entry.key;
+                              final option = entry.value;
+                              final isSelected = selected == option.id;
 
-                            Row(
-                              children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: AnimatedOpacity(
-                                    duration: const Duration(milliseconds: 300),
-                                    opacity: selected != null ? 1.0 : 0.5,
-                                    child: GlassButton(
-                                      label: isLast
-                                          ? l.survey_save_continue
-                                          : l.continueLabel,
-                                      onPressed: selected != null && !_isLoading
-                                          ? (isLast ? _submit : _goNext)
-                                          : null,
-                                      loading: _isLoading,
-                                      compact: isSmall,
+                              return TweenAnimationBuilder<double>(
+                                duration: Duration(
+                                  milliseconds: 600 + (index * 150),
+                                ),
+                                tween: Tween(begin: 0.0, end: 1.0),
+                                curve: Curves.easeOutBack,
+                                builder: (context, entranceValue, child) {
+                                  return TweenAnimationBuilder<double>(
+                                    duration: const Duration(milliseconds: 400),
+                                    tween: Tween(
+                                      begin: 1.0,
+                                      end: isSelected ? 1.05 : 1.0,
                                     ),
+                                    curve: Curves.easeOutBack,
+                                    builder: (context, selectionValue, child) {
+                                      return Transform.scale(
+                                        scale: entranceValue * selectionValue,
+                                        child: Opacity(
+                                          opacity: entranceValue.clamp(
+                                            0.0,
+                                            1.0,
+                                          ),
+                                          child: child,
+                                        ),
+                                      );
+                                    },
+                                    child: child,
+                                  );
+                                },
+                                child: GlassOptionChip(
+                                  key: ValueKey(option.id),
+                                  label: option.label,
+                                  selected: isSelected,
+                                  compact: isSmall,
+                                  onTap: () {
+                                    setState(() {
+                                      _answers[question.id] = option.id;
+                                    });
+                                  },
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          SizedBox(height: isSmall ? 20 : 28),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: AnimatedOpacity(
+                                  duration: const Duration(milliseconds: 300),
+                                  opacity: selected != null ? 1.0 : 0.5,
+                                  child: GlassButton(
+                                    label: isLast
+                                        ? l.survey_save_continue
+                                        : l.continueLabel,
+                                    onPressed: selected != null && !_isLoading
+                                        ? (isLast ? _submit : _goNext)
+                                        : null,
+                                    loading: _isLoading,
+                                    compact: isSmall,
                                   ),
                                 ),
-                                if (_currentIndex > 0)
-                                  const SizedBox(width: 12),
-                                if (_currentIndex > 0)
-                                  Expanded(
-                                    child: GlassButton(
-                                      label: '←',
-                                      onPressed: _goBack,
-                                      primary: false,
-                                      compact: isSmall,
-                                    ),
+                              ),
+                              if (_currentIndex > 0) const SizedBox(width: 12),
+                              if (_currentIndex > 0)
+                                Expanded(
+                                  child: GlassButton(
+                                    label: '←',
+                                    onPressed: _goBack,
+                                    primary: false,
+                                    compact: isSmall,
                                   ),
-                              ],
-                            ),
-                          ],
-                        ),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                        ],
                       ),
                     ),
                   ),
@@ -485,42 +480,21 @@ class _AnimatedIconButton extends StatefulWidget {
 
 class _AnimatedIconButtonState extends State<_AnimatedIconButton>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200),
-    );
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 1.2,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return ScaleTransition(
-      scale: _scaleAnimation,
-      child: IconButton(
-        icon: Icon(widget.icon),
-        color: theme.colorScheme.primary,
-        onPressed: () {
-          _controller.forward().then((_) => _controller.reverse());
-          widget.onPressed();
-        },
-        iconSize: widget.size,
-      ),
+    return IconButton(
+      icon: Icon(widget.icon),
+      color: theme.colorScheme.primary,
+      onPressed: () {
+        widget.onPressed();
+      },
+      iconSize: widget.size,
     );
   }
 }

@@ -123,10 +123,7 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                         if (!isUnlocked) const SizedBox(height: 14),
                         Text(
                           widget.description,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            height: 1.4,
-                          ),
+                          style: const TextStyle(fontSize: 15, height: 1.4),
                         ),
                         const SizedBox(height: 18),
                         const Divider(),

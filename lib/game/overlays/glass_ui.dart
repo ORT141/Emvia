@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class _GlassTheme {
   final ColorScheme colors;
   final bool isDark;
+  static const Color foreground = Colors.white;
 
   _GlassTheme(BuildContext context)
     : colors = Theme.of(context).colorScheme,
@@ -11,31 +12,31 @@ class _GlassTheme {
 
   Color get panelBackground => isDark
       ? colors.surface.withValues(alpha: 0.12)
-      : colors.surface.withValues(alpha: 0.6);
+      : colors.surface.withValues(alpha: 0.3);
 
   Color get panelBorder => isDark
       ? colors.outline.withValues(alpha: 0.15)
-      : colors.outline.withValues(alpha: 0.1);
+      : colors.outline.withValues(alpha: 0.14);
 
-  Color get panelText => colors.onSurface;
-  Color get panelTextSecondary => colors.onSurfaceVariant;
+  Color get panelText => foreground;
+  Color get panelTextSecondary => foreground;
 
-  Color get buttonPrimaryBackground => colors.primary;
-  Color get buttonPrimaryForeground => colors.onPrimary;
+  Color get buttonPrimaryBackground => colors.primary.withValues(alpha: 0.8);
+  Color get buttonPrimaryForeground => foreground;
 
-  Color get buttonSecondaryForeground => colors.onSurface;
+  Color get buttonSecondaryForeground => foreground;
   Color get buttonSecondaryBorder =>
       colors.outline.withValues(alpha: isDark ? 0.3 : 0.2);
 
   Color chipBackground(bool selected) => selected
-      ? colors.primaryContainer
+      ? colors.primary.withValues(alpha: 0.25)
       : colors.surfaceContainerHighest.withValues(alpha: isDark ? 0.4 : 0.5);
 
-  Color chipBorder(bool selected) =>
-      selected ? colors.primary : colors.outlineVariant.withValues(alpha: 0.5);
+  Color chipBorder(bool selected) => selected
+      ? colors.primary.withValues(alpha: 0.8)
+      : colors.outlineVariant.withValues(alpha: 0.5);
 
-  Color chipText(bool selected) =>
-      selected ? colors.onPrimaryContainer : colors.onSurfaceVariant;
+  Color chipText(bool selected) => foreground;
 }
 
 class _GlassBase extends StatelessWidget {
@@ -57,21 +58,18 @@ class _GlassBase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(borderRadius: borderRadius),
-      child: ClipRRect(
-        borderRadius: borderRadius,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
-          child: Container(
-            padding: padding,
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: borderRadius,
-              border: Border.all(color: borderColor, width: 1.5),
-            ),
-            child: child,
+    return ClipRRect(
+      borderRadius: borderRadius,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
+        child: Container(
+          padding: padding,
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: borderRadius,
+            border: Border.all(color: borderColor, width: 1.5),
           ),
+          child: child,
         ),
       ),
     );
@@ -124,6 +122,10 @@ class GlassPanel extends StatelessWidget {
               onSurface: glassTheme.panelText,
               onSurfaceVariant: glassTheme.panelTextSecondary,
             ),
+            iconTheme: const IconThemeData(color: _GlassTheme.foreground),
+            primaryIconTheme: const IconThemeData(
+              color: _GlassTheme.foreground,
+            ),
             textTheme: Theme.of(context).textTheme.apply(
               bodyColor: glassTheme.panelText,
               displayColor: glassTheme.panelText,
@@ -132,6 +134,7 @@ class GlassPanel extends StatelessWidget {
           ),
           child: Material(
             color: Colors.transparent,
+            clipBehavior: Clip.none,
             child: DefaultTextStyle.merge(
               style: TextStyle(color: glassTheme.panelText),
               child: child,
@@ -274,14 +277,14 @@ class GlassOptionChip extends StatelessWidget {
                         size: compact ? 14 : 16,
                       )
                     : (icon != null
-                        ? IconTheme(
-                            data: IconThemeData(
-                              color: glassTheme.chipText(selected),
-                              size: compact ? 14 : 16,
-                            ),
-                            child: icon!,
-                          )
-                        : const SizedBox.shrink()),
+                          ? IconTheme(
+                              data: IconThemeData(
+                                color: glassTheme.chipText(selected),
+                                size: compact ? 14 : 16,
+                              ),
+                              child: icon!,
+                            )
+                          : const SizedBox.shrink()),
               ),
               const SizedBox(width: 6),
             ],
