@@ -127,60 +127,62 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
             child: Builder(
               builder: (context) {
                 final theme = Theme.of(context);
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      loc.play,
-                      style: GoogleFonts.baloo2(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onSurface,
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        loc.play,
+                        style: GoogleFonts.baloo2(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onSurface,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    _CharacterSelectBar(
-                      game: widget.game,
-                      selectedCharacter: pendingCharacter,
-                      compact: isSmall,
-                      onCharacterSelected: (character) {
-                        setModalState(() {
-                          pendingCharacter = character;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        GlassButton(
-                          label: loc.cancel,
-                          onPressed: () => Navigator.of(ctx).pop(),
-                          primary: false,
-                          compact: isSmall,
-                        ),
-                        const SizedBox(width: 12),
-                        GlassButton(
-                          label: loc.play,
-                          onPressed:
-                              (pendingCharacter != null &&
-                                  widget.game.isCharacterUnlocked(
-                                    pendingCharacter!,
-                                  ))
-                              ? () {
-                                  widget.game.selectCharacter(
-                                    pendingCharacter!,
-                                  );
-                                  Navigator.of(ctx).pop();
-                                  widget.game.startNewGameSurveyFlow();
-                                }
-                              : null,
-                          compact: isSmall,
-                        ),
-                      ],
-                    ),
-                  ],
+                      const SizedBox(height: 16),
+                      _CharacterSelectBar(
+                        game: widget.game,
+                        selectedCharacter: pendingCharacter,
+                        compact: isSmall,
+                        onCharacterSelected: (character) {
+                          setModalState(() {
+                            pendingCharacter = character;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GlassButton(
+                            label: loc.cancel,
+                            onPressed: () => Navigator.of(ctx).pop(),
+                            primary: false,
+                            compact: isSmall,
+                          ),
+                          const SizedBox(width: 12),
+                          GlassButton(
+                            label: loc.play,
+                            onPressed:
+                                (pendingCharacter != null &&
+                                    widget.game.isCharacterUnlocked(
+                                      pendingCharacter!,
+                                    ))
+                                ? () {
+                                    widget.game.selectCharacter(
+                                      pendingCharacter!,
+                                    );
+                                    Navigator.of(ctx).pop();
+                                    widget.game.startNewGameSurveyFlow();
+                                  }
+                                : null,
+                            compact: isSmall,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
@@ -210,14 +212,14 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
           final isSmallScreen = constraints.maxWidth < 650;
           final isShortScreen = constraints.maxHeight < 500;
 
-          final double topButtonWidth = isSmallScreen ? 64.0 : 86.0;
+          final double topButtonWidth = isSmallScreen ? 56.0 : 86.0;
           final double logoWidth = isShortScreen
-              ? 140.0
+              ? 120.0
               : isSmallScreen
-              ? 240.0
+              ? 200.0
               : 280.0;
-          final double menuButtonWidth = isSmallScreen ? 240.0 : 280.0;
-          final double menuButtonMinHeight = 56.0;
+          final double menuButtonWidth = isSmallScreen ? 200.0 : 280.0;
+          final double menuButtonMinHeight = isSmallScreen ? 48.0 : 56.0;
 
           return Stack(
             children: [
@@ -308,7 +310,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: isShortScreen ? 6 : 32),
+                                SizedBox(height: isShortScreen ? 4 : 24),
                                 Align(
                                   alignment: isSmallScreen
                                       ? Alignment.center
@@ -325,7 +327,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
                                         width: menuButtonWidth,
                                         minHeight: menuButtonMinHeight,
                                       ),
-                                      SizedBox(height: isShortScreen ? 8 : 16),
+                                      SizedBox(height: isShortScreen ? 4 : 12),
                                       _ImageMenuButton(
                                         assetPath:
                                             'assets/images/main-menu/continue-main-menu.png',
@@ -725,8 +727,8 @@ class _CharacterInfoCard extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      constraints: BoxConstraints(maxHeight: compact ? 120 : 200),
-      padding: EdgeInsets.all(compact ? 8 : 12),
+      constraints: BoxConstraints(maxHeight: compact ? 90 : 200),
+      padding: EdgeInsets.all(compact ? 6 : 12),
       decoration: BoxDecoration(
         color: theme.colorScheme.onSurface.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
@@ -735,11 +737,14 @@ class _CharacterInfoCard extends StatelessWidget {
         ),
       ),
       child: data == null
-          ? Text(
-              loc.select_hero_description,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-                fontSize: compact ? 11 : 12,
+          ? Center(
+              child: Text(
+                loc.select_hero_description,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontSize: compact ? 10 : 12,
+                ),
               ),
             )
           : SingleChildScrollView(
@@ -751,7 +756,7 @@ class _CharacterInfoCard extends StatelessWidget {
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w800,
                       color: theme.colorScheme.onSurface,
-                      fontSize: compact ? 13 : 14,
+                      fontSize: compact ? 12 : 14,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -760,30 +765,37 @@ class _CharacterInfoCard extends StatelessWidget {
                     style: theme.textTheme.bodySmall?.copyWith(
                       fontStyle: FontStyle.italic,
                       color: theme.colorScheme.onSurfaceVariant,
-                      fontSize: compact ? 11 : 12,
+                      fontSize: compact ? 10 : 12,
                     ),
                   ),
-                  SizedBox(height: compact ? 4 : 8),
-                  Text(
-                    '${loc.character_trait_label} ${data!.trait}',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      fontSize: compact ? 11 : 12,
+                  if (!compact) ...[
+                    SizedBox(height: 8),
+                    Text(
+                      '${loc.character_trait_label} ${data!.trait}',
+                      style: theme.textTheme.bodySmall?.copyWith(fontSize: 12),
                     ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    '${loc.character_superpower_label} ${data!.superPower}',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      fontSize: compact ? 11 : 12,
+                    const SizedBox(height: 2),
+                    Text(
+                      '${loc.character_superpower_label} ${data!.superPower}',
+                      style: theme.textTheme.bodySmall?.copyWith(fontSize: 12),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    data!.description,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      fontSize: compact ? 11 : 12,
+                    const SizedBox(height: 4),
+                    Text(
+                      data!.description,
+                      style: theme.textTheme.bodySmall?.copyWith(fontSize: 12),
                     ),
-                  ),
+                  ] else ...[
+                    SizedBox(height: 4),
+                    Text(
+                      data!.description,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontSize: 10,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ],
               ),
             ),

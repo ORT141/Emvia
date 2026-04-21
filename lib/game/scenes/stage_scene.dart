@@ -11,10 +11,20 @@ class StageScene extends GameScene {
     : super(
         backgroundPath: 'scenes/stage/background_stage.png',
         foregroundPath: 'scenes/stage/foreground_stage.png',
-        scalingMode: SceneScalingMode.scrolling,
         showControls: true,
         frozenPlayer: false,
       );
+
+  @override
+  double worldWidthForViewport(Vector2 viewportSize) {
+    if (background.sprite?.srcSize != null &&
+        background.sprite!.srcSize.y > 0) {
+      final src = background.sprite!.srcSize;
+      final scale = viewportSize.y / src.y;
+      return src.x * scale;
+    }
+    return viewportSize.x * 2;
+  }
 
   static const double _rockingChairHeightFactor = 0.8;
   static const double _booksHeightFactor = 0.1;

@@ -355,7 +355,7 @@ class SurveyService {
             },
             body: body,
           )
-          .timeout(const Duration(seconds: 20));
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
@@ -369,8 +369,9 @@ class SurveyService {
         await prefs.setString(aiWordsKey, jsonEncode(words));
         await prefs.setString(aiColorKey, color);
         await prefs.setString(aiStressTypeKey, stressType);
-        await prefs.setString(aiColorKey, color);
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('Survey AI backend error: $e');
+    }
   }
 }
