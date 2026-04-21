@@ -16,9 +16,6 @@ class SurveyScene extends GameScene {
   Future<void> onLoad() async {
     await super.onLoad();
 
-    background.opacity = 0;
-    foreground?.opacity = 0;
-
     game.player.opacity = 0;
 
     layoutToWorld();

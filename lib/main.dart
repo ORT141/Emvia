@@ -1,4 +1,3 @@
-// import 'package:device_preview/device_preview.dart';
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/game/scenes/path/path_detail_component.dart';
 import 'package:emvia/game/overlays/calm_map_overlay.dart';
@@ -33,12 +32,6 @@ void main() async {
   await Flame.device.fullScreen();
   await Flame.device.setLandscape();
 
-  // runApp(
-  //  DevicePreview(
-  //    builder: (context) => MyApp(),
-  //  ),
-  // );
-
   runApp(const MyApp());
 }
 
@@ -50,7 +43,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale? _locale = const Locale('uk');
+  Locale? _locale = const Locale('en');
   ThemeMode _themeMode = ThemeMode.light;
 
   void _setLocale(Locale locale) => setState(() => _locale = locale);

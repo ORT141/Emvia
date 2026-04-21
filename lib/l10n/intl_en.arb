@@ -498,6 +498,38 @@
     "survey_geometry": "Clear Geometry",
     "survey_nature": "Nature Motifs",
     "survey_stars": "Starry Sky",
+    "heroes_title": "Heroes",
+    "@heroes_title": {
+        "description": "Title for the character selection section."
+    },
+    "select_hero_description": "Choose a hero to see the description",
+    "@select_hero_description": {
+        "description": "Instruction text for character selection."
+    },
+    "character_olya": "Olya",
+    "@character_olya": {
+        "description": "Name of the character Olya."
+    },
+    "character_liam": "Liam",
+    "@character_liam": {
+        "description": "Name of the character Liam."
+    },
+    "character_olenka": "Olenka",
+    "@character_olenka": {
+        "description": "Name of the character Olenka."
+    },
+    "character_anton": "Anton",
+    "@character_anton": {
+        "description": "Name of the character Anton."
+    },
+    "character_trait_label": "Trait:",
+    "@character_trait_label": {
+        "description": "Label for character trait."
+    },
+    "character_superpower_label": "Superpower:",
+    "@character_superpower_label": {
+        "description": "Label for character superpower."
+    },
     "survey_clouds": "Soft Clouds",
     "survey_calming_item_title": "3. Which object gives a sense of calm?",
     "survey_book": "Book",

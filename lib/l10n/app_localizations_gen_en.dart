@@ -508,6 +508,30 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get survey_stars => 'Starry Sky';
 
   @override
+  String get heroes_title => 'Heroes';
+
+  @override
+  String get select_hero_description => 'Choose a hero to see the description';
+
+  @override
+  String get character_olya => 'Olya';
+
+  @override
+  String get character_liam => 'Liam';
+
+  @override
+  String get character_olenka => 'Olenka';
+
+  @override
+  String get character_anton => 'Anton';
+
+  @override
+  String get character_trait_label => 'Trait:';
+
+  @override
+  String get character_superpower_label => 'Superpower:';
+
+  @override
   String get survey_clouds => 'Soft Clouds';
 
   @override

@@ -508,6 +508,30 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get survey_stars => 'Зоряне небо';
 
   @override
+  String get heroes_title => 'Герої';
+
+  @override
+  String get select_hero_description => 'Обери героя, щоб побачити опис';
+
+  @override
+  String get character_olya => 'Оля';
+
+  @override
+  String get character_liam => 'Ліам';
+
+  @override
+  String get character_olenka => 'Оленка';
+
+  @override
+  String get character_anton => 'Антон';
+
+  @override
+  String get character_trait_label => 'Особливість:';
+
+  @override
+  String get character_superpower_label => 'Суперсила:';
+
+  @override
   String get survey_clouds => 'М’які хмари';
 
   @override

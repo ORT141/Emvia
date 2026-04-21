@@ -1004,6 +1004,54 @@ abstract class AppLocalizationsGen {
   /// **'Starry Sky'**
   String get survey_stars;
 
+  /// Title for the character selection section.
+  ///
+  /// In en, this message translates to:
+  /// **'Heroes'**
+  String get heroes_title;
+
+  /// Instruction text for character selection.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a hero to see the description'**
+  String get select_hero_description;
+
+  /// Name of the character Olya.
+  ///
+  /// In en, this message translates to:
+  /// **'Olya'**
+  String get character_olya;
+
+  /// Name of the character Liam.
+  ///
+  /// In en, this message translates to:
+  /// **'Liam'**
+  String get character_liam;
+
+  /// Name of the character Olenka.
+  ///
+  /// In en, this message translates to:
+  /// **'Olenka'**
+  String get character_olenka;
+
+  /// Name of the character Anton.
+  ///
+  /// In en, this message translates to:
+  /// **'Anton'**
+  String get character_anton;
+
+  /// Label for character trait.
+  ///
+  /// In en, this message translates to:
+  /// **'Trait:'**
+  String get character_trait_label;
+
+  /// Label for character superpower.
+  ///
+  /// In en, this message translates to:
+  /// **'Superpower:'**
+  String get character_superpower_label;
+
   /// No description provided for @survey_clouds.
   ///
   /// In en, this message translates to:

@@ -498,6 +498,38 @@
     "survey_lavender": "Лавандовий",
     "survey_deep_ocean": "Глибокий синій",
     "survey_sand": "Теплий пісочний",
+    "heroes_title": "Герої",
+    "@heroes_title": {
+        "description": "Title for the character selection section."
+    },
+    "select_hero_description": "Обери героя, щоб побачити опис",
+    "@select_hero_description": {
+        "description": "Instruction text for character selection."
+    },
+    "character_olya": "Оля",
+    "@character_olya": {
+        "description": "Name of the character Olya."
+    },
+    "character_liam": "Ліам",
+    "@character_liam": {
+        "description": "Name of the character Liam."
+    },
+    "character_olenka": "Оленка",
+    "@character_olenka": {
+        "description": "Name of the character Olenka."
+    },
+    "character_anton": "Антон",
+    "@character_anton": {
+        "description": "Name of the character Anton."
+    },
+    "character_trait_label": "Особливість:",
+    "@character_trait_label": {
+        "description": "Label for character trait."
+    },
+    "character_superpower_label": "Суперсила:",
+    "@character_superpower_label": {
+        "description": "Label for character superpower."
+    },
     "survey_calming_pattern_title": "2. Який візерунок заспокоює?",
     "survey_geometry": "Чітка геометрія",
     "survey_nature": "Природні мотиви",

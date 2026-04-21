@@ -1,6 +1,7 @@
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';
 import 'package:flutter/material.dart';
+import 'glass_ui.dart';
 
 class CalmingItemPromptOverlay extends StatelessWidget {
   const CalmingItemPromptOverlay({super.key, required this.game});
@@ -20,30 +21,12 @@ class CalmingItemPromptOverlay extends StatelessWidget {
         margin: EdgeInsets.only(top: isSmall ? 12 : 28),
         child: FractionallySizedBox(
           widthFactor: isSmall ? 0.95 : 0.92,
-          child: Container(
+          child: GlassPanel(
             padding: EdgeInsets.symmetric(
               vertical: isSmall ? 10 : 14,
               horizontal: isSmall ? 14 : 18,
             ),
-            decoration: BoxDecoration(
-              color: Theme.of(
-                context,
-              ).colorScheme.surface.withValues(alpha: 0.82),
-              borderRadius: BorderRadius.circular(isSmall ? 16 : 24),
-              border: Border.all(
-                color: Theme.of(
-                  context,
-                ).colorScheme.primary.withValues(alpha: 0.18),
-                width: 1.2,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.18),
-                  blurRadius: isSmall ? 12 : 18,
-                  offset: Offset(0, isSmall ? 4 : 8),
-                ),
-              ],
-            ),
+            borderRadius: BorderRadius.circular(isSmall ? 16 : 24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

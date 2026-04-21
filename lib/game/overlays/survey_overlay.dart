@@ -1,4 +1,5 @@
 import 'package:emvia/game/emvia_game.dart';
+import 'package:emvia/game/overlays/glass_ui.dart';
 import 'package:emvia/game/survey_service.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
@@ -84,224 +85,215 @@ class _SurveyOverlayState extends State<SurveyOverlay> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.shortestSide < 600;
 
-    return Scaffold(
-      backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.32),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: isSmall ? size.width * 0.95 : 840,
-            maxHeight: size.height * 0.9,
-          ),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(isSmall ? 16 : 20),
+    return Stack(
+      children: [
+        const GlassOverlayScrim(),
+        Center(
+          child: GlassPanel(
+            width: isSmall ? size.width * 0.95 : 840,
+            constraints: BoxConstraints(maxHeight: size.height * 0.9),
+            padding: EdgeInsets.symmetric(
+              horizontal: isSmall ? 16 : 24,
+              vertical: isSmall ? 16 : 24,
             ),
-            color: theme.colorScheme.surface,
-            elevation: 24,
             child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: isSmall ? 16 : 24,
-                  vertical: isSmall ? 16 : 24,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l.survey_calibration_title,
-                      style:
-                          (isSmall
-                                  ? theme.textTheme.titleLarge
-                                  : theme.textTheme.headlineSmall)
-                              ?.copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: theme.colorScheme.primary,
-                              ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      l.survey_calibration_subtitle,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                        fontSize: isSmall ? 13 : 14,
-                      ),
-                    ),
-                    SizedBox(height: isSmall ? 12 : 16),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: LinearProgressIndicator(
-                              value: (_currentIndex + 1) / questions.length,
-                              minHeight: isSmall ? 4 : 6,
-                              backgroundColor:
-                                  theme.colorScheme.surfaceContainerHighest,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l.survey_calibration_title,
+                    style:
+                        (isSmall
+                                ? theme.textTheme.titleLarge
+                                : theme.textTheme.headlineSmall)
+                            ?.copyWith(
+                              fontWeight: FontWeight.w800,
                               color: theme.colorScheme.primary,
                             ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          '${_currentIndex + 1} / ${questions.length}',
-                          style: theme.textTheme.labelMedium?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l.survey_calibration_subtitle,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontSize: isSmall ? 13 : 14,
                     ),
-                    SizedBox(height: isSmall ? 16 : 24),
+                  ),
+                  SizedBox(height: isSmall ? 12 : 16),
 
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            question.title,
-                            style:
-                                (isSmall
-                                        ? theme.textTheme.titleMedium
-                                        : theme.textTheme.titleLarge)
-                                    ?.copyWith(fontWeight: FontWeight.w700),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: LinearProgressIndicator(
+                            value: (_currentIndex + 1) / questions.length,
+                            minHeight: isSmall ? 4 : 6,
+                            backgroundColor:
+                                theme.colorScheme.surfaceContainerHighest,
+                            color: theme.colorScheme.primary,
                           ),
                         ),
-                        IconButton(
-                          tooltip: 'Play again',
-                          icon: const Icon(Icons.volume_up_rounded),
-                          color: theme.colorScheme.primary,
-                          onPressed: () => _playQuestionSound(_currentIndex),
-                          iconSize: isSmall ? 20 : 24,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        '${_currentIndex + 1} / ${questions.length}',
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
-                      ],
-                    ),
-                    SizedBox(height: isSmall ? 12 : 16),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: isSmall ? 16 : 24),
 
-                    Wrap(
-                      spacing: isSmall ? 8 : 10,
-                      runSpacing: isSmall ? 8 : 10,
-                      children: question.options.map((option) {
-                        final isSelected = selected == option.id;
-                        return ChoiceChip(
-                          key: ValueKey(option.id),
-                          label: Text(
-                            option.label,
-                            style: TextStyle(fontSize: isSmall ? 13 : 14),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          question.title,
+                          style:
+                              (isSmall
+                                      ? theme.textTheme.titleMedium
+                                      : theme.textTheme.titleLarge)
+                                  ?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: 'Play again',
+                        icon: const Icon(Icons.volume_up_rounded),
+                        color: theme.colorScheme.primary,
+                        onPressed: () => _playQuestionSound(_currentIndex),
+                        iconSize: isSmall ? 20 : 24,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: isSmall ? 12 : 16),
+
+                  Wrap(
+                    spacing: isSmall ? 8 : 10,
+                    runSpacing: isSmall ? 8 : 10,
+                    children: question.options.map((option) {
+                      final isSelected = selected == option.id;
+                      return ChoiceChip(
+                        key: ValueKey(option.id),
+                        label: Text(
+                          option.label,
+                          style: TextStyle(fontSize: isSmall ? 13 : 14),
+                        ),
+                        selected: isSelected,
+                        avatar: isSelected
+                            ? Icon(
+                                Icons.check,
+                                size: isSmall ? 14 : 16,
+                                color: theme.colorScheme.primary,
+                              )
+                            : null,
+                        selectedColor: theme.colorScheme.primary.withValues(
+                          alpha: 0.14,
+                        ),
+                        backgroundColor:
+                            theme.colorScheme.surfaceContainerHighest,
+                        elevation: isSelected ? 2 : 0,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isSmall ? 4 : 8,
+                          vertical: isSmall ? 4 : 8,
+                        ),
+                        onSelected: (value) {
+                          if (!value) return;
+                          setState(() {
+                            _answers[question.id] = option.id;
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  SizedBox(height: isSmall ? 20 : 28),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.primary,
+                            foregroundColor: theme.colorScheme.onPrimary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              vertical: isSmall ? 12 : 14,
+                            ),
+                            elevation: 0,
                           ),
-                          selected: isSelected,
-                          avatar: isSelected
-                              ? Icon(
-                                  Icons.check,
-                                  size: isSmall ? 14 : 16,
-                                  color: theme.colorScheme.primary,
-                                )
+                          onPressed: selected != null && !_isLoading
+                              ? (isLast ? _submit : _goNext)
                               : null,
-                          selectedColor: theme.colorScheme.primary.withValues(
-                            alpha: 0.14,
-                          ),
-                          backgroundColor:
-                              theme.colorScheme.surfaceContainerHighest,
-                          elevation: isSelected ? 2 : 0,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: isSmall ? 4 : 8,
-                            vertical: isSmall ? 4 : 8,
-                          ),
-                          onSelected: (value) {
-                            if (!value) return;
-                            setState(() {
-                              _answers[question.id] = option.id;
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ),
-                    SizedBox(height: isSmall ? 20 : 28),
-
-                    Row(
-                      children: [
+                          child: _isLoading
+                              ? SizedBox(
+                                  height: isSmall ? 16 : 20,
+                                  width: isSmall ? 16 : 20,
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  isLast ? l.survey_save_continue : '→',
+                                  style: TextStyle(
+                                    fontSize: isSmall ? 16 : 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      if (_currentIndex > 0) const SizedBox(width: 12),
+                      if (_currentIndex > 0)
                         Expanded(
-                          flex: 3,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: theme.colorScheme.primary,
-                              foregroundColor: theme.colorScheme.onPrimary,
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               padding: EdgeInsets.symmetric(
                                 vertical: isSmall ? 12 : 14,
                               ),
-                              elevation: 0,
                             ),
-                            onPressed: selected != null && !_isLoading
-                                ? (isLast ? _submit : _goNext)
-                                : null,
-                            child: _isLoading
-                                ? SizedBox(
-                                    height: isSmall ? 16 : 20,
-                                    width: isSmall ? 16 : 20,
-                                    child: const CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                : Text(
-                                    isLast ? l.survey_save_continue : '→',
-                                    style: TextStyle(
-                                      fontSize: isSmall ? 16 : 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                            onPressed: _goBack,
+                            child: const Text(
+                              '←',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
-                        if (_currentIndex > 0) const SizedBox(width: 12),
-                        if (_currentIndex > 0)
-                          Expanded(
-                            child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                  vertical: isSmall ? 12 : 14,
-                                ),
-                              ),
-                              onPressed: _goBack,
-                              child: const Text(
-                                '←',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
+                    ],
+                  ),
 
-                    if (kAllowSurveySkip) ...[
-                      SizedBox(height: isSmall ? 6 : 10),
-                      SizedBox(
-                        width: double.infinity,
-                        child: TextButton(
-                          onPressed: _isLoading ? null : _skip,
-                          child: Text(
-                            'Skip',
-                            style: TextStyle(
-                              color: theme.colorScheme.onSurfaceVariant,
-                              fontSize: isSmall ? 12 : 14,
-                            ),
+                  if (kAllowSurveySkip) ...[
+                    SizedBox(height: isSmall ? 6 : 10),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed: _isLoading ? null : _skip,
+                        child: Text(
+                          'Skip',
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurfaceVariant,
+                            fontSize: isSmall ? 12 : 14,
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ],
-                ),
+                ],
               ),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 

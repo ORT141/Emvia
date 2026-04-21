@@ -12,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
+import 'glass_ui.dart';
 
 class CalmMapOverlay extends StatefulWidget {
   const CalmMapOverlay({super.key, required this.game});
@@ -180,62 +181,18 @@ class _CalmMapOverlayState extends State<CalmMapOverlay> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            ElevatedButton.icon(
+                            GlassButton(
+                              label: l.calm_map_export_png.toUpperCase(),
                               onPressed: _isExporting ? null : _exportPng,
-                              icon: _isExporting
-                                  ? SizedBox(
-                                      width: isSmall ? 14 : 18,
-                                      height: isSmall ? 14 : 18,
-                                      child: const CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : Icon(
-                                      Icons.image_outlined,
-                                      size: isSmall ? 18 : 24,
-                                    ),
-                              label: Text(
-                                l.calm_map_export_png.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: isSmall ? 13 : 14,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white.withValues(
-                                  alpha: 0.2,
-                                ),
-                                foregroundColor: Colors.white,
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: isSmall ? 20 : 28,
-                                  vertical: isSmall ? 12 : 16,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                  side: const BorderSide(color: Colors.white24),
-                                ),
-                                elevation: 0,
-                              ),
+                              compact: isSmall,
                             ),
                             SizedBox(width: isSmall ? 12 : 16),
-                            TextButton(
+                            GlassButton(
+                              label: l.play_again.toUpperCase(),
                               onPressed: () =>
                                   widget.game.returnToMainMenuAfterJourney(),
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.white70,
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: isSmall ? 20 : 28,
-                                  vertical: isSmall ? 12 : 16,
-                                ),
-                              ),
-                              child: Text(
-                                l.play_again.toUpperCase(),
-                                style: GoogleFonts.baloo2(
-                                  fontSize: isSmall ? 14 : 16,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
+                              primary: false,
+                              compact: isSmall,
                             ),
                           ],
                         ),

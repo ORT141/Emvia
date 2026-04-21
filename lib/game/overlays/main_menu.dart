@@ -5,6 +5,7 @@ import 'package:flame_audio/flame_audio.dart';
 import '../emvia_game.dart';
 import '../emvia_types.dart';
 import '../../l10n/app_localizations_gen.dart';
+import 'glass_ui.dart';
 
 class MainMenuOverlay extends StatefulWidget {
   final EmviaGame game;
@@ -56,71 +57,46 @@ class _MainMenuOverlayState extends State<MainMenuOverlay>
       context: context,
       builder: (ctx) {
         final isSmall = MediaQuery.of(ctx).size.shortestSide < 600;
-        return AlertDialog(
-          backgroundColor: theme.colorScheme.surface,
-          insetPadding: EdgeInsets.symmetric(
-            horizontal: isSmall ? 16.0 : 40.0,
-            vertical: isSmall ? 12.0 : 24.0,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
-          content: Padding(
-            padding: EdgeInsets.all(isSmall ? 16.0 : 32.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.volume_up_rounded,
-                  size: isSmall ? 40.0 : 64.0,
-                  color: theme.colorScheme.primary,
+        return GlassDialog(
+          maxWidth: isSmall ? 320 : 420,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.volume_up_rounded,
+                size: isSmall ? 40.0 : 64.0,
+                color: theme.colorScheme.primary,
+              ),
+              SizedBox(height: isSmall ? 12 : 24),
+              Text(
+                loc.sound_question_title,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
                 ),
-                SizedBox(height: isSmall ? 12 : 24),
-                Text(
-                  loc.sound_question_title,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
+              ),
+              SizedBox(height: isSmall ? 16 : 32),
+              Row(
+                children: [
+                  Expanded(
+                    child: GlassButton(
+                      label: loc.sound_on,
+                      onPressed: () => Navigator.of(ctx).pop(true),
+                      compact: isSmall,
+                    ),
                   ),
-                ),
-                SizedBox(height: isSmall ? 16 : 32),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primary,
-                          foregroundColor: theme.colorScheme.onPrimary,
-                          padding: EdgeInsets.symmetric(
-                            vertical: isSmall ? 10.0 : 16.0,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        onPressed: () => Navigator.of(ctx).pop(true),
-                        child: Text(loc.sound_on),
-                      ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: GlassButton(
+                      label: loc.sound_off,
+                      onPressed: () => Navigator.of(ctx).pop(false),
+                      primary: false,
+                      compact: isSmall,
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
-                            vertical: isSmall ? 10.0 : 16.0,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        onPressed: () => Navigator.of(ctx).pop(false),
-                        child: Text(loc.sound_off),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         );
       },
@@ -431,10 +407,13 @@ class _LanguageButton extends StatelessWidget {
         width: width,
         fit: BoxFit.contain,
       ),
-      itemBuilder: (context) => [
-        _buildLanguageItem('en', '🇺🇸 English'),
-        _buildLanguageItem('uk', '🇺🇦 Українська'),
-      ],
+      itemBuilder: (context) {
+        final loc = AppLocalizationsGen.of(context)!;
+        return [
+          _buildLanguageItem('en', '🇺🇸 ${loc.lang_en}'),
+          _buildLanguageItem('uk', '🇺🇦 ${loc.lang_uk}'),
+        ];
+      },
     );
   }
 
@@ -552,6 +531,7 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final loc = AppLocalizationsGen.of(context)!;
     final selectedCharacter = widget.selectedCharacter;
     final selectedCard = selectedCharacter != null
         ? _characterCardData(selectedCharacter)
@@ -571,7 +551,7 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
       child: Column(
         children: [
           Text(
-            'Герої',
+            loc.heroes_title,
             style: GoogleFonts.baloo2(
               fontWeight: FontWeight.w700,
               fontSize: compact ? 13 : null,
@@ -587,7 +567,7 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
               _CharacterGhost(
                 imagePath: 'player-selecting/olya_ghost.png',
                 realImagePath: 'player/olya/standing.png',
-                label: 'Оля',
+                label: loc.character_olya,
                 selected: selectedCharacter == PlayableCharacter.olya,
                 hovered: _hoveredCharacter == PlayableCharacter.olya,
                 locked: false,
@@ -618,7 +598,7 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
               ),
               _CharacterGhost(
                 imagePath: 'player-selecting/liam_ghost.png',
-                label: 'Ліам',
+                label: loc.character_liam,
                 selected: selectedCharacter == PlayableCharacter.liam,
                 hovered: _hoveredCharacter == PlayableCharacter.liam,
                 locked: false,
@@ -649,7 +629,7 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
               ),
               _CharacterGhost(
                 imagePath: 'player-selecting/olenka_ghost.png',
-                label: 'Оленка',
+                label: loc.character_olenka,
                 selected: selectedCharacter == PlayableCharacter.olenka,
                 hovered: _hoveredCharacter == PlayableCharacter.olenka,
                 locked: true,
@@ -681,7 +661,7 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
               ),
               _CharacterGhost(
                 imagePath: 'player-selecting/anton_ghost.png',
-                label: 'Антон',
+                label: loc.character_anton,
                 selected: selectedCharacter == PlayableCharacter.anton,
                 hovered: _hoveredCharacter == PlayableCharacter.anton,
                 locked: true,
@@ -783,6 +763,7 @@ class _CharacterInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final loc = AppLocalizationsGen.of(context)!;
 
     return Container(
       width: double.infinity,
@@ -795,7 +776,7 @@ class _CharacterInfoCard extends StatelessWidget {
       ),
       child: data == null
           ? Text(
-              'Обери героя, щоб побачити опис',
+              loc.select_hero_description,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
                 fontSize: compact ? 11 : 12,
@@ -824,14 +805,14 @@ class _CharacterInfoCard extends StatelessWidget {
                   ),
                   SizedBox(height: compact ? 4 : 8),
                   Text(
-                    'Особливість: ${data!.trait}',
+                    '${loc.character_trait_label} ${data!.trait}',
                     style: theme.textTheme.bodySmall?.copyWith(
                       fontSize: compact ? 11 : 12,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Суперсила: ${data!.superPower}',
+                    '${loc.character_superpower_label} ${data!.superPower}',
                     style: theme.textTheme.bodySmall?.copyWith(
                       fontSize: compact ? 11 : 12,
                     ),

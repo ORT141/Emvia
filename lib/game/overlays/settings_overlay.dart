@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../emvia_game.dart';
 import '../../l10n/app_localizations_gen.dart';
+import 'glass_ui.dart';
 
 class SettingsOverlay extends StatefulWidget {
   final EmviaGame game;
@@ -121,6 +122,18 @@ class _SettingsOverlayState extends State<SettingsOverlay>
     final currentLanguage = Localizations.localeOf(context).languageCode;
     final size = MediaQuery.of(context).size;
     final isSmall = size.shortestSide < 600;
+    final isDark = theme.brightness == Brightness.dark;
+    final overlayTextColor = isDark
+        ? theme.colorScheme.onSurface
+        : Colors.white;
+    final overlaySubduedTextColor = isDark
+        ? theme.colorScheme.onSurfaceVariant
+        : Colors.white70;
+    final sectionTitleStyle = TextStyle(
+      color: overlayTextColor,
+      fontWeight: FontWeight.w700,
+      fontSize: isSmall ? 13 : 14,
+    );
 
     return FadeTransition(
       opacity: _fadeAnimation,
@@ -128,28 +141,11 @@ class _SettingsOverlayState extends State<SettingsOverlay>
         position: _slideAnimation,
         child: Align(
           alignment: Alignment.centerRight,
-          child: Container(
-            margin:
-                MediaQuery.of(context).padding +
-                EdgeInsets.all(isSmall ? 8 : 16),
+          child: GlassPanel(
             padding: EdgeInsets.all(isSmall ? 12 : 16),
+            borderRadius: BorderRadius.circular(20),
+            alphaValue: widget.isDarkMode ? 0.06 : 0.14,
             width: isSmall ? (size.width * 0.85).clamp(280.0, 320.0) : 320,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(
-                    alpha: widget.isDarkMode ? 0.3 : 0.08,
-                  ),
-                  blurRadius: 16,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-              border: Border.all(
-                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
-              ),
-            ),
             child: SingleChildScrollView(
               child: Material(
                 color: Colors.transparent,
@@ -171,19 +167,13 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                         IconButton(
                           icon: const Icon(Icons.close),
                           onPressed: _close,
-                          color: theme.colorScheme.onSurfaceVariant,
+                          color: overlaySubduedTextColor,
                           iconSize: isSmall ? 20 : 24,
                         ),
                       ],
                     ),
                     SizedBox(height: isSmall ? 8 : 12),
-                    Text(
-                      loc.sound,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: isSmall ? 13 : 14,
-                      ),
-                    ),
+                    Text(loc.sound, style: sectionTitleStyle),
                     Slider(
                       value: widget.game.volume,
                       onChanged: (v) => setState(() => widget.game.volume = v),
@@ -192,59 +182,53 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                       activeColor: theme.colorScheme.primary,
                     ),
                     SizedBox(height: isSmall ? 8 : 12),
-                    Text(
-                      loc.language,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: isSmall ? 13 : 14,
-                      ),
-                    ),
+                    Text(loc.language, style: sectionTitleStyle),
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        _LangChip(
+                        GlassOptionChip(
                           label: loc.lang_uk,
-                          code: 'uk',
+                          icon: null,
                           selected: currentLanguage == 'uk',
-                          onTap: _setLanguage,
+                          onTap: () => _setLanguage('uk'),
                           compact: isSmall,
                         ),
-                        _LangChip(
+                        GlassOptionChip(
                           label: loc.lang_en,
-                          code: 'en',
+                          icon: null,
                           selected: currentLanguage == 'en',
-                          onTap: _setLanguage,
+                          onTap: () => _setLanguage('en'),
                           compact: isSmall,
                         ),
                       ],
                     ),
                     SizedBox(height: isSmall ? 12 : 16),
-                    Text(
-                      loc.theme,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: isSmall ? 13 : 14,
-                      ),
-                    ),
+                    Text(loc.theme, style: sectionTitleStyle),
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        _ThemeChip(
+                        GlassOptionChip(
                           label: loc.light,
-                          isDark: false,
+                          icon: Icon(
+                            Icons.light_mode_rounded,
+                            size: isSmall ? 14 : 16,
+                          ),
                           selected: !widget.isDarkMode,
-                          onTap: !widget.isDarkMode
-                              ? null
-                              : widget.onThemeToggled,
+                          onTap: widget.isDarkMode
+                              ? widget.onThemeToggled
+                              : null,
                           compact: isSmall,
                         ),
-                        _ThemeChip(
+                        GlassOptionChip(
                           label: loc.dark,
-                          isDark: true,
+                          icon: Icon(
+                            Icons.dark_mode_rounded,
+                            size: isSmall ? 14 : 16,
+                          ),
                           selected: widget.isDarkMode,
                           onTap: widget.isDarkMode
                               ? null
@@ -254,37 +238,17 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                       ],
                     ),
                     SizedBox(height: isSmall ? 16 : 24),
-                    FilledButton(
+                    GlassButton(
+                      label: loc.done,
                       onPressed: _close,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: theme.colorScheme.primary,
-                        padding: EdgeInsets.symmetric(
-                          vertical: isSmall ? 12 : 14,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        loc.done,
-                        style: TextStyle(
-                          fontSize: isSmall ? 14 : 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      compact: isSmall,
                     ),
                     SizedBox(height: isSmall ? 8 : 12),
                     ExpansionTile(
-                      collapsedIconColor: theme.colorScheme.onSurfaceVariant,
+                      collapsedIconColor: overlaySubduedTextColor,
+                      iconColor: overlayTextColor,
                       tilePadding: EdgeInsets.zero,
-                      title: Text(
-                        loc.credits,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: isSmall ? 13 : 14,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
+                      title: Text(loc.credits, style: sectionTitleStyle),
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,14 +272,14 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                                 'Remez Devid',
                                 style: TextStyle(
                                   fontSize: isSmall ? 13 : 14,
-                                  color: theme.colorScheme.onSurface,
+                                  color: overlayTextColor,
                                 ),
                               ),
                               subtitle: Text(
                                 loc.leadDeveloper,
                                 style: TextStyle(
                                   fontSize: isSmall ? 11 : 12,
-                                  color: theme.colorScheme.onSurfaceVariant,
+                                  color: overlaySubduedTextColor,
                                 ),
                               ),
                             ),
@@ -339,14 +303,14 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                                 'Alice Dudarok',
                                 style: TextStyle(
                                   fontSize: isSmall ? 13 : 14,
-                                  color: theme.colorScheme.onSurface,
+                                  color: overlayTextColor,
                                 ),
                               ),
                               subtitle: Text(
                                 loc.artistAndDesigner,
                                 style: TextStyle(
                                   fontSize: isSmall ? 11 : 12,
-                                  color: theme.colorScheme.onSurfaceVariant,
+                                  color: overlaySubduedTextColor,
                                 ),
                               ),
                             ),
@@ -358,7 +322,7 @@ class _SettingsOverlayState extends State<SettingsOverlay>
                                 loc.thanksForPlaying,
                                 style: TextStyle(
                                   fontSize: isSmall ? 12 : 13,
-                                  color: theme.colorScheme.onSurface,
+                                  color: overlayTextColor,
                                 ),
                               ),
                             ),
@@ -385,121 +349,6 @@ class _SettingsOverlayState extends State<SettingsOverlay>
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _LangChip extends StatelessWidget {
-  final String label;
-  final String code;
-  final bool selected;
-  final void Function(String) onTap;
-  final bool compact;
-
-  const _LangChip({
-    required this.label,
-    required this.code,
-    required this.selected,
-    required this.onTap,
-    this.compact = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return GestureDetector(
-      onTap: () => onTap(code),
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: compact ? 8 : 10,
-          horizontal: compact ? 10 : 14,
-        ),
-        decoration: BoxDecoration(
-          color: selected
-              ? theme.colorScheme.primaryContainer
-              : theme.colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: selected
-                ? theme.colorScheme.primary
-                : theme.colorScheme.outlineVariant,
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: compact ? 12 : 14,
-            color: selected
-                ? theme.colorScheme.onPrimaryContainer
-                : theme.colorScheme.onSurfaceVariant,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ThemeChip extends StatelessWidget {
-  final String label;
-  final bool isDark;
-  final bool selected;
-  final VoidCallback? onTap;
-  final bool compact;
-
-  const _ThemeChip({
-    required this.label,
-    required this.isDark,
-    required this.selected,
-    this.onTap,
-    this.compact = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: compact ? 8 : 10,
-          horizontal: compact ? 10 : 14,
-        ),
-        decoration: BoxDecoration(
-          color: selected
-              ? theme.colorScheme.primaryContainer
-              : theme.colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: selected
-                ? theme.colorScheme.primary
-                : theme.colorScheme.outlineVariant,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
-              size: compact ? 14 : 16,
-              color: selected
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.onSurfaceVariant,
-            ),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: compact ? 12 : 14,
-                color: selected
-                    ? theme.colorScheme.onPrimaryContainer
-                    : theme.colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
         ),
       ),
     );
