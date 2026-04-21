@@ -310,36 +310,40 @@ class _SurveyOverlayState extends State<SurveyOverlay>
                             }).toList(),
                           ),
                           SizedBox(height: isSmall ? 20 : 28),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: AnimatedOpacity(
-                                  duration: const Duration(milliseconds: 300),
-                                  opacity: selected != null ? 1.0 : 0.5,
-                                  child: GlassButton(
-                                    label: isLast
-                                        ? l.survey_save_continue
-                                        : l.continueLabel,
-                                    onPressed: selected != null && !_isLoading
-                                        ? (isLast ? _submit : _goNext)
-                                        : null,
-                                    loading: _isLoading,
-                                    compact: isSmall,
-                                  ),
-                                ),
-                              ),
-                              if (_currentIndex > 0) const SizedBox(width: 12),
-                              if (_currentIndex > 0)
+                          GestureDetector(
+                            onLongPressStart: (_) => _submit(),
+                            child: Row(
+                              children: [
                                 Expanded(
-                                  child: GlassButton(
-                                    label: '←',
-                                    onPressed: _goBack,
-                                    primary: false,
-                                    compact: isSmall,
+                                  flex: 3,
+                                  child: AnimatedOpacity(
+                                    duration: const Duration(milliseconds: 300),
+                                    opacity: selected != null ? 1.0 : 0.5,
+                                    child: GlassButton(
+                                      label: isLast
+                                          ? l.survey_save_continue
+                                          : l.continueLabel,
+                                      onPressed: selected != null && !_isLoading
+                                          ? (isLast ? _submit : _goNext)
+                                          : null,
+                                      loading: _isLoading,
+                                      compact: isSmall,
+                                    ),
                                   ),
                                 ),
-                            ],
+                                if (_currentIndex > 0)
+                                  const SizedBox(width: 12),
+                                if (_currentIndex > 0)
+                                  Expanded(
+                                    child: GlassButton(
+                                      label: '←',
+                                      onPressed: _goBack,
+                                      primary: false,
+                                      compact: isSmall,
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 8),
                         ],

@@ -19,9 +19,10 @@ class _MobileControlsOverlayState extends State<MobileControlsOverlay> {
   void initState() {
     super.initState();
     _visible = false;
-    widget.game.mobileControlsVisible.addListener(_onVisibilityChanged);
+    widget.game.overlayManager.mobileControlsVisible
+        .addListener(_onVisibilityChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.game.mobileControlsVisible.value) {
+      if (widget.game.overlayManager.mobileControlsVisible.value) {
         setState(() {
           _visible = true;
         });
@@ -30,7 +31,7 @@ class _MobileControlsOverlayState extends State<MobileControlsOverlay> {
   }
 
   void _onVisibilityChanged() {
-    final shouldShow = widget.game.mobileControlsVisible.value;
+    final shouldShow = widget.game.overlayManager.mobileControlsVisible.value;
     if (shouldShow == _visible) return;
     setState(() {
       _visible = shouldShow;
@@ -39,7 +40,8 @@ class _MobileControlsOverlayState extends State<MobileControlsOverlay> {
 
   @override
   void dispose() {
-    widget.game.mobileControlsVisible.removeListener(_onVisibilityChanged);
+    widget.game.overlayManager.mobileControlsVisible
+        .removeListener(_onVisibilityChanged);
     super.dispose();
   }
 

@@ -1,6 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import '../../scenes/classroom_scene.dart';
+import '../../scenes/corridor_scene.dart';
+import '../../scenes/stage_scene.dart';
 import '../base_player.dart';
 import '../character_data.dart';
 
@@ -12,6 +14,8 @@ class OlyaPlayer extends BasePlayer {
     extraAssets: {
       'stressPanic': 'stress/stress-scene/panic_olya.png',
     },
+    widthFactor: 0.5,
+    resetScaleOnIdle: true,
   );
 
   OlyaPlayer() : super(characterData: olyaData);
@@ -75,6 +79,16 @@ class OlyaPlayer extends BasePlayer {
   }
 
   @override
+  Future<void> onStartGame() async {
+    await game.loadScene(
+      ClassroomScene(),
+      onFullOpacity: () {
+        opacity = 0;
+      },
+    );
+  }
+
+  @override
   void onTapDown(TapDownEvent event) {
     if (game.currentScene is ClassroomScene) {
       return;
@@ -85,6 +99,14 @@ class OlyaPlayer extends BasePlayer {
   void update(double dt) {
     _updateAnimations();
     super.update(dt);
+
+    if (game.currentScene is ClassroomScene && hasReachedRightSceneEdge()) {
+      game.transitionToStressScene();
+    }
+
+    if (game.currentScene is CorridorScene && hasReachedRightSceneEdge()) {
+      game.transitionToStageScene();
+    }
   }
 
   bool _hasHeadphones = false;
@@ -92,6 +114,15 @@ class OlyaPlayer extends BasePlayer {
   @override
   Future<void> interactWithItem(String itemId) async {
     isInteracting = true;
+
+    if (itemId == 'rocking_chair' && game.currentScene is StageScene) {
+      var chairPos = (game.currentScene as StageScene).chairWorldPosition;
+      chairPos = chairPos?.clone()?..y += size.y * 0.3;
+      if (chairPos != null) {
+        position.setFrom(chairPos);
+      }
+    }
+
     final SpriteAnimation interactionAnim;
     switch (itemId) {
       case 'rocking_chair':

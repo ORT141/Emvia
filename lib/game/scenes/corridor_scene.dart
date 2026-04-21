@@ -21,8 +21,9 @@ class CorridorScene extends GameScene {
         foregroundPath: 'scenes/corridor/background.png',
         showControls: true,
         frozenPlayer: false,
-        playerYOffset: 12.0,
-      );
+      ) {
+    GameScene.register(() => CorridorScene());
+  }
 
   bool _lockerPromptShown = false;
   bool _hudShown = false;

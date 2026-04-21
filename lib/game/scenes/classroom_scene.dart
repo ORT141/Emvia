@@ -14,7 +14,9 @@ class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
         backgroundPath: 'scenes/classroom/classroom.png',
         showControls: false,
         frozenPlayer: true,
-      );
+      ) {
+    GameScene.register(() => ClassroomScene());
+  }
 
   @override
   double worldWidthForViewport(Vector2 viewportSize) => viewportSize.x;

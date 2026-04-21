@@ -8,14 +8,18 @@ import '../emvia_game.dart';
 enum SceneScalingMode { stretch, scrolling }
 
 abstract class GameScene extends Component with HasGameReference<EmviaGame> {
+  static final List<GameScene Function()> registry = [];
+
+  static void register(GameScene Function() builder) {
+    registry.add(builder);
+  }
+
   final String backgroundPath;
   final List<String> foregroundPaths;
   final SceneScalingMode scalingMode;
 
   final bool showControls;
   final bool frozenPlayer;
-  final double playerYOffset;
-
   GameScene({
     this.backgroundPath = '',
     String? foregroundPath,
@@ -23,7 +27,6 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
     this.scalingMode = SceneScalingMode.scrolling,
     this.showControls = false,
     this.frozenPlayer = false,
-    this.playerYOffset = 0.0,
   }) : foregroundPaths = [
          if (foregroundPath != null && foregroundPath.isNotEmpty)
            foregroundPath,

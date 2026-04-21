@@ -4,7 +4,6 @@ import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:emvia/l10n/app_localizations_gen.dart';
 
 import 'survey_service.dart';
 import 'components/fade_overlay.dart';
@@ -12,15 +11,8 @@ import 'characters/base_player.dart';
 import 'characters/character_factory.dart';
 import 'scenes/game_scene.dart';
 import 'scenes/classroom_scene.dart';
-import 'scenes/corridor_scene.dart';
 import 'scenes/stress/stress_scene.dart';
-import 'scenes/stage_scene.dart';
-import 'scenes/scene_scene.dart';
-import 'utils/pos_util.dart';
-import 'scenes/notebook_scene.dart';
 import 'scenes/path/path_choice_scene.dart';
-import 'scenes/second_corridor_scene.dart';
-import 'scenes/outside_scene.dart';
 import 'scenes/survey_scene.dart';
 import 'dialog/dialog_model.dart';
 import 'backpack/backpack_inventory.dart';
@@ -34,17 +26,21 @@ import 'managers/camera_manager.dart';
 import 'managers/game_preferences_manager.dart';
 import 'managers/game_session_manager.dart';
 import 'managers/transition_manager.dart';
+import 'managers/overlay_manager.dart';
+import 'managers/navigation_manager.dart';
 
 class EmviaGame extends FlameGame
     with TapCallbacks, HasKeyboardHandlerComponents, DialogHandler {
   static const double worldWidth = 2000.0;
 
-  final SurveyService _surveyService = SurveyService();
-  final GamePreferencesManager _preferences = GamePreferencesManager();
-  final GameSessionManager _session = GameSessionManager();
+  final SurveyService surveyService = SurveyService();
+  final GamePreferencesManager preferences = GamePreferencesManager();
+  final GameSessionManager session = GameSessionManager();
 
   late final CameraManager cameraManager;
   late final TransitionManager transitionManager;
+  late final OverlayManager overlayManager;
+  late final NavigationManager navigationManager;
 
   BasePlayer? _player;
   BasePlayer get player => _player!;
@@ -58,111 +54,90 @@ class EmviaGame extends FlameGame
 
   bool isFrozen = false;
   bool hasTriggeredStressScene = false;
-  bool _hasShownCorridorStressIntro = false;
-  bool _isCorridorStressIntroActive = false;
+  bool hasShownCorridorStressIntro = false;
+  bool isCorridorStressIntroActive = false;
 
   late final BackpackInventory backpack = BackpackInventory();
 
   double _mobileMoveX = 0;
 
   DialogTree? currentTree;
-  ValueNotifier<bool> mobileControlsVisible = ValueNotifier<bool>(false);
 
   EmviaGame() {
     cameraManager = CameraManager(this);
     transitionManager = TransitionManager(this);
+    overlayManager = OverlayManager(this);
+    navigationManager = NavigationManager(this);
   }
 
-  int get sceneIndex => _session.sceneIndex;
+  int get sceneIndex => session.sceneIndex;
   set sceneIndex(int value) {
-    _session.sceneIndex = value;
-    _session.save();
+    session.sceneIndex = value;
+    session.save();
   }
 
-  int get stressLevel => _session.stressLevel;
+  int get stressLevel => session.stressLevel;
   set stressLevel(int value) {
-    _session.stressLevel = value;
-    _session.save();
+    session.stressLevel = value;
+    session.save();
   }
 
-  ValueNotifier<int> get stressNotifier => _session.stressNotifier;
+  ValueNotifier<int> get stressNotifier => session.stressNotifier;
 
-  PlayableCharacter get selectedCharacter => _session.selectedCharacter;
+  PlayableCharacter get selectedCharacter => session.selectedCharacter;
   set selectedCharacter(PlayableCharacter value) {
-    _session.selectedCharacter = value;
-    _session.save();
+    session.selectedCharacter = value;
+    session.save();
   }
 
-  SurveyProfile get surveyProfile => _session.surveyProfile;
+  SurveyProfile get surveyProfile => session.surveyProfile;
   set surveyProfile(SurveyProfile value) {
-    _session.surveyProfile = value;
-    _session.save();
+    session.surveyProfile = value;
+    session.save();
   }
 
-  double get volume => _preferences.volume;
-  set volume(double value) => _preferences.volume = value;
+  double get volume => preferences.volume;
+  set volume(double value) => preferences.volume = value;
 
-  bool get soundEnabled => _preferences.soundEnabled;
-  set soundEnabled(bool value) => _preferences.soundEnabled = value;
+  bool get soundEnabled => preferences.soundEnabled;
+  set soundEnabled(bool value) => preferences.soundEnabled = value;
 
-  bool get soundQuestionAnswered => _preferences.soundQuestionAnswered;
+  bool get soundQuestionAnswered => preferences.soundQuestionAnswered;
   set soundQuestionAnswered(bool value) =>
-      _preferences.soundQuestionAnswered = value;
+      preferences.soundQuestionAnswered = value;
 
-  List<String> get selectedTools => _session.selectedTools;
+  List<String> get selectedTools => session.selectedTools;
 
   ValueNotifier<DialogNode?> get currentNodeNotifier =>
-      _session.currentNodeNotifier;
+      session.currentNodeNotifier;
   ValueNotifier<PathDetailInfo?> get pathDetailNotifier =>
-      _session.pathDetailNotifier;
+      session.pathDetailNotifier;
 
-  DialogNode? get currentNode => _session.currentNode;
-  set currentNode(DialogNode? value) => _session.currentNode = value;
+  DialogNode? get currentNode => session.currentNode;
+  set currentNode(DialogNode? value) => session.currentNode = value;
 
-  final ValueNotifier<StageItemCardData?> selectedStageItemNotifier =
-      ValueNotifier<StageItemCardData?>(null);
+  ValueNotifier<StageItemCardData?> get selectedStageItemNotifier =>
+      overlayManager.selectedStageItemNotifier;
 
-  bool get isBackpackOpen => overlays.isActive('Backpack');
-  bool get isDebugOpen => overlays.isActive('Debug');
+  bool get isBackpackOpen => overlayManager.isBackpackOpen;
+  bool get isDebugOpen => overlayManager.isDebugOpen;
+  bool get isStageItemCardOpen => overlayManager.isStageItemCardOpen;
 
-  bool get isStageItemCardOpen => overlays.isActive('StageItemCard');
+  void showStageItemCard(StageItemCardData item) =>
+      overlayManager.showStageItemCard(item);
 
-  void showStageItemCard(StageItemCardData item) {
-    overlays.remove('CalmingItemPrompt');
-    selectedStageItemNotifier.value = item;
-    overlays.add('StageItemCard');
-    if (currentScene is StageScene) {
-      (currentScene as StageScene).clearSelectedItem();
-    }
-  }
-
-  void hideStageItemCard() {
-    overlays.remove('StageItemCard');
-    selectedStageItemNotifier.value = null;
-    if (currentScene is StageScene) {
-      (currentScene as StageScene).clearSelectedItem();
-    }
-  }
+  void hideStageItemCard() => overlayManager.hideStageItemCard();
 
   Future<void> useStageItem(StageItemCardData item) async {
     if (!isPlayerInitialized) return;
 
     isFrozen = true;
-    hideMobileControls();
+    overlayManager.hideMobileControls();
     overlays.add('CalmingEffect');
-    hideStageItemCard();
+    overlayManager.hideStageItemCard();
 
     cameraManager.animateZoomTo(1.45);
     cameraManager.beginFocusOnPlayer();
-
-    if (item.id == 'rocking_chair' && currentScene is StageScene) {
-      player.isInteracting = true;
-      var chairPos = (currentScene as StageScene).chairWorldPosition;
-      chairPos = chairPos?.clone()?..y += player.size.y * 0.3;
-      if (chairPos != null) {
-        player.position.setFrom(chairPos);
-      }
-    }
 
     await player.interactWithItem(item.id);
 
@@ -172,7 +147,7 @@ class EmviaGame extends FlameGame
     cameraManager.animateZoomTo(1.1);
     cameraManager.endFocusOnPlayer();
     isFrozen = false;
-    showMobileControls();
+    overlayManager.showMobileControls();
   }
 
   bool debugTapEnabled = false;
@@ -189,18 +164,16 @@ class EmviaGame extends FlameGame
   void toggleMobileSpoof() {
     _spoofMobile = !_spoofMobile;
     if (_spoofMobile) {
-      showMobileControls();
+      overlayManager.showMobileControls();
     } else {
-      hideMobileControls();
+      overlayManager.hideMobileControls();
     }
   }
 
-  bool get isCorridorStressIntroActive => _isCorridorStressIntroActive;
-
   @override
   Future<void> onLoad() async {
-    await _preferences.load();
-    await _session.load();
+    await preferences.load();
+    await session.load();
 
     _initializePlayer();
     _configureWorldRoot();
@@ -209,7 +182,7 @@ class EmviaGame extends FlameGame
     fadeOverlay = FadeOverlay();
     add(fadeOverlay);
 
-    await _loadMenuScene();
+    await loadMenuScene();
 
     overlays.add('MainMenu');
   }
@@ -224,7 +197,7 @@ class EmviaGame extends FlameGame
       ..anchor = Anchor.topLeft;
   }
 
-  Future<void> _loadMenuScene() async {
+  Future<void> loadMenuScene() async {
     await loadScene(
       SurveyScene(),
       onFullOpacity: () {
@@ -249,7 +222,7 @@ class EmviaGame extends FlameGame
       if (event.logicalKey == LogicalKeyboardKey.f3 ||
           (event.logicalKey == LogicalKeyboardKey.keyD &&
               keysPressed.contains(LogicalKeyboardKey.controlLeft))) {
-        toggleDebug();
+        overlayManager.toggleDebug();
         return KeyEventResult.handled;
       }
 
@@ -272,7 +245,7 @@ class EmviaGame extends FlameGame
     if (paused) return;
     pauseEngine();
     overlays.add('PauseMenu');
-    hideMobileControls();
+    overlayManager.hideMobileControls();
   }
 
   void resumeGame() {
@@ -280,12 +253,12 @@ class EmviaGame extends FlameGame
     resumeEngine();
     overlays.remove('PauseMenu');
     if (sceneIndex > 0) {
-      showMobileControls();
+      overlayManager.showMobileControls();
     }
   }
 
   Future<void> continueGame() async {
-    _clearGameplayOverlays();
+    overlayManager.clearGameplayOverlays();
     _initializePlayer();
 
     switch (sceneIndex) {
@@ -304,132 +277,27 @@ class EmviaGame extends FlameGame
         await loadScene(StressScene(), onFullOpacity: () {});
         break;
       case 4:
-        await transitionToCorridor();
+        await navigationManager.transitionToCorridor();
         break;
       case 6:
-        await loadStageScene();
+        await navigationManager.loadStageScene();
         break;
       default:
-        await _startGameFlow();
+        await navigationManager.startGameFlow();
     }
-    closeMainMenu();
+    overlayManager.closeMainMenu();
   }
 
-  Future<void> reloadCurrentScene() async {
-    final scene = currentScene;
-    if (scene == null) return;
+  Future<void> reloadCurrentScene() => navigationManager.reloadCurrentScene();
 
-    final savedSceneIndex = sceneIndex;
-    overlays.remove('Debug');
+  Future<void> goToCorridor() => navigationManager.goToCorridor();
 
-    if (scene is ClassroomScene) {
-      await loadScene(
-        ClassroomScene(),
-        onFullOpacity: () {
-          sceneIndex = savedSceneIndex;
-        },
-      );
-      return;
-    } else if (scene is CorridorScene) {
-      await loadScene(
-        CorridorScene(),
-        onFullOpacity: () {
-          sceneIndex = savedSceneIndex;
-        },
-      );
-      return;
-    } else if (scene is StageScene) {
-      await loadScene(
-        StageScene(),
-        onFullOpacity: () {
-          sceneIndex = savedSceneIndex;
-          player.opacity = 1;
-        },
-      );
-      return;
-    } else if (scene is StressScene) {
-      await loadScene(
-        StressScene(),
-        onFullOpacity: () {
-          sceneIndex = savedSceneIndex;
-        },
-      );
-      return;
-    } else if (scene is PathChoiceScene) {
-      await loadScene(
-        PathChoiceScene(),
-        onFullOpacity: () {
-          sceneIndex = savedSceneIndex;
-        },
-      );
-      return;
-    } else if (scene is SurveyScene) {
-      await loadScene(
-        SurveyScene(),
-        onFullOpacity: () {
-          sceneIndex = savedSceneIndex;
-        },
-      );
-      return;
-    } else if (scene is NotebookScene) {
-      await loadScene(
-        NotebookScene(),
-        onFullOpacity: () {
-          sceneIndex = savedSceneIndex;
-        },
-      );
-      return;
-    }
+  Future<void> transitionToCorridor() =>
+      navigationManager.transitionToCorridor();
 
-    currentScene?.redrawScene();
-  }
+  Future<void> playRightSideScene() => navigationManager.playRightSideScene();
 
-  Future<void> goToCorridor() async {
-    if (stressLevel >= 30 && !_hasShownCorridorStressIntro) {
-      _hasShownCorridorStressIntro = true;
-      _isCorridorStressIntroActive = true;
-    }
-
-    await loadScene(
-      CorridorScene(),
-      onFullOpacity: () {
-        sceneIndex = 4;
-        overlays.remove('TapGame');
-      },
-    );
-
-    if (_isCorridorStressIntroActive) {
-      hideMobileControls();
-    }
-  }
-
-  Future<void> transitionToCorridor() async {
-    await loadScene(
-      CorridorScene(),
-      onFullOpacity: () {
-        overlays.remove('TapGame');
-        restoreCorridorPosition();
-      },
-    );
-    sceneIndex = 4;
-    player.opacity = 1;
-  }
-
-  Future<void> playRightSideScene() async {
-    await loadScene(SceneScene(), onFullOpacity: () {});
-  }
-
-  Future<void> loadStageScene() async {
-    unequipTool('headphones');
-    await loadScene(
-      StageScene(),
-      onFullOpacity: () {
-        sceneIndex = 6;
-        player.opacity = 1;
-        showMobileControls();
-      },
-    );
-  }
+  Future<void> loadStageScene() => navigationManager.loadStageScene();
 
   double currentSceneWorldWidth() {
     final scene = currentScene;
@@ -437,66 +305,22 @@ class EmviaGame extends FlameGame
   }
 
   void startGame() {
-    if (selectedCharacter == PlayableCharacter.olya) {
-      _startGameFlow();
-    }
-  }
-
-  Future<void> _startGameFlow() async {
-    final token = _session.beginSession();
-    final profile = await _surveyService.getProfile();
-
-    _session.resetForNewJourney(profile: profile);
-    backpack.clear();
-    hasTriggeredStressScene = false;
-
-    _clearGameplayOverlays();
-
-    await loadScene(
-      ClassroomScene(),
-      onFullOpacity: () {
-        player.opacity = 0;
-      },
-    );
-
-    if (!_session.isCurrentSession(token)) return;
+    navigationManager.startGameFlow();
   }
 
   void finishJourney() {
-    if (_session.journeyCompleted) return;
-    _session.journeyCompleted = true;
-    hideMobileControls();
+    if (session.journeyCompleted) return;
+    session.journeyCompleted = true;
+    overlayManager.hideMobileControls();
     pauseEngine();
     overlays.add('CalmMap');
   }
 
-  Future<void> returnToMainMenuAfterJourney() async {
-    overlays.remove('CalmMap');
-    if (paused) {
-      resumeEngine();
-    }
-    _prepareReturnToMainMenu();
-    await _loadMenuScene();
-    openMainMenu();
-  }
+  Future<void> returnToMainMenuAfterJourney() =>
+      navigationManager.returnToMainMenuAfterJourney();
 
-  Future<void> returnToMainMenuAfterSurvey() async {
-    overlays.remove('Survey');
-    _prepareReturnToMainMenu();
-    await _loadMenuScene();
-    openMainMenu();
-  }
-
-  void _prepareReturnToMainMenu() {
-    stressLevel = 100;
-    sceneIndex = 0;
-    hasTriggeredStressScene = false;
-    _hasShownCorridorStressIntro = false;
-    _isCorridorStressIntroActive = false;
-    hideMobileControls();
-    overlays.remove('Stress');
-    overlays.remove('TapGame');
-  }
+  Future<void> returnToMainMenuAfterSurvey() =>
+      navigationManager.returnToMainMenuAfterSurvey();
 
   void initializeInventory(BuildContext context) {
     if (backpack.items.isNotEmpty) return;
@@ -505,58 +329,21 @@ class EmviaGame extends FlameGame
     }
   }
 
-  void _clearGameplayOverlays() {
-    overlays.remove('Dialog');
-    overlays.remove('CalmMap');
-    overlays.remove('PathChoice');
-    overlays.remove('Backpack');
-    currentNode = null;
-    hidePathDetail();
-  }
-
   void setDebugTapEnabled(bool enabled) {
     debugTapEnabled = enabled;
   }
 
-  void toggleBackpack() {
-    if (!_canToggleBackpack()) return;
-    if (isBackpackOpen) {
-      overlays.remove('Backpack');
-    } else {
-      overlays.remove('Dialog');
-      currentNode = null;
-      overlays.add('Backpack');
-    }
-  }
+  void toggleBackpack() => overlayManager.toggleBackpack();
 
   void equipTool(String toolId) {
-    _session.toggleSelectedTool(toolId);
+    session.toggleSelectedTool(toolId);
   }
 
   void unequipTool(String toolId) {
-    _session.removeSelectedTool(toolId);
+    session.removeSelectedTool(toolId);
   }
 
-  void toggleDebug() {
-    if (isDebugOpen) {
-      overlays.remove('Debug');
-    } else {
-      overlays.add('Debug');
-    }
-  }
-
-  bool _canToggleBackpack() {
-    if (sceneIndex == 0) return false;
-    if (transitionManager.isTransitioning) return false;
-    if (_isCorridorStressIntroActive) return false;
-    if (overlays.isActive('MainMenu')) {
-      return false;
-    }
-    if (overlays.isActive('Survey')) {
-      return false;
-    }
-    return true;
-  }
+  void toggleDebug() => overlayManager.toggleDebug();
 
   void setMobileMoveX(double direction) {
     if (isFrozen) return;
@@ -564,48 +351,25 @@ class EmviaGame extends FlameGame
     player.setMobileDirection(_mobileMoveX);
   }
 
-  void showMobileControls() {
-    if (!isMobilePlatform) return;
-    if (sceneIndex == 0) return;
+  void showMobileControls() => overlayManager.showMobileControls();
 
-    if (!overlays.isActive('MobileControls')) {
-      overlays.add('MobileControls');
-    }
-    mobileControlsVisible.value = true;
-  }
+  void hideMobileControls() => overlayManager.hideMobileControls();
 
-  void hideMobileControls() {
-    if (!mobileControlsVisible.value) return;
-    mobileControlsVisible.value = false;
-    setMobileMoveX(0);
-  }
-
-  void openMainMenu() {
-    overlays.remove('Backpack');
-    hideMobileControls();
-    overlays.add('MainMenu');
-  }
+  void openMainMenu() => overlayManager.openMainMenu();
 
   Future<void> returnToMainMenu() async {
     await fadeOverlay.fadeIn(0.4);
     resumeEngine();
     overlays.remove('PauseMenu');
-    await _loadMenuScene();
-    overlays.add('MainMenu');
+    navigationManager.prepareReturnToMainMenu();
+    await loadMenuScene();
+    openMainMenu();
     await fadeOverlay.fadeOut(0.4);
   }
 
-  void closeMainMenu() {
-    overlays.remove('MainMenu');
-    if (sceneIndex == 0 && currentScene is CorridorScene) {
-      player.opacity = 1;
-    }
-    if (!paused && sceneIndex > 0) {
-      showMobileControls();
-    }
-  }
+  void closeMainMenu() => overlayManager.closeMainMenu();
 
-  bool consumeStartGameAfterSurvey() => _session.consumeStartGameAfterSurvey();
+  bool consumeStartGameAfterSurvey() => session.consumeStartGameAfterSurvey();
 
   bool isCharacterUnlocked(PlayableCharacter character) {
     return character == PlayableCharacter.olya ||
@@ -618,8 +382,8 @@ class EmviaGame extends FlameGame
   }
 
   void startNewGameSurveyFlow() async {
-    await _surveyService.clearAiResults();
-    _session.markStartGameAfterSurvey();
+    await surveyService.clearAiResults();
+    session.markStartGameAfterSurvey();
     closeMainMenu();
     await loadScene(
       SurveyScene(),
@@ -630,210 +394,53 @@ class EmviaGame extends FlameGame
   }
 
   void startGameSkippingSurvey() {
-    _startGameFlow();
+    navigationManager.startGameFlow();
   }
 
-  Future<void> skipToScene(GameScene scene) async {
-    final token = _session.beginSession();
-    final profile = await _surveyService.getProfile();
+  Future<void> skipToScene(GameScene scene) =>
+      navigationManager.skipToScene(scene);
 
-    _session.resetForNewJourney(profile: profile);
-    backpack.clear();
-    hasTriggeredStressScene = false;
+  void showPathDetail(PathDetailInfo info) =>
+      navigationManager.showPathDetail(info);
 
-    overlays.remove('MainMenu');
-    overlays.remove('Survey');
-    overlays.remove('CalmMap');
-    overlays.remove('TapGame');
-    overlays.remove('Backpack');
-    overlays.remove('Stress');
+  void hidePathDetail() => navigationManager.hidePathDetail();
 
-    _clearGameplayOverlays();
+  void clearPathSelection() => navigationManager.clearPathSelection();
 
-    await loadScene(
-      scene,
-      onFullOpacity: () {
-        sceneIndex = _sceneIndexForScene(scene);
-        overlays.remove('TapGame');
-        if (scene is CorridorScene || scene is StageScene) {
-          player.opacity = 1;
-        }
-      },
-    );
+  void clearPathOverlay() => navigationManager.clearPathOverlay();
 
-    if (!_session.isCurrentSession(token)) return;
-  }
+  void restoreClassroomBackground() =>
+      navigationManager.restoreClassroomBackground();
 
-  int _sceneIndexForScene(GameScene scene) {
-    if (scene is ClassroomScene) return 1;
-    if (scene is PathChoiceScene) return 2;
-    if (scene is StressScene) return 3;
-    if (scene is CorridorScene) return 4;
-    if (scene is StageScene) return 6;
-    if (scene is SurveyScene) return 0;
-    if (scene is NotebookScene) return 0;
-    return sceneIndex;
-  }
+  void chooseFirstPath(BuildContext context) =>
+      navigationManager.chooseFirstPath(context);
 
-  void showPathDetail(PathDetailInfo info) {
-    _session.pathDetail = info;
-    overlays.add('PathDetail');
-  }
+  void chooseSecondPath(BuildContext context) =>
+      navigationManager.chooseSecondPath(context);
 
-  void hidePathDetail() {
-    overlays.remove('PathDetail');
-    _session.pathDetail = null;
-  }
+  void chooseThirdPath(BuildContext context) =>
+      navigationManager.chooseThirdPath(context);
 
-  void clearPathSelection() {
-    if (currentScene is PathChoiceScene) {
-      (currentScene as PathChoiceScene).clearSelection();
-    }
-  }
+  Future<void> applyPathChoice(int index, BuildContext context) =>
+      navigationManager.applyPathChoice(index, context);
 
-  void clearPathOverlay() {
-    classroomScene?.clearPathOverlay();
-  }
+  Future<void> goToSecondCorridor() => navigationManager.goToSecondCorridor();
 
-  void restoreClassroomBackground() {
-    classroomScene?.showClassroomImage();
-  }
+  Future<void> goToOutside() => navigationManager.goToOutside();
 
-  void chooseFirstPath(BuildContext context) {
-    _confirmSelectedPath(context, 0);
-  }
+  void showBreathingExercise() => navigationManager.showBreathingExercise();
 
-  void chooseSecondPath(BuildContext context) {
-    _confirmSelectedPath(context, 1);
-  }
+  Future<void> finishBreathingExercise() =>
+      navigationManager.finishBreathingExercise();
 
-  void chooseThirdPath(BuildContext context) {
-    _confirmSelectedPath(context, 2);
-  }
+  Future<void> transitionToStressScene() =>
+      navigationManager.transitionToStressScene();
 
-  void _confirmSelectedPath(BuildContext context, int index) {
-    if (!context.mounted) return;
-    final l = AppLocalizationsGen.of(context)!;
-    _recordPathChoice(l, index);
-    _finishPathChoice();
-  }
+  Future<void> transitionToStageScene() =>
+      navigationManager.transitionToStageScene();
 
-  void _finishPathChoice() {
-    sceneIndex = 2;
-    player.opacity = 1;
-    classroomScene?.showClassroomImage();
-    classroomScene?.clearMarks();
-    transitionManager.updateClassroomZoom();
-    cameraManager.snapToPlayer(force: true);
-
-    Future.delayed(const Duration(seconds: 1), () {
-      goToCorridor();
-    });
-  }
-
-  Future<void> applyPathChoice(int index, BuildContext context) async {
-    final l = AppLocalizationsGen.of(context)!;
-    _recordPathChoice(l, index);
-
-    if (index == 1 || index == 2) {
-      stressLevel = 100;
-    }
-
-    if (index == 0) {
-      await goToCorridor();
-    } else if (index == 1) {
-      await goToSecondCorridor();
-    } else {
-      await goToOutside();
-    }
-  }
-
-  Future<void> goToSecondCorridor() async {
-    await loadScene(
-      SecondCorridorScene(),
-      onFullOpacity: () {
-        sceneIndex = 4;
-        player.opacity = 1;
-        showMobileControls();
-      },
-    );
-  }
-
-  Future<void> goToOutside() async {
-    await loadScene(
-      OutsideScene(),
-      onFullOpacity: () {
-        sceneIndex = 4;
-        player.opacity = 1;
-        showMobileControls();
-      },
-    );
-  }
-
-  void showBreathingExercise() {
-    isFrozen = true;
-    hideMobileControls();
-    overlays.add('BreathingExercise');
-  }
-
-  Future<void> finishBreathingExercise() async {
-    overlays.remove('BreathingExercise');
-    isFrozen = false;
-    await loadScene(
-      PathChoiceScene(),
-      onFullOpacity: () {
-        sceneIndex = 2;
-        player.opacity = 0;
-      },
-    );
-  }
-
-  void _recordPathChoice(AppLocalizationsGen l, int index) {
-    _session.addSelectedTool(l.classroom);
-    _session.addSelectedTool(_pathLabelForIndex(l, index));
-  }
-
-  String _pathLabelForIndex(AppLocalizationsGen l, int index) {
-    switch (index) {
-      case 0:
-        return l.path_first;
-      case 1:
-        return l.path_second;
-      default:
-        return l.path_third;
-    }
-  }
-
-  Future<void> _transitionToStressScene() async {
-    if (transitionManager.isTransitioning) return;
-    await loadScene(
-      StressScene(),
-      onFullOpacity: () {
-        sceneIndex = 3;
-        player.opacity = 0;
-      },
-    );
-  }
-
-  Future<void> _transitionToStageScene() async {
-    if (transitionManager.isTransitioning) return;
-    unequipTool('headphones');
-    await loadScene(
-      StageScene(),
-      onFullOpacity: () {
-        sceneIndex = 6;
-        player.opacity = 1;
-        showMobileControls();
-      },
-    );
-  }
-
-  void completeCorridorStressIntro() {
-    if (!_isCorridorStressIntroActive) return;
-    _isCorridorStressIntroActive = false;
-    isFrozen = false;
-    showMobileControls();
-  }
+  void completeCorridorStressIntro() =>
+      navigationManager.completeCorridorStressIntro();
 
   void playerToCorridorEntrance() {
     player.position.x = player.size.x / 2 + 10;
@@ -841,14 +448,14 @@ class EmviaGame extends FlameGame
   }
 
   void saveCorridorReturnPosition(double x) {
-    _session.savedCorridorReturnX = x;
-    _session.save();
+    session.savedCorridorReturnX = x;
+    session.save();
   }
 
   void restoreCorridorPosition() {
-    final savedX = _session.savedCorridorReturnX;
-    _session.savedCorridorReturnX = null;
-    _session.save();
+    final savedX = session.savedCorridorReturnX;
+    session.savedCorridorReturnX = null;
+    session.save();
 
     if (savedX == null) {
       playerToCorridorEntrance();
@@ -871,32 +478,7 @@ class EmviaGame extends FlameGame
 
     if (_player == null || _player!.parent == null) return;
 
-    if (currentScene is ClassroomScene && _hasReachedRightSceneEdge()) {
-      _transitionToStressScene();
-    }
-
-    if (currentScene is CorridorScene &&
-        !_session.journeyCompleted &&
-        _hasReachedRightSceneEdge()) {
-      _transitionToStageScene();
-    }
-
     cameraManager.update(dt);
-  }
-
-  bool _hasReachedRightSceneEdge() {
-    final scene = currentScene;
-    if (scene != null && scene.background.size.x > 0) {
-      final uvTarget = getWorldPosFromUV(
-        Vector2(0.9, 0.5),
-        scene.background.position,
-        scene.background.size,
-      );
-      final thresholdX = uvTarget.x - player.size.x / 2;
-      return player.position.x >= thresholdX;
-    }
-
-    return false;
   }
 
   @override
@@ -966,6 +548,6 @@ class EmviaGame extends FlameGame
     PositionComponent root,
   ) {
     final p = scene.spawnPoint(screenSize, root.size);
-    return Vector2(p.x, p.y + scene.playerYOffset);
+    return Vector2(p.x, p.y);
   }
 }

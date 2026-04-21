@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
 import '../emvia_game.dart';
+import '../utils/pos_util.dart';
 import 'character_data.dart';
 
 enum PlayerState { standing, walking }
@@ -38,6 +39,29 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
 
   bool isInteracting = false;
 
+  Future<void> onStartGame();
+
+  Future<void> interactWithItem(String itemId);
+
+  void endInteraction() {
+    isInteracting = false;
+  }
+
+  bool hasReachedRightSceneEdge() {
+    final scene = game.currentScene;
+    if (scene != null && scene.background.size.x > 0) {
+      final uvTarget = getWorldPosFromUV(
+        Vector2(0.9, 0.5),
+        scene.background.position,
+        scene.background.size,
+      );
+      final thresholdX = uvTarget.x - size.x / 2;
+      return position.x >= thresholdX;
+    }
+
+    return false;
+  }
+
   final Vector2 velocity = Vector2.zero();
   final Vector2 keyboardVelocity = Vector2.zero();
   final Vector2 mobileVelocity = Vector2.zero();
@@ -46,11 +70,7 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
 
   void updatePlayerSize() {
     final height = game.size.y * 0.42;
-    if (characterData.name == "olya") {
-      size = Vector2(height * 0.5, height);
-    } else {
-      size = Vector2(height, height);
-    }
+    size = Vector2(height * characterData.widthFactor, height);
   }
 
   @override
@@ -86,7 +106,7 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
 
     if (velocity.isZero()) {
       current = PlayerState.standing;
-      if (characterData.name == "olya") {
+      if (characterData.resetScaleOnIdle) {
         scale.x = 1;
       }
     } else {
@@ -151,8 +171,4 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
       ..x = xDirection.clamp(-1.0, 1.0)
       ..y = 0;
   }
-
-  Future<void> interactWithItem(String itemId);
-
-  void endInteraction() {}
 }

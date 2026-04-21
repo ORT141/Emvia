@@ -68,14 +68,18 @@ class _TapGameOverlayState extends State<TapGameOverlay>
     _voiceFadeTimer = Timer.periodic(stepDuration, (timer) {
       currentStep++;
       _voiceVolume = (from + delta * currentStep).clamp(0.0, _initialVolume);
-      _voicePlayer?.setVolume(_voiceVolume);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _voicePlayer?.setVolume(_voiceVolume);
+      });
 
       if (currentStep >= steps) {
         timer.cancel();
         _voiceFadeTimer = null;
         if (to <= 0.0) {
-          _voicePlayer?.stop();
-          _voicePlayer = null;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _voicePlayer?.stop();
+            _voicePlayer = null;
+          });
         }
         completer.complete();
       }
@@ -86,11 +90,18 @@ class _TapGameOverlayState extends State<TapGameOverlay>
 
   Future<void> _startVoiceLoop() async {
     try {
-      _voicePlayer = await FlameAudio.loop(
+      final player = await FlameAudio.loop(
         'other/people-talking.mp3',
         volume: 0.0,
       );
-      _voicePlayer?.setReleaseMode(ReleaseMode.loop);
+      player.setReleaseMode(ReleaseMode.loop);
+      
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          _voicePlayer = player;
+        });
+      });
+
       await _fadeVoiceVolume(
         0.0,
         widget.game.volume,
@@ -110,6 +121,11 @@ class _TapGameOverlayState extends State<TapGameOverlay>
         0.0,
         const Duration(milliseconds: 400),
       );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _voicePlayer?.stop();
+        _voicePlayer?.dispose();
+        _voicePlayer = null;
+      });
     }
   }
 

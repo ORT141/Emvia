@@ -10,7 +10,9 @@ class OutsideScene extends GameScene {
         backgroundPath: 'scenes/outside/background.png',
         showControls: true,
         frozenPlayer: false,
-      );
+      ) {
+    GameScene.register(() => OutsideScene());
+  }
 
   SpriteComponent? _peopleBackgroundOverlay;
   SpriteComponent? _peopleForegroundOverlay;

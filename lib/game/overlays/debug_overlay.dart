@@ -5,7 +5,6 @@ import '../dialog/dialog_model.dart';
 import '../scenes/classroom_scene.dart';
 import '../scenes/corridor_scene.dart';
 import '../scenes/stage_scene.dart';
-import '../scenes/test_scene.dart';
 import '../scenes/second_corridor_scene.dart';
 import '../scenes/outside_scene.dart';
 import '../scenes/survey_scene.dart';
@@ -160,11 +159,6 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                       'Survey',
                                       () =>
                                           widget.game.loadScene(SurveyScene()),
-                                    ),
-                                    _buildSceneButton(
-                                      'Test',
-                                      () => widget.game.loadScene(TestScene()),
-                                      color: Colors.redAccent,
                                     ),
                                   ],
                                 ),
@@ -472,11 +466,7 @@ class _DebugOverlayState extends State<DebugOverlay> {
     );
   }
 
-  Widget _buildSceneButton(
-    String label,
-    VoidCallback onPressed, {
-    Color? color,
-  }) {
+  Widget _buildSceneButton(String label, VoidCallback onPressed) {
     return GlassButton(
       label: label,
       onPressed: () {

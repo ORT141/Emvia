@@ -12,7 +12,9 @@ class SecondCorridorScene extends GameScene {
         foregroundPath: 'scenes/second-corridor/background.png',
         showControls: true,
         frozenPlayer: false,
-      );
+      ) {
+    GameScene.register(() => SecondCorridorScene());
+  }
 
   SpriteComponent? _peopleBackgroundOverlay;
   SpriteComponent? _peopleForegroundOverlay;

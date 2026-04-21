@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import '../../scenes/placeholder_scene.dart';
 import '../base_player.dart';
 import '../character_data.dart';
 
@@ -7,6 +8,8 @@ class LiamPlayer extends BasePlayer {
     name: 'Liam',
     assetPath: 'player/liam',
     walkingFrames: 1,
+    widthFactor: 1.0,
+    resetScaleOnIdle: false,
   );
 
   LiamPlayer() : super(characterData: liamData);
@@ -25,6 +28,16 @@ class LiamPlayer extends BasePlayer {
     };
 
     current = PlayerState.standing;
+  }
+
+  @override
+  Future<void> onStartGame() async {
+    await game.loadScene(
+      PlaceholderScene(),
+      onFullOpacity: () {
+        opacity = 0;
+      },
+    );
   }
 
   @override
