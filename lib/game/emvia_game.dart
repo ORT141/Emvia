@@ -131,6 +131,9 @@ class EmviaGame extends FlameGame
     overlays.remove('CalmingItemPrompt');
     selectedStageItemNotifier.value = item;
     overlays.add('StageItemCard');
+    if (currentScene is StageScene) {
+      (currentScene as StageScene).clearSelectedItem();
+    }
   }
 
   void hideStageItemCard() {
@@ -417,6 +420,7 @@ class EmviaGame extends FlameGame
   }
 
   Future<void> loadStageScene() async {
+    unequipTool('headphones');
     await loadScene(
       StageScene(),
       onFullOpacity: () {
@@ -527,6 +531,10 @@ class EmviaGame extends FlameGame
 
   void equipTool(String toolId) {
     _session.toggleSelectedTool(toolId);
+  }
+
+  void unequipTool(String toolId) {
+    _session.removeSelectedTool(toolId);
   }
 
   void toggleDebug() {
@@ -809,6 +817,7 @@ class EmviaGame extends FlameGame
 
   Future<void> _transitionToStageScene() async {
     if (transitionManager.isTransitioning) return;
+    unequipTool('headphones');
     await loadScene(
       StageScene(),
       onFullOpacity: () {

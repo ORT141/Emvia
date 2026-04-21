@@ -7,12 +7,13 @@ import 'package:emvia/l10n/app_localizations.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'glass_ui.dart';
+import 'info_pill.dart';
+import 'pattern_painter.dart';
 
 class CalmMapOverlay extends StatefulWidget {
   const CalmMapOverlay({super.key, required this.game});
@@ -83,127 +84,127 @@ class _CalmMapOverlayState extends State<CalmMapOverlay> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.shortestSide < 600;
 
-    return Focus(
-      autofocus: true,
-      onKeyEvent: (node, event) {
-        if (event is KeyDownEvent &&
-            event.logicalKey == LogicalKeyboardKey.keyP) {
-          _exportPng();
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
-      },
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(
-          children: [
-            Positioned.fill(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: Container(color: Colors.black.withValues(alpha: 0.4)),
-              ),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(color: Colors.black.withValues(alpha: 0.4)),
             ),
-            Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: isSmall ? size.width * 0.95 : 820,
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(isSmall ? 8 : 16),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                            isSmall ? 24 : 32,
-                          ),
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.1),
+          ),
+          Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: isSmall ? size.width * 0.95 : 820,
+                maxHeight: size.height * 0.95,
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(isSmall ? 8 : 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          return FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: SizedBox(
+                              width: constraints.maxWidth,
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.circular(
                                   isSmall ? 24 : 32,
                                 ),
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.2),
-                                  width: 1.5,
-                                ),
-                              ),
-                              child: RepaintBoundary(
-                                key: _exportKey,
-                                child: _CalmMapCard(
-                                  game: widget.game,
-                                  title: l.calm_map_title,
-                                  artifactLabel: l.calm_map_personal_artifact,
-                                  safeColorLabel: l.calm_map_safe_color(
-                                    profile.safeColorLabel(context),
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                    sigmaX: 15,
+                                    sigmaY: 15,
                                   ),
-                                  patternLabel: l.calm_map_pattern(
-                                    profile.calmingPatternLabel(context),
-                                  ),
-                                  itemLabel: l.calm_map_item(
-                                    profile.calmingItemLabel(context),
-                                  ),
-                                  actionLabel: l.calm_map_calming_action(
-                                    profile.calmingActionLabel(context),
-                                  ),
-                                  soundLabel: l.calm_map_sound_trigger(
-                                    profile.soundTriggerLabel(context),
-                                  ),
-                                  supportMessageLabel: l
-                                      .calm_map_support_message(
-                                        profile.supportMessageLabel(context),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.1,
                                       ),
-                                  supportSymbolLabel: l.calm_map_support_symbol(
-                                    profile.supportSymbolLabel(context),
+                                      borderRadius: BorderRadius.circular(
+                                        isSmall ? 24 : 32,
+                                      ),
+                                      border: Border.all(
+                                        color: Colors.white.withValues(
+                                          alpha: 0.2,
+                                        ),
+                                        width: 1.5,
+                                      ),
+                                    ),
+                                    child: RepaintBoundary(
+                                      key: _exportKey,
+                                      child: _CalmMapCard(
+                                        game: widget.game,
+                                        title: l.calm_map_title,
+                                        artifactLabel:
+                                            l.calm_map_personal_artifact,
+                                        safeColorLabel: l.calm_map_safe_color(
+                                          profile.safeColorLabel(context),
+                                        ),
+                                        patternLabel: l.calm_map_pattern(
+                                          profile.calmingPatternLabel(context),
+                                        ),
+                                        itemLabel: l.calm_map_item(
+                                          profile.calmingItemLabel(context),
+                                        ),
+                                        actionLabel: l.calm_map_calming_action(
+                                          profile.calmingActionLabel(context),
+                                        ),
+                                        soundLabel: l.calm_map_sound_trigger(
+                                          profile.soundTriggerLabel(context),
+                                        ),
+                                        supportMessageLabel: profile
+                                            .supportMessageLabel(context),
+                                        supportSymbolLabel: l
+                                            .calm_map_support_symbol(
+                                              profile.supportSymbolLabel(
+                                                context,
+                                              ),
+                                            ),
+                                        selectedPathLabel: _selectedToolsLabel(
+                                          context,
+                                        ),
+                                        isSmall: isSmall,
+                                      ),
+                                    ),
                                   ),
-                                  selectedPathLabel: l.calm_map_selected_path(
-                                    _selectedToolsLabel(context),
-                                  ),
-                                  isSmall: isSmall,
                                 ),
                               ),
                             ),
-                          ),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: isSmall ? 16 : 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GlassButton(
+                          label: l.calm_map_export_png.toUpperCase(),
+                          onPressed: _isExporting ? null : _exportPng,
+                          compact: isSmall,
                         ),
-                        SizedBox(height: isSmall ? 16 : 24),
-                        Text(
-                          l.calm_map_export_hint,
-                          style: GoogleFonts.baloo2(
-                            color: Colors.white70,
-                            fontSize: isSmall ? 13 : 15,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: isSmall ? 16 : 24),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GlassButton(
-                              label: l.calm_map_export_png.toUpperCase(),
-                              onPressed: _isExporting ? null : _exportPng,
-                              compact: isSmall,
-                            ),
-                            SizedBox(width: isSmall ? 12 : 16),
-                            GlassButton(
-                              label: l.play_again.toUpperCase(),
-                              onPressed: () =>
-                                  widget.game.returnToMainMenuAfterJourney(),
-                              primary: false,
-                              compact: isSmall,
-                            ),
-                          ],
+                        SizedBox(width: isSmall ? 12 : 16),
+                        GlassButton(
+                          label: l.play_again.toUpperCase(),
+                          onPressed: () =>
+                              widget.game.returnToMainMenuAfterJourney(),
+                          primary: false,
+                          compact: isSmall,
                         ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -259,134 +260,190 @@ class _CalmMapCard extends StatelessWidget {
     final baseColor = profile.safeColorValue;
     final accentColor = Color.lerp(baseColor, Colors.white, 0.45)!;
 
+    final isVerySmall = MediaQuery.of(context).size.shortestSide < 400;
+
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(isSmall ? 16 : 28),
+      padding: EdgeInsets.all(isSmall ? 12 : 16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Color.lerp(baseColor, Colors.white, 0.18)!,
-            Color.lerp(baseColor, const Color(0xFF173047), 0.52)!,
+            Color.lerp(baseColor, const Color(0xFF0F2027), 0.3)!,
+            const Color(0xFF0F2027),
           ],
         ),
-        borderRadius: BorderRadius.circular(isSmall ? 24 : 32),
+        borderRadius: BorderRadius.circular(isSmall ? 20 : 32),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.18),
-            blurRadius: isSmall ? 20 : 32,
-            offset: Offset(0, isSmall ? 8 : 16),
+            color: Colors.black.withValues(alpha: 0.4),
+            blurRadius: isSmall ? 16 : 40,
+            offset: Offset(0, isSmall ? 6 : 20),
+          ),
+          BoxShadow(
+            color: Colors.white.withValues(alpha: 0.05),
+            blurRadius: 0,
+            spreadRadius: -1,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(isSmall ? 16 : 24),
+        borderRadius: BorderRadius.circular(isSmall ? 12 : 24),
         child: CustomPaint(
-          painter: _PatternPainter(
+          painter: PatternPainter(
             patternId: profile.calmingPattern,
-            strokeColor: Colors.white.withValues(alpha: 0.22),
-            accentColor: accentColor.withValues(alpha: 0.20),
+            strokeColor: Colors.white.withValues(alpha: 0.18),
+            accentColor: accentColor.withValues(alpha: 0.15),
           ),
           child: Padding(
-            padding: EdgeInsets.all(isSmall ? 16 : 28),
+            padding: EdgeInsets.all(isSmall ? 12 : 28),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            artifactLabel.toUpperCase(),
-                            style: TextStyle(
-                              fontSize: isSmall ? 11 : 14,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: isSmall ? 1.2 : 1.6,
-                              color: Colors.white70,
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              artifactLabel.toUpperCase(),
+                              style: GoogleFonts.inter(
+                                fontSize: isVerySmall ? 8 : (isSmall ? 9 : 12),
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 1.5,
+                                color: Colors.white.withValues(alpha: 0.9),
+                              ),
                             ),
                           ),
-                          SizedBox(height: isSmall ? 4 : 8),
+                          SizedBox(height: isSmall ? 2 : 8),
                           Text(
                             title,
-                            style: TextStyle(
-                              fontSize: isSmall ? 26 : 38,
-                              height: 1.05,
-                              fontWeight: FontWeight.w900,
+                            style: GoogleFonts.baloo2(
+                              fontSize: isVerySmall ? 20 : (isSmall ? 24 : 48),
+                              height: 0.9,
+                              fontWeight: FontWeight.w800,
                               color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withValues(alpha: 0.4),
+                                  offset: const Offset(0, 2),
+                                  blurRadius: 4,
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
+                    SizedBox(width: isSmall ? 8 : 20),
                     Container(
-                      width: isSmall ? 64 : 86,
-                      height: isSmall ? 64 : 86,
+                      width: isVerySmall ? 48 : (isSmall ? 56 : 100),
+                      height: isVerySmall ? 48 : (isSmall ? 56 : 100),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.18),
+                        color: Colors.black.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.34),
-                          width: isSmall ? 1.5 : 2,
+                          color: Colors.white.withValues(alpha: 0.2),
+                          width: 1.5,
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
                       alignment: Alignment.center,
                       child: Text(
                         profile.supportSymbolEmoji,
-                        style: TextStyle(fontSize: isSmall ? 32 : 42),
+                        style: TextStyle(
+                          fontSize: isVerySmall ? 24 : (isSmall ? 28 : 52),
+                        ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: isSmall ? 16 : 22),
+                SizedBox(height: isSmall ? 12 : 32),
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(isSmall ? 14 : 20),
+                  padding: EdgeInsets.all(isSmall ? 10 : 24),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(isSmall ? 16 : 24),
+                    color: Colors.black.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(isSmall ? 12 : 28),
                     border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.18),
+                      color: Colors.white.withValues(alpha: 0.25),
                     ),
                   ),
                   child: Text(
                     supportMessageLabel,
-                    style: TextStyle(
-                      fontSize: isSmall ? 20 : 28,
-                      height: 1.2,
+                    style: GoogleFonts.baloo2(
+                      fontSize: isVerySmall ? 16 : (isSmall ? 18 : 32),
+                      height: 1.1,
                       fontWeight: FontWeight.w700,
                       color: Colors.white,
                     ),
                   ),
                 ),
-                SizedBox(height: isSmall ? 16 : 22),
+                SizedBox(height: isSmall ? 8 : 28),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: Column(
                         children: [
-                          _InfoPill(label: safeColorLabel, isSmall: isSmall),
-                          SizedBox(height: isSmall ? 8 : 12),
-                          _InfoPill(label: patternLabel, isSmall: isSmall),
-                          SizedBox(height: isSmall ? 8 : 12),
-                          _InfoPill(label: itemLabel, isSmall: isSmall),
+                          InfoPill(
+                            label: safeColorLabel,
+                            icon: Icons.palette_outlined,
+                            isSmall: isSmall,
+                          ),
+                          SizedBox(height: isSmall ? 4 : 12),
+                          InfoPill(
+                            label: patternLabel,
+                            icon: Icons.texture_outlined,
+                            isSmall: isSmall,
+                          ),
+                          SizedBox(height: isSmall ? 4 : 12),
+                          InfoPill(
+                            label: itemLabel,
+                            icon: Icons.category_outlined,
+                            isSmall: isSmall,
+                          ),
                         ],
                       ),
                     ),
-                    SizedBox(width: isSmall ? 10 : 14),
+                    SizedBox(width: isSmall ? 6 : 14),
                     Expanded(
                       child: Column(
                         children: [
-                          _InfoPill(label: actionLabel, isSmall: isSmall),
-                          SizedBox(height: isSmall ? 8 : 12),
-                          _InfoPill(label: soundLabel, isSmall: isSmall),
-                          SizedBox(height: isSmall ? 8 : 12),
-                          _InfoPill(
+                          InfoPill(
+                            label: actionLabel,
+                            icon: Icons.self_improvement_outlined,
+                            isSmall: isSmall,
+                          ),
+                          SizedBox(height: isSmall ? 4 : 12),
+                          InfoPill(
+                            label: soundLabel,
+                            icon: Icons.volume_up_outlined,
+                            isSmall: isSmall,
+                          ),
+                          SizedBox(height: isSmall ? 4 : 12),
+                          InfoPill(
                             label: supportSymbolLabel,
+                            icon: Icons.auto_awesome_outlined,
                             isSmall: isSmall,
                           ),
                         ],
@@ -394,25 +451,40 @@ class _CalmMapCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: isSmall ? 14 : 18),
+                SizedBox(height: isSmall ? 8 : 28),
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(isSmall ? 12 : 18),
+                  padding: EdgeInsets.all(isSmall ? 8 : 20),
                   decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.18),
-                    borderRadius: BorderRadius.circular(isSmall ? 16 : 22),
+                    color: Colors.black.withValues(alpha: 0.4),
+                    borderRadius: BorderRadius.circular(isSmall ? 8 : 24),
                     border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.14),
+                      color: Colors.white.withValues(alpha: 0.2),
                     ),
                   ),
-                  child: Text(
-                    selectedPathLabel,
-                    style: TextStyle(
-                      fontSize: isSmall ? 14 : 18,
-                      height: 1.35,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        selectedPathLabel.toUpperCase(),
+                        style: GoogleFonts.inter(
+                          fontSize: isVerySmall ? 7 : (isSmall ? 8 : 11),
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.2,
+                          color: Colors.white.withValues(alpha: 0.6),
+                        ),
+                      ),
+                      SizedBox(height: isSmall ? 2 : 10),
+                      Text(
+                        selectedPathLabel,
+                        style: GoogleFonts.baloo2(
+                          fontSize: isVerySmall ? 11 : (isSmall ? 13 : 20),
+                          height: 1.2,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -421,167 +493,5 @@ class _CalmMapCard extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _InfoPill extends StatelessWidget {
-  const _InfoPill({required this.label, this.isSmall = false});
-
-  final String label;
-  final bool isSmall;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: isSmall ? 10 : 16,
-        vertical: isSmall ? 10 : 14,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(isSmall ? 12 : 18),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: isSmall ? 13 : 18,
-          height: 1.25,
-          fontWeight: FontWeight.w600,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
-}
-
-class _PatternPainter extends CustomPainter {
-  const _PatternPainter({
-    required this.patternId,
-    required this.strokeColor,
-    required this.accentColor,
-  });
-
-  final String patternId;
-  final Color strokeColor;
-  final Color accentColor;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    switch (patternId) {
-      case 'nature':
-        _paintNature(canvas, size);
-        return;
-      case 'stars':
-        _paintStars(canvas, size);
-        return;
-      case 'clouds':
-        _paintClouds(canvas, size);
-        return;
-      case 'geometry':
-      default:
-        _paintGeometry(canvas, size);
-    }
-  }
-
-  void _paintGeometry(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = strokeColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.4;
-    const step = 74.0;
-    for (double x = -size.height; x < size.width + size.height; x += step) {
-      canvas.drawLine(
-        Offset(x, 0),
-        Offset(x + size.height, size.height),
-        paint,
-      );
-    }
-    for (double x = 0; x < size.width; x += step * 1.2) {
-      canvas.drawRect(Rect.fromLTWH(x, size.height * 0.18, 42, 42), paint);
-    }
-  }
-
-  void _paintNature(Canvas canvas, Size size) {
-    final stroke = Paint()
-      ..color = strokeColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    final fill = Paint()
-      ..color = accentColor
-      ..style = PaintingStyle.fill;
-
-    for (double x = 80; x < size.width; x += 160) {
-      final path = Path()
-        ..moveTo(x, size.height * 0.18)
-        ..quadraticBezierTo(x - 28, size.height * 0.26, x, size.height * 0.34)
-        ..quadraticBezierTo(x + 28, size.height * 0.26, x, size.height * 0.18);
-      canvas.drawPath(path, fill);
-      canvas.drawPath(path, stroke);
-    }
-
-    for (double y = size.height * 0.58; y < size.height; y += 56) {
-      final path = Path()..moveTo(0, y);
-      for (double x = 0; x <= size.width; x += 48) {
-        path.quadraticBezierTo(x + 24, y - 14, x + 48, y);
-      }
-      canvas.drawPath(path, stroke);
-    }
-  }
-
-  void _paintStars(Canvas canvas, Size size) {
-    final dot = Paint()
-      ..color = Colors.white.withValues(alpha: 0.56)
-      ..style = PaintingStyle.fill;
-    final line = Paint()
-      ..color = strokeColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.1;
-
-    final points = <Offset>[];
-    for (double y = 54; y < size.height; y += 82) {
-      for (double x = 48; x < size.width; x += 120) {
-        final offset = Offset(x + ((y / 16) % 22), y + ((x / 30) % 16));
-        points.add(offset);
-        canvas.drawCircle(offset, 2.4, dot);
-      }
-    }
-
-    for (int i = 0; i < points.length - 1; i += 3) {
-      canvas.drawLine(points[i], points[i + 1], line);
-    }
-  }
-
-  void _paintClouds(Canvas canvas, Size size) {
-    final fill = Paint()
-      ..color = accentColor
-      ..style = PaintingStyle.fill;
-    final outline = Paint()
-      ..color = strokeColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.4;
-
-    for (double x = -40; x < size.width + 80; x += 180) {
-      for (double y = 40; y < size.height; y += 120) {
-        final rect = Rect.fromLTWH(x, y, 120, 48);
-        final path = Path()
-          ..addRRect(RRect.fromRectAndRadius(rect, const Radius.circular(26)))
-          ..addOval(Rect.fromCircle(center: Offset(x + 34, y + 18), radius: 22))
-          ..addOval(Rect.fromCircle(center: Offset(x + 64, y + 10), radius: 28))
-          ..addOval(
-            Rect.fromCircle(center: Offset(x + 94, y + 22), radius: 20),
-          );
-        canvas.drawPath(path, fill);
-        canvas.drawPath(path, outline);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _PatternPainter oldDelegate) {
-    return oldDelegate.patternId != patternId ||
-        oldDelegate.strokeColor != strokeColor ||
-        oldDelegate.accentColor != accentColor;
   }
 }

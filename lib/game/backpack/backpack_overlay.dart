@@ -5,7 +5,7 @@ import 'package:emvia/l10n/app_localizations.dart';
 
 import '../emvia_game.dart';
 import 'backpack_item.dart';
-import '../scenes/corridor_scene.dart';
+import '../overlays/glass_ui.dart';
 
 class BackpackOverlay extends StatefulWidget {
   const BackpackOverlay({super.key, required this.game});
@@ -180,184 +180,126 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
     final items = widget.game.backpack.items;
     final currentIndex = items.indexWhere((it) => it.id == item.id);
     final total = items.length;
-    final isCorridor = widget.game.currentScene is CorridorScene;
-    final isBlocked = isCorridor && item.id != 'headphones';
+    final canUse = item.id == 'headphones';
+    final isSelected = widget.game.selectedTools.contains(item.id);
+    final isBlocked = !canUse;
     final size = MediaQuery.of(context).size;
     final isSmall = size.shortestSide < 600;
 
-    return ConstrainedBox(
+    return GlassPanel(
       constraints: BoxConstraints(
         maxWidth: isSmall ? size.width * 0.9 : 800,
         maxHeight: isSmall ? size.height * 0.85 : 600,
       ),
-      child: Container(
-        margin: EdgeInsets.all(isSmall ? 16 : 24),
-        padding: EdgeInsets.all(isSmall ? 20 : 32),
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(isSmall ? 24 : 40),
-          border: Border.all(
-            color: theme.colorScheme.primary.withValues(alpha: 0.3),
-            width: isSmall ? 2 : 3,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.3),
-              blurRadius: isSmall ? 20 : 40,
-              offset: Offset(0, isSmall ? 8 : 15),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.name,
-                      style: GoogleFonts.baloo2(
-                        fontSize: (size.height * (isSmall ? 0.04 : 0.05)).clamp(
-                          isSmall ? 20.0 : 22.0,
-                          isSmall ? 28.0 : 36.0,
-                        ),
-                        fontWeight: FontWeight.w900,
-                        color: theme.colorScheme.onSurface,
+      padding: EdgeInsets.all(isSmall ? 20 : 32),
+      borderRadius: BorderRadius.circular(isSmall ? 24 : 40),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flexible(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.name,
+                    style: GoogleFonts.baloo2(
+                      fontSize: (size.height * (isSmall ? 0.04 : 0.05)).clamp(
+                        isSmall ? 20.0 : 22.0,
+                        isSmall ? 28.0 : 36.0,
                       ),
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
                     ),
-                    const SizedBox(height: 8),
+                  ),
+                  const SizedBox(height: 8),
+                  if (isBlocked || isSelected)
                     Text(
-                      widget.game.selectedTools.contains(item.id)
-                          ? item.status
-                          : item.status,
+                      item.status,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         fontSize: isSmall ? 14 : 16,
                         color: isBlocked
-                            ? theme.colorScheme.error
-                            : (widget.game.selectedTools.contains(item.id)
-                                  ? Colors.green.shade600
-                                  : theme.colorScheme.secondary),
+                            ? Colors.redAccent
+                            : Colors.greenAccent,
                       ),
                     ),
-                    SizedBox(height: isSmall ? 12 : 24),
-                    Text(
-                      item.description,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        height: 1.5,
-                        fontSize: isSmall ? 14 : 16,
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
+                  SizedBox(height: isSmall ? 12 : 24),
+                  Text(
+                    item.description,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      height: 1.5,
+                      fontSize: isSmall ? 14 : 16,
+                      color: Colors.white.withValues(alpha: 0.9),
                     ),
-                    SizedBox(height: isSmall ? 16 : 32),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: SizedBox(
-                          width: isSmall ? 140 : 160,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                onPressed: _selectPrevItem,
-                                icon: const Icon(Icons.chevron_left_rounded),
-                                tooltip: 'Previous item',
-                                iconSize: isSmall ? 20 : 24,
+                  ),
+                  SizedBox(height: isSmall ? 16 : 32),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: SizedBox(
+                        width: isSmall ? 140 : 160,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: _selectPrevItem,
+                              icon: const Icon(
+                                Icons.chevron_left_rounded,
+                                color: Colors.white,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0,
+                              tooltip: 'Previous item',
+                              iconSize: isSmall ? 20 : 24,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                              ),
+                              child: Text(
+                                total > 0
+                                    ? '${currentIndex + 1} / $total'
+                                    : '0 / 0',
+                                style: theme.textTheme.bodyLarge?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: isSmall ? 16 : 18,
+                                  color: Colors.white,
                                 ),
-                                child: Text(
-                                  total > 0
-                                      ? '${currentIndex + 1} / $total'
-                                      : '0 / 0',
-                                  style: theme.textTheme.bodyLarge?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: isSmall ? 16 : 18,
-                                  ),
-                                ),
                               ),
-                              IconButton(
-                                onPressed: _selectNextItem,
-                                icon: const Icon(Icons.chevron_right_rounded),
-                                tooltip: AppLocalizations.of(
-                                  context,
-                                )!.next_item,
-                                iconSize: isSmall ? 20 : 24,
+                            ),
+                            IconButton(
+                              onPressed: _selectNextItem,
+                              icon: const Icon(
+                                Icons.chevron_right_rounded,
+                                color: Colors.white,
                               ),
-                            ],
-                          ),
+                              tooltip: AppLocalizations.of(context)!.next_item,
+                              iconSize: isSmall ? 20 : 24,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                    SizedBox(height: isSmall ? 16 : 24),
+                  ),
+                  SizedBox(height: isSmall ? 16 : 24),
+                  if (canUse && !isSelected)
                     SizedBox(
                       width: double.infinity,
-                      child: FilledButton(
-                        onPressed: isBlocked
-                            ? null
-                            : () async {
-                                if (item.id == 'headphones') {
-                                  widget.game.equipTool(item.id);
-                                  widget.game.stressLevel = 10;
-                                  widget.game.overlays.remove('Backpack');
-                                  return;
-                                }
-
-                                if (!widget.game.soundEnabled) return;
-
-                                final soundPath = item.localizedSoundAsset(
-                                  context,
-                                );
-
-                                await _stopItemAudio?.call();
-                                if (!mounted) return;
-                                try {
-                                  final player = await FlameAudio.play(
-                                    soundPath,
-                                    volume: widget.game.volume,
-                                  );
-                                  _stopItemAudio = player.stop;
-                                } catch (_) {}
-                              },
-                        style: FilledButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
-                            vertical: isSmall ? 14 : 20,
-                          ),
-                          textStyle: TextStyle(
-                            fontSize: isSmall ? 16 : 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          backgroundColor: isBlocked
-                              ? theme.colorScheme.errorContainer
-                              : null,
-                        ),
-                        child: Text(
-                          isBlocked
-                              ? (item.id == 'blanket'
-                                    ? AppLocalizations.of(
-                                        context,
-                                      )!.item_blanket_status
-                                    : AppLocalizations.of(
-                                        context,
-                                      )!.item_lunchbox_status)
-                              : (widget.game.selectedTools.contains(item.id)
-                                    ? 'Unequip'
-                                    : AppLocalizations.of(context)!.use_item),
-                        ),
+                      child: GlassButton(
+                        onPressed: () async {
+                          widget.game.equipTool(item.id);
+                          widget.game.stressLevel = 10;
+                          widget.game.overlays.remove('Backpack');
+                        },
+                        label: AppLocalizations.of(context)!.use_item,
                       ),
                     ),
-                  ],
-                ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

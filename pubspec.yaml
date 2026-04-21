@@ -36,6 +36,7 @@ flutter:
 
     assets:
         - assets/images/
+        - assets/images/misc/
         - assets/images/main-menu/
         - assets/images/stress/
         - assets/images/stress/stress-scene/

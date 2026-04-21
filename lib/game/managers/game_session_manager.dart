@@ -68,6 +68,12 @@ class GameSessionManager {
     save();
   }
 
+  void removeSelectedTool(String toolId) {
+    if (_selectedTools.remove(toolId)) {
+      save();
+    }
+  }
+
   void clearSelectedTools() {
     _selectedTools.clear();
     save();
@@ -95,10 +101,7 @@ class GameSessionManager {
       }
       await prefs.setInt('stressLevel', _stressLevel);
       await prefs.setString('selectedCharacter', selectedCharacter.name);
-      await prefs.setString(
-        'surveyProfile',
-        jsonEncode(surveyProfile.answers),
-      );
+      await prefs.setString('surveyProfile', jsonEncode(surveyProfile.answers));
       await prefs.setStringList('selectedTools', _selectedTools.toList());
       await prefs.setBool('journeyCompleted', journeyCompleted);
     } catch (_) {}

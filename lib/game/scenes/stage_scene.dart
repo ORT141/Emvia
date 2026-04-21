@@ -186,7 +186,7 @@ class _StageItem extends SpriteComponent with TapCallbacks {
     required this.onTap,
   }) : super(sprite: normalSprite) {
     anchor = Anchor.center;
-    priority = 30;
+    priority = data.id == 'bag_of_rocks' ? 40 : 30;
     paint = Paint()
       ..isAntiAlias = true
       ..filterQuality = FilterQuality.high;
