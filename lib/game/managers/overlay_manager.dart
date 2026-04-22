@@ -56,7 +56,7 @@ class OverlayManager {
   bool canToggleBackpack() {
     if (game.sceneIndex == 0) return false;
     if (game.transitionManager.isTransitioning) return false;
-    if (game.isCorridorStressIntroActive) return false;
+    if (game.olyaState.isCorridorStressIntroActive) return false;
     if (game.overlays.isActive('MainMenu')) return false;
     if (game.overlays.isActive('Survey')) return false;
     return true;

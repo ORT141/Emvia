@@ -16,29 +16,32 @@ class PlaceholderScene extends GameScene {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    
-    add(RectangleComponent(
-      size: game.size,
-      paint: Paint()..color = Colors.black,
-      priority: -100,
-    ));
+
+    add(
+      RectangleComponent(
+        size: game.size,
+        paint: Paint()..color = Colors.black,
+        priority: -100,
+      ),
+    );
 
     game.player.opacity = 1;
     game.player.position = game.size / 2;
     add(game.player);
 
-    game.worldRoot.
-    add(TextComponent(
-      text: 'Coming soon...',
-      textRenderer: TextPaint(
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 48,
-          fontWeight: FontWeight.bold,
+    game.worldRoot.add(
+      TextComponent(
+        text: 'Coming soon...',
+        textRenderer: TextPaint(
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 48,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        anchor: Anchor.center,
+        position: game.size / 2 + Vector2(0, 100),
       ),
-      anchor: Anchor.center,
-      position: game.size / 2 + Vector2(0, 100),
-    ));
+    );
   }
 }

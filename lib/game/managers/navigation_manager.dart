@@ -6,8 +6,6 @@ import '../scenes/corridor_scene.dart';
 import '../scenes/stage_scene.dart';
 import '../scenes/stress/stress_scene.dart';
 import '../scenes/path/path_choice_scene.dart';
-import '../scenes/survey_scene.dart';
-import '../scenes/notebook_scene.dart';
 import '../scenes/second_corridor_scene.dart';
 import '../scenes/outside_scene.dart';
 import '../scenes/scene_scene.dart';
@@ -24,72 +22,74 @@ class NavigationManager {
     if (scene == null) return;
 
     final savedSceneIndex = game.sceneIndex;
-    game.overlayManager.hideStageItemCard(); // Ensure it's hidden
+    game.overlayManager.hideStageItemCard();
     game.overlays.remove('Debug');
 
-    if (scene is ClassroomScene) {
-      await game.loadScene(ClassroomScene(), onFullOpacity: () {
-        game.sceneIndex = savedSceneIndex;
-      });
-    } else if (scene is CorridorScene) {
-      await game.loadScene(CorridorScene(), onFullOpacity: () {
-        game.sceneIndex = savedSceneIndex;
-      });
-    } else if (scene is StageScene) {
-      await game.loadScene(StageScene(), onFullOpacity: () {
-        game.sceneIndex = savedSceneIndex;
-        game.player.opacity = 1;
-      });
-    } else if (scene is StressScene) {
-      await game.loadScene(StressScene(), onFullOpacity: () {
-        game.sceneIndex = savedSceneIndex;
-      });
-    } else if (scene is PathChoiceScene) {
-      await game.loadScene(PathChoiceScene(), onFullOpacity: () {
-        game.sceneIndex = savedSceneIndex;
-      });
-    } else if (scene is SurveyScene) {
-      await game.loadScene(SurveyScene(), onFullOpacity: () {
-        game.sceneIndex = savedSceneIndex;
-      });
-    } else if (scene is NotebookScene) {
-      await game.loadScene(NotebookScene(), onFullOpacity: () {
-        game.sceneIndex = savedSceneIndex;
-      });
+    final sceneType = scene.runtimeType;
+    final sceneFactory = _sceneFactories[sceneType];
+
+    if (sceneFactory != null) {
+      await game.loadScene(
+        sceneFactory(),
+        onFullOpacity: () {
+          game.sceneIndex = savedSceneIndex;
+          if (scene is StageScene) {
+            game.player.opacity = 1;
+          }
+        },
+      );
     } else {
       game.currentScene?.redrawScene();
     }
   }
 
-  Future<void> goToCorridor() async {
-    if (game.stressLevel >= 30 && !game.hasShownCorridorStressIntro) {
-      game.hasShownCorridorStressIntro = true;
-      game.isCorridorStressIntroActive = true;
-    }
+  static final Map<Type, GameScene Function()> _sceneFactories = {
+    for (final factory in GameScene.registry) factory().runtimeType: factory,
+  };
 
+  Future<void> _loadSceneWithDefaults(
+    GameScene scene, {
+    int? sceneIndex,
+    VoidCallback? onFullOpacity,
+    bool showMobileControls = true,
+    bool resetPlayerOpacity = true,
+  }) async {
     await game.loadScene(
-      CorridorScene(),
+      scene,
       onFullOpacity: () {
-        game.sceneIndex = 4;
-        game.overlays.remove('TapGame');
+        if (sceneIndex != null) game.sceneIndex = sceneIndex;
+        if (resetPlayerOpacity) game.player.opacity = 1;
+        if (showMobileControls) {
+          game.overlayManager.showMobileControls();
+        }
+        onFullOpacity?.call();
       },
     );
+  }
 
-    if (game.isCorridorStressIntroActive) {
-      game.overlayManager.hideMobileControls();
+  Future<void> goToCorridor() async {
+    if (game.stressLevel >= 30 && !game.olyaState.hasShownCorridorStressIntro) {
+      game.olyaState.hasShownCorridorStressIntro = true;
+      game.olyaState.isCorridorStressIntroActive = true;
     }
+
+    await _loadSceneWithDefaults(
+      CorridorScene(),
+      sceneIndex: 4,
+      showMobileControls: !game.olyaState.isCorridorStressIntroActive,
+      onFullOpacity: () => game.overlays.remove('TapGame'),
+    );
   }
 
   Future<void> transitionToCorridor() async {
-    await game.loadScene(
+    await _loadSceneWithDefaults(
       CorridorScene(),
+      sceneIndex: 4,
       onFullOpacity: () {
         game.overlays.remove('TapGame');
         game.restoreCorridorPosition();
       },
     );
-    game.sceneIndex = 4;
-    game.player.opacity = 1;
   }
 
   Future<void> playRightSideScene() async {
@@ -98,46 +98,22 @@ class NavigationManager {
 
   Future<void> loadStageScene() async {
     game.unequipTool('headphones');
-    await game.loadScene(
-      StageScene(),
-      onFullOpacity: () {
-        game.sceneIndex = 6;
-        game.player.opacity = 1;
-        game.overlayManager.showMobileControls();
-      },
-    );
+    await _loadSceneWithDefaults(StageScene(), sceneIndex: 6);
   }
 
   Future<void> goToSecondCorridor() async {
-    await game.loadScene(
-      SecondCorridorScene(),
-      onFullOpacity: () {
-        game.sceneIndex = 4;
-        game.player.opacity = 1;
-        game.overlayManager.showMobileControls();
-      },
-    );
+    await _loadSceneWithDefaults(SecondCorridorScene(), sceneIndex: 4);
   }
 
   Future<void> goToOutside() async {
-    await game.loadScene(
-      OutsideScene(),
-      onFullOpacity: () {
-        game.sceneIndex = 4;
-        game.player.opacity = 1;
-        game.overlayManager.showMobileControls();
-      },
-    );
+    await _loadSceneWithDefaults(OutsideScene(), sceneIndex: 4);
   }
 
   Future<void> startGameFlow() async {
     final token = game.session.beginSession();
     final profile = await game.surveyService.getProfile();
 
-    game.session.resetForNewJourney(profile: profile);
-    game.backpack.clear();
-    game.hasTriggeredStressScene = false;
-
+    _resetJourneyState(profile: profile);
     game.overlayManager.clearGameplayOverlays();
 
     await game.player.onStartGame();
@@ -149,31 +125,37 @@ class NavigationManager {
     final token = game.session.beginSession();
     final profile = await game.surveyService.getProfile();
 
-    game.session.resetForNewJourney(profile: profile);
-    game.backpack.clear();
-    game.hasTriggeredStressScene = false;
+    _resetJourneyState(profile: profile);
+    _clearGameplayOverlays();
 
-    game.overlays.remove('MainMenu');
-    game.overlays.remove('Survey');
-    game.overlays.remove('CalmMap');
-    game.overlays.remove('TapGame');
-    game.overlays.remove('Backpack');
-    game.overlays.remove('Stress');
-
-    game.overlayManager.clearGameplayOverlays();
-
-    await game.loadScene(
+    await _loadSceneWithDefaults(
       scene,
-      onFullOpacity: () {
-        game.sceneIndex = _sceneIndexForScene(scene);
-        game.overlays.remove('TapGame');
-        if (scene is CorridorScene || scene is StageScene) {
-          game.player.opacity = 1;
-        }
-      },
+      sceneIndex: _sceneIndexForScene(scene),
+      resetPlayerOpacity: scene is CorridorScene || scene is StageScene,
     );
 
     if (!game.session.isCurrentSession(token)) return;
+  }
+
+  void _resetJourneyState({required dynamic profile}) {
+    game.session.resetForNewJourney(profile: profile);
+    game.backpack.clear();
+    game.olyaState.hasTriggeredStressScene = false;
+  }
+
+  void _clearGameplayOverlays() {
+    final overlaysToRemove = [
+      'MainMenu',
+      'Survey',
+      'CalmMap',
+      'TapGame',
+      'Backpack',
+      'Stress',
+    ];
+    for (final overlay in overlaysToRemove) {
+      game.overlays.remove(overlay);
+    }
+    game.overlayManager.clearGameplayOverlays();
   }
 
   int _sceneIndexForScene(GameScene scene) {
@@ -187,16 +169,16 @@ class NavigationManager {
 
   Future<void> returnToMainMenuAfterJourney() async {
     game.overlays.remove('CalmMap');
-    if (game.paused) {
-      game.resumeEngine();
-    }
-    prepareReturnToMainMenu();
-    await game.loadMenuScene();
-    game.overlayManager.openMainMenu();
+    if (game.paused) game.resumeEngine();
+    await _returnToMainMenu();
   }
 
   Future<void> returnToMainMenuAfterSurvey() async {
     game.overlays.remove('Survey');
+    await _returnToMainMenu();
+  }
+
+  Future<void> _returnToMainMenu() async {
     prepareReturnToMainMenu();
     await game.loadMenuScene();
     game.overlayManager.openMainMenu();
@@ -205,9 +187,9 @@ class NavigationManager {
   void prepareReturnToMainMenu() {
     game.stressLevel = 100;
     game.sceneIndex = 0;
-    game.hasTriggeredStressScene = false;
-    game.hasShownCorridorStressIntro = false;
-    game.isCorridorStressIntroActive = false;
+    game.olyaState.hasTriggeredStressScene = false;
+    game.olyaState.hasShownCorridorStressIntro = false;
+    game.olyaState.isCorridorStressIntroActive = false;
     game.overlayManager.hideMobileControls();
     game.overlays.remove('Stress');
     game.overlays.remove('TapGame');
@@ -230,11 +212,11 @@ class NavigationManager {
   }
 
   void clearPathOverlay() {
-    game.classroomScene?.clearPathOverlay();
+    game.olyaState.classroomScene?.clearPathOverlay();
   }
 
   void restoreClassroomBackground() {
-    game.classroomScene?.showClassroomImage();
+    game.olyaState.classroomScene?.showClassroomImage();
   }
 
   void chooseFirstPath(BuildContext context) {
@@ -259,8 +241,8 @@ class NavigationManager {
   void finishPathChoice() {
     game.sceneIndex = 2;
     game.player.opacity = 1;
-    game.classroomScene?.showClassroomImage();
-    game.classroomScene?.clearMarks();
+    game.olyaState.classroomScene?.showClassroomImage();
+    game.olyaState.classroomScene?.clearMarks();
     game.transitionManager.updateClassroomZoom();
     game.cameraManager.snapToPlayer(force: true);
 
@@ -287,14 +269,14 @@ class NavigationManager {
   }
 
   void showBreathingExercise() {
-    game.isFrozen = true;
+    game.gameState.isFrozen = true;
     game.overlayManager.hideMobileControls();
     game.overlays.add('BreathingExercise');
   }
 
   Future<void> finishBreathingExercise() async {
     game.overlays.remove('BreathingExercise');
-    game.isFrozen = false;
+    game.gameState.isFrozen = false;
     await game.loadScene(
       PathChoiceScene(),
       onFullOpacity: () {
@@ -329,9 +311,9 @@ class NavigationManager {
   }
 
   void completeCorridorStressIntro() {
-    if (!game.isCorridorStressIntroActive) return;
-    game.isCorridorStressIntroActive = false;
-    game.isFrozen = false;
+    if (!game.olyaState.isCorridorStressIntroActive) return;
+    game.olyaState.isCorridorStressIntroActive = false;
+    game.gameState.isFrozen = false;
     game.overlayManager.showMobileControls();
   }
 
@@ -351,4 +333,3 @@ class NavigationManager {
     }
   }
 }
-

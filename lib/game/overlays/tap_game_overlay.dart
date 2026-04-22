@@ -95,7 +95,7 @@ class _TapGameOverlayState extends State<TapGameOverlay>
         volume: 0.0,
       );
       player.setReleaseMode(ReleaseMode.loop);
-      
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
         setState(() {
           _voicePlayer = player;
@@ -183,7 +183,7 @@ class _TapGameOverlayState extends State<TapGameOverlay>
     if (_tapCount >= _target) {
       widget.game.stressLevel = 50;
       widget.game.overlays.remove('TapGame');
-      widget.game.isFrozen = false;
+      widget.game.gameState.isFrozen = false;
     }
   }
 

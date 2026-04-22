@@ -70,7 +70,8 @@ class _StageItemCardOverlayState extends State<StageItemCardOverlay> {
 
         final profile = widget.game.surveyProfile;
         final selectedItemId = profile.calmingItem;
-        final isChosenItem = item.id == selectedItemId ||
+        final isChosenItem =
+            item.id == selectedItemId ||
             (selectedItemId == 'stones' && item.id == 'bag_of_rocks') ||
             (selectedItemId == 'toy' && item.id == 'hibuki') ||
             (item.id == 'rocking_chair');

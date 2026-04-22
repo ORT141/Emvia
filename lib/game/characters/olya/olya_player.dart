@@ -11,9 +11,7 @@ class OlyaPlayer extends BasePlayer {
     name: 'olya',
     assetPath: 'player/olya',
     walkingFrames: 26,
-    extraAssets: {
-      'stressPanic': 'stress/stress-scene/panic_olya.png',
-    },
+    extraAssets: {'stressPanic': 'stress/stress-scene/panic_olya.png'},
     widthFactor: 0.5,
     resetScaleOnIdle: true,
   );
@@ -39,8 +37,9 @@ class OlyaPlayer extends BasePlayer {
     _walkingAnimation = await loadWalkingAnimation();
 
     try {
-      _standingHeadphonesAnimation =
-          await loadSingleFrameAnimation('standing_headphones.png');
+      _standingHeadphonesAnimation = await loadSingleFrameAnimation(
+        'standing_headphones.png',
+      );
       _walkingHeadphonesAnimation = await loadWalkingAnimation(
         prefix: 'walking_headphones',
         frames: 29,
@@ -68,11 +67,15 @@ class OlyaPlayer extends BasePlayer {
     }
 
     _chosenBooksAnimation = await loadSingleFrameAnimation('chosen_books.png');
-    _chosenHibukiAnimation = await loadSingleFrameAnimation('chosen_hibuki.png');
-    _chosenBagOfRocksAnimation =
-        await loadSingleFrameAnimation('chosen_bag_of_rocks.png');
-    _chosenSittingInChairAnimation =
-        await loadSingleFrameAnimation('chosen_sitting_in_chair.png');
+    _chosenHibukiAnimation = await loadSingleFrameAnimation(
+      'chosen_hibuki.png',
+    );
+    _chosenBagOfRocksAnimation = await loadSingleFrameAnimation(
+      'chosen_bag_of_rocks.png',
+    );
+    _chosenSittingInChairAnimation = await loadSingleFrameAnimation(
+      'chosen_sitting_in_chair.png',
+    );
 
     _updateAnimations();
     current = PlayerState.standing;

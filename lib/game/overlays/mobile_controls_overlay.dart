@@ -19,8 +19,9 @@ class _MobileControlsOverlayState extends State<MobileControlsOverlay> {
   void initState() {
     super.initState();
     _visible = false;
-    widget.game.overlayManager.mobileControlsVisible
-        .addListener(_onVisibilityChanged);
+    widget.game.overlayManager.mobileControlsVisible.addListener(
+      _onVisibilityChanged,
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.game.overlayManager.mobileControlsVisible.value) {
         setState(() {
@@ -40,8 +41,9 @@ class _MobileControlsOverlayState extends State<MobileControlsOverlay> {
 
   @override
   void dispose() {
-    widget.game.overlayManager.mobileControlsVisible
-        .removeListener(_onVisibilityChanged);
+    widget.game.overlayManager.mobileControlsVisible.removeListener(
+      _onVisibilityChanged,
+    );
     super.dispose();
   }
 
@@ -249,9 +251,10 @@ class _HoldMoveButtonState extends State<_HoldMoveButton>
       vsync: this,
       duration: const Duration(milliseconds: 100),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.85).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.85,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
   }
 
   @override

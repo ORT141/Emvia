@@ -177,7 +177,7 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
       game.hideMobileControls();
     }
 
-    game.isFrozen = frozenPlayer;
+    game.gameState.isFrozen = frozenPlayer;
   }
 
   @mustCallSuper

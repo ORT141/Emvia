@@ -161,8 +161,8 @@ class CorridorScene extends GameScene {
       _peopleForegroundOverlay = null;
     }
 
-    if (game.isCorridorStressIntroActive) {
-      game.isFrozen = true;
+    if (game.olyaState.isCorridorStressIntroActive) {
+      game.gameState.isFrozen = true;
     }
 
     if (game.stressLevel >= 30 && !game.overlays.isActive('Stress')) {
@@ -206,10 +206,10 @@ class CorridorScene extends GameScene {
 
     if (!_stressSceneTriggered &&
         !game.transitionManager.isTransitioning &&
-        !game.hasTriggeredStressScene &&
+        !game.olyaState.hasTriggeredStressScene &&
         playerX >= stressTriggerX) {
       _stressSceneTriggered = true;
-      game.hasTriggeredStressScene = true;
+      game.olyaState.hasTriggeredStressScene = true;
       game.saveCorridorReturnPosition(playerX);
       game.loadScene(
         StressScene(),
@@ -240,7 +240,7 @@ class CorridorScene extends GameScene {
     ).x;
     if (!_lockerPromptShown && playerX >= lockerX) {
       _lockerPromptShown = true;
-      game.isFrozen = true;
+      game.gameState.isFrozen = true;
 
       final l = AppLocalizationsGen.of(game.buildContext!)!;
       final tree = DialogTree(
@@ -251,7 +251,7 @@ class CorridorScene extends GameScene {
     }
 
     if (_lockerPromptShown && game.isBackpackOpen) {
-      game.isFrozen = false;
+      game.gameState.isFrozen = false;
     }
 
     final maxX = background.size.x - game.player.size.x / 2;

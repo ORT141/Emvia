@@ -69,6 +69,7 @@ class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+    game.olyaState.classroomScene = this;
 
     background.priority = 0;
 

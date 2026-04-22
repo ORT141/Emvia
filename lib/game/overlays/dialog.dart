@@ -22,7 +22,7 @@ class DialogOverlay extends StatelessWidget {
       builder: (context, node, child) {
         return Stack(
           children: [
-              AnimatedSwitcher(
+            AnimatedSwitcher(
               duration: const Duration(milliseconds: 400),
               switchInCurve: Curves.easeOutBack,
               switchOutCurve: Curves.easeIn,
@@ -113,9 +113,7 @@ class DialogOverlay extends StatelessWidget {
                               width: isSmall ? 44 : 56,
                               height: isSmall ? 44 : 56,
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(
-                                  alpha: 0.1,
-                                ),
+                                color: Colors.white.withValues(alpha: 0.1),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -133,9 +131,7 @@ class DialogOverlay extends StatelessWidget {
                               children: [
                                 if (node.speakerName != null)
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                      bottom: 4,
-                                    ),
+                                    padding: const EdgeInsets.only(bottom: 4),
                                     child: Text(
                                       node.speakerName!(loc),
                                       style: GoogleFonts.baloo2(

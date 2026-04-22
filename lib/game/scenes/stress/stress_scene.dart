@@ -15,7 +15,9 @@ class StressScene extends GameScene {
         foregroundPath: 'stress/stress-scene/panic_foreground.png',
         scalingMode: SceneScalingMode.stretch,
         frozenPlayer: true,
-      );
+      ) {
+    GameScene.register(() => StressScene());
+  }
 
   RectangleComponent? _ambientOverlay;
   SpriteComponent? _playerComponent;

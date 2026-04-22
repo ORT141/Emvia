@@ -28,6 +28,7 @@ import 'managers/game_session_manager.dart';
 import 'managers/transition_manager.dart';
 import 'managers/overlay_manager.dart';
 import 'managers/navigation_manager.dart';
+import 'managers/game_state/game_state.dart';
 
 class EmviaGame extends FlameGame
     with TapCallbacks, HasKeyboardHandlerComponents, DialogHandler {
@@ -36,6 +37,8 @@ class EmviaGame extends FlameGame
   final SurveyService surveyService = SurveyService();
   final GamePreferencesManager preferences = GamePreferencesManager();
   final GameSessionManager session = GameSessionManager();
+  final GameState gameState = OlyaGameState();
+  OlyaGameState get olyaState => gameState as OlyaGameState;
 
   late final CameraManager cameraManager;
   late final TransitionManager transitionManager;
@@ -50,16 +53,8 @@ class EmviaGame extends FlameGame
   final PositionComponent worldRoot = PositionComponent();
 
   GameScene? currentScene;
-  ClassroomScene? classroomScene;
-
-  bool isFrozen = false;
-  bool hasTriggeredStressScene = false;
-  bool hasShownCorridorStressIntro = false;
-  bool isCorridorStressIntroActive = false;
 
   late final BackpackInventory backpack = BackpackInventory();
-
-  double _mobileMoveX = 0;
 
   DialogTree? currentTree;
 
@@ -131,7 +126,7 @@ class EmviaGame extends FlameGame
   Future<void> useStageItem(StageItemCardData item) async {
     if (!isPlayerInitialized) return;
 
-    isFrozen = true;
+    gameState.isFrozen = true;
     overlayManager.hideMobileControls();
     overlays.add('CalmingEffect');
     overlayManager.hideStageItemCard();
@@ -146,7 +141,7 @@ class EmviaGame extends FlameGame
     overlays.remove('CalmingEffect');
     cameraManager.animateZoomTo(1.1);
     cameraManager.endFocusOnPlayer();
-    isFrozen = false;
+    gameState.isFrozen = false;
     overlayManager.showMobileControls();
   }
 
@@ -346,9 +341,9 @@ class EmviaGame extends FlameGame
   void toggleDebug() => overlayManager.toggleDebug();
 
   void setMobileMoveX(double direction) {
-    if (isFrozen) return;
-    _mobileMoveX = direction.clamp(-1.0, 1.0);
-    player.setMobileDirection(_mobileMoveX);
+    if (gameState.isFrozen) return;
+    gameState.mobileMoveX = direction.clamp(-1.0, 1.0);
+    player.setMobileDirection(gameState.mobileMoveX);
   }
 
   void showMobileControls() => overlayManager.showMobileControls();
@@ -407,10 +402,10 @@ class EmviaGame extends FlameGame
 
   void clearPathSelection() => navigationManager.clearPathSelection();
 
-  void clearPathOverlay() => navigationManager.clearPathOverlay();
+  void clearPathOverlay() => olyaState.classroomScene?.clearPathOverlay();
 
   void restoreClassroomBackground() =>
-      navigationManager.restoreClassroomBackground();
+      olyaState.classroomScene?.showClassroomImage();
 
   void chooseFirstPath(BuildContext context) =>
       navigationManager.chooseFirstPath(context);

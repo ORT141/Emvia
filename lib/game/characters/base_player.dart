@@ -89,7 +89,7 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
   @override
   void update(double dt) {
     super.update(dt);
-    if (game.isFrozen) {
+    if (game.gameState.isFrozen) {
       velocity.setZero();
       keyboardVelocity.setZero();
       mobileVelocity.setZero();
@@ -141,7 +141,7 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
       }
     }
 
-    if (game.isFrozen) {
+    if (game.gameState.isFrozen) {
       keyboardVelocity.setZero();
       return false;
     }

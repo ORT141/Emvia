@@ -85,10 +85,7 @@ class _PauseMenuOverlayState extends State<PauseMenuOverlay>
                         ),
                       ),
                       const SizedBox(height: 40),
-                      GlassButton(
-                        label: loc.resume,
-                        onPressed: _handleResume,
-                      ),
+                      GlassButton(label: loc.resume, onPressed: _handleResume),
                       const SizedBox(height: 16),
                       GlassButton(
                         label: loc.return_to_menu,

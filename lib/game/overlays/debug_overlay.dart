@@ -80,7 +80,7 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                 _buildInfoRow(
                                   context,
                                   'Is Frozen',
-                                  widget.game.isFrozen.toString(),
+                                  widget.game.gameState.isFrozen.toString(),
                                 ),
                               ],
                             ),

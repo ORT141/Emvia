@@ -68,7 +68,7 @@ class TransitionManager {
   }
 
   void updateClassroomZoom() {
-    final scene = game.classroomScene;
+    final scene = game.olyaState.classroomScene;
     if (scene == null || !scene.isLoaded) return;
 
     final h = scene.bgHeight;

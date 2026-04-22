@@ -9,7 +9,9 @@ import 'path_mark.dart';
 import '../game_scene.dart';
 
 class PathChoiceScene extends GameScene with CoverScaling {
-  PathChoiceScene() : super(backgroundPath: 'scenes/classroom/path.png');
+  PathChoiceScene() : super(backgroundPath: 'scenes/classroom/path.png') {
+    GameScene.register(() => PathChoiceScene());
+  }
 
   @override
   double worldWidthForViewport(Vector2 viewportSize) => viewportSize.x;

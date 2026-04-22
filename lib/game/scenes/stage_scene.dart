@@ -13,7 +13,9 @@ class StageScene extends GameScene {
         foregroundPath: 'scenes/stage/foreground_stage.png',
         showControls: true,
         frozenPlayer: false,
-      );
+      ) {
+    GameScene.register(() => StageScene());
+  }
 
   @override
   double worldWidthForViewport(Vector2 viewportSize) {
