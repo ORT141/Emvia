@@ -45,7 +45,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get calming => 'Заспокоююсь...';
 
   @override
-  String get stress_intro_caption => 'Рівень стресу олі.';
+  String get stress_intro_caption => 'Рівень стресу Олі.';
 
   @override
   String get stress_intro_watch => 'Слідкуйте за ним';
@@ -246,11 +246,14 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get item_lunchbox_name => 'Ланч-бокс';
 
   @override
-  String get item_lunchbox_status => 'Не на часі';
+  String get item_lunchbox_status => 'Доступ обмежено';
 
   @override
   String get item_lunchbox_desc =>
       'Знайома та безпечна їжа у своєму боксі - це важливо для комфорту поза домом. Але зараз проблема не в голоді, а в рівні шуму! Цей предмет тут не допоможе.';
+
+  @override
+  String get stage_item_not_chosen_status => 'Ви не обрали цей предмет';
 
   @override
   String get stage_item_book_title => 'Книжка';

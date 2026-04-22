@@ -48,7 +48,7 @@
     "@calming": {
         "description": "Status label shown while the calming effect is active."
     },
-    "stress_intro_caption": "Рівень стресу олі.",
+    "stress_intro_caption": "Рівень стресу Олі.",
     "@stress_intro_caption": {
         "description": "Caption shown under the stress meter when it first appears in the corridor."
     },
@@ -276,8 +276,9 @@
     "item_blanket_status": "Недоступно зараз",
     "item_blanket_desc": "Відчуття глибокого тиску чудово знімає перевантаження і дає відчуття «кокона» безпеки. Але забрати її з собою в шумний коридор неможливо. Шукай щось більш мобільне!",
     "item_lunchbox_name": "Ланч-бокс",
-    "item_lunchbox_status": "Не на часі",
+    "item_lunchbox_status": "Доступ обмежено",
     "item_lunchbox_desc": "Знайома та безпечна їжа у своєму боксі - це важливо для комфорту поза домом. Але зараз проблема не в голоді, а в рівні шуму! Цей предмет тут не допоможе.",
+    "stage_item_not_chosen_status": "Ви не обрали цей предмет",
     "stage_item_book_title": "Книжка",
     "stage_item_book_description": "Перелистування книжки може бути дуже заспокійливою активністю. Повторювані рухи дають відчуття контролю. Тактильні відчуття (шурхіт сторінок, текстура) регулюють нервову систему. Правильний ресурс.",
     "stage_item_bag_of_rocks_title": "Мішечок з камінчиками",

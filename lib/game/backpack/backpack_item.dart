@@ -52,17 +52,6 @@ class BackpackItem {
     final l10n = AppLocalizations.of(context)!;
     return [
       BackpackItem(
-        id: 'headphones',
-        name: l10n.item_headphones_name,
-        status: l10n.item_headphones_status,
-        description: l10n.item_headphones_desc,
-        type: BackpackItemType.tool,
-        soundAssets: {
-          'en': 'items/sensory headphones.mp3',
-          'uk': 'items/сенсорні навушники.mp3',
-        },
-      ),
-      BackpackItem(
         id: 'blanket',
         name: l10n.item_blanket_name,
         status: l10n.item_blanket_status,
@@ -80,6 +69,17 @@ class BackpackItem {
         description: l10n.item_lunchbox_desc,
         type: BackpackItemType.tool,
         soundAssets: {'en': 'items/lunchbox.mp3', 'uk': 'items/ланчбокс.mp3'},
+      ),
+      BackpackItem(
+        id: 'headphones',
+        name: l10n.item_headphones_name,
+        status: l10n.item_headphones_status,
+        description: l10n.item_headphones_desc,
+        type: BackpackItemType.tool,
+        soundAssets: {
+          'en': 'items/sensory headphones.mp3',
+          'uk': 'items/сенсорні навушники.mp3',
+        },
       ),
     ];
   }

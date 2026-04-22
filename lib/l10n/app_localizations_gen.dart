@@ -173,7 +173,7 @@ abstract class AppLocalizationsGen {
   /// Caption shown under the stress meter when it first appears in the corridor.
   ///
   /// In en, this message translates to:
-  /// **'Olya stress level.'**
+  /// **'Olya\'s stress level.'**
   String get stress_intro_caption;
 
   /// Short reminder to monitor the stress meter.
@@ -551,7 +551,7 @@ abstract class AppLocalizationsGen {
   /// No description provided for @item_lunchbox_status.
   ///
   /// In en, this message translates to:
-  /// **'Not the right time'**
+  /// **'Access restricted'**
   String get item_lunchbox_status;
 
   /// No description provided for @item_lunchbox_desc.
@@ -559,6 +559,12 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'Familiar and safe food in your own box is important for comfort away from home. But right now the problem isn\'t hunger, it\'s the noise level! This item won\'t help here.'**
   String get item_lunchbox_desc;
+
+  /// No description provided for @stage_item_not_chosen_status.
+  ///
+  /// In en, this message translates to:
+  /// **'You did not select this item'**
+  String get stage_item_not_chosen_status;
 
   /// No description provided for @stage_item_book_title.
   ///

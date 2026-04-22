@@ -45,7 +45,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get calming => 'Calming...';
 
   @override
-  String get stress_intro_caption => 'Olya stress level.';
+  String get stress_intro_caption => 'Olya\'s stress level.';
 
   @override
   String get stress_intro_watch => 'Keep an eye on it';
@@ -246,11 +246,14 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get item_lunchbox_name => 'Lunch box';
 
   @override
-  String get item_lunchbox_status => 'Not the right time';
+  String get item_lunchbox_status => 'Access restricted';
 
   @override
   String get item_lunchbox_desc =>
       'Familiar and safe food in your own box is important for comfort away from home. But right now the problem isn\'t hunger, it\'s the noise level! This item won\'t help here.';
+
+  @override
+  String get stage_item_not_chosen_status => 'You did not select this item';
 
   @override
   String get stage_item_book_title => 'Thick book';

@@ -48,7 +48,7 @@
     "@calming": {
         "description": "Status label shown while the calming effect is active."
     },
-    "stress_intro_caption": "Olya stress level.",
+    "stress_intro_caption": "Olya's stress level.",
     "@stress_intro_caption": {
         "description": "Caption shown under the stress meter when it first appears in the corridor."
     },
@@ -279,8 +279,9 @@
     "item_blanket_status": "Unavailable right now",
     "item_blanket_desc": "The sensation of deep pressure perfectly relieves overload and provides a feeling of a safety \"cocoon\". But it is impossible to take it with you into a noisy corridor. Look for something more mobile!",
     "item_lunchbox_name": "Lunch box",
-    "item_lunchbox_status": "Not the right time",
+    "item_lunchbox_status": "Access restricted",
     "item_lunchbox_desc": "Familiar and safe food in your own box is important for comfort away from home. But right now the problem isn't hunger, it's the noise level! This item won't help here.",
+    "stage_item_not_chosen_status": "You did not select this item",
     "stage_item_book_title": "Thick book",
     "stage_item_book_description": "Page turning can be very soothing. Repeated motions create a sense of control. Tactile sensations like paper rustle and texture help regulate the nervous system. A good calming resource.",
     "stage_item_bag_of_rocks_title": "Pouch with smooth pebbles",

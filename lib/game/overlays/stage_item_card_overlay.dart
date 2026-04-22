@@ -172,7 +172,7 @@ class _StageItemCardOverlayState extends State<StageItemCardOverlay> {
                             vertical: isSmall ? 12 : 16,
                           ),
                           child: Text(
-                            l.item_lunchbox_status,
+                            l.stage_item_not_chosen_status,
                             textAlign: TextAlign.center,
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
