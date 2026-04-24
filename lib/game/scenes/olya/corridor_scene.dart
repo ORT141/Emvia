@@ -1,24 +1,24 @@
 import 'dart:math' as math;
 import 'package:emvia/game/emvia_game.dart';
+import 'package:emvia/game/utils/color_util.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
 import 'package:flame/particles.dart';
-import 'package:flame/rendering.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/pos_util.dart';
-import 'game_scene.dart';
+import '../../utils/pos_util.dart';
+import '../game_scene.dart';
 import 'stress/stress_scene.dart';
 
 import 'package:emvia/l10n/app_localizations_gen.dart';
-import '../dialog/dialog_model.dart';
+import '../../dialog/dialog_model.dart';
 
 class CorridorScene extends GameScene {
   CorridorScene()
     : super(
-        backgroundPath: 'scenes/corridor/wall.png',
-        foregroundPath: 'scenes/corridor/background.png',
+        backgroundPath: 'scenes/olya/corridor/background.png',
+        foregroundPath: 'scenes/olya/corridor/foreground.png',
         showControls: true,
         frozenPlayer: false,
       ) {
@@ -88,7 +88,7 @@ class CorridorScene extends GameScene {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(180, viewportSize.y * 0.6);
+      Vector2(180, worldSize.y * 0.6);
 
   static const _stressTriggerUVx = 0.1591;
   static const _lockerPromptUVx = 0.2688;
@@ -136,12 +136,16 @@ class CorridorScene extends GameScene {
   Future<void> onLoad() async {
     await super.onLoad();
 
+    if (game.player.parent != game.worldRoot) {
+      game.worldRoot.add(game.player);
+    }
+
     try {
       _peopleBackgroundOverlay = SpriteComponent()
         ..anchor = Anchor.topLeft
         ..priority = 10;
       _peopleBackgroundOverlay!.sprite = await game.loadSprite(
-        'scenes/corridor/people_background.png',
+        'scenes/olya/corridor/people_background.png',
       );
       add(_peopleBackgroundOverlay!);
     } catch (_) {
@@ -153,7 +157,7 @@ class CorridorScene extends GameScene {
         ..anchor = Anchor.topLeft
         ..priority = 50;
       _peopleForegroundOverlay!.sprite = await game.loadSprite(
-        'scenes/corridor/people_foreground.png',
+        'scenes/olya/corridor/people_foreground.png',
       );
 
       game.worldRoot.add(_peopleForegroundOverlay!);
@@ -161,7 +165,7 @@ class CorridorScene extends GameScene {
       _peopleForegroundOverlay = null;
     }
 
-    if (game.olyaState.isCorridorStressIntroActive) {
+    if (game.olyaState?.isCorridorStressIntroActive ?? false) {
       game.gameState.isFrozen = true;
     }
 
@@ -169,8 +173,7 @@ class CorridorScene extends GameScene {
       game.overlays.add('Stress');
     }
 
-    final color = game.surveyProfile.safeColorValue;
-    background.decorator.addLast(PaintDecorator.tint(color));
+    ColorUtil.colorWalls(background.decorator, game.surveyProfile);
 
     await _loadWallPattern();
   }
@@ -206,10 +209,12 @@ class CorridorScene extends GameScene {
 
     if (!_stressSceneTriggered &&
         !game.transitionManager.isTransitioning &&
-        !game.olyaState.hasTriggeredStressScene &&
+        !(game.olyaState?.hasTriggeredStressScene ?? true) &&
         playerX >= stressTriggerX) {
       _stressSceneTriggered = true;
-      game.olyaState.hasTriggeredStressScene = true;
+      if (game.olyaState != null) {
+        game.olyaState!.hasTriggeredStressScene = true;
+      }
       game.saveCorridorReturnPosition(playerX);
       game.loadScene(
         StressScene(),
@@ -326,13 +331,11 @@ class CorridorScene extends GameScene {
     _patternSprites.clear();
     _collectedPatterns = 0;
 
-    final color = game.surveyProfile.safeColorValue;
     try {
       background.decorator.removeLast();
     } catch (_) {}
-    try {
-      background.decorator.addLast(PaintDecorator.tint(color));
-    } catch (_) {}
+
+    ColorUtil.colorWalls(background.decorator, game.surveyProfile);
 
     _loadWallPattern();
     _hudShown = false;

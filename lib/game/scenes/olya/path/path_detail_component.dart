@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../overlays/glass_ui.dart';
+import '../../../overlays/glass_ui.dart';
 
 class PathDetailComponent extends StatefulWidget {
   final int index;

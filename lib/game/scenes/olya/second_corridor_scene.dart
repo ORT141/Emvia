@@ -1,17 +1,19 @@
+import 'package:emvia/game/utils/color_util.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/foundation.dart';
 
-import '../utils/pos_util.dart';
-import 'game_scene.dart';
+import '../../utils/pos_util.dart';
+import '../game_scene.dart';
 
-class OutsideScene extends GameScene {
-  OutsideScene()
+class SecondCorridorScene extends GameScene {
+  SecondCorridorScene()
     : super(
-        backgroundPath: 'scenes/outside/background.png',
+        backgroundPath: 'scenes/olya/second-corridor/background.png',
+        foregroundPath: 'scenes/olya/second-corridor/foreground.png',
         showControls: true,
         frozenPlayer: false,
       ) {
-    GameScene.register(() => OutsideScene());
+    GameScene.register(() => SecondCorridorScene());
   }
 
   SpriteComponent? _peopleBackgroundOverlay;
@@ -34,7 +36,7 @@ class OutsideScene extends GameScene {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(180, viewportSize.y * 0.75);
+      Vector2(180, worldSize.y / 1.65);
 
   @override
   @protected
@@ -64,7 +66,7 @@ class OutsideScene extends GameScene {
         ..anchor = Anchor.topLeft
         ..priority = 10;
       _peopleBackgroundOverlay!.sprite = await game.loadSprite(
-        'scenes/outside/people_background.png',
+        'scenes/olya/second-corridor/people_background.png',
       );
       add(_peopleBackgroundOverlay!);
     } catch (_) {
@@ -76,12 +78,14 @@ class OutsideScene extends GameScene {
         ..anchor = Anchor.topLeft
         ..priority = 50;
       _peopleForegroundOverlay!.sprite = await game.loadSprite(
-        'scenes/outside/people_foreground.png',
+        'scenes/olya/second-corridor/people_foreground.png',
       );
       game.worldRoot.add(_peopleForegroundOverlay!);
     } catch (_) {
       _peopleForegroundOverlay = null;
     }
+
+    ColorUtil.colorWalls(background.decorator, game.surveyProfile);
 
     layoutToWorld();
   }
@@ -119,6 +123,11 @@ class OutsideScene extends GameScene {
     _peopleForegroundOverlay?.removeFromParent();
     _peopleForegroundOverlay = null;
 
+    try {
+      background.decorator.removeLast();
+    } catch (_) {}
+    ColorUtil.colorWalls(background.decorator, game.surveyProfile);
+
     layoutToWorld();
     super.redrawScene();
   }
@@ -133,7 +142,6 @@ class OutsideScene extends GameScene {
     _peopleBackgroundOverlay = null;
     _peopleForegroundOverlay?.removeFromParent();
     _peopleForegroundOverlay = null;
-
     super.onRemove();
   }
 }

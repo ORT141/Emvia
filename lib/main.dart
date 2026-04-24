@@ -1,8 +1,8 @@
 import 'package:emvia/game/emvia_game.dart';
-import 'package:emvia/game/scenes/path/path_detail_component.dart';
-import 'package:emvia/game/overlays/calm_map_overlay.dart';
-import 'package:emvia/game/overlays/calm_effect_overlay.dart';
-import 'package:emvia/game/overlays/calm_item_prompt_overlay.dart';
+import 'package:emvia/game/scenes/olya/path/path_detail_component.dart';
+import 'package:emvia/game/overlays/olya/calm_map_overlay.dart';
+import 'package:emvia/game/overlays/olya/calm_effect_overlay.dart';
+import 'package:emvia/game/overlays/olya/calm_item_prompt_overlay.dart';
 import 'package:emvia/game/overlays/dialog.dart';
 import 'package:emvia/game/overlays/main_menu.dart';
 import 'package:emvia/game/overlays/pause_menu.dart';
@@ -10,13 +10,14 @@ import 'package:emvia/game/overlays/mobile_controls_overlay.dart';
 import 'package:emvia/game/backpack/backpack_overlay.dart';
 import 'package:emvia/game/overlays/settings_overlay.dart';
 import 'package:emvia/game/overlays/survey_overlay.dart';
-import 'package:emvia/game/overlays/stage_item_card_overlay.dart';
+import 'package:emvia/game/overlays/olya/stage_item_card_overlay.dart';
 import 'package:emvia/game/overlays/debug_overlay.dart';
-import 'package:emvia/game/scenes/stress/stress_overlay.dart';
-import 'package:emvia/game/overlays/tap_game_overlay.dart';
-import 'package:emvia/game/overlays/pattern_progress_overlay.dart';
-import 'package:emvia/game/overlays/breathing_exercise_overlay.dart';
-import 'package:emvia/game/scenes/corridor_scene.dart';
+import 'package:emvia/game/overlays/liam/camera_overlay.dart';
+import 'package:emvia/game/scenes/olya/stress/stress_overlay.dart';
+import 'package:emvia/game/overlays/olya/tap_game_overlay.dart';
+import 'package:emvia/game/overlays/olya/pattern_progress_overlay.dart';
+import 'package:emvia/game/overlays/olya/breathing_exercise_overlay.dart';
+import 'package:emvia/game/scenes/olya/corridor_scene.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -141,6 +142,7 @@ class _MyAppState extends State<MyApp> {
             isDarkMode: _themeMode == ThemeMode.dark,
           ),
           'Stress': (_, game) => StressOverlay(game: game),
+          'Camera': (_, game) => CameraOverlay(game: game),
           'TapGame': (_, game) => TapGameOverlay(game: game),
           'BreathingExercise': (_, game) =>
               BreathingExerciseOverlay(game: game),

@@ -143,7 +143,7 @@ class _BackpackOverlayState extends State<BackpackOverlay> {
                   child: GestureDetector(
                     onTap: () => _selectItem(items.first),
                     child: Image.asset(
-                      'assets/images/backpack/backpack.png',
+                      'assets/images/misc/olya-backpack/backpack.png',
                       fit: BoxFit.contain,
                     ),
                   ),

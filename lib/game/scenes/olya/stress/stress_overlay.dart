@@ -74,7 +74,10 @@ class _StressOverlayState extends State<StressOverlay>
   }
 
   void _dismissIntro() {
-    if (!widget.game.olyaState.isCorridorStressIntroActive || _isIntroAnimating) return;
+    if (!(widget.game.olyaState?.isCorridorStressIntroActive ?? false) ||
+        _isIntroAnimating) {
+      return;
+    }
     setState(() {
       _isIntroAnimating = true;
     });
@@ -123,7 +126,8 @@ class _StressOverlayState extends State<StressOverlay>
             final fluidPath =
                 'assets/images/stress/stressfluid_${stressType}_$fluidLevel.png';
             final showIntro =
-                widget.game.olyaState.isCorridorStressIntroActive || _isIntroAnimating;
+                (widget.game.olyaState?.isCorridorStressIntroActive ?? false) ||
+                _isIntroAnimating;
 
             return Stack(
               children: [

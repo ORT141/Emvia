@@ -1,10 +1,10 @@
-import 'package:emvia/game/stage_item_card_data.dart';
+import 'package:emvia/game/emvia_types.dart';
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/l10n/app_localizations.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'glass_ui.dart';
+import '../glass_ui.dart';
 
 class StageItemCardOverlay extends StatefulWidget {
   const StageItemCardOverlay({super.key, required this.game});

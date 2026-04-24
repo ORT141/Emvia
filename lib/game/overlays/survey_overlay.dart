@@ -1,6 +1,6 @@
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/game/overlays/glass_ui.dart';
-import 'package:emvia/game/survey_service.dart';
+import 'package:emvia/game/utils/survey_service.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:emvia/l10n/app_localizations.dart';

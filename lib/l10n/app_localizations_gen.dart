@@ -1339,6 +1339,18 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'Collected: {current} / {total}'**
   String corridor_pattern_progress(Object current, Object total);
+
+  /// No description provided for @camera_liam_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Liam\'s Camera'**
+  String get camera_liam_title;
+
+  /// No description provided for @camera_liam_instructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Press C to toggle camera. Tap shutter to take photo.'**
+  String get camera_liam_instructions;
 }
 
 class _AppLocalizationsGenDelegate

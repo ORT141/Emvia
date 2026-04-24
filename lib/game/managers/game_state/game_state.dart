@@ -1,4 +1,4 @@
-import '../../scenes/classroom_scene.dart';
+import '../../scenes/olya/classroom_scene.dart';
 
 abstract class GameState {
   bool isFrozen = false;
@@ -10,4 +10,8 @@ class OlyaGameState extends GameState {
   bool hasShownCorridorStressIntro = false;
   bool isCorridorStressIntroActive = false;
   ClassroomScene? classroomScene;
+}
+
+class LiamGameState extends GameState {
+  bool isCameraMode = false;
 }

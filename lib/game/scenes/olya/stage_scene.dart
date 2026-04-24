@@ -1,12 +1,12 @@
+import 'package:emvia/game/emvia_types.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'dart:ui' show FilterQuality, Paint, Rect;
 
 import 'package:emvia/l10n/app_localizations_gen.dart';
-import '../dialog/dialog_model.dart';
-import '../scenes/game_scene.dart';
-import '../stage_item_card_data.dart';
-import '../utils/pos_util.dart';
+import '../../dialog/dialog_model.dart';
+import '../game_scene.dart';
+import '../../utils/pos_util.dart';
 
 class StageScene extends GameScene {
   StageScene()
@@ -38,8 +38,8 @@ class StageScene extends GameScene {
   static final List<StageItemCardData> _itemDefinitions = [
     StageItemCardData(
       id: 'rocking_chair',
-      normalSpritePath: 'scenes/stage/rocking_chair.png',
-      selectedSpritePath: 'scenes/stage/rocking_chair_selected.png',
+      normalSpritePath: 'scenes/olya/stage/rocking_chair.png',
+      selectedSpritePath: 'scenes/olya/stage/rocking_chair_selected.png',
       uv: Vector2(0.5104, 0.4),
       heightFactor: _rockingChairHeightFactor,
       soundAssetEn: 'items/stage/rocking chair.mp3',
@@ -49,8 +49,8 @@ class StageScene extends GameScene {
     ),
     StageItemCardData(
       id: 'book',
-      normalSpritePath: 'scenes/stage/books.png',
-      selectedSpritePath: 'scenes/stage/books_selected.png',
+      normalSpritePath: 'scenes/olya/stage/books.png',
+      selectedSpritePath: 'scenes/olya/stage/books_selected.png',
       uv: Vector2(0.7355, 0.6),
       heightFactor: _booksHeightFactor,
       soundAssetEn: 'items/stage/thick book.mp3',
@@ -60,8 +60,8 @@ class StageScene extends GameScene {
     ),
     StageItemCardData(
       id: 'bag_of_rocks',
-      normalSpritePath: 'scenes/stage/bag_of_rocks.png',
-      selectedSpritePath: 'scenes/stage/bag_of_rocks_selected.png',
+      normalSpritePath: 'scenes/olya/stage/bag_of_rocks.png',
+      selectedSpritePath: 'scenes/olya/stage/bag_of_rocks_selected.png',
       uv: Vector2(0.7450, 0.6195),
       heightFactor: _bagOfRocksHeightFactor,
       soundAssetEn: 'items/stage/pouch with smooth pebbles.mp3',
@@ -71,8 +71,8 @@ class StageScene extends GameScene {
     ),
     StageItemCardData(
       id: 'hibuki',
-      normalSpritePath: 'scenes/stage/hibuki.png',
-      selectedSpritePath: 'scenes/stage/hibuki_selected.png',
+      normalSpritePath: 'scenes/olya/stage/hibuki.png',
+      selectedSpritePath: 'scenes/olya/stage/hibuki_selected.png',
       uv: Vector2(0.775, 0.4975),
       heightFactor: _hibukiHeightFactor,
       soundAssetEn: 'items/stage/hug-dog.mp3',

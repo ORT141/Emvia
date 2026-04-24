@@ -1,19 +1,17 @@
 import 'package:flame/components.dart';
-import 'package:flame/rendering.dart';
 import 'package:flutter/foundation.dart';
 
-import '../utils/pos_util.dart';
-import 'game_scene.dart';
+import '../../utils/pos_util.dart';
+import '../game_scene.dart';
 
-class SecondCorridorScene extends GameScene {
-  SecondCorridorScene()
+class OutsideScene extends GameScene {
+  OutsideScene()
     : super(
-        backgroundPath: 'scenes/second-corridor/foreground.png',
-        foregroundPath: 'scenes/second-corridor/background.png',
+        backgroundPath: 'scenes/olya/outside/background.png',
         showControls: true,
         frozenPlayer: false,
       ) {
-    GameScene.register(() => SecondCorridorScene());
+    GameScene.register(() => OutsideScene());
   }
 
   SpriteComponent? _peopleBackgroundOverlay;
@@ -36,7 +34,7 @@ class SecondCorridorScene extends GameScene {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(180, viewportSize.y / 1.65);
+      Vector2(180, worldSize.y * 0.75);
 
   @override
   @protected
@@ -66,7 +64,7 @@ class SecondCorridorScene extends GameScene {
         ..anchor = Anchor.topLeft
         ..priority = 10;
       _peopleBackgroundOverlay!.sprite = await game.loadSprite(
-        'scenes/second-corridor/people_background.png',
+        'scenes/olya/outside/people_background.png',
       );
       add(_peopleBackgroundOverlay!);
     } catch (_) {
@@ -78,15 +76,12 @@ class SecondCorridorScene extends GameScene {
         ..anchor = Anchor.topLeft
         ..priority = 50;
       _peopleForegroundOverlay!.sprite = await game.loadSprite(
-        'scenes/second-corridor/people_foreground.png',
+        'scenes/olya/outside/people_foreground.png',
       );
       game.worldRoot.add(_peopleForegroundOverlay!);
     } catch (_) {
       _peopleForegroundOverlay = null;
     }
-
-    final color = game.surveyProfile.safeColorValue;
-    background.decorator.addLast(PaintDecorator.tint(color));
 
     layoutToWorld();
   }
@@ -124,14 +119,6 @@ class SecondCorridorScene extends GameScene {
     _peopleForegroundOverlay?.removeFromParent();
     _peopleForegroundOverlay = null;
 
-    try {
-      background.decorator.removeLast();
-    } catch (_) {}
-    final color = game.surveyProfile.safeColorValue;
-    try {
-      background.decorator.addLast(PaintDecorator.tint(color));
-    } catch (_) {}
-
     layoutToWorld();
     super.redrawScene();
   }
@@ -146,6 +133,7 @@ class SecondCorridorScene extends GameScene {
     _peopleBackgroundOverlay = null;
     _peopleForegroundOverlay?.removeFromParent();
     _peopleForegroundOverlay = null;
+
     super.onRemove();
   }
 }

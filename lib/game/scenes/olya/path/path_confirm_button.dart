@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 import 'package:emvia/l10n/app_localizations.dart';
-import '../../emvia_game.dart';
+import '../../../emvia_game.dart';
 
 class PathConfirmButton extends PositionComponent
     with TapCallbacks, HasGameReference<EmviaGame> {

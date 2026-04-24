@@ -616,5 +616,7 @@
     "tap_game_title": "Торкніться екрану кілька разів, щоб заспокоїтись",
     "locker_prompt": "Ви біля своєї шафки - відкрийте рюкзак, щоб продовжити.",
     "corridor_pattern_instruction": "Торкніться візерунків на стіні, щоб зібрати їх",
-    "corridor_pattern_progress": "Зібрано: {current} / {total}"
+    "corridor_pattern_progress": "Зібрано: {current} / {total}",
+    "camera_liam_title": "Камера Ліама",
+    "camera_liam_instructions": "Натисніть C, щоб увімкнути камеру. Натисніть на спуск, щоб зробити фото."
 }

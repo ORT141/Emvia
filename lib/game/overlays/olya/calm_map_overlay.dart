@@ -11,7 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'glass_ui.dart';
+import '../glass_ui.dart';
 import 'info_pill.dart';
 import 'pattern_painter.dart';
 

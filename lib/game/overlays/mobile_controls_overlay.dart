@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-
+import '../emvia_types.dart';
 import '../emvia_game.dart';
 
 class MobileControlsOverlay extends StatefulWidget {
@@ -112,6 +112,17 @@ class _MobileControlsOverlayState extends State<MobileControlsOverlay> {
                       ],
                     ),
                   ),
+                  if (widget.game.selectedCharacter == PlayableCharacter.liam)
+                    Positioned(
+                      right: isSmall ? 12 : 24,
+                      bottom: isSmall ? 12 : 24,
+                      child: _ControlButton(
+                        icon: Icons.camera_alt_rounded,
+                        size: buttonSize,
+                        iconSize: iconSize,
+                        onTap: widget.game.toggleCameraMode,
+                      ),
+                    ),
                 ],
               );
             },

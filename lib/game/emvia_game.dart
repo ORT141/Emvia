@@ -5,19 +5,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'survey_service.dart';
+import 'utils/survey_service.dart';
 import 'components/fade_overlay.dart';
 import 'characters/base_player.dart';
 import 'characters/character_factory.dart';
 import 'scenes/game_scene.dart';
-import 'scenes/classroom_scene.dart';
-import 'scenes/stress/stress_scene.dart';
-import 'scenes/path/path_choice_scene.dart';
+import 'scenes/olya/classroom_scene.dart';
+import 'scenes/olya/stress/stress_scene.dart';
+import 'scenes/olya/path/path_choice_scene.dart';
 import 'scenes/survey_scene.dart';
 import 'dialog/dialog_model.dart';
 import 'backpack/backpack_inventory.dart';
 import 'backpack/backpack_item.dart';
-import 'stage_item_card_data.dart';
 
 import 'dialog/dialog_handler.dart';
 import 'emvia_types.dart';
@@ -37,8 +36,9 @@ class EmviaGame extends FlameGame
   final SurveyService surveyService = SurveyService();
   final GamePreferencesManager preferences = GamePreferencesManager();
   final GameSessionManager session = GameSessionManager();
-  final GameState gameState = OlyaGameState();
-  OlyaGameState get olyaState => gameState as OlyaGameState;
+  late GameState gameState;
+  OlyaGameState? get olyaState => gameState is OlyaGameState ? gameState as OlyaGameState : null;
+  LiamGameState? get liamState => gameState is LiamGameState ? gameState as LiamGameState : null;
 
   late final CameraManager cameraManager;
   late final TransitionManager transitionManager;
@@ -184,6 +184,11 @@ class EmviaGame extends FlameGame
 
   void _initializePlayer() {
     _player = CharacterFactory.createPlayer(selectedCharacter);
+    if (selectedCharacter == PlayableCharacter.liam) {
+      gameState = LiamGameState();
+    } else {
+      gameState = OlyaGameState();
+    }
   }
 
   void _configureWorldRoot() {
@@ -340,6 +345,22 @@ class EmviaGame extends FlameGame
 
   void toggleDebug() => overlayManager.toggleDebug();
 
+  void toggleCameraMode() {
+    if (selectedCharacter != PlayableCharacter.liam) return;
+    final state = liamState;
+    if (state == null) return;
+    
+    if (state.isCameraMode) {
+      state.isCameraMode = false;
+      overlays.remove('Camera');
+      gameState.isFrozen = false;
+    } else {
+      state.isCameraMode = true;
+      overlays.add('Camera');
+      gameState.isFrozen = true;
+    }
+  }
+
   void setMobileMoveX(double direction) {
     if (gameState.isFrozen) return;
     gameState.mobileMoveX = direction.clamp(-1.0, 1.0);
@@ -402,10 +423,10 @@ class EmviaGame extends FlameGame
 
   void clearPathSelection() => navigationManager.clearPathSelection();
 
-  void clearPathOverlay() => olyaState.classroomScene?.clearPathOverlay();
+  void clearPathOverlay() => olyaState?.classroomScene?.clearPathOverlay();
 
   void restoreClassroomBackground() =>
-      olyaState.classroomScene?.showClassroomImage();
+      olyaState?.classroomScene?.showClassroomImage();
 
   void chooseFirstPath(BuildContext context) =>
       navigationManager.chooseFirstPath(context);

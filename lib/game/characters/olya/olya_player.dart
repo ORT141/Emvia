@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import '../../scenes/classroom_scene.dart';
-import '../../scenes/corridor_scene.dart';
-import '../../scenes/stage_scene.dart';
+import '../../scenes/olya/classroom_scene.dart';
+import '../../scenes/olya/corridor_scene.dart';
+import '../../scenes/olya/stage_scene.dart';
 import '../base_player.dart';
 import '../character_data.dart';
 

@@ -4,9 +4,9 @@ import 'package:flame/components.dart';
 import 'package:flame/rendering.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show HSVColor;
-import '../../emvia_game.dart';
+import '../../../emvia_game.dart';
 
-import '../game_scene.dart';
+import '../../game_scene.dart';
 
 class StressScene extends GameScene {
   StressScene()
@@ -35,7 +35,7 @@ class StressScene extends GameScene {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(viewportSize.x / 2, viewportSize.y / 2);
+      Vector2(viewportSize.x / 2, worldSize.y / 2);
 
   @override
   Future<void> onLoad() async {

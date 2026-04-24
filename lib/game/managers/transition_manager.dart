@@ -1,8 +1,10 @@
+import 'package:emvia/game/scenes/olya/path/path_choice_scene.dart';
+import 'package:emvia/game/scenes/olya/scene_scene.dart';
+import 'package:emvia/game/scenes/survey_scene.dart';
 import 'package:flame/components.dart';
 import '../emvia_game.dart';
 import '../scenes/game_scene.dart';
-import '../scenes/classroom_scene.dart';
-import '../scenes/corridor_scene.dart';
+import '../scenes/olya/classroom_scene.dart';
 
 class TransitionManager {
   final EmviaGame game;
@@ -33,18 +35,21 @@ class TransitionManager {
 
     scene.onGameResize(game.size);
 
-    if (scene is! ClassroomScene) {
-      game.worldRoot.scale = Vector2.all(game.cameraManager.zoom);
-    }
-
     if (game.player.parent != game.worldRoot) {
       await game.worldRoot.add(game.player);
     }
 
-    if (scene is CorridorScene) {
-      game.player.opacity = 1.0;
-    } else {
+    var hidePlayerScenes = [
+      ClassroomScene,
+      SurveyScene,
+      PathChoiceScene,
+      SceneScene,
+    ];
+
+    if (hidePlayerScenes.any((type) => scene.runtimeType == type)) {
       game.player.opacity = 0.0;
+    } else {
+      game.player.opacity = 1.0;
     }
 
     game.player.position = game.sceneSpawnPoint(
@@ -68,7 +73,7 @@ class TransitionManager {
   }
 
   void updateClassroomZoom() {
-    final scene = game.olyaState.classroomScene;
+    final scene = game.olyaState?.classroomScene;
     if (scene == null || !scene.isLoaded) return;
 
     final h = scene.bgHeight;

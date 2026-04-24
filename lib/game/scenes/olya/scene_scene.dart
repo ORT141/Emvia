@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:emvia/game/scenes/game_scene.dart';
-import 'package:emvia/game/scenes/stress/stress_scene.dart';
+import 'package:emvia/game/scenes/olya/stress/stress_scene.dart';
 import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';

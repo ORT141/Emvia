@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../emvia_game.dart';
 import '../scenes/game_scene.dart';
-import '../scenes/classroom_scene.dart';
-import '../scenes/corridor_scene.dart';
-import '../scenes/stage_scene.dart';
-import '../scenes/stress/stress_scene.dart';
-import '../scenes/path/path_choice_scene.dart';
-import '../scenes/second_corridor_scene.dart';
-import '../scenes/outside_scene.dart';
-import '../scenes/scene_scene.dart';
+import '../scenes/olya/classroom_scene.dart';
+import '../scenes/olya/corridor_scene.dart';
+import '../scenes/olya/stage_scene.dart';
+import '../scenes/olya/stress/stress_scene.dart';
+import '../scenes/olya/path/path_choice_scene.dart';
+import '../scenes/olya/second_corridor_scene.dart';
+import '../scenes/olya/outside_scene.dart';
+import '../scenes/olya/scene_scene.dart';
 import '../emvia_types.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';
 import '../overlays/glass_ui.dart';
@@ -69,15 +69,15 @@ class NavigationManager {
   }
 
   Future<void> goToCorridor() async {
-    if (game.stressLevel >= 30 && !game.olyaState.hasShownCorridorStressIntro) {
-      game.olyaState.hasShownCorridorStressIntro = true;
-      game.olyaState.isCorridorStressIntroActive = true;
+    if (game.stressLevel >= 30 && !(game.olyaState?.hasShownCorridorStressIntro ?? true)) {
+      game.olyaState?.hasShownCorridorStressIntro = true;
+      game.olyaState?.isCorridorStressIntroActive = true;
     }
 
     await _loadSceneWithDefaults(
       CorridorScene(),
       sceneIndex: 4,
-      showMobileControls: !game.olyaState.isCorridorStressIntroActive,
+      showMobileControls: !(game.olyaState?.isCorridorStressIntroActive ?? false),
       onFullOpacity: () => game.overlays.remove('TapGame'),
     );
   }
@@ -141,7 +141,7 @@ class NavigationManager {
   void _resetJourneyState({required dynamic profile}) {
     game.session.resetForNewJourney(profile: profile);
     game.backpack.clear();
-    game.olyaState.hasTriggeredStressScene = false;
+    game.olyaState?.hasTriggeredStressScene = false;
   }
 
   void _clearGameplayOverlays() {
@@ -188,9 +188,9 @@ class NavigationManager {
   void prepareReturnToMainMenu() {
     game.stressLevel = 100;
     game.sceneIndex = 0;
-    game.olyaState.hasTriggeredStressScene = false;
-    game.olyaState.hasShownCorridorStressIntro = false;
-    game.olyaState.isCorridorStressIntroActive = false;
+    game.olyaState?.hasTriggeredStressScene = false;
+    game.olyaState?.hasShownCorridorStressIntro = false;
+    game.olyaState?.isCorridorStressIntroActive = false;
     game.overlayManager.hideMobileControls();
     game.overlays.remove('Stress');
     game.overlays.remove('TapGame');
@@ -213,11 +213,11 @@ class NavigationManager {
   }
 
   void clearPathOverlay() {
-    game.olyaState.classroomScene?.clearPathOverlay();
+    game.olyaState?.classroomScene?.clearPathOverlay();
   }
 
   void restoreClassroomBackground() {
-    game.olyaState.classroomScene?.showClassroomImage();
+    game.olyaState?.classroomScene?.showClassroomImage();
   }
 
   void chooseFirstPath(BuildContext context) {
@@ -272,8 +272,8 @@ class NavigationManager {
   void finishPathChoice() {
     game.sceneIndex = 2;
     game.player.opacity = 1;
-    game.olyaState.classroomScene?.showClassroomImage();
-    game.olyaState.classroomScene?.clearMarks();
+    game.olyaState?.classroomScene?.showClassroomImage();
+    game.olyaState?.classroomScene?.clearMarks();
     game.transitionManager.updateClassroomZoom();
     game.cameraManager.snapToPlayer(force: true);
 
@@ -372,8 +372,8 @@ class NavigationManager {
   }
 
   void completeCorridorStressIntro() {
-    if (!game.olyaState.isCorridorStressIntroActive) return;
-    game.olyaState.isCorridorStressIntroActive = false;
+    if (!(game.olyaState?.isCorridorStressIntroActive ?? false)) return;
+    game.olyaState?.isCorridorStressIntroActive = false;
     game.gameState.isFrozen = false;
     game.overlayManager.showMobileControls();
   }

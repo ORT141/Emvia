@@ -1,17 +1,17 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 
-import '../utils/pos_util.dart';
-import '../utils/cover_scaling.dart';
+import '../../utils/pos_util.dart';
+import '../../utils/cover_scaling.dart';
 import 'path/path_confirm_button.dart';
 import 'path/path_mark.dart';
-import 'game_scene.dart';
+import '../game_scene.dart';
 import 'path/path_choice_scene.dart';
 
 class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
   ClassroomScene()
     : super(
-        backgroundPath: 'scenes/classroom/classroom.png',
+        backgroundPath: 'scenes/olya/classroom/classroom.png',
         showControls: false,
         frozenPlayer: true,
       ) {
@@ -23,7 +23,7 @@ class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(viewportSize.x / 2, viewportSize.y / 2);
+      Vector2(viewportSize.x / 2, worldSize.y / 2);
 
   SpriteComponent? _pathOverlay;
 
@@ -69,7 +69,7 @@ class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    game.olyaState.classroomScene = this;
+    game.olyaState?.classroomScene = this;
 
     background.priority = 0;
 

@@ -1,5 +1,6 @@
+import 'package:emvia/game/scenes/liam/house_scene.dart';
 import 'package:flame/components.dart';
-import '../../scenes/placeholder_scene.dart';
+import 'package:flutter/services.dart';
 import '../base_player.dart';
 import '../character_data.dart';
 
@@ -32,12 +33,18 @@ class LiamPlayer extends BasePlayer {
 
   @override
   Future<void> onStartGame() async {
-    await game.loadScene(
-      PlaceholderScene(),
-      onFullOpacity: () {
-        opacity = 0;
-      },
-    );
+    await game.loadScene(HouseScene(), onFullOpacity: () {});
+  }
+
+  @override
+  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (event is KeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.keyC) {
+        game.toggleCameraMode();
+        return true;
+      }
+    }
+    return super.onKeyEvent(event, keysPressed);
   }
 
   @override

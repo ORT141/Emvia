@@ -20,6 +20,7 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
 
   final bool showControls;
   final bool frozenPlayer;
+
   GameScene({
     this.backgroundPath = '',
     String? foregroundPath,

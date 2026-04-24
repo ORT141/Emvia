@@ -616,5 +616,7 @@
     "tap_game_title": "Tap the screen repeatedly to calm down",
     "locker_prompt": "You're at your locker, open your backpack to continue.",
     "corridor_pattern_instruction": "Tap the patterns on the wall to collect them",
-    "corridor_pattern_progress": "Collected: {current} / {total}"
+    "corridor_pattern_progress": "Collected: {current} / {total}",
+    "camera_liam_title": "Liam's Camera",
+    "camera_liam_instructions": "Press C to toggle camera. Tap shutter to take photo."
 }

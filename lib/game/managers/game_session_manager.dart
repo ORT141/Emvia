@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../dialog/dialog_model.dart';
 import '../emvia_types.dart';
-import '../survey_service.dart';
+import '../utils/survey_service.dart';
 
 class GameSessionManager {
   int sceneIndex = 0;

@@ -691,4 +691,11 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String corridor_pattern_progress(Object current, Object total) {
     return 'Collected: $current / $total';
   }
+
+  @override
+  String get camera_liam_title => 'Liam\'s Camera';
+
+  @override
+  String get camera_liam_instructions =>
+      'Press C to toggle camera. Tap shutter to take photo.';
 }

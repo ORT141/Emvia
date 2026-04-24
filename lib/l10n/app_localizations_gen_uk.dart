@@ -692,4 +692,11 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String corridor_pattern_progress(Object current, Object total) {
     return 'Зібрано: $current / $total';
   }
+
+  @override
+  String get camera_liam_title => 'Камера Ліама';
+
+  @override
+  String get camera_liam_instructions =>
+      'Натисніть C, щоб увімкнути камеру. Натисніть на спуск, щоб зробити фото.';
 }

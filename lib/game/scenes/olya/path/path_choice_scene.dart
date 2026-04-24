@@ -4,12 +4,12 @@ import 'package:emvia/l10n/app_localizations.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../utils/cover_scaling.dart';
+import '../../../utils/cover_scaling.dart';
 import 'path_mark.dart';
-import '../game_scene.dart';
+import '../../game_scene.dart';
 
 class PathChoiceScene extends GameScene with CoverScaling {
-  PathChoiceScene() : super(backgroundPath: 'scenes/classroom/path.png') {
+  PathChoiceScene() : super(backgroundPath: 'scenes/olya/classroom/path.png') {
     GameScene.register(() => PathChoiceScene());
   }
 
@@ -18,7 +18,7 @@ class PathChoiceScene extends GameScene with CoverScaling {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(viewportSize.x / 2, viewportSize.y / 2);
+      Vector2(viewportSize.x / 2, worldSize.y / 2);
 
   final List<Vector2> _marks = <Vector2>[];
   final List<PathMark> _markCircles = <PathMark>[];

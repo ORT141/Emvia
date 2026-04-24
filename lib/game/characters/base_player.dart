@@ -2,6 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
 import '../emvia_game.dart';
+import '../emvia_types.dart';
 import '../utils/pos_util.dart';
 import 'character_data.dart';
 
@@ -69,7 +70,8 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
   double get speed => game.size.y * (300.0 / 1080.0);
 
   void updatePlayerSize() {
-    final height = game.size.y * 0.42;
+    if (game.worldRoot.size.y <= 0) return;
+    final height = game.worldRoot.size.y * 0.42;
     size = Vector2(height * characterData.widthFactor, height);
   }
 
@@ -89,6 +91,8 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
   @override
   void update(double dt) {
     super.update(dt);
+    updatePlayerSize();
+
     if (game.gameState.isFrozen) {
       velocity.setZero();
       keyboardVelocity.setZero();
@@ -136,7 +140,9 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
   bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     if (event is KeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.tab) {
-        game.toggleBackpack();
+        if (game.selectedCharacter != PlayableCharacter.liam) {
+          game.toggleBackpack();
+        }
         return true;
       }
     }

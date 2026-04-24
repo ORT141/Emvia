@@ -1,7 +1,7 @@
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';
 import 'package:flutter/material.dart';
-import 'glass_ui.dart';
+import '../glass_ui.dart';
 
 class CalmingItemPromptOverlay extends StatelessWidget {
   const CalmingItemPromptOverlay({super.key, required this.game});

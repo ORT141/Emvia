@@ -15,14 +15,18 @@ dependencies:
     flame_audio: ^2.11.12
     google_fonts: ^7.0.2
     cupertino_icons: ^1.0.8
+
     flutter_localizations:
         sdk: flutter
+
     intl: 0.20.2
     shared_preferences: ^2.5.4
     http: ^1.2.0
     flutter_launcher_icons: ^0.14.4
     path_provider: ^2.1.5
     open_filex: ^4.7.0
+    camera: ^0.12.0+1
+    permission_handler: ^12.0.1
 
 dev_dependencies:
     flutter_test:
@@ -39,23 +43,38 @@ flutter:
         - assets/images/misc/
         - assets/images/main-menu/
         - assets/images/stress/
-        - assets/images/stress/stress-scene/
         - assets/images/player/
-        - assets/images/player/olya/
-        - assets/images/player/liam/
-        - assets/images/backpack/
+
         - assets/images/player-selecting/
-        - assets/images/scenes/
-        - assets/images/scenes/classroom/
-        - assets/images/scenes/outside/
-        - assets/images/scenes/corridor/
-        - assets/images/scenes/second-corridor/
-        - assets/images/scenes/stage/
-        - assets/images/scenes/scene/
+
+        # olya specific
+
+        - assets/images/player/olya/
+
+        - assets/images/scenes/olya/classroom/
+        - assets/images/scenes/olya/outside/
+        - assets/images/scenes/olya/corridor/
+        - assets/images/scenes/olya/second-corridor/
+        - assets/images/scenes/olya/stage/
+        - assets/images/scenes/olya/scene/
+
+        - assets/images/stress/stress-scene/
+
+        - assets/images/misc/olya-backpack/
+
+        - assets/sounds/olya/paths/
+        - assets/sounds/olya/items/
+
+        # ------------------
+
+        # liam specific
+        - assets/images/player/liam/
+        - assets/images/scenes/liam/house/
         - assets/images/wall-patterns/
-        - assets/sounds/paths/
+
+        # ------------------
+
         - assets/sounds/survey/
         - assets/sounds/player-cards/
-        - assets/sounds/items/
         - assets/sounds/tips/
         - assets/sounds/other/

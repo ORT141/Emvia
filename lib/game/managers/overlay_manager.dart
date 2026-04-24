@@ -1,8 +1,8 @@
+import 'package:emvia/game/emvia_types.dart';
 import 'package:flutter/foundation.dart';
 import '../emvia_game.dart';
-import '../stage_item_card_data.dart';
-import '../scenes/stage_scene.dart';
-import '../scenes/corridor_scene.dart';
+import '../scenes/olya/stage_scene.dart';
+import '../scenes/olya/corridor_scene.dart';
 
 class OverlayManager {
   final EmviaGame game;
@@ -56,7 +56,7 @@ class OverlayManager {
   bool canToggleBackpack() {
     if (game.sceneIndex == 0) return false;
     if (game.transitionManager.isTransitioning) return false;
-    if (game.olyaState.isCorridorStressIntroActive) return false;
+    if (game.olyaState?.isCorridorStressIntroActive ?? false) return false;
     if (game.overlays.isActive('MainMenu')) return false;
     if (game.overlays.isActive('Survey')) return false;
     return true;

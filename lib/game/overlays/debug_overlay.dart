@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'glass_ui.dart';
 import '../emvia_game.dart';
 import '../dialog/dialog_model.dart';
-import '../scenes/classroom_scene.dart';
-import '../scenes/corridor_scene.dart';
-import '../scenes/stage_scene.dart';
-import '../scenes/second_corridor_scene.dart';
-import '../scenes/outside_scene.dart';
+import '../scenes/olya/classroom_scene.dart';
+import '../scenes/olya/corridor_scene.dart';
+import '../scenes/olya/stage_scene.dart';
+import '../scenes/olya/second_corridor_scene.dart';
+import '../scenes/olya/outside_scene.dart';
 import '../scenes/survey_scene.dart';
 
 class DebugOverlay extends StatefulWidget {
