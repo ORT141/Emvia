@@ -558,6 +558,7 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
               ),
               _CharacterGhost(
                 imagePath: 'player-selecting/liam_ghost.png',
+                realImagePath: 'player/liam/standing.png',
                 label: loc.character_liam,
                 selected: selectedCharacter == PlayableCharacter.liam,
                 hovered: _hoveredCharacter == PlayableCharacter.liam,
