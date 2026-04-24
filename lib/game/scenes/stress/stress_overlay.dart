@@ -18,6 +18,8 @@ class _StressOverlayState extends State<StressOverlay>
     with TickerProviderStateMixin {
   late final AnimationController _shakeController;
   late final Animation<double> _shakeAnimation;
+  late final AnimationController _pulseController;
+  late final Animation<double> _pulseAnimation;
   late final AnimationController _introController;
   late final Animation<double> _introAnimation;
   int _lastStress = 0;
@@ -34,6 +36,15 @@ class _StressOverlayState extends State<StressOverlay>
       begin: -2,
       end: 2,
     ).chain(CurveTween(curve: Curves.linear)).animate(_shakeController);
+
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.04).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOutSine),
+    );
+
     _introController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 850),
@@ -58,6 +69,7 @@ class _StressOverlayState extends State<StressOverlay>
   void dispose() {
     _introController.dispose();
     _shakeController.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
@@ -318,7 +330,10 @@ class _StressOverlayState extends State<StressOverlay>
         alignment: Alignment.center,
         children: [
           Image.asset(bgPath),
-          Image.asset(fluidPath, gaplessPlayback: true),
+          ScaleTransition(
+            scale: _pulseAnimation,
+            child: Image.asset(fluidPath, gaplessPlayback: true),
+          ),
         ],
       ),
     );

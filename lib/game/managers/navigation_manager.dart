@@ -11,6 +11,7 @@ import '../scenes/outside_scene.dart';
 import '../scenes/scene_scene.dart';
 import '../emvia_types.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';
+import '../overlays/glass_ui.dart';
 
 class NavigationManager {
   final EmviaGame game;
@@ -231,11 +232,41 @@ class NavigationManager {
     confirmSelectedPath(context, 2);
   }
 
-  void confirmSelectedPath(BuildContext context, int index) {
+  Future<void> confirmSelectedPath(BuildContext context, int index) async {
     if (!context.mounted) return;
     final l = AppLocalizationsGen.of(context)!;
     recordPathChoice(l, index);
-    finishPathChoice();
+
+    if (index == 1 || index == 2) {
+      await showDialog(
+        context: context,
+        builder: (ctx) => GlassDialog(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l.too_dangerous,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.redAccent,
+                ),
+              ),
+              const SizedBox(height: 24),
+              GlassButton(
+                label: l.continueLabel,
+                onPressed: () => Navigator.of(ctx).pop(),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      await applyPathChoice(index, context);
+    } else {
+      finishPathChoice();
+    }
   }
 
   void finishPathChoice() {
@@ -277,6 +308,36 @@ class NavigationManager {
   Future<void> finishBreathingExercise() async {
     game.overlays.remove('BreathingExercise');
     game.gameState.isFrozen = false;
+
+    final context = game.buildContext;
+    if (context != null && context.mounted) {
+      final l = AppLocalizationsGen.of(context)!;
+      await showDialog(
+        context: context,
+        builder: (ctx) => GlassDialog(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l.too_dangerous,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.redAccent,
+                ),
+              ),
+              const SizedBox(height: 24),
+              GlassButton(
+                label: l.continueLabel,
+                onPressed: () => Navigator.of(ctx).pop(),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     await game.loadScene(
       PathChoiceScene(),
       onFullOpacity: () {

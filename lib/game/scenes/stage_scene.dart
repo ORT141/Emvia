@@ -2,6 +2,8 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'dart:ui' show FilterQuality, Paint, Rect;
 
+import 'package:emvia/l10n/app_localizations_gen.dart';
+import '../dialog/dialog_model.dart';
 import '../scenes/game_scene.dart';
 import '../stage_item_card_data.dart';
 import '../utils/pos_util.dart';
@@ -83,6 +85,7 @@ class StageScene extends GameScene {
   final List<_StageItem> _items = [];
   _StageItem? _selectedItem;
   bool _hasShownCalmingPrompt = false;
+  bool _calmPromptShown = false;
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) {
@@ -110,16 +113,26 @@ class StageScene extends GameScene {
   void update(double dt) {
     super.update(dt);
 
-    if (_hasShownCalmingPrompt) {
-      return;
-    }
-
     if (!game.isPlayerInitialized) {
       return;
     }
 
     final sceneEdgeX = game.worldRoot.size.x - game.player.size.x - 50;
+
     if (game.player.position.x >= sceneEdgeX) {
+      if (game.stressLevel > 30) {
+        game.player.position.x = sceneEdgeX - 5;
+        if (!_calmPromptShown) {
+          _calmPromptShown = true;
+          _showCalmDownPrompt();
+        }
+        return;
+      }
+
+      if (_hasShownCalmingPrompt) {
+        return;
+      }
+
       _hasShownCalmingPrompt = true;
 
       clearSelectedItem();
@@ -128,7 +141,20 @@ class StageScene extends GameScene {
       } catch (_) {}
 
       game.playRightSideScene();
+    } else {
+      if (game.player.position.x < sceneEdgeX - 100) {
+        _calmPromptShown = false;
+      }
     }
+  }
+
+  void _showCalmDownPrompt() {
+    final l = AppLocalizationsGen.of(game.buildContext!)!;
+    final tree = DialogTree(
+      nodes: {'start': DialogNode(id: 'start', text: (_) => l.too_loud)},
+      startNodeId: 'start',
+    );
+    game.startDialog(tree);
   }
 
   @override

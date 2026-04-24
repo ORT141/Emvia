@@ -1,4 +1,3 @@
-import 'package:emvia/l10n/app_localizations_gen.dart';
 import 'package:flutter/material.dart';
 import '../../overlays/glass_ui.dart';
 
@@ -82,7 +81,6 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                   ? constraints.maxWidth
                   : MediaQuery.of(context).size.width;
               final dialogWidth = maxWidth * 0.9 < 600 ? maxWidth * 0.9 : 600.0;
-              final isUnlocked = widget.index == 0;
 
               return Material(
                 color: Colors.transparent,
@@ -110,17 +108,6 @@ class _PathDetailComponentState extends State<PathDetailComponent>
                           ),
                         ),
                         const SizedBox(height: 14),
-                        if (!isUnlocked)
-                          Text(
-                            AppLocalizationsGen.of(context)!.too_dangerous,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.redAccent.withValues(alpha: 0.9),
-                              height: 1.4,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        if (!isUnlocked) const SizedBox(height: 14),
                         Text(
                           widget.description,
                           style: const TextStyle(fontSize: 15, height: 1.4),

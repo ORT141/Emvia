@@ -173,9 +173,12 @@ class _MyAppState extends State<MyApp> {
                 description: info.description,
                 confirmLabel: info.confirmLabel,
                 cancelLabel: info.cancelLabel,
-                onConfirm: () {
-                  game.applyPathChoice(info.index, game.buildContext!);
-                  game.hidePathDetail();
+                onConfirm: () async {
+                  // game.hidePathDetail();
+                  await game.navigationManager.confirmSelectedPath(
+                    game.buildContext!,
+                    info.index,
+                  );
                 },
                 onCancel: () {
                   game.hidePathDetail();

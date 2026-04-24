@@ -254,9 +254,9 @@ class CorridorScene extends GameScene {
       game.gameState.isFrozen = false;
     }
 
-    final maxX = background.size.x - game.player.size.x / 2;
-    if (_collectedPatterns < _patternSprites.length && playerX >= maxX - 50) {
-      game.player.position.x = maxX - 55;
+    final blockX = patternWorldEndX;
+    if (_collectedPatterns < _patternSprites.length && playerX >= blockX) {
+      game.player.position.x = blockX - 5;
     }
   }
 
