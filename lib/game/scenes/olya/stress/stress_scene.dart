@@ -101,7 +101,7 @@ class StressScene extends GameScene {
     _time += dt;
 
     if (game.stressLevel <= 60 && !game.overlays.isActive('TapGame')) {
-      _startTransitionToCorridor();
+      startTransitionToCorridor();
     }
 
     _noiseOverlay?.intensity = _stressFactor;
@@ -147,10 +147,10 @@ class StressScene extends GameScene {
 
   bool _transitioning = false;
 
-  void _startTransitionToCorridor() {
+  void startTransitionToCorridor() {
     if (_transitioning) return;
     _transitioning = true;
-    game.transitionToCorridor();
+    game.navigationManager.goToCorridor();
   }
 
   @override

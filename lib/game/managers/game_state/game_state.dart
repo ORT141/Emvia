@@ -1,4 +1,5 @@
 import '../../scenes/olya/classroom_scene.dart';
+import '../../models/captured_photo.dart';
 
 abstract class GameState {
   bool isFrozen = false;
@@ -14,4 +15,14 @@ class OlyaGameState extends GameState {
 
 class LiamGameState extends GameState {
   bool isCameraMode = false;
+
+  static const int maxPhotos = 6;
+
+  final List<CapturedPhoto> capturedPhotos = [];
+
+  bool get canCaptureMore => capturedPhotos.length < maxPhotos;
+
+  void addPhoto(CapturedPhoto photo) {
+    if (canCaptureMore) capturedPhotos.add(photo);
+  }
 }

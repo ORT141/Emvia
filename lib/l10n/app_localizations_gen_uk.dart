@@ -699,4 +699,58 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   @override
   String get camera_liam_instructions =>
       'Натисніть C, щоб увімкнути камеру. Натисніть на спуск, щоб зробити фото.';
+
+  @override
+  String get tag_freely => 'вільно';
+
+  @override
+  String get tag_impossible => 'неможливо';
+
+  @override
+  String get tag_difficult => 'складно';
+
+  @override
+  String get tag_obstacle => 'перешкода';
+
+  @override
+  String get tag_danger => 'небезпека';
+
+  @override
+  String get tag_uncomfortable => 'незручно';
+
+  @override
+  String get tag_control => 'контроль';
+
+  @override
+  String get tag_dependency => 'залежність';
+
+  @override
+  String get tag_help => 'допомога';
+
+  @override
+  String get tag_strength => 'сила';
+
+  @override
+  String get tag_style => 'стиль';
+
+  @override
+  String get tag_personality => 'особистість';
+
+  @override
+  String get tag_unreachable => 'недосяжно';
+
+  @override
+  String get tag_barrier => 'бар\'єр';
+
+  @override
+  String get tag_injustice => 'несправедливість';
+
+  @override
+  String get tag_accessibility => 'доступність';
+
+  @override
+  String get tag_solution => 'рішення';
+
+  @override
+  String get tag_freedom => 'свобода';
 }

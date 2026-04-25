@@ -43,5 +43,5 @@ class HouseScene extends GameScene {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(50, worldSize.y * 0.75);
+      Vector2(50, worldSize.y * 0.68);
 }

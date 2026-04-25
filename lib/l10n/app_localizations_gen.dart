@@ -1351,6 +1351,114 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'Press C to toggle camera. Tap shutter to take photo.'**
   String get camera_liam_instructions;
+
+  /// Scene 2 tag
+  ///
+  /// In en, this message translates to:
+  /// **'freely'**
+  String get tag_freely;
+
+  /// Scene 2 tag
+  ///
+  /// In en, this message translates to:
+  /// **'impossible'**
+  String get tag_impossible;
+
+  /// Scene 2 tag
+  ///
+  /// In en, this message translates to:
+  /// **'difficult'**
+  String get tag_difficult;
+
+  /// Scene 3 tag
+  ///
+  /// In en, this message translates to:
+  /// **'obstacle'**
+  String get tag_obstacle;
+
+  /// Scene 3 tag
+  ///
+  /// In en, this message translates to:
+  /// **'danger'**
+  String get tag_danger;
+
+  /// Scene 3 tag
+  ///
+  /// In en, this message translates to:
+  /// **'uncomfortable'**
+  String get tag_uncomfortable;
+
+  /// Scene 4 tag
+  ///
+  /// In en, this message translates to:
+  /// **'control'**
+  String get tag_control;
+
+  /// Scene 4 tag
+  ///
+  /// In en, this message translates to:
+  /// **'dependency'**
+  String get tag_dependency;
+
+  /// Scene 4 tag
+  ///
+  /// In en, this message translates to:
+  /// **'help'**
+  String get tag_help;
+
+  /// Scene 5 tag
+  ///
+  /// In en, this message translates to:
+  /// **'strength'**
+  String get tag_strength;
+
+  /// Scene 5 tag
+  ///
+  /// In en, this message translates to:
+  /// **'style'**
+  String get tag_style;
+
+  /// Scene 5 tag
+  ///
+  /// In en, this message translates to:
+  /// **'personality'**
+  String get tag_personality;
+
+  /// Scene 6 tag
+  ///
+  /// In en, this message translates to:
+  /// **'unreachable'**
+  String get tag_unreachable;
+
+  /// Scene 6 tag
+  ///
+  /// In en, this message translates to:
+  /// **'barrier'**
+  String get tag_barrier;
+
+  /// Scene 6 tag
+  ///
+  /// In en, this message translates to:
+  /// **'injustice'**
+  String get tag_injustice;
+
+  /// Scene 7 tag
+  ///
+  /// In en, this message translates to:
+  /// **'accessibility'**
+  String get tag_accessibility;
+
+  /// Scene 7 tag
+  ///
+  /// In en, this message translates to:
+  /// **'solution'**
+  String get tag_solution;
+
+  /// Scene 7 tag
+  ///
+  /// In en, this message translates to:
+  /// **'freedom'**
+  String get tag_freedom;
 }
 
 class _AppLocalizationsGenDelegate

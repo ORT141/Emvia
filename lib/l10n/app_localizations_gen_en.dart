@@ -698,4 +698,58 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   @override
   String get camera_liam_instructions =>
       'Press C to toggle camera. Tap shutter to take photo.';
+
+  @override
+  String get tag_freely => 'freely';
+
+  @override
+  String get tag_impossible => 'impossible';
+
+  @override
+  String get tag_difficult => 'difficult';
+
+  @override
+  String get tag_obstacle => 'obstacle';
+
+  @override
+  String get tag_danger => 'danger';
+
+  @override
+  String get tag_uncomfortable => 'uncomfortable';
+
+  @override
+  String get tag_control => 'control';
+
+  @override
+  String get tag_dependency => 'dependency';
+
+  @override
+  String get tag_help => 'help';
+
+  @override
+  String get tag_strength => 'strength';
+
+  @override
+  String get tag_style => 'style';
+
+  @override
+  String get tag_personality => 'personality';
+
+  @override
+  String get tag_unreachable => 'unreachable';
+
+  @override
+  String get tag_barrier => 'barrier';
+
+  @override
+  String get tag_injustice => 'injustice';
+
+  @override
+  String get tag_accessibility => 'accessibility';
+
+  @override
+  String get tag_solution => 'solution';
+
+  @override
+  String get tag_freedom => 'freedom';
 }

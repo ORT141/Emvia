@@ -3,7 +3,7 @@ import 'package:flame/rendering.dart';
 
 class ColorUtil {
   static void applySurveyColor(Decorator decorator, SurveyProfile profile) {
-    final color = profile.safeColorValue;
+    final color = profile.safeColorValue.withValues(alpha: 0.25);
     decorator.addLast(PaintDecorator.tint(color));
   }
 
