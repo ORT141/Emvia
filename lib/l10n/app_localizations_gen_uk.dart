@@ -753,4 +753,22 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get tag_freedom => 'свобода';
+
+  @override
+  String get educational_card_label => 'Освітня картка';
+
+  @override
+  String get educational_card_counting_objects =>
+      'Рахунок предметів знижує тривогу та повертає контроль при перевантаженні';
+
+  @override
+  String get educational_card_got_it => 'Зрозуміло';
+
+  @override
+  String get educational_card_scene_end =>
+      'Поважайте особистий простір людини в спектрі та не приділяйте їй підвищеної уваги. Не змушуйте говорити у стресі - дайте час на відновлення. Пам\'ятайте: аутичний спектр не означає відсутність хисту; навпаки, часто це унікальне бачення світу та видатні здібності.';
+
+  @override
+  String get educational_card_stress_speaking =>
+      'Не змушуйте говорити у стресі - дайте час на відновлення';
 }

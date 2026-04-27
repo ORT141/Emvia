@@ -17,6 +17,7 @@ import 'package:emvia/game/scenes/olya/stress/stress_overlay.dart';
 import 'package:emvia/game/overlays/olya/tap_game_overlay.dart';
 import 'package:emvia/game/overlays/olya/pattern_progress_overlay.dart';
 import 'package:emvia/game/overlays/olya/breathing_exercise_overlay.dart';
+import 'package:emvia/game/overlays/olya/educational_card_overlay.dart';
 import 'package:emvia/game/scenes/olya/corridor_scene.dart';
 import 'package:emvia/game/scenes/olya/path/path_choice_scene.dart';
 import 'package:flame/game.dart';
@@ -147,6 +148,7 @@ class _MyAppState extends State<MyApp> {
           'TapGame': (_, game) => TapGameOverlay(game: game),
           'BreathingExercise': (_, game) =>
               BreathingExerciseOverlay(game: game),
+          'EducationalCard': (_, game) => EducationalCardOverlay(game: game),
           'CalmMap': (_, game) => CalmMapOverlay(game: game),
           'PatternProgress': (_, game) {
             final scene = game.currentScene;

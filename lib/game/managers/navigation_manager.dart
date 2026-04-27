@@ -213,6 +213,26 @@ class NavigationManager {
     game.overlays.add('BreathingExercise');
   }
 
+  void showEducationalCard(String text, {VoidCallback? onDismiss}) {
+    game.educationalCardText = text;
+    game.educationalCardOnDismiss = onDismiss;
+    game.gameState.isFrozen = true;
+    game.overlayManager.hideMobileControls();
+    game.overlays.add('EducationalCard');
+  }
+
+  void dismissEducationalCard() {
+    game.overlays.remove('EducationalCard');
+    final cb = game.educationalCardOnDismiss;
+    game.educationalCardOnDismiss = null;
+    if (cb != null) {
+      cb();
+    } else {
+      game.gameState.isFrozen = false;
+      game.overlayManager.showMobileControls();
+    }
+  }
+
   Future<void> finishBreathingExercise() async {
     game.overlays.remove('BreathingExercise');
     game.gameState.isFrozen = false;

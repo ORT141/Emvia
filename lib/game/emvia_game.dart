@@ -66,6 +66,10 @@ class EmviaGame extends FlameGame
 
   DialogTree? currentTree;
 
+  String educationalCardText = '';
+
+  VoidCallback? educationalCardOnDismiss;
+
   EmviaGame() {
     cameraManager = CameraManager(this);
     transitionManager = TransitionManager(this);
@@ -143,6 +147,10 @@ class EmviaGame extends FlameGame
     cameraManager.beginFocusOnPlayer();
 
     await player.interactWithItem(item.id);
+
+    if (olyaState != null) {
+      olyaState!.hasUsedItemInStage = true;
+    }
 
     stressLevel = (stressLevel - 10).clamp(0, 100);
 
@@ -411,6 +419,9 @@ extension EmviaGameFlow on EmviaGame {
 
   Future<void> finishBreathingExercise() =>
       navigationManager.finishBreathingExercise();
+  void showEducationalCard(String text, {VoidCallback? onDismiss}) =>
+      navigationManager.showEducationalCard(text, onDismiss: onDismiss);
+  void dismissEducationalCard() => navigationManager.dismissEducationalCard();
   Future<void> transitionToStressScene() =>
       navigationManager.transitionToStressScene();
   Future<void> transitionToStageScene() =>

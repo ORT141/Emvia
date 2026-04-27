@@ -33,6 +33,33 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
     ], stepTime: stepTime);
   }
 
+  Future<SpriteAnimation> loadWalkingAnimationAuto({
+    String prefix = 'walking',
+    int maxFrames = 30,
+    double stepTime = 0.1,
+  }) async {
+    final frames = <Sprite>[];
+    for (int i = 1; i <= maxFrames; i++) {
+      try {
+        final sprite = await game.loadSprite(
+          "${characterData.assetPath}/${prefix}_$i.png",
+        );
+        frames.add(sprite);
+      } catch (_) {
+        break;
+      }
+    }
+
+    if (frames.isEmpty) {
+      try {
+        final sprite = await game.loadSprite("${characterData.assetPath}/standing.png");
+        frames.add(sprite);
+      } catch (_) {}
+    }
+
+    return SpriteAnimation.spriteList(frames, stepTime: stepTime);
+  }
+
   Future<SpriteAnimation> loadSingleFrameAnimation(String fileName) async {
     return SpriteAnimation.spriteList([
       await game.loadSprite("${characterData.assetPath}/$fileName"),

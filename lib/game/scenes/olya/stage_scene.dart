@@ -12,8 +12,8 @@ import '../../utils/pos_util.dart';
 class StageScene extends GameScene {
   StageScene()
     : super(
-        backgroundPath: 'scenes/stage/background_stage.png',
-        foregroundPath: 'scenes/stage/foreground_stage.png',
+        backgroundPath: 'scenes/olya/stage/background_stage.png',
+        foregroundPath: 'scenes/olya/stage/foreground_stage.png',
         showControls: true,
         frozenPlayer: false,
       ) {
@@ -123,7 +123,8 @@ class StageScene extends GameScene {
     final sceneEdgeX = game.worldRoot.size.x - game.player.size.x - 50;
 
     if (game.player.position.x >= sceneEdgeX) {
-      if (game.stressLevel > 30) {
+      final bypass = game.olyaState?.hasUsedItemInStage ?? false;
+      if (game.stressLevel > 30 && !bypass) {
         game.player.position.x = sceneEdgeX - 5;
         if (!_calmPromptShown) {
           _calmPromptShown = true;
@@ -143,6 +144,9 @@ class StageScene extends GameScene {
         game.player.endInteraction();
       } catch (_) {}
 
+      // clear the bypass flag when transitioning
+      if (game.olyaState != null) game.olyaState!.hasUsedItemInStage = false;
+
       game.playRightSideScene();
     } else {
       if (game.player.position.x < sceneEdgeX - 100) {
@@ -153,17 +157,37 @@ class StageScene extends GameScene {
 
   void _showCalmDownPrompt() {
     final l = AppLocalizationsGen.of(game.buildContext!)!;
-    final tree = DialogTree(
-      nodes: {'start': DialogNode(id: 'start', text: (_) => l.too_loud)},
-      startNodeId: 'start',
+    final bypass = game.olyaState?.hasUsedItemInStage ?? false;
+    if (bypass) {
+      game.gameState.isFrozen = false;
+      game.overlayManager.showMobileControls();
+      final tree = DialogTree(
+        nodes: {'start': DialogNode(id: 'start', text: (_) => l.too_loud)},
+        startNodeId: 'start',
+      );
+      game.startDialog(tree);
+      return;
+    }
+
+    game.showEducationalCard(
+      l.educational_card_stress_speaking,
+      onDismiss: () {
+        game.gameState.isFrozen = false;
+        game.overlayManager.showMobileControls();
+        final tree = DialogTree(
+          nodes: {'start': DialogNode(id: 'start', text: (_) => l.too_loud)},
+          startNodeId: 'start',
+        );
+        game.startDialog(tree);
+      },
     );
-    game.startDialog(tree);
   }
 
   @override
   void onRemove() {
     _selectedItem = null;
     _items.clear();
+    if (game.olyaState != null) game.olyaState!.hasUsedItemInStage = false;
     super.onRemove();
   }
 

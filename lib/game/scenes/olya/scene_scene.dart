@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:emvia/game/scenes/game_scene.dart';
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/game/scenes/olya/stress/stress_scene.dart';
+import 'package:emvia/l10n/app_localizations_gen.dart';
 import 'dart:math' as math;
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -10,7 +11,7 @@ import 'package:flame_audio/flame_audio.dart';
 class SceneScene extends GameScene {
   SceneScene()
     : super(
-        backgroundPath: 'scenes/scene/scene_stress.png',
+        backgroundPath: 'scenes/olya/scene/scene_stress.png',
         scalingMode: SceneScalingMode.stretch,
         frozenPlayer: true,
         showPlayer: false,
@@ -32,7 +33,7 @@ class SceneScene extends GameScene {
     }
 
     _winImage = SpriteComponent()
-      ..sprite = await game.loadSprite('scenes/scene/scene_win.png')
+      ..sprite = await game.loadSprite('scenes/olya/scene/scene_win.png')
       ..priority = 20
       ..opacity = 0.0;
     add(_winImage!);
@@ -75,7 +76,16 @@ class SceneScene extends GameScene {
       _noiseOverlay?.fadeOut(const Duration(milliseconds: 600));
 
       Future.delayed(const Duration(seconds: 1), () async {
-        game.finishJourney();
+        final context = game.buildContext;
+        if (context != null && context.mounted) {
+          final l = AppLocalizationsGen.of(context)!;
+          game.showEducationalCard(
+            l.educational_card_scene_end,
+            onDismiss: game.finishJourney,
+          );
+        } else {
+          game.finishJourney();
+        }
       });
     });
   }

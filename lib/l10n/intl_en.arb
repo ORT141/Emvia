@@ -654,5 +654,15 @@
     "tag_solution": "solution",
     "@tag_solution": { "description": "Scene 7 tag" },
     "tag_freedom": "freedom",
-    "@tag_freedom": { "description": "Scene 7 tag" }
+    "@tag_freedom": { "description": "Scene 7 tag" },
+    "educational_card_label": "Educational card",
+    "@educational_card_label": { "description": "Label badge shown on educational card overlays." },
+    "educational_card_counting_objects": "Counting objects reduces anxiety and restores control during sensory overload",
+    "@educational_card_counting_objects": { "description": "Educational card text about counting objects to reduce anxiety during sensory overload." },
+    "educational_card_got_it": "Got it",
+    "@educational_card_got_it": { "description": "Dismiss button on educational card overlay." },
+    "educational_card_scene_end": "Respect the personal space of a person on the spectrum and do not draw excessive attention to them. Do not force them to speak under stress - give them time to recover. Remember: the autism spectrum does not mean a lack of talent; on the contrary, it often brings a unique worldview and outstanding abilities.",
+    "@educational_card_scene_end": { "description": "Educational card shown at the end of the stage scene about respecting autistic individuals." },
+    "educational_card_stress_speaking": "Don't force them to speak when stressed - give them time to recover",
+    "@educational_card_stress_speaking": { "description": "Educational card shown when the player is stressed and cannot proceed in the stage scene." }
 }

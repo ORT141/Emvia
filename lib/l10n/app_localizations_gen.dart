@@ -1459,6 +1459,36 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'freedom'**
   String get tag_freedom;
+
+  /// Label badge shown on educational card overlays.
+  ///
+  /// In en, this message translates to:
+  /// **'Educational card'**
+  String get educational_card_label;
+
+  /// Educational card text about counting objects to reduce anxiety during sensory overload.
+  ///
+  /// In en, this message translates to:
+  /// **'Counting objects reduces anxiety and restores control during sensory overload'**
+  String get educational_card_counting_objects;
+
+  /// Dismiss button on educational card overlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get educational_card_got_it;
+
+  /// Educational card shown at the end of the stage scene about respecting autistic individuals.
+  ///
+  /// In en, this message translates to:
+  /// **'Respect the personal space of a person on the spectrum and do not draw excessive attention to them. Do not force them to speak under stress - give them time to recover. Remember: the autism spectrum does not mean a lack of talent; on the contrary, it often brings a unique worldview and outstanding abilities.'**
+  String get educational_card_scene_end;
+
+  /// Educational card shown when the player is stressed and cannot proceed in the stage scene.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t force them to speak when stressed - give them time to recover'**
+  String get educational_card_stress_speaking;
 }
 
 class _AppLocalizationsGenDelegate

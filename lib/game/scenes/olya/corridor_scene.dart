@@ -26,6 +26,7 @@ class CorridorScene extends GameScene {
   }
 
   bool _lockerPromptShown = false;
+  bool _educationalCardShown = false;
   bool _hudShown = false;
 
   SpriteComponent? _peopleBackgroundOverlay;
@@ -136,7 +137,6 @@ class CorridorScene extends GameScene {
       game.worldRoot.add(game.player);
     }
 
-    // Move specific intro logic here
     if (game.stressLevel >= 30 &&
         !(game.olyaState?.hasShownCorridorStressIntro ?? true)) {
       game.olyaState?.hasShownCorridorStressIntro = true;
@@ -272,7 +272,17 @@ class CorridorScene extends GameScene {
       _lockerPromptUVx,
       0,
     ).toWorldPos(background.position, background.size).x;
-    if (!_lockerPromptShown && playerX >= lockerX) {
+    if (!_educationalCardShown && playerX >= lockerX) {
+      _educationalCardShown = true;
+      final l = AppLocalizationsGen.of(game.buildContext!)!;
+      game.navigationManager.showEducationalCard(
+        l.educational_card_counting_objects,
+      );
+    }
+
+    if (_educationalCardShown &&
+        !_lockerPromptShown &&
+        !game.overlays.isActive('EducationalCard')) {
       _lockerPromptShown = true;
       game.gameState.isFrozen = true;
 
@@ -364,6 +374,7 @@ class CorridorScene extends GameScene {
 
     _loadWallPattern();
     _hudShown = false;
+    _educationalCardShown = false;
     game.overlays.remove('PatternProgress');
     layoutToWorld();
     super.redrawScene();
@@ -379,6 +390,7 @@ class CorridorScene extends GameScene {
     _peopleForegroundOverlay = null;
 
     game.overlays.remove('PatternProgress');
+    game.overlays.remove('EducationalCard');
 
     super.onRemove();
   }

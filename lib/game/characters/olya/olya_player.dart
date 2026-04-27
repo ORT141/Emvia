@@ -35,15 +35,20 @@ class OlyaPlayer extends BasePlayer {
     updatePlayerSize();
 
     _standingAnimation = await loadSingleFrameAnimation('standing.png');
-    _walkingAnimation = await loadWalkingAnimation();
+    _walkingAnimation = await loadWalkingAnimationAuto(
+      prefix: 'walking',
+      maxFrames: 26,
+      stepTime: 0.08,
+    );
 
     try {
       _standingHeadphonesAnimation = await loadSingleFrameAnimation(
         'standing_headphones.png',
       );
-      _walkingHeadphonesAnimation = await loadWalkingAnimation(
+      _walkingHeadphonesAnimation = await loadWalkingAnimationAuto(
         prefix: 'walking_headphones',
-        frames: 29,
+        maxFrames: 29,
+        stepTime: 0.08,
       );
 
       try {

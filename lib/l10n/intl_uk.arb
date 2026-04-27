@@ -654,5 +654,15 @@
     "tag_solution": "рішення",
     "@tag_solution": { "description": "Scene 7 tag" },
     "tag_freedom": "свобода",
-    "@tag_freedom": { "description": "Scene 7 tag" }
+    "@tag_freedom": { "description": "Scene 7 tag" },
+    "educational_card_label": "Освітня картка",
+    "@educational_card_label": { "description": "Label badge shown on educational card overlays." },
+    "educational_card_counting_objects": "Рахунок предметів знижує тривогу та повертає контроль при перевантаженні",
+    "@educational_card_counting_objects": { "description": "Educational card text about counting objects to reduce anxiety during sensory overload." },
+    "educational_card_got_it": "Зрозуміло",
+    "@educational_card_got_it": { "description": "Dismiss button on educational card overlay." },
+    "educational_card_scene_end": "Поважайте особистий простір людини в спектрі та не приділяйте їй підвищеної уваги. Не змушуйте говорити у стресі - дайте час на відновлення. Пам'ятайте: аутичний спектр не означає відсутність хисту; навпаки, часто це унікальне бачення світу та видатні здібності.",
+    "@educational_card_scene_end": { "description": "Educational card shown at the end of the stage scene about respecting autistic individuals." },
+    "educational_card_stress_speaking": "Не змушуйте говорити у стресі - дайте час на відновлення",
+    "@educational_card_stress_speaking": { "description": "Educational card shown when the player is stressed and cannot proceed in the stage scene." }
 }

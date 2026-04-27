@@ -17,16 +17,22 @@ class LiamPlayer extends BasePlayer {
   LiamPlayer() : super(characterData: liamData);
 
   late final SpriteAnimation _standingAnimation;
+  late final SpriteAnimation _walkingAnimation;
 
   @override
   Future<void> onLoad() async {
     updatePlayerSize();
 
     _standingAnimation = await loadSingleFrameAnimation('standing.png');
+    _walkingAnimation = await loadWalkingAnimationAuto(
+      prefix: 'walking',
+      maxFrames: 30,
+      stepTime: 0.08,
+    );
 
     animations = {
       PlayerState.standing: _standingAnimation,
-      PlayerState.walking: _standingAnimation,
+      PlayerState.walking: _walkingAnimation,
     };
 
     current = PlayerState.standing;

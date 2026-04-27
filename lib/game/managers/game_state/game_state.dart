@@ -11,6 +11,7 @@ class OlyaGameState extends GameState {
   bool hasShownCorridorStressIntro = false;
   bool isCorridorStressIntroActive = false;
   ClassroomScene? classroomScene;
+  bool hasUsedItemInStage = false;
 }
 
 class LiamGameState extends GameState {

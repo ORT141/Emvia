@@ -752,4 +752,22 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get tag_freedom => 'freedom';
+
+  @override
+  String get educational_card_label => 'Educational card';
+
+  @override
+  String get educational_card_counting_objects =>
+      'Counting objects reduces anxiety and restores control during sensory overload';
+
+  @override
+  String get educational_card_got_it => 'Got it';
+
+  @override
+  String get educational_card_scene_end =>
+      'Respect the personal space of a person on the spectrum and do not draw excessive attention to them. Do not force them to speak under stress - give them time to recover. Remember: the autism spectrum does not mean a lack of talent; on the contrary, it often brings a unique worldview and outstanding abilities.';
+
+  @override
+  String get educational_card_stress_speaking =>
+      'Don\'t force them to speak when stressed - give them time to recover';
 }
