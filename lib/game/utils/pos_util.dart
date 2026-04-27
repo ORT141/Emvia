@@ -51,3 +51,8 @@ Vector2 clampTargetToWorldBounds(
 Vector2 getWorldPosFromUV(Vector2 uv, Vector2 bgPos, Vector2 bgSize) {
   return bgPos + Vector2(uv.x * bgSize.x, uv.y * bgSize.y);
 }
+
+extension Vector2Extension on Vector2 {
+  Vector2 toWorldPos(Vector2 bgPos, Vector2 bgSize) =>
+      bgPos + Vector2(x * bgSize.x, y * bgSize.y);
+}

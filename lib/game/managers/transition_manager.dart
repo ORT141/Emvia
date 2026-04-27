@@ -1,10 +1,6 @@
-import 'package:emvia/game/scenes/olya/path/path_choice_scene.dart';
-import 'package:emvia/game/scenes/olya/scene_scene.dart';
-import 'package:emvia/game/scenes/survey_scene.dart';
 import 'package:flame/components.dart';
 import '../emvia_game.dart';
 import '../scenes/game_scene.dart';
-import '../scenes/olya/classroom_scene.dart';
 
 class TransitionManager {
   final EmviaGame game;
@@ -39,17 +35,10 @@ class TransitionManager {
       await game.worldRoot.add(game.player);
     }
 
-    var hidePlayerScenes = [
-      ClassroomScene,
-      SurveyScene,
-      PathChoiceScene,
-      SceneScene,
-    ];
-
-    if (hidePlayerScenes.any((type) => scene.runtimeType == type)) {
-      game.player.opacity = 0.0;
-    } else {
+    if (scene.showPlayer) {
       game.player.opacity = 1.0;
+    } else {
+      game.player.opacity = 0.0;
     }
 
     game.player.position = game.sceneSpawnPoint(

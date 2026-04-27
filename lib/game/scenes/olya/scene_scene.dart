@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:emvia/game/scenes/game_scene.dart';
+import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/game/scenes/olya/stress/stress_scene.dart';
 import 'dart:math' as math;
 import 'package:flame/components.dart';
@@ -12,6 +13,7 @@ class SceneScene extends GameScene {
         backgroundPath: 'scenes/scene/scene_stress.png',
         scalingMode: SceneScalingMode.stretch,
         frozenPlayer: true,
+        showPlayer: false,
       );
 
   SpriteComponent? _winImage;

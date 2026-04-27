@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/services.dart';
+import '../utils/game_config.dart';
 import '../emvia_game.dart';
 import '../emvia_types.dart';
 import '../utils/pos_util.dart';
@@ -71,7 +72,7 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
 
   void updatePlayerSize() {
     if (game.worldRoot.size.y <= 0) return;
-    final height = game.worldRoot.size.y * 0.42;
+    final height = game.worldRoot.size.y * GameConfig.playerHeightFactor;
     size = Vector2(height * characterData.widthFactor, height);
   }
 
@@ -132,7 +133,7 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
           ? game
                 .sceneSpawnPoint(game.currentScene!, game.size, game.worldRoot)
                 .y
-          : game.worldRoot.size.y * 0.58;
+          : game.worldRoot.size.y * GameConfig.playerSpawnYFactor;
     }
   }
 

@@ -94,15 +94,14 @@ class OutsideScene extends GameScene {
     if (game.transitionManager.isTransitioning) return;
 
     final playerX = game.player.position.x;
-    final triggerX = getWorldPosFromUV(
-      Vector2(_stressTriggerUVx, 0),
-      background.position,
-      background.size,
-    ).x;
+    final triggerX = Vector2(
+      _stressTriggerUVx,
+      0,
+    ).toWorldPos(background.position, background.size).x;
 
     if (playerX >= triggerX) {
       _stressTriggered = true;
-      game.showBreathingExercise();
+      game.navigationManager.showBreathingExercise();
     }
 
     if (game.stressLevel >= 30 && !game.overlays.isActive('Stress')) {

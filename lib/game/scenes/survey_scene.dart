@@ -7,7 +7,7 @@ import 'package:flutter/material.dart' hide Gradient;
 import 'game_scene.dart';
 
 class SurveyScene extends GameScene {
-  SurveyScene() : super() {
+  SurveyScene() : super(showPlayer: false) {
     GameScene.register(() => SurveyScene());
   }
 

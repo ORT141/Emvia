@@ -18,6 +18,7 @@ import 'package:emvia/game/overlays/olya/tap_game_overlay.dart';
 import 'package:emvia/game/overlays/olya/pattern_progress_overlay.dart';
 import 'package:emvia/game/overlays/olya/breathing_exercise_overlay.dart';
 import 'package:emvia/game/scenes/olya/corridor_scene.dart';
+import 'package:emvia/game/scenes/olya/path/path_choice_scene.dart';
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -176,10 +177,10 @@ class _MyAppState extends State<MyApp> {
                 confirmLabel: info.confirmLabel,
                 cancelLabel: info.cancelLabel,
                 onConfirm: () async {
-                  await game.navigationManager.confirmSelectedPath(
-                    game.buildContext!,
-                    info.index,
-                  );
+                  final scene = game.currentScene;
+                  if (scene is PathChoiceScene) {
+                    await scene.confirmSelectedPath(info.index);
+                  }
                 },
                 onCancel: () {
                   game.hidePathDetail();

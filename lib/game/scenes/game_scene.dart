@@ -28,11 +28,14 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
     this.scalingMode = SceneScalingMode.scrolling,
     this.showControls = false,
     this.frozenPlayer = false,
+    this.showPlayer = true,
   }) : foregroundPaths = [
          if (foregroundPath != null && foregroundPath.isNotEmpty)
            foregroundPath,
          ...?foregroundPaths,
        ];
+
+  final bool showPlayer;
 
   final SpriteComponent background = SpriteComponent()
     ..anchor = Anchor.topLeft

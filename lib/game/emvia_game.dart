@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'utils/game_config.dart';
 import 'utils/survey_service.dart';
 import 'components/fade_overlay.dart';
 import 'characters/base_player.dart';
@@ -37,8 +38,15 @@ class EmviaGame extends FlameGame
   final GamePreferencesManager preferences = GamePreferencesManager();
   final GameSessionManager session = GameSessionManager();
   late GameState gameState;
-  OlyaGameState? get olyaState => gameState is OlyaGameState ? gameState as OlyaGameState : null;
-  LiamGameState? get liamState => gameState is LiamGameState ? gameState as LiamGameState : null;
+  OlyaGameState? get olyaState {
+    final state = gameState;
+    return state is OlyaGameState ? state : null;
+  }
+
+  LiamGameState? get liamState {
+    final state = gameState;
+    return state is LiamGameState ? state : null;
+  }
 
   late final CameraManager cameraManager;
   late final TransitionManager transitionManager;
@@ -131,7 +139,7 @@ class EmviaGame extends FlameGame
     overlays.add('CalmingEffect');
     overlayManager.hideStageItemCard();
 
-    cameraManager.animateZoomTo(1.45);
+    cameraManager.animateZoomTo(GameConfig.interactionZoom);
     cameraManager.beginFocusOnPlayer();
 
     await player.interactWithItem(item.id);
@@ -139,7 +147,7 @@ class EmviaGame extends FlameGame
     stressLevel = (stressLevel - 10).clamp(0, 100);
 
     overlays.remove('CalmingEffect');
-    cameraManager.animateZoomTo(1.1);
+    cameraManager.animateZoomTo(GameConfig.defaultZoom);
     cameraManager.endFocusOnPlayer();
     gameState.isFrozen = false;
     overlayManager.showMobileControls();
@@ -288,203 +296,20 @@ class EmviaGame extends FlameGame
     overlayManager.closeMainMenu();
   }
 
-  Future<void> reloadCurrentScene() => navigationManager.reloadCurrentScene();
-
-  Future<void> goToCorridor() => navigationManager.goToCorridor();
-
-  Future<void> transitionToCorridor() =>
-      navigationManager.transitionToCorridor();
-
-  Future<void> playRightSideScene() => navigationManager.playRightSideScene();
-
-  Future<void> loadStageScene() => navigationManager.loadStageScene();
-
   double currentSceneWorldWidth() {
     final scene = currentScene;
-    return scene?.worldWidthForViewport(size) ?? worldWidth;
-  }
-
-  void startGame() {
-    navigationManager.startGameFlow();
-  }
-
-  void finishJourney() {
-    if (session.journeyCompleted) return;
-    session.journeyCompleted = true;
-    overlayManager.hideMobileControls();
-    pauseEngine();
-    overlays.add('CalmMap');
-  }
-
-  Future<void> returnToMainMenuAfterJourney() =>
-      navigationManager.returnToMainMenuAfterJourney();
-
-  Future<void> returnToMainMenuAfterSurvey() =>
-      navigationManager.returnToMainMenuAfterSurvey();
-
-  void initializeInventory(BuildContext context) {
-    if (backpack.items.isNotEmpty) return;
-    for (final item in BackpackItem.initialItems(context)) {
-      backpack.addItem(item);
-    }
+    return scene?.worldWidthForViewport(size) ?? GameConfig.worldWidth;
   }
 
   void setDebugTapEnabled(bool enabled) {
     debugTapEnabled = enabled;
   }
 
-  void toggleBackpack() => overlayManager.toggleBackpack();
-
-  void equipTool(String toolId) {
-    session.toggleSelectedTool(toolId);
-  }
-
-  void unequipTool(String toolId) {
-    session.removeSelectedTool(toolId);
-  }
-
-  void toggleDebug() => overlayManager.toggleDebug();
-
-  void toggleCameraMode() {
-    if (selectedCharacter != PlayableCharacter.liam) return;
-    final state = liamState;
-    if (state == null) return;
-    
-    if (state.isCameraMode) {
-      state.isCameraMode = false;
-      overlays.remove('Camera');
-      gameState.isFrozen = false;
-    } else {
-      state.isCameraMode = true;
-      overlays.add('Camera');
-      gameState.isFrozen = true;
-    }
-  }
-
-  void setMobileMoveX(double direction) {
-    if (gameState.isFrozen) return;
-    gameState.mobileMoveX = direction.clamp(-1.0, 1.0);
-    player.setMobileDirection(gameState.mobileMoveX);
-  }
-
-  void showMobileControls() => overlayManager.showMobileControls();
-
-  void hideMobileControls() => overlayManager.hideMobileControls();
-
-  void openMainMenu() => overlayManager.openMainMenu();
-
-  Future<void> returnToMainMenu() async {
-    await fadeOverlay.fadeIn(0.4);
-    resumeEngine();
-    overlays.remove('PauseMenu');
-    navigationManager.prepareReturnToMainMenu();
-    await loadMenuScene();
-    openMainMenu();
-    await fadeOverlay.fadeOut(0.4);
-  }
-
-  void closeMainMenu() => overlayManager.closeMainMenu();
-
   bool consumeStartGameAfterSurvey() => session.consumeStartGameAfterSurvey();
 
   bool isCharacterUnlocked(PlayableCharacter character) {
     return character == PlayableCharacter.olya ||
         character == PlayableCharacter.liam;
-  }
-
-  void selectCharacter(PlayableCharacter character) {
-    if (!isCharacterUnlocked(character)) return;
-    selectedCharacter = character;
-  }
-
-  void startNewGameSurveyFlow() async {
-    await surveyService.clearAiResults();
-    session.markStartGameAfterSurvey();
-    closeMainMenu();
-    await loadScene(
-      SurveyScene(),
-      onFullOpacity: () {
-        overlays.add('Survey');
-      },
-    );
-  }
-
-  void startGameSkippingSurvey() {
-    navigationManager.startGameFlow();
-  }
-
-  Future<void> skipToScene(GameScene scene) =>
-      navigationManager.skipToScene(scene);
-
-  void showPathDetail(PathDetailInfo info) =>
-      navigationManager.showPathDetail(info);
-
-  void hidePathDetail() => navigationManager.hidePathDetail();
-
-  void clearPathSelection() => navigationManager.clearPathSelection();
-
-  void clearPathOverlay() => olyaState?.classroomScene?.clearPathOverlay();
-
-  void restoreClassroomBackground() =>
-      olyaState?.classroomScene?.showClassroomImage();
-
-  void chooseFirstPath(BuildContext context) =>
-      navigationManager.chooseFirstPath(context);
-
-  void chooseSecondPath(BuildContext context) =>
-      navigationManager.chooseSecondPath(context);
-
-  void chooseThirdPath(BuildContext context) =>
-      navigationManager.chooseThirdPath(context);
-
-  Future<void> applyPathChoice(int index, BuildContext context) =>
-      navigationManager.applyPathChoice(index, context);
-
-  Future<void> goToSecondCorridor() => navigationManager.goToSecondCorridor();
-
-  Future<void> goToOutside() => navigationManager.goToOutside();
-
-  void showBreathingExercise() => navigationManager.showBreathingExercise();
-
-  Future<void> finishBreathingExercise() =>
-      navigationManager.finishBreathingExercise();
-
-  Future<void> transitionToStressScene() =>
-      navigationManager.transitionToStressScene();
-
-  Future<void> transitionToStageScene() =>
-      navigationManager.transitionToStageScene();
-
-  void completeCorridorStressIntro() =>
-      navigationManager.completeCorridorStressIntro();
-
-  void playerToCorridorEntrance() {
-    player.position.x = player.size.x / 2 + 10;
-    cameraManager.snapToPlayer(force: true);
-  }
-
-  void saveCorridorReturnPosition(double x) {
-    session.savedCorridorReturnX = x;
-    session.save();
-  }
-
-  void restoreCorridorPosition() {
-    final savedX = session.savedCorridorReturnX;
-    session.savedCorridorReturnX = null;
-    session.save();
-
-    if (savedX == null) {
-      playerToCorridorEntrance();
-      return;
-    }
-
-    final minX = player.size.x / 2;
-    final maxX = worldRoot.size.x - player.size.x / 2;
-    player.position.x = savedX.clamp(minX, maxX).toDouble();
-    if (currentScene != null) {
-      player.position.y = sceneSpawnPoint(currentScene!, size, worldRoot).y;
-    }
-    cameraManager.snapToPlayer(force: true);
   }
 
   @override
@@ -565,5 +390,115 @@ class EmviaGame extends FlameGame
   ) {
     final p = scene.spawnPoint(screenSize, root.size);
     return Vector2(p.x, p.y);
+  }
+}
+
+extension EmviaGameFlow on EmviaGame {
+  Future<void> reloadCurrentScene() => navigationManager.reloadCurrentScene();
+  Future<void> goToCorridor() => navigationManager.goToCorridor();
+  Future<void> transitionToCorridor() =>
+      navigationManager.transitionToCorridor();
+  Future<void> playRightSideScene() => navigationManager.playRightSideScene();
+  Future<void> startGame() => navigationManager.startGameFlow();
+  Future<void> startGameSkippingSurvey() => navigationManager.startGameFlow();
+
+  Future<void> skipToScene(GameScene scene) =>
+      navigationManager.skipToScene(scene);
+  void showPathDetail(PathDetailInfo info) =>
+      navigationManager.showPathDetail(info);
+  void hidePathDetail() => navigationManager.hidePathDetail();
+  void clearPathSelection() => navigationManager.clearPathSelection();
+
+  Future<void> finishBreathingExercise() =>
+      navigationManager.finishBreathingExercise();
+  Future<void> transitionToStressScene() =>
+      navigationManager.transitionToStressScene();
+  Future<void> transitionToStageScene() =>
+      navigationManager.transitionToStageScene();
+  void completeCorridorStressIntro() =>
+      navigationManager.completeCorridorStressIntro();
+
+  void selectCharacter(PlayableCharacter character) {
+    if (isCharacterUnlocked(character)) {
+      selectedCharacter = character;
+    }
+  }
+
+  void startNewGameSurveyFlow() async {
+    await surveyService.clearAiResults();
+    session.markStartGameAfterSurvey();
+    closeMainMenu();
+    await loadScene(
+      SurveyScene(),
+      onFullOpacity: () {
+        overlays.add('Survey');
+      },
+    );
+  }
+
+  Future<void> returnToMainMenu() async {
+    await fadeOverlay.fadeIn(GameConfig.defaultFadeDuration);
+    resumeEngine();
+    overlays.remove('PauseMenu');
+    navigationManager.prepareReturnToMainMenu();
+    await loadMenuScene();
+    openMainMenu();
+    await fadeOverlay.fadeOut(GameConfig.defaultFadeDuration);
+  }
+
+  Future<void> returnToMainMenuAfterJourney() =>
+      navigationManager.returnToMainMenuAfterJourney();
+  Future<void> returnToMainMenuAfterSurvey() =>
+      navigationManager.returnToMainMenuAfterSurvey();
+
+  void finishJourney() {
+    if (session.journeyCompleted) return;
+    session.journeyCompleted = true;
+    overlayManager.hideMobileControls();
+    pauseEngine();
+    overlays.add('CalmMap');
+  }
+}
+
+extension EmviaGameUI on EmviaGame {
+  void toggleBackpack() => overlayManager.toggleBackpack();
+  void toggleDebug() => overlayManager.toggleDebug();
+  void openMainMenu() => overlayManager.openMainMenu();
+  void closeMainMenu() => overlayManager.closeMainMenu();
+  void showMobileControls() => overlayManager.showMobileControls();
+  void hideMobileControls() => overlayManager.hideMobileControls();
+
+  void toggleCameraMode() {
+    if (selectedCharacter != PlayableCharacter.liam) return;
+    final state = liamState;
+    if (state == null) return;
+
+    if (state.isCameraMode) {
+      state.isCameraMode = false;
+      overlays.remove('Camera');
+      gameState.isFrozen = false;
+    } else {
+      state.isCameraMode = true;
+      overlays.add('Camera');
+      gameState.isFrozen = true;
+    }
+  }
+
+  void setMobileMoveX(double direction) {
+    if (gameState.isFrozen) return;
+    gameState.mobileMoveX = direction.clamp(-1.0, 1.0);
+    player.setMobileDirection(gameState.mobileMoveX);
+  }
+}
+
+extension EmviaGameInventory on EmviaGame {
+  void equipTool(String toolId) => session.toggleSelectedTool(toolId);
+  void unequipTool(String toolId) => session.removeSelectedTool(toolId);
+
+  void initializeInventory(BuildContext context) {
+    if (backpack.items.isNotEmpty) return;
+    for (final item in BackpackItem.initialItems(context)) {
+      backpack.addItem(item);
+    }
   }
 }

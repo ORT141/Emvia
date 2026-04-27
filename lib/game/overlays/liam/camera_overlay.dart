@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../l10n/app_localizations_gen.dart';
+import '../glass_ui.dart';
 import '../../emvia_game.dart';
 import '../../models/captured_photo.dart';
 
@@ -296,45 +297,6 @@ String _resolveTag(AppLocalizationsGen l, String key) {
   }
 }
 
-class _TagButton extends StatelessWidget {
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _TagButton({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected ? Colors.white : Colors.white24,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: selected ? Colors.white : Colors.white54,
-            width: selected ? 2 : 1,
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: selected ? Colors.black : Colors.white,
-            fontWeight: selected ? FontWeight.bold : FontWeight.normal,
-            fontSize: 13,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _TagEditorDialog extends StatefulWidget {
   final EmviaGame game;
   final XFile file;
@@ -368,30 +330,28 @@ class _TagEditorDialogState extends State<_TagEditorDialog> {
             horizontal: horizontalInset,
             vertical: isCompact ? 12.0 : 20.0,
           ),
-          child: ConstrainedBox(
+          child: GlassPanel(
+            padding: EdgeInsets.zero,
             constraints: BoxConstraints(
               maxWidth: dialogMaxWidth,
               maxHeight: dialogMaxHeight,
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFF0B0B0F),
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: Colors.white24),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(
-                    isCompact ? 12 : 16,
-                    isCompact ? 12 : 16,
-                    isCompact ? 12 : 16,
-                    isCompact ? 14 : 18,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ConstrainedBox(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  isCompact ? 16 : 24,
+                  isCompact ? 16 : 24,
+                  isCompact ? 16 : 24,
+                  isCompact ? 20 : 28,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GlassPanel(
+                      padding: EdgeInsets.zero,
+                      borderRadius: BorderRadius.circular(16),
+                      alphaValue: 0.1,
+                      child: ConstrainedBox(
                         constraints: BoxConstraints(
                           maxHeight: previewMaxHeight,
                         ),
@@ -402,11 +362,10 @@ class _TagEditorDialogState extends State<_TagEditorDialog> {
                               Positioned.fill(
                                 child: _buildCapturedImage(widget.file),
                               ),
-
                               if (_selectedTag != null)
                                 Positioned(
-                                  right: 24,
-                                  bottom: 24,
+                                  right: 16,
+                                  bottom: 16,
                                   child: _TagStamp(
                                     label: l != null
                                         ? _resolveTag(l, _selectedTag!)
@@ -417,74 +376,65 @@ class _TagEditorDialogState extends State<_TagEditorDialog> {
                           ),
                         ),
                       ),
-                      SizedBox(height: isCompact ? 12 : 16),
-                      Text(
-                        l?.camera_liam_title ?? 'Tag editor',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
+                    ),
+                    SizedBox(height: isCompact ? 16 : 24),
+                    Text(
+                      l?.camera_liam_title ?? 'Tag editor',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.5,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: isCompact ? 12 : 16),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: tagKeys.map((key) {
+                        final label = l != null ? _resolveTag(l, key) : key;
+                        final isSelected = _selectedTag == key;
+                        return GlassOptionChip(
+                          label: label,
+                          selected: isSelected,
+                          onTap: () => setState(() {
+                            _selectedTag = key;
+                          }),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(height: isCompact ? 20 : 28),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GlassButton(
+                          label: l?.cancel ?? 'Discard',
+                          primary: false,
+                          compact: isCompact,
+                          onPressed: () => Navigator.of(context).pop(),
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: isCompact ? 10 : 12),
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: tagKeys.map((key) {
-                          final label = l != null ? _resolveTag(l, key) : key;
-                          final isSelected = _selectedTag == key;
-                          return _TagButton(
-                            label: label,
-                            selected: isSelected,
-                            onTap: () => setState(() {
-                              _selectedTag = key;
-                            }),
-                          );
-                        }).toList(),
-                      ),
-                      SizedBox(height: isCompact ? 14 : 16),
-                      Wrap(
-                        alignment: WrapAlignment.spaceBetween,
-                        runSpacing: 8,
-                        spacing: 12,
-                        children: [
-                          TextButton.icon(
-                            onPressed: () => Navigator.of(context).pop(),
-                            icon: const Icon(
-                              Icons.delete_outline,
-                              color: Colors.white70,
-                            ),
-                            label: Text(
-                              l?.cancel ?? 'Discard',
-                              style: const TextStyle(color: Colors.white70),
-                            ),
-                          ),
-                          ElevatedButton.icon(
-                            onPressed: _selectedTag == null
-                                ? null
-                                : () {
-                                    widget.game.liamState?.addPhoto(
-                                      CapturedPhoto(
-                                        path: widget.file.path,
-                                        tagKey: _selectedTag!,
-                                        sceneIndex: widget.game.sceneIndex,
-                                      ),
-                                    );
-                                    Navigator.of(context).pop();
-                                  },
-                            icon: const Icon(Icons.check),
-                            label: Text(l?.continueLabel ?? 'Save'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        const SizedBox(width: 12),
+                        GlassButton(
+                          label: l?.continueLabel ?? 'Save',
+                          primary: true,
+                          compact: isCompact,
+                          onPressed: _selectedTag == null
+                              ? null
+                              : () {
+                                  widget.game.liamState?.addPhoto(
+                                    CapturedPhoto(
+                                      path: widget.file.path,
+                                      tagKey: _selectedTag!,
+                                      sceneIndex: widget.game.sceneIndex,
+                                    ),
+                                  );
+                                  Navigator.of(context).pop();
+                                },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -502,20 +452,21 @@ class _TagStamp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.65),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: Colors.white70),
-      ),
+    return GlassPanel(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      borderRadius: BorderRadius.circular(10),
+      blurSigma: 6,
+      alphaValue: 0.5,
       child: Text(
         '#$label',
         style: const TextStyle(
           color: Colors.white,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w900,
           fontSize: 14,
-          letterSpacing: 0.5,
+          letterSpacing: 0.8,
+          shadows: [
+            Shadow(color: Colors.black45, offset: Offset(0, 2), blurRadius: 4),
+          ],
         ),
       ),
     );

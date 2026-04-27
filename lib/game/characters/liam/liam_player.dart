@@ -1,6 +1,7 @@
 import 'package:emvia/game/scenes/liam/house_scene.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
+import 'package:emvia/game/emvia_game.dart';
 import '../base_player.dart';
 import '../character_data.dart';
 

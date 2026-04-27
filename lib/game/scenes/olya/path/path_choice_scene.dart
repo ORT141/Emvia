@@ -1,15 +1,21 @@
 import 'package:emvia/game/emvia_types.dart';
+import 'package:emvia/game/utils/ui_utils.dart';
+import 'package:emvia/game/emvia_game.dart';
 import 'package:flame/components.dart';
 import 'package:emvia/l10n/app_localizations.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import '../../../utils/cover_scaling.dart';
 import 'path_mark.dart';
 import '../../game_scene.dart';
 
 class PathChoiceScene extends GameScene with CoverScaling {
-  PathChoiceScene() : super(backgroundPath: 'scenes/olya/classroom/path.png') {
+  PathChoiceScene()
+    : super(
+        backgroundPath: 'scenes/olya/classroom/path.png',
+        showPlayer: false,
+      ) {
     GameScene.register(() => PathChoiceScene());
   }
 
@@ -169,6 +175,52 @@ class PathChoiceScene extends GameScene with CoverScaling {
     }
     _stopPathAudio?.call();
     _stopPathAudio = null;
+  }
+
+  Future<void> confirmSelectedPath(int index) async {
+    final context = game.buildContext;
+    if (context == null || !context.mounted) return;
+    final l = AppLocalizationsGen.of(context)!;
+    _recordPathChoice(l, index);
+
+    if (index == 1 || index == 2) {
+      await UIUtils.showWarningDialog(context, l.too_dangerous);
+      await _applyPathChoice(index, l);
+    } else {
+      game.olyaState?.classroomScene?.completePathChoice();
+    }
+  }
+
+  Future<void> _applyPathChoice(int index, AppLocalizationsGen l) async {
+    _recordPathChoice(l, index);
+
+    if (index == 1 || index == 2) {
+      game.stressLevel = 100;
+    }
+
+    if (index == 0) {
+      await game.navigationManager.goToCorridor();
+    } else if (index == 1) {
+      await game.navigationManager.goToSecondCorridor();
+    } else {
+      await game.navigationManager.goToOutside();
+    }
+  }
+
+  void _recordPathChoice(AppLocalizationsGen l, int index) {
+    game.session.addSelectedTool(l.classroom);
+    game.session.addSelectedTool(_pathLabelForIndex(l, index));
+  }
+
+  String _pathLabelForIndex(AppLocalizationsGen l, int index) {
+    switch (index) {
+      case 0:
+        return l.path_first;
+      case 1:
+        return l.path_second;
+      default:
+        return l.path_third;
+    }
   }
 
   @override

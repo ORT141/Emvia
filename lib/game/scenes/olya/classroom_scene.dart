@@ -14,6 +14,7 @@ class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
         backgroundPath: 'scenes/olya/classroom/classroom.png',
         showControls: false,
         frozenPlayer: true,
+        showPlayer: false,
       ) {
     GameScene.register(() => ClassroomScene());
   }
@@ -144,13 +145,20 @@ class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
 
   void _onConfirmChoice() {
     if (_selectedMarkIndex == null) return;
-    if (_selectedMarkIndex == 0) {
-      game.chooseFirstPath(game.buildContext!);
-    } else if (_selectedMarkIndex == 1) {
-      game.chooseSecondPath(game.buildContext!);
-    } else if (_selectedMarkIndex == 2) {
-      game.chooseThirdPath(game.buildContext!);
-    }
+    completePathChoice();
+  }
+
+  void completePathChoice() {
+    game.sceneIndex = 2;
+    game.player.opacity = 1;
+    showClassroomImage();
+    clearMarks();
+    game.transitionManager.updateClassroomZoom();
+    game.cameraManager.snapToPlayer(force: true);
+
+    Future.delayed(const Duration(seconds: 1), () {
+      game.navigationManager.goToCorridor();
+    });
   }
 
   Future<void> clearMarks() async {

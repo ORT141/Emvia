@@ -1,5 +1,6 @@
 import 'package:emvia/game/emvia_types.dart';
 import 'package:flame/components.dart';
+import 'package:emvia/game/emvia_game.dart';
 import 'package:flame/events.dart';
 import 'dart:ui' show FilterQuality, Paint, Rect;
 
@@ -95,6 +96,8 @@ class StageScene extends GameScene {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
+
+    game.unequipTool('headphones');
 
     for (final itemDef in _itemDefinitions) {
       await _addItem(itemDef);

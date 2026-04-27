@@ -3,6 +3,7 @@ import 'package:flame/events.dart';
 import '../../scenes/olya/classroom_scene.dart';
 import '../../scenes/olya/corridor_scene.dart';
 import '../../scenes/olya/stage_scene.dart';
+import 'package:emvia/game/emvia_game.dart';
 import '../base_player.dart';
 import '../character_data.dart';
 

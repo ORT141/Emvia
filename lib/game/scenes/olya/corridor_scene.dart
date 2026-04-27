@@ -42,19 +42,17 @@ class CorridorScene extends GameScene {
       _patternSprites.map((sp) => sp.position.clone()).toList();
 
   Vector2 get backpackWorldMin =>
-      getWorldPosFromUV(_backpackMinUV, background.position, background.size);
+      _backpackMinUV.toWorldPos(background.position, background.size);
   Vector2 get backpackWorldMax =>
-      getWorldPosFromUV(_backpackMaxUV, background.position, background.size);
-  double get patternWorldStartX => getWorldPosFromUV(
-    Vector2(_patternStartUVx, 0),
-    background.position,
-    background.size,
-  ).x;
-  double get patternWorldEndX => getWorldPosFromUV(
-    Vector2(_patternEndUVx, 0),
-    background.position,
-    background.size,
-  ).x;
+      _backpackMaxUV.toWorldPos(background.position, background.size);
+  double get patternWorldStartX => Vector2(
+    _patternStartUVx,
+    0,
+  ).toWorldPos(background.position, background.size).x;
+  double get patternWorldEndX => Vector2(
+    _patternEndUVx,
+    0,
+  ).toWorldPos(background.position, background.size).x;
 
   @override
   double worldWidthForViewport(Vector2 viewportSize) {
@@ -110,13 +108,11 @@ class CorridorScene extends GameScene {
     final zoom = game.worldRoot.scale.x;
     final worldPos = (screenPos - worldOffset) / zoom;
 
-    final minPos = getWorldPosFromUV(
-      _backpackMinUV,
+    final minPos = _backpackMinUV.toWorldPos(
       background.position,
       background.size,
     );
-    final maxPos = getWorldPosFromUV(
-      _backpackMaxUV,
+    final maxPos = _backpackMaxUV.toWorldPos(
       background.position,
       background.size,
     );
@@ -138,6 +134,13 @@ class CorridorScene extends GameScene {
 
     if (game.player.parent != game.worldRoot) {
       game.worldRoot.add(game.player);
+    }
+
+    // Move specific intro logic here
+    if (game.stressLevel >= 30 &&
+        !(game.olyaState?.hasShownCorridorStressIntro ?? true)) {
+      game.olyaState?.hasShownCorridorStressIntro = true;
+      game.olyaState?.isCorridorStressIntroActive = true;
     }
 
     try {
@@ -167,15 +170,39 @@ class CorridorScene extends GameScene {
 
     if (game.olyaState?.isCorridorStressIntroActive ?? false) {
       game.gameState.isFrozen = true;
+      game.overlayManager.hideMobileControls();
+    } else {
+      game.overlayManager.showMobileControls();
     }
 
     if (game.stressLevel >= 30 && !game.overlays.isActive('Stress')) {
       game.overlays.add('Stress');
     }
 
+    _restorePosition();
+
     ColorUtil.colorWalls(background.decorator, game.surveyProfile);
 
     await _loadWallPattern();
+  }
+
+  void _restorePosition() {
+    final savedX = game.session.savedCorridorReturnX;
+    game.session.savedCorridorReturnX = null;
+    game.session.save();
+
+    if (savedX == null) {
+      game.player.position.x = game.player.size.x / 2 + 10;
+    } else {
+      final minX = game.player.size.x / 2;
+      final maxX = game.worldRoot.size.x - game.player.size.x / 2;
+      game.player.position.x = savedX.clamp(minX, maxX).toDouble();
+    }
+
+    game.player.position.y = game
+        .sceneSpawnPoint(this, game.size, game.worldRoot)
+        .y;
+    game.cameraManager.snapToPlayer(force: true);
   }
 
   void _onPatternCollected() {
@@ -194,6 +221,11 @@ class CorridorScene extends GameScene {
     }
   }
 
+  void saveCorridorReturnPosition(double x) {
+    game.session.savedCorridorReturnX = x;
+    game.session.save();
+  }
+
   bool _stressSceneTriggered = false;
 
   @override
@@ -201,11 +233,10 @@ class CorridorScene extends GameScene {
     super.update(dt);
 
     final playerX = game.player.position.x;
-    final stressTriggerX = getWorldPosFromUV(
-      Vector2(_stressTriggerUVx, 0),
-      background.position,
-      background.size,
-    ).x;
+    final stressTriggerX = Vector2(
+      _stressTriggerUVx,
+      0,
+    ).toWorldPos(background.position, background.size).x;
 
     if (!_stressSceneTriggered &&
         !game.transitionManager.isTransitioning &&
@@ -215,7 +246,7 @@ class CorridorScene extends GameScene {
       if (game.olyaState != null) {
         game.olyaState!.hasTriggeredStressScene = true;
       }
-      game.saveCorridorReturnPosition(playerX);
+      saveCorridorReturnPosition(playerX);
       game.loadScene(
         StressScene(),
         onFullOpacity: () {
@@ -227,22 +258,20 @@ class CorridorScene extends GameScene {
     }
 
     if (!_hudShown && _patternSprites.isNotEmpty) {
-      final hudTriggerX = getWorldPosFromUV(
-        Vector2(_lockerPromptUVx + 0.15, 0),
-        background.position,
-        background.size,
-      ).x;
+      final hudTriggerX = Vector2(
+        _lockerPromptUVx + 0.15,
+        0,
+      ).toWorldPos(background.position, background.size).x;
       if (playerX >= hudTriggerX) {
         _hudShown = true;
         game.overlays.add('PatternProgress');
       }
     }
 
-    final lockerX = getWorldPosFromUV(
-      Vector2(_lockerPromptUVx, 0),
-      background.position,
-      background.size,
-    ).x;
+    final lockerX = Vector2(
+      _lockerPromptUVx,
+      0,
+    ).toWorldPos(background.position, background.size).x;
     if (!_lockerPromptShown && playerX >= lockerX) {
       _lockerPromptShown = true;
       game.gameState.isFrozen = true;
@@ -277,27 +306,23 @@ class CorridorScene extends GameScene {
       final worldH = game.size.y;
       final patternSize = worldH * 0.11;
       final spacing = patternSize * 2.5;
-      final minY = getWorldPosFromUV(
-        Vector2(0, _patternStartUVy),
-        background.position,
-        background.size,
-      ).y;
-      final maxY = getWorldPosFromUV(
-        Vector2(0, _patternEndUVy),
-        background.position,
-        background.size,
-      ).y;
+      final minY = Vector2(
+        0,
+        _patternStartUVy,
+      ).toWorldPos(background.position, background.size).y;
+      final maxY = Vector2(
+        0,
+        _patternEndUVy,
+      ).toWorldPos(background.position, background.size).y;
 
-      final startX = getWorldPosFromUV(
-        Vector2(_patternStartUVx, 0),
-        background.position,
-        background.size,
-      ).x;
-      final endX = getWorldPosFromUV(
-        Vector2(_patternEndUVx, 0),
-        background.position,
-        background.size,
-      ).x;
+      final startX = Vector2(
+        _patternStartUVx,
+        0,
+      ).toWorldPos(background.position, background.size).x;
+      final endX = Vector2(
+        _patternEndUVx,
+        0,
+      ).toWorldPos(background.position, background.size).x;
       final areaWidth = endX - startX;
       final count = (areaWidth / spacing).floor().clamp(8, 12);
 
