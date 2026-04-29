@@ -178,10 +178,12 @@ class _MyAppState extends State<MyApp> {
                 description: info.description,
                 confirmLabel: info.confirmLabel,
                 cancelLabel: info.cancelLabel,
-                onConfirm: () async {
+                onConfirm: () {
                   final scene = game.currentScene;
+                  game.hidePathDetail();
+                  game.clearPathSelection();
                   if (scene is PathChoiceScene) {
-                    await scene.confirmSelectedPath(info.index);
+                    scene.confirmSelectedPath(info.index);
                   }
                 },
                 onCancel: () {

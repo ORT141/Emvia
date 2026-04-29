@@ -185,10 +185,8 @@ class PathChoiceScene extends GameScene with CoverScaling {
 
     if (index == 1 || index == 2) {
       await UIUtils.showWarningDialog(context, l.too_dangerous);
-      await _applyPathChoice(index, l);
-    } else {
-      game.olyaState?.classroomScene?.completePathChoice();
     }
+    await _applyPathChoice(index, l);
   }
 
   Future<void> _applyPathChoice(int index, AppLocalizationsGen l) async {

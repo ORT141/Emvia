@@ -52,7 +52,9 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
 
     if (frames.isEmpty) {
       try {
-        final sprite = await game.loadSprite("${characterData.assetPath}/standing.png");
+        final sprite = await game.loadSprite(
+          "${characterData.assetPath}/standing.png",
+        );
         frames.add(sprite);
       } catch (_) {}
     }

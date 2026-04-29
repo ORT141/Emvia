@@ -301,6 +301,9 @@ class CorridorScene extends GameScene {
     final blockX = patternWorldEndX;
     if (_collectedPatterns < _patternSprites.length && playerX >= blockX) {
       game.player.position.x = blockX - 5;
+      game.navigationManager.showEducationalCard(
+        'You need to collect all patterns before you can leave.',
+      );
     }
   }
 

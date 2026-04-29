@@ -207,6 +207,11 @@ class EmviaGame extends FlameGame
     }
   }
 
+  void _reinitializePlayer() {
+    _player?.removeFromParent();
+    _initializePlayer();
+  }
+
   void _configureWorldRoot() {
     worldRoot
       ..scale = Vector2.all(cameraManager.zoom)
@@ -439,6 +444,7 @@ extension EmviaGameFlow on EmviaGame {
     await surveyService.clearAiResults();
     session.markStartGameAfterSurvey();
     closeMainMenu();
+    _reinitializePlayer();
     await loadScene(
       SurveyScene(),
       onFullOpacity: () {
