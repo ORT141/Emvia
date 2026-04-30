@@ -20,13 +20,17 @@ class FadeOverlay extends RectangleComponent with HasGameReference<EmviaGame> {
     position = Vector2.all(-1);
   }
 
-  Future<void> fadeIn(double duration) async {
+  Future<void> fadeIn(double duration) => _fadeTo(1.0, duration);
+
+  Future<void> fadeOut(double duration) => _fadeTo(0.0, duration);
+
+  Future<void> _fadeTo(double target, double duration) async {
     removeAll(children.whereType<OpacityEffect>());
 
     final completer = Completer<void>();
     add(
       OpacityEffect.to(
-        1.0,
+        target,
         EffectController(duration: duration),
         onComplete: () {
           if (!completer.isCompleted) completer.complete();
@@ -35,32 +39,7 @@ class FadeOverlay extends RectangleComponent with HasGameReference<EmviaGame> {
     );
 
     Future.delayed(Duration(milliseconds: (duration * 1000).toInt() + 250), () {
-      if (!completer.isCompleted) {
-        completer.complete();
-      }
-    });
-
-    return completer.future;
-  }
-
-  Future<void> fadeOut(double duration) async {
-    removeAll(children.whereType<OpacityEffect>());
-
-    final completer = Completer<void>();
-    add(
-      OpacityEffect.to(
-        0.0,
-        EffectController(duration: duration),
-        onComplete: () {
-          if (!completer.isCompleted) completer.complete();
-        },
-      ),
-    );
-
-    Future.delayed(Duration(milliseconds: (duration * 1000).toInt() + 250), () {
-      if (!completer.isCompleted) {
-        completer.complete();
-      }
+      if (!completer.isCompleted) completer.complete();
     });
 
     return completer.future;

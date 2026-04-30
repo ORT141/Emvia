@@ -51,6 +51,16 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
       Vector2(viewportSize.x / 2, worldSize.y * 0.75);
 
+  int get sceneIndex => 0;
+
+  void onWorldResize(Vector2 size) {
+    game.worldRoot.size = Vector2(worldWidthForViewport(size), size.y);
+  }
+
+  void onPlayerReachedRightEdge() {}
+
+  void onItemCardShown() {}
+
   @override
   @mustCallSuper
   void onGameResize(Vector2 size) {

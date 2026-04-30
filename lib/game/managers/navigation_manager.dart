@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../emvia_game.dart';
 import '../scenes/game_scene.dart';
-import '../scenes/olya/classroom_scene.dart';
 import '../scenes/olya/corridor_scene.dart';
 import '../scenes/olya/stage_scene.dart';
 import '../scenes/olya/stress/stress_scene.dart';
@@ -19,6 +18,36 @@ class NavigationManager {
 
   NavigationManager(this.game);
 
+  Future<void> continueFromSavedScene() async {
+    final savedIndex = game.sceneIndex;
+    if (savedIndex <= 0) {
+      await startGameFlow();
+      return;
+    }
+
+    GameScene? targetScene;
+    for (final factory in GameScene.registry) {
+      final candidate = factory();
+      if (candidate.sceneIndex == savedIndex) {
+        targetScene = candidate;
+        break;
+      }
+    }
+
+    if (targetScene == null) {
+      await startGameFlow();
+      return;
+    }
+
+    await _loadSceneWithDefaults(
+      targetScene,
+      sceneIndex: savedIndex,
+      showMobileControls: targetScene.showControls,
+      resetPlayerOpacity: targetScene.showPlayer,
+      onFullOpacity: () => game.overlays.remove('TapGame'),
+    );
+  }
+
   Future<void> reloadCurrentScene() async {
     final scene = game.currentScene;
     if (scene == null) return;
@@ -35,9 +64,6 @@ class NavigationManager {
         sceneFactory(),
         onFullOpacity: () {
           game.sceneIndex = savedSceneIndex;
-          if (scene is StageScene) {
-            game.player.opacity = 1;
-          }
         },
       );
     } else {
@@ -74,16 +100,6 @@ class NavigationManager {
       CorridorScene(),
       sceneIndex: 4,
       onFullOpacity: () => game.overlays.remove('TapGame'),
-    );
-  }
-
-  Future<void> transitionToCorridor() async {
-    await _loadSceneWithDefaults(
-      CorridorScene(),
-      sceneIndex: 4,
-      onFullOpacity: () {
-        game.overlays.remove('TapGame');
-      },
     );
   }
 
@@ -124,8 +140,8 @@ class NavigationManager {
 
     await _loadSceneWithDefaults(
       scene,
-      sceneIndex: _sceneIndexForScene(scene),
-      resetPlayerOpacity: scene is CorridorScene || scene is StageScene,
+      sceneIndex: scene.sceneIndex,
+      resetPlayerOpacity: scene.showPlayer,
     );
 
     if (!game.session.isCurrentSession(token)) return;
@@ -134,7 +150,7 @@ class NavigationManager {
   void _resetJourneyState({required dynamic profile}) {
     game.session.resetForNewJourney(profile: profile);
     game.backpack.clear();
-    game.olyaState?.hasTriggeredStressScene = false;
+    game.gameState.reset();
   }
 
   void _clearGameplayOverlays() {
@@ -150,17 +166,6 @@ class NavigationManager {
       game.overlays.remove(overlay);
     }
     game.overlayManager.clearGameplayOverlays();
-  }
-
-  int _sceneIndexForScene(GameScene scene) {
-    final Map<Type, int> indices = {
-      ClassroomScene: 1,
-      PathChoiceScene: 2,
-      StressScene: 3,
-      CorridorScene: 4,
-      StageScene: 6,
-    };
-    return indices[scene.runtimeType] ?? 0;
   }
 
   Future<void> returnToMainMenuAfterJourney() async {
@@ -183,9 +188,7 @@ class NavigationManager {
   void prepareReturnToMainMenu() {
     game.stressLevel = 100;
     game.sceneIndex = 0;
-    game.olyaState?.hasTriggeredStressScene = false;
-    game.olyaState?.hasShownCorridorStressIntro = false;
-    game.olyaState?.isCorridorStressIntroActive = false;
+    game.gameState.reset();
     game.overlayManager.hideMobileControls();
     game.overlays.remove('Stress');
     game.overlays.remove('TapGame');
@@ -208,16 +211,14 @@ class NavigationManager {
   }
 
   void showBreathingExercise() {
-    game.gameState.isFrozen = true;
-    game.overlayManager.hideMobileControls();
+    game.freezePlayer();
     game.overlays.add('BreathingExercise');
   }
 
   void showEducationalCard(String text, {VoidCallback? onDismiss}) {
     game.educationalCardText = text;
     game.educationalCardOnDismiss = onDismiss;
-    game.gameState.isFrozen = true;
-    game.overlayManager.hideMobileControls();
+    game.freezePlayer();
     game.overlays.add('EducationalCard');
   }
 
@@ -228,8 +229,7 @@ class NavigationManager {
     if (cb != null) {
       cb();
     } else {
-      game.gameState.isFrozen = false;
-      game.overlayManager.showMobileControls();
+      game.unfreezePlayer();
     }
   }
 
@@ -278,7 +278,6 @@ class NavigationManager {
   void completeCorridorStressIntro() {
     if (!(game.olyaState?.isCorridorStressIntroActive ?? false)) return;
     game.olyaState?.isCorridorStressIntroActive = false;
-    game.gameState.isFrozen = false;
-    game.overlayManager.showMobileControls();
+    game.unfreezePlayer();
   }
 }

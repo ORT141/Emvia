@@ -4,6 +4,7 @@ import 'package:emvia/game/emvia_game.dart';
 import 'package:flame/events.dart';
 import 'dart:ui' show FilterQuality, Paint, Rect;
 
+import 'package:emvia/game/utils/game_config.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';
 import '../../dialog/dialog_model.dart';
 import '../game_scene.dart';
@@ -30,6 +31,9 @@ class StageScene extends GameScene {
     }
     return viewportSize.x * 2;
   }
+
+  @override
+  int get sceneIndex => 6;
 
   static const double _rockingChairHeightFactor = 0.8;
   static const double _booksHeightFactor = 0.1;
@@ -144,7 +148,6 @@ class StageScene extends GameScene {
         game.player.endInteraction();
       } catch (_) {}
 
-      // clear the bypass flag when transitioning
       if (game.olyaState != null) game.olyaState!.hasUsedItemInStage = false;
 
       game.playRightSideScene();
@@ -158,28 +161,25 @@ class StageScene extends GameScene {
   void _showCalmDownPrompt() {
     final l = AppLocalizationsGen.of(game.buildContext!)!;
     final bypass = game.olyaState?.hasUsedItemInStage ?? false;
-    if (bypass) {
-      game.gameState.isFrozen = false;
-      game.overlayManager.showMobileControls();
-      final tree = DialogTree(
-        nodes: {'start': DialogNode(id: 'start', text: (_) => l.too_loud)},
-        startNodeId: 'start',
+
+    void showTooLoudDialog() {
+      game.unfreezePlayer();
+      game.startDialog(
+        DialogTree(
+          nodes: {'start': DialogNode(id: 'start', text: (_) => l.too_loud)},
+          startNodeId: 'start',
+        ),
       );
-      game.startDialog(tree);
+    }
+
+    if (bypass) {
+      showTooLoudDialog();
       return;
     }
 
     game.showEducationalCard(
       l.educational_card_stress_speaking,
-      onDismiss: () {
-        game.gameState.isFrozen = false;
-        game.overlayManager.showMobileControls();
-        final tree = DialogTree(
-          nodes: {'start': DialogNode(id: 'start', text: (_) => l.too_loud)},
-          startNodeId: 'start',
-        );
-        game.startDialog(tree);
-      },
+      onDismiss: showTooLoudDialog,
     );
   }
 
@@ -189,6 +189,28 @@ class StageScene extends GameScene {
     _items.clear();
     if (game.olyaState != null) game.olyaState!.hasUsedItemInStage = false;
     super.onRemove();
+  }
+
+  @override
+  void onItemCardShown() => clearSelectedItem();
+
+  Future<void> useItem(StageItemCardData item) async {
+    game.freezePlayer();
+    game.overlays.add('CalmingEffect');
+    game.overlayManager.hideStageItemCard();
+
+    game.cameraManager.animateZoomTo(GameConfig.interactionZoom);
+    game.cameraManager.beginFocusOnPlayer();
+
+    await game.player.interactWithItem(item.id);
+
+    game.olyaState?.hasUsedItemInStage = true;
+    game.stressLevel = (game.stressLevel - 10).clamp(0, 100);
+
+    game.overlays.remove('CalmingEffect');
+    game.cameraManager.animateZoomTo(GameConfig.defaultZoom);
+    game.cameraManager.endFocusOnPlayer();
+    game.unfreezePlayer();
   }
 
   void clearSelectedItem() {

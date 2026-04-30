@@ -3,53 +3,40 @@ import 'dialog_model.dart';
 import '../emvia_game.dart';
 
 mixin DialogHandler on FlameGame {
-  void startDialog(DialogTree tree) {
-    if (this is! EmviaGame) return;
-    final game = this as EmviaGame;
+  EmviaGame get _g => this as EmviaGame;
 
-    game.currentTree = tree;
-    game.currentNode = tree.getNode(tree.startNodeId);
-    game.currentNode?.onSelect?.call(game);
-    game.overlays.add('Dialog');
+  void startDialog(DialogTree tree) {
+    _g.currentTree = tree;
+    _g.currentNode = tree.getNode(tree.startNodeId);
+    _g.currentNode?.onSelect?.call(_g);
+    overlays.add('Dialog');
   }
 
   void selectChoice(DialogChoice choice) {
-    if (this is! EmviaGame) return;
-    final game = this as EmviaGame;
-
-    choice.onSelect?.call(game);
+    choice.onSelect?.call(_g);
     if (choice.nextNodeId != null) {
-      game.currentNode = game.currentTree?.getNode(choice.nextNodeId);
-      game.currentNode?.onSelect?.call(game);
-      if (game.currentNode == null) {
-        game.overlays.remove('Dialog');
-      }
+      _g.currentNode = _g.currentTree?.getNode(choice.nextNodeId);
+      _g.currentNode?.onSelect?.call(_g);
+      if (_g.currentNode == null) overlays.remove('Dialog');
     } else {
-      game.overlays.remove('Dialog');
-      game.currentNode = null;
+      overlays.remove('Dialog');
+      _g.currentNode = null;
     }
   }
 
   void nextDialog() {
-    if (this is! EmviaGame) return;
-    final game = this as EmviaGame;
-
-    if (game.currentNode?.choices != null &&
-        game.currentNode!.choices!.isNotEmpty) {
+    if (_g.currentNode?.choices != null &&
+        _g.currentNode!.choices!.isNotEmpty) {
       return;
     }
 
-    if (game.currentNode?.nextNodeId != null) {
-      game.currentNode = game.currentTree?.getNode(
-        game.currentNode!.nextNodeId,
-      );
-      game.currentNode?.onSelect?.call(game);
-      if (game.currentNode == null) {
-        game.overlays.remove('Dialog');
-      }
+    if (_g.currentNode?.nextNodeId != null) {
+      _g.currentNode = _g.currentTree?.getNode(_g.currentNode!.nextNodeId);
+      _g.currentNode?.onSelect?.call(_g);
+      if (_g.currentNode == null) overlays.remove('Dialog');
     } else {
-      game.overlays.remove('Dialog');
-      game.currentNode = null;
+      overlays.remove('Dialog');
+      _g.currentNode = null;
     }
   }
 }

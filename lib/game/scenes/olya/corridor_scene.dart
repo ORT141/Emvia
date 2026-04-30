@@ -9,12 +9,13 @@ import 'package:flutter/material.dart';
 
 import '../../utils/pos_util.dart';
 import '../game_scene.dart';
+import '../people_overlay_mixin.dart';
 import 'stress/stress_scene.dart';
 
 import 'package:emvia/l10n/app_localizations_gen.dart';
 import '../../dialog/dialog_model.dart';
 
-class CorridorScene extends GameScene {
+class CorridorScene extends GameScene with PeopleOverlayMixin {
   CorridorScene()
     : super(
         backgroundPath: 'scenes/olya/corridor/background.png',
@@ -29,8 +30,12 @@ class CorridorScene extends GameScene {
   bool _educationalCardShown = false;
   bool _hudShown = false;
 
-  SpriteComponent? _peopleBackgroundOverlay;
-  SpriteComponent? _peopleForegroundOverlay;
+  @override
+  String get peopleBackgroundOverlayPath =>
+      'scenes/olya/corridor/people_background.png';
+  @override
+  String get peopleForegroundOverlayPath =>
+      'scenes/olya/corridor/people_foreground.png';
 
   final List<PatternSymbol> _patternSprites = [];
   int _collectedPatterns = 0;
@@ -56,6 +61,12 @@ class CorridorScene extends GameScene {
   ).toWorldPos(background.position, background.size).x;
 
   @override
+  void onPlayerReachedRightEdge() => game.transitionToStageScene();
+
+  @override
+  int get sceneIndex => 4;
+
+  @override
   double worldWidthForViewport(Vector2 viewportSize) {
     if (background.sprite?.srcSize != null &&
         background.sprite!.srcSize.y > 0) {
@@ -70,19 +81,7 @@ class CorridorScene extends GameScene {
   @protected
   void layoutToWorld() {
     super.layoutToWorld();
-
-    for (final overlay in [
-      _peopleBackgroundOverlay,
-      _peopleForegroundOverlay,
-    ]) {
-      final src = overlay?.sprite?.srcSize;
-      if (overlay == null || src == null || src.y <= 0) continue;
-      final viewportH = game.size.y;
-      final scale = viewportH / src.y;
-      overlay
-        ..size = Vector2(src.x * scale, viewportH)
-        ..position = Vector2.zero();
-    }
+    layoutPeopleOverlays();
   }
 
   @override
@@ -143,34 +142,10 @@ class CorridorScene extends GameScene {
       game.olyaState?.isCorridorStressIntroActive = true;
     }
 
-    try {
-      _peopleBackgroundOverlay = SpriteComponent()
-        ..anchor = Anchor.topLeft
-        ..priority = 10;
-      _peopleBackgroundOverlay!.sprite = await game.loadSprite(
-        'scenes/olya/corridor/people_background.png',
-      );
-      add(_peopleBackgroundOverlay!);
-    } catch (_) {
-      _peopleBackgroundOverlay = null;
-    }
-
-    try {
-      _peopleForegroundOverlay = SpriteComponent()
-        ..anchor = Anchor.topLeft
-        ..priority = 50;
-      _peopleForegroundOverlay!.sprite = await game.loadSprite(
-        'scenes/olya/corridor/people_foreground.png',
-      );
-
-      game.worldRoot.add(_peopleForegroundOverlay!);
-    } catch (_) {
-      _peopleForegroundOverlay = null;
-    }
+    await loadPeopleOverlays();
 
     if (game.olyaState?.isCorridorStressIntroActive ?? false) {
-      game.gameState.isFrozen = true;
-      game.overlayManager.hideMobileControls();
+      game.freezePlayer();
     } else {
       game.overlayManager.showMobileControls();
     }
@@ -385,16 +360,9 @@ class CorridorScene extends GameScene {
 
   @override
   void onRemove() {
-    game.worldRoot.remove(_peopleForegroundOverlay!);
-
-    _peopleBackgroundOverlay?.removeFromParent();
-    _peopleBackgroundOverlay = null;
-    _peopleForegroundOverlay?.removeFromParent();
-    _peopleForegroundOverlay = null;
-
+    removePeopleOverlays();
     game.overlays.remove('PatternProgress');
     game.overlays.remove('EducationalCard');
-
     super.onRemove();
   }
 }

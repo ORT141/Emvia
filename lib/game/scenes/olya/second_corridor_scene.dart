@@ -4,8 +4,9 @@ import 'package:flutter/foundation.dart';
 
 import '../../utils/pos_util.dart';
 import '../game_scene.dart';
+import '../people_overlay_mixin.dart';
 
-class SecondCorridorScene extends GameScene {
+class SecondCorridorScene extends GameScene with PeopleOverlayMixin {
   SecondCorridorScene()
     : super(
         backgroundPath: 'scenes/olya/second-corridor/background.png',
@@ -16,12 +17,16 @@ class SecondCorridorScene extends GameScene {
     GameScene.register(() => SecondCorridorScene());
   }
 
-  SpriteComponent? _peopleBackgroundOverlay;
-  SpriteComponent? _peopleForegroundOverlay;
-
   bool _stressTriggered = false;
 
   static const _stressTriggerUVx = 0.7;
+
+  @override
+  String get peopleBackgroundOverlayPath =>
+      'scenes/olya/second-corridor/people_background.png';
+  @override
+  String get peopleForegroundOverlayPath =>
+      'scenes/olya/second-corridor/people_foreground.png';
 
   @override
   double worldWidthForViewport(Vector2 viewportSize) {
@@ -42,48 +47,14 @@ class SecondCorridorScene extends GameScene {
   @protected
   void layoutToWorld() {
     super.layoutToWorld();
-
-    for (final overlay in [
-      _peopleBackgroundOverlay,
-      _peopleForegroundOverlay,
-    ]) {
-      final src = overlay?.sprite?.srcSize;
-      if (overlay == null || src == null || src.y <= 0) continue;
-      final viewportH = game.size.y;
-      final scale = viewportH / src.y;
-      overlay
-        ..size = Vector2(src.x * scale, viewportH)
-        ..position = Vector2.zero();
-    }
+    layoutPeopleOverlays();
   }
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    try {
-      _peopleBackgroundOverlay = SpriteComponent()
-        ..anchor = Anchor.topLeft
-        ..priority = 10;
-      _peopleBackgroundOverlay!.sprite = await game.loadSprite(
-        'scenes/olya/second-corridor/people_background.png',
-      );
-      add(_peopleBackgroundOverlay!);
-    } catch (_) {
-      _peopleBackgroundOverlay = null;
-    }
-
-    try {
-      _peopleForegroundOverlay = SpriteComponent()
-        ..anchor = Anchor.topLeft
-        ..priority = 50;
-      _peopleForegroundOverlay!.sprite = await game.loadSprite(
-        'scenes/olya/second-corridor/people_foreground.png',
-      );
-      game.worldRoot.add(_peopleForegroundOverlay!);
-    } catch (_) {
-      _peopleForegroundOverlay = null;
-    }
+    await loadPeopleOverlays();
 
     ColorUtil.colorWalls(background.decorator, game.surveyProfile);
 
@@ -117,10 +88,7 @@ class SecondCorridorScene extends GameScene {
   @mustCallSuper
   void redrawScene() {
     _stressTriggered = false;
-    _peopleBackgroundOverlay?.removeFromParent();
-    _peopleBackgroundOverlay = null;
-    _peopleForegroundOverlay?.removeFromParent();
-    _peopleForegroundOverlay = null;
+    removePeopleOverlays();
 
     try {
       background.decorator.removeLast();
@@ -133,14 +101,7 @@ class SecondCorridorScene extends GameScene {
 
   @override
   void onRemove() {
-    if (_peopleForegroundOverlay != null) {
-      game.worldRoot.remove(_peopleForegroundOverlay!);
-    }
-
-    _peopleBackgroundOverlay?.removeFromParent();
-    _peopleBackgroundOverlay = null;
-    _peopleForegroundOverlay?.removeFromParent();
-    _peopleForegroundOverlay = null;
+    removePeopleOverlays();
     super.onRemove();
   }
 }

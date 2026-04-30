@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 
+import '../../emvia_game.dart';
 import '../../utils/pos_util.dart';
 import '../../utils/cover_scaling.dart';
 import 'path/path_confirm_button.dart';
@@ -23,8 +24,19 @@ class ClassroomScene extends GameScene with TapCallbacks, CoverScaling {
   double worldWidthForViewport(Vector2 viewportSize) => viewportSize.x;
 
   @override
+  int get sceneIndex => 1;
+
+  @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
       Vector2(viewportSize.x / 2, worldSize.y / 2);
+
+  @override
+  void onWorldResize(Vector2 size) {
+    game.transitionManager.updateClassroomZoom();
+  }
+
+  @override
+  void onPlayerReachedRightEdge() => game.transitionToStressScene();
 
   SpriteComponent? _pathOverlay;
 

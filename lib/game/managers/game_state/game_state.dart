@@ -4,6 +4,8 @@ import '../../models/captured_photo.dart';
 abstract class GameState {
   bool isFrozen = false;
   double mobileMoveX = 0;
+
+  void reset() {}
 }
 
 class OlyaGameState extends GameState {
@@ -12,6 +14,15 @@ class OlyaGameState extends GameState {
   bool isCorridorStressIntroActive = false;
   ClassroomScene? classroomScene;
   bool hasUsedItemInStage = false;
+
+  @override
+  void reset() {
+    hasTriggeredStressScene = false;
+    hasShownCorridorStressIntro = false;
+    isCorridorStressIntroActive = false;
+    hasUsedItemInStage = false;
+    classroomScene = null;
+  }
 }
 
 class LiamGameState extends GameState {

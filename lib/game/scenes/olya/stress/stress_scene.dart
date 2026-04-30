@@ -34,6 +34,9 @@ class StressScene extends GameScene {
   double worldWidthForViewport(Vector2 viewportSize) => viewportSize.x;
 
   @override
+  int get sceneIndex => 3;
+
+  @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
       Vector2(viewportSize.x / 2, worldSize.y / 2);
 

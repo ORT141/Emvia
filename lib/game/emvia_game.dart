@@ -11,9 +11,7 @@ import 'components/fade_overlay.dart';
 import 'characters/base_player.dart';
 import 'characters/character_factory.dart';
 import 'scenes/game_scene.dart';
-import 'scenes/olya/classroom_scene.dart';
-import 'scenes/olya/stress/stress_scene.dart';
-import 'scenes/olya/path/path_choice_scene.dart';
+import 'scenes/olya/stage_scene.dart';
 import 'scenes/survey_scene.dart';
 import 'dialog/dialog_model.dart';
 import 'backpack/backpack_inventory.dart';
@@ -137,26 +135,16 @@ class EmviaGame extends FlameGame
 
   Future<void> useStageItem(StageItemCardData item) async {
     if (!isPlayerInitialized) return;
+    final scene = currentScene;
+    if (scene is StageScene) await scene.useItem(item);
+  }
 
+  void freezePlayer() {
     gameState.isFrozen = true;
     overlayManager.hideMobileControls();
-    overlays.add('CalmingEffect');
-    overlayManager.hideStageItemCard();
+  }
 
-    cameraManager.animateZoomTo(GameConfig.interactionZoom);
-    cameraManager.beginFocusOnPlayer();
-
-    await player.interactWithItem(item.id);
-
-    if (olyaState != null) {
-      olyaState!.hasUsedItemInStage = true;
-    }
-
-    stressLevel = (stressLevel - 10).clamp(0, 100);
-
-    overlays.remove('CalmingEffect');
-    cameraManager.animateZoomTo(GameConfig.defaultZoom);
-    cameraManager.endFocusOnPlayer();
+  void unfreezePlayer() {
     gameState.isFrozen = false;
     overlayManager.showMobileControls();
   }
@@ -281,31 +269,7 @@ class EmviaGame extends FlameGame
   Future<void> continueGame() async {
     overlayManager.clearGameplayOverlays();
     _initializePlayer();
-
-    switch (sceneIndex) {
-      case 1:
-        await loadScene(
-          ClassroomScene(),
-          onFullOpacity: () {
-            player.opacity = 0;
-          },
-        );
-        break;
-      case 2:
-        await loadScene(PathChoiceScene(), onFullOpacity: () {});
-        break;
-      case 3:
-        await loadScene(StressScene(), onFullOpacity: () {});
-        break;
-      case 4:
-        await navigationManager.transitionToCorridor();
-        break;
-      case 6:
-        await navigationManager.loadStageScene();
-        break;
-      default:
-        await navigationManager.startGameFlow();
-    }
+    await navigationManager.continueFromSavedScene();
     overlayManager.closeMainMenu();
   }
 
@@ -340,8 +304,8 @@ class EmviaGame extends FlameGame
     super.onGameResize(size);
 
     final scene = currentScene;
-    if (scene is ClassroomScene && scene.isLoaded) {
-      transitionManager.updateClassroomZoom();
+    if (scene != null && scene.isLoaded) {
+      scene.onWorldResize(size);
     } else {
       worldRoot.size = Vector2(currentSceneWorldWidth(), size.y);
     }
@@ -409,8 +373,7 @@ class EmviaGame extends FlameGame
 extension EmviaGameFlow on EmviaGame {
   Future<void> reloadCurrentScene() => navigationManager.reloadCurrentScene();
   Future<void> goToCorridor() => navigationManager.goToCorridor();
-  Future<void> transitionToCorridor() =>
-      navigationManager.transitionToCorridor();
+  Future<void> transitionToCorridor() => navigationManager.goToCorridor();
   Future<void> playRightSideScene() => navigationManager.playRightSideScene();
   Future<void> startGame() => navigationManager.startGameFlow();
   Future<void> startGameSkippingSurvey() => navigationManager.startGameFlow();

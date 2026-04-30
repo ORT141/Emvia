@@ -12,19 +12,19 @@ class GamePreferencesManager {
   double get volume => _soundEnabled ? _volume : 0.0;
   set volume(double value) {
     _volume = value.clamp(0.0, 1.0);
-    _saveVolume();
+    _save(_volumeKey, _volume);
   }
 
   bool get soundEnabled => _soundEnabled;
   set soundEnabled(bool value) {
     _soundEnabled = value;
-    _saveSoundEnabled();
+    _save(_soundEnabledKey, _soundEnabled);
   }
 
   bool get soundQuestionAnswered => _soundQuestionAnswered;
   set soundQuestionAnswered(bool value) {
     _soundQuestionAnswered = value;
-    _saveSoundQuestionAnswered();
+    _save(_soundAskedKey, _soundQuestionAnswered);
   }
 
   Future<void> load() async {
@@ -36,24 +36,14 @@ class GamePreferencesManager {
     } catch (_) {}
   }
 
-  Future<void> _saveVolume() async {
+  Future<void> _save(String key, Object value) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setDouble(_volumeKey, _volume);
-    } catch (_) {}
-  }
-
-  Future<void> _saveSoundEnabled() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_soundEnabledKey, _soundEnabled);
-    } catch (_) {}
-  }
-
-  Future<void> _saveSoundQuestionAnswered() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(_soundAskedKey, _soundQuestionAnswered);
+      if (value is double) {
+        await prefs.setDouble(key, value);
+      } else if (value is bool) {
+        await prefs.setBool(key, value);
+      }
     } catch (_) {}
   }
 }

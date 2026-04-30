@@ -5,13 +5,7 @@ import 'liam/liam_player.dart';
 
 class CharacterFactory {
   static BasePlayer createPlayer(PlayableCharacter character) {
-    switch (character) {
-      case PlayableCharacter.olya:
-        return OlyaPlayer();
-      case PlayableCharacter.liam:
-        return LiamPlayer();
-      default:
-        return OlyaPlayer();
-    }
+    if (character == PlayableCharacter.liam) return LiamPlayer();
+    return OlyaPlayer();
   }
 }

@@ -1,9 +1,6 @@
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import '../../scenes/olya/classroom_scene.dart';
-import '../../scenes/olya/corridor_scene.dart';
 import '../../scenes/olya/stage_scene.dart';
-import 'package:emvia/game/emvia_game.dart';
 import '../base_player.dart';
 import '../character_data.dart';
 
@@ -98,23 +95,12 @@ class OlyaPlayer extends BasePlayer {
   }
 
   @override
-  void onTapDown(TapDownEvent event) {
-    if (game.currentScene is ClassroomScene) {
-      return;
-    }
-  }
-
-  @override
   void update(double dt) {
     _updateAnimations();
     super.update(dt);
 
-    if (game.currentScene is ClassroomScene && hasReachedRightSceneEdge()) {
-      game.transitionToStressScene();
-    }
-
-    if (game.currentScene is CorridorScene && hasReachedRightSceneEdge()) {
-      game.transitionToStageScene();
+    if (hasReachedRightSceneEdge()) {
+      game.currentScene?.onPlayerReachedRightEdge();
     }
   }
 

@@ -1,8 +1,6 @@
 import 'package:emvia/game/emvia_types.dart';
 import 'package:flutter/foundation.dart';
 import '../emvia_game.dart';
-import '../scenes/olya/stage_scene.dart';
-import '../scenes/olya/corridor_scene.dart';
 
 class OverlayManager {
   final EmviaGame game;
@@ -21,17 +19,12 @@ class OverlayManager {
     game.overlays.remove('CalmingItemPrompt');
     selectedStageItemNotifier.value = item;
     game.overlays.add('StageItemCard');
-    if (game.currentScene is StageScene) {
-      (game.currentScene as StageScene).clearSelectedItem();
-    }
+    game.currentScene?.onItemCardShown();
   }
 
   void hideStageItemCard() {
     game.overlays.remove('StageItemCard');
     selectedStageItemNotifier.value = null;
-    if (game.currentScene is StageScene) {
-      (game.currentScene as StageScene).clearSelectedItem();
-    }
   }
 
   void toggleBackpack() {
@@ -95,9 +88,6 @@ class OverlayManager {
 
   void closeMainMenu() {
     game.overlays.remove('MainMenu');
-    if (game.sceneIndex == 0 && game.currentScene is CorridorScene) {
-      game.player.opacity = 1;
-    }
     if (!game.paused && game.sceneIndex > 0) {
       showMobileControls();
     }
