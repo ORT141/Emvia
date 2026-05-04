@@ -1,7 +1,7 @@
 import 'package:emvia/l10n/app_localizations_gen.dart';
 import 'package:flame/components.dart';
 
-enum PlayableCharacter { olya, liam, olenka, anton }
+enum PlayableCharacter { liam, olya, olenka, anton }
 
 class PathDetailInfo {
   final int index;

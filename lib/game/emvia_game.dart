@@ -285,8 +285,8 @@ class EmviaGame extends FlameGame
   bool consumeStartGameAfterSurvey() => session.consumeStartGameAfterSurvey();
 
   bool isCharacterUnlocked(PlayableCharacter character) {
-    return character == PlayableCharacter.olya ||
-        character == PlayableCharacter.liam;
+    return character == PlayableCharacter.liam ||
+        character == PlayableCharacter.olya;
   }
 
   @override

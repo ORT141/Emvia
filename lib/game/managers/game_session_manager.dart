@@ -25,7 +25,7 @@ class GameSessionManager {
   bool journeyCompleted = false;
   bool _startGameAfterSurvey = false;
 
-  PlayableCharacter selectedCharacter = PlayableCharacter.olya;
+  PlayableCharacter selectedCharacter = PlayableCharacter.liam;
   SurveyProfile surveyProfile = SurveyProfile(const {});
 
   final LinkedHashSet<String> _selectedTools = LinkedHashSet<String>();
@@ -121,7 +121,7 @@ class GameSessionManager {
       if (charName != null) {
         selectedCharacter = PlayableCharacter.values.firstWhere(
           (e) => e.name == charName,
-          orElse: () => PlayableCharacter.olya,
+          orElse: () => PlayableCharacter.liam,
         );
       }
 

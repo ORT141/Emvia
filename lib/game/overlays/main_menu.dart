@@ -456,14 +456,14 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
 
   static const _playerCardFiles = {
     'en': {
-      PlayableCharacter.olya: 'olya.mp3',
       PlayableCharacter.liam: 'liam.mp3',
+      PlayableCharacter.olya: 'olya.mp3',
       PlayableCharacter.olenka: 'olena.mp3',
       PlayableCharacter.anton: 'anton.mp3',
     },
     'uk': {
-      PlayableCharacter.olya: 'оля.mp3',
       PlayableCharacter.liam: 'ліам.mp3',
+      PlayableCharacter.olya: 'оля.mp3',
       PlayableCharacter.olenka: 'олена.mp3',
       PlayableCharacter.anton: 'антон.mp3',
     },
@@ -525,38 +525,6 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
             runSpacing: compact ? 8 : 12,
             children: [
               _CharacterGhost(
-                imagePath: 'player-selecting/olya_ghost.png',
-                realImagePath: 'player/olya/standing.png',
-                label: loc.character_olya,
-                selected: selectedCharacter == PlayableCharacter.olya,
-                hovered: _hoveredCharacter == PlayableCharacter.olya,
-                locked: false,
-                width: ghostWidth,
-                imageHeight: ghostImageHeight,
-                onHoverChanged: (isHovering) {
-                  setState(() {
-                    _hoveredCharacter = isHovering
-                        ? PlayableCharacter.olya
-                        : (_hoveredCharacter == PlayableCharacter.olya
-                              ? null
-                              : _hoveredCharacter);
-                  });
-                },
-                onTap: () async {
-                  final lang =
-                      Localizations.localeOf(context).languageCode == 'uk'
-                      ? 'uk'
-                      : 'en';
-                  final file = _playerCardFiles[lang]?[PlayableCharacter.olya];
-                  if (file != null) {
-                    WidgetsBinding.instance.addPostFrameCallback(
-                      (_) => _playPreview(file),
-                    );
-                  }
-                  widget.onCharacterSelected(PlayableCharacter.olya);
-                },
-              ),
-              _CharacterGhost(
                 imagePath: 'player-selecting/liam_ghost.png',
                 realImagePath: 'player/liam/standing.png',
                 label: loc.character_liam,
@@ -586,6 +554,38 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
                     );
                   }
                   widget.onCharacterSelected(PlayableCharacter.liam);
+                },
+              ),
+              _CharacterGhost(
+                imagePath: 'player-selecting/olya_ghost.png',
+                realImagePath: 'player/olya/standing.png',
+                label: loc.character_olya,
+                selected: selectedCharacter == PlayableCharacter.olya,
+                hovered: _hoveredCharacter == PlayableCharacter.olya,
+                locked: false,
+                width: ghostWidth,
+                imageHeight: ghostImageHeight,
+                onHoverChanged: (isHovering) {
+                  setState(() {
+                    _hoveredCharacter = isHovering
+                        ? PlayableCharacter.olya
+                        : (_hoveredCharacter == PlayableCharacter.olya
+                              ? null
+                              : _hoveredCharacter);
+                  });
+                },
+                onTap: () async {
+                  final lang =
+                      Localizations.localeOf(context).languageCode == 'uk'
+                      ? 'uk'
+                      : 'en';
+                  final file = _playerCardFiles[lang]?[PlayableCharacter.olya];
+                  if (file != null) {
+                    WidgetsBinding.instance.addPostFrameCallback(
+                      (_) => _playPreview(file),
+                    );
+                  }
+                  widget.onCharacterSelected(PlayableCharacter.olya);
                 },
               ),
               _CharacterGhost(
@@ -663,14 +663,6 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
   _CharacterCardData _characterCardData(PlayableCharacter character) {
     final loc = AppLocalizationsGen.of(context)!;
     switch (character) {
-      case PlayableCharacter.olya:
-        return _CharacterCardData(
-          title: loc.character_olya_title,
-          quote: loc.character_olya_quote,
-          trait: loc.character_olya_trait,
-          superPower: loc.character_olya_superPower,
-          description: loc.character_olya_description,
-        );
       case PlayableCharacter.liam:
         return _CharacterCardData(
           title: loc.character_liam_title,
@@ -678,6 +670,14 @@ class _CharacterSelectBarState extends State<_CharacterSelectBar> {
           trait: loc.character_liam_trait,
           superPower: loc.character_liam_superPower,
           description: loc.character_liam_description,
+        );
+      case PlayableCharacter.olya:
+        return _CharacterCardData(
+          title: loc.character_olya_title,
+          quote: loc.character_olya_quote,
+          trait: loc.character_olya_trait,
+          superPower: loc.character_olya_superPower,
+          description: loc.character_olya_description,
         );
       case PlayableCharacter.olenka:
         return _CharacterCardData(
