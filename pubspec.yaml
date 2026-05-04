@@ -70,6 +70,7 @@ flutter:
         # liam specific
         - assets/images/player/liam/
         - assets/images/scenes/liam/house/
+        - assets/images/scenes/liam/outside/
         - assets/images/wall-patterns/
 
         # ------------------

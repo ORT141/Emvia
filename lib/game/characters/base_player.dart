@@ -93,6 +93,21 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
     return false;
   }
 
+  bool hasReachedLeftSceneEdge() {
+    final scene = game.currentScene;
+    if (scene != null && scene.background.size.x > 0) {
+      final uvTarget = getWorldPosFromUV(
+        Vector2(0.1, 0.5),
+        scene.background.position,
+        scene.background.size,
+      );
+      final thresholdX = uvTarget.x + size.x / 2;
+      return position.x <= thresholdX;
+    }
+
+    return false;
+  }
+
   final Vector2 velocity = Vector2.zero();
   final Vector2 keyboardVelocity = Vector2.zero();
   final Vector2 mobileVelocity = Vector2.zero();
@@ -158,11 +173,12 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
     );
 
     if (!isInteracting) {
-      position.y = game.currentScene != null
-          ? game
-                .sceneSpawnPoint(game.currentScene!, game.size, game.worldRoot)
-                .y
+      final scene = game.currentScene;
+      final baseY = scene != null
+          ? game.sceneSpawnPoint(scene, game.size, game.worldRoot).y
           : game.worldRoot.size.y * GameConfig.playerSpawnYFactor;
+      final yOffset = scene?.playerYOffsetForX(position.x) ?? 0;
+      position.y = baseY - yOffset;
     }
   }
 

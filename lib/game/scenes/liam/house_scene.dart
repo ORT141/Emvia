@@ -12,6 +12,12 @@ class HouseScene extends GameScene {
   }
 
   @override
+  int get sceneIndex => 7;
+
+  @override
+  void onPlayerReachedLeftEdge() => game.navigationManager.goToLiamOutside();
+
+  @override
   void onRemove() {
     if (game.player.parent == game.worldRoot) {
       game.player.removeFromParent();
@@ -43,5 +49,5 @@ class HouseScene extends GameScene {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(50, worldSize.y * 0.68);
+      Vector2(worldSize.x * 0.2, worldSize.y * 0.68);
 }

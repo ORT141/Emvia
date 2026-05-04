@@ -1,4 +1,3 @@
-import 'package:emvia/game/scenes/liam/house_scene.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/services.dart';
 import 'package:emvia/game/emvia_game.dart';
@@ -40,7 +39,20 @@ class LiamPlayer extends BasePlayer {
 
   @override
   Future<void> onStartGame() async {
-    await game.loadScene(HouseScene(), onFullOpacity: () {});
+    await game.navigationManager.goToLiamHouse();
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    if (hasReachedLeftSceneEdge()) {
+      game.currentScene?.onPlayerReachedLeftEdge();
+    }
+
+    if (hasReachedRightSceneEdge()) {
+      game.currentScene?.onPlayerReachedRightEdge();
+    }
   }
 
   @override

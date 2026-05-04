@@ -57,6 +57,10 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
     game.worldRoot.size = Vector2(worldWidthForViewport(size), size.y);
   }
 
+  double playerYOffsetForX(double playerX) => 0;
+
+  void onPlayerReachedLeftEdge() {}
+
   void onPlayerReachedRightEdge() {}
 
   void onItemCardShown() {}

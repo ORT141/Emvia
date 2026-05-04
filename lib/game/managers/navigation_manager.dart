@@ -8,6 +8,8 @@ import '../scenes/olya/path/path_choice_scene.dart';
 import '../scenes/olya/second_corridor_scene.dart';
 import '../scenes/olya/outside_scene.dart';
 import '../scenes/olya/scene_scene.dart';
+import '../scenes/liam/house_scene.dart';
+import '../scenes/liam/outside_scene.dart';
 import '../emvia_types.dart';
 import 'package:emvia/l10n/app_localizations.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';
@@ -26,7 +28,7 @@ class NavigationManager {
     }
 
     GameScene? targetScene;
-    for (final factory in GameScene.registry) {
+    for (final factory in List<GameScene Function()>.of(GameScene.registry)) {
       final candidate = factory();
       if (candidate.sceneIndex == savedIndex) {
         targetScene = candidate;
@@ -71,8 +73,9 @@ class NavigationManager {
     }
   }
 
-  static final Map<Type, GameScene Function()> _sceneFactories = {
-    for (final factory in GameScene.registry) factory().runtimeType: factory,
+  static Map<Type, GameScene Function()> get _sceneFactories => {
+    for (final factory in List<GameScene Function()>.of(GameScene.registry))
+      factory().runtimeType: factory,
   };
 
   Future<void> _loadSceneWithDefaults(
@@ -117,6 +120,16 @@ class NavigationManager {
 
   Future<void> goToOutside() async {
     await _loadSceneWithDefaults(OutsideScene(), sceneIndex: 4);
+  }
+
+  Future<void> goToLiamHouse() async {
+    if (game.transitionManager.isTransitioning) return;
+    await _loadSceneWithDefaults(HouseScene(), sceneIndex: 7);
+  }
+
+  Future<void> goToLiamOutside() async {
+    if (game.transitionManager.isTransitioning) return;
+    await _loadSceneWithDefaults(LiamOutsideScene(), sceneIndex: 8);
   }
 
   Future<void> startGameFlow() async {
