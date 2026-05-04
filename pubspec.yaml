@@ -41,6 +41,7 @@ flutter:
     assets:
         - assets/images/
         - assets/images/misc/
+        - assets/images/misc/camera/
         - assets/images/main-menu/
         - assets/images/stress/
         - assets/images/player/

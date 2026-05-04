@@ -185,7 +185,6 @@ class CorridorScene extends GameScene with PeopleOverlayMixin {
     collectedPatternsNotifier.value = _collectedPatterns;
     if (_collectedPatterns >= _patternSprites.length) {
       game.overlays.remove('PatternProgress');
-      // TODO: when background for notebook scene is ready, uncomment this
       //game.isFrozen = true;
       //game.loadScene(
       //  NotebookScene(),

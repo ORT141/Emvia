@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../l10n/app_localizations_gen.dart';
@@ -20,6 +21,13 @@ const Map<int, List<String>> _sceneTags = {
   7: ['tag_accessibility', 'tag_solution', 'tag_freedom'],
 };
 
+final List<String> _cameraEquipFrames = List.unmodifiable(
+  List.generate(
+    24,
+    (index) => 'assets/images/misc/camera/camera_${index + 1}.png',
+  ),
+);
+
 class CameraOverlay extends StatefulWidget {
   final EmviaGame game;
 
@@ -30,17 +38,34 @@ class CameraOverlay extends StatefulWidget {
 }
 
 class _CameraOverlayState extends State<CameraOverlay>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
+  static const Size _cameraFrameSize = Size(1900, 1025);
+
+  late final AnimationController _equipController;
   late final AnimationController _shutterController;
   late final Animation<double> _shutterAnimation;
   CameraController? _controller;
   bool _isInitialized = false;
   String? _error;
   bool _isTakingPhoto = false;
+  bool _isClosing = false;
+  bool _didPrecacheFrames = false;
+
+  bool get _useBlankPreviewOnWindows => !kIsWeb && Platform.isWindows;
 
   @override
   void initState() {
     super.initState();
+    _equipController =
+        AnimationController(
+          vsync: this,
+          duration: const Duration(milliseconds: 650),
+          reverseDuration: const Duration(milliseconds: 500),
+        )..addListener(() {
+          if (mounted) {
+            setState(() {});
+          }
+        });
     _shutterController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 100),
@@ -48,17 +73,55 @@ class _CameraOverlayState extends State<CameraOverlay>
     _shutterAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _shutterController, curve: Curves.easeInOut),
     );
+    _equipController.forward();
     _initializeCamera();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didPrecacheFrames) return;
+
+    for (final assetPath in _cameraEquipFrames) {
+      precacheImage(AssetImage(assetPath), context);
+    }
+
+    _didPrecacheFrames = true;
   }
 
   @override
   void dispose() {
     _controller?.dispose();
+    _equipController.dispose();
     _shutterController.dispose();
     super.dispose();
   }
 
+  bool get _isCameraEquipped =>
+      !_isClosing &&
+      !_equipController.isAnimating &&
+      _equipController.status == AnimationStatus.completed;
+
+  String get _currentCameraFrameAsset {
+    final frameIndex = math.min(
+      (_equipController.value * _cameraEquipFrames.length).floor(),
+      _cameraEquipFrames.length - 1,
+    );
+    return _cameraEquipFrames[frameIndex];
+  }
+
+  double get _previewOpacity {
+    final normalizedProgress = ((_equipController.value - 0.78) / 0.22)
+        .clamp(0.0, 1.0)
+        .toDouble();
+    return Curves.easeOut.transform(normalizedProgress);
+  }
+
   Future<void> _initializeCamera() async {
+    if (_useBlankPreviewOnWindows) {
+      return;
+    }
+
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       final status = await Permission.camera.request();
       if (status.isDenied || status.isPermanentlyDenied) {
@@ -105,7 +168,7 @@ class _CameraOverlayState extends State<CameraOverlay>
   }
 
   Future<void> _takePhoto() async {
-    if (!_isInitialized || _isTakingPhoto) return;
+    if (!_isCameraEquipped || !_isInitialized || _isTakingPhoto) return;
 
     final liamState = widget.game.liamState;
     if (liamState == null || !liamState.canCaptureMore) return;
@@ -132,6 +195,22 @@ class _CameraOverlayState extends State<CameraOverlay>
     }
   }
 
+  Future<void> _closeCamera() async {
+    if (_isClosing) return;
+
+    setState(() => _isClosing = true);
+
+    try {
+      if (_equipController.value > 0.0) {
+        await _equipController.reverse();
+      }
+    } finally {
+      if (mounted) {
+        widget.game.toggleCameraMode();
+      }
+    }
+  }
+
   Future<void> _openTagEditorModal(XFile file) async {
     await showDialog<void>(
       context: context,
@@ -144,58 +223,72 @@ class _CameraOverlayState extends State<CameraOverlay>
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: _takePhoto,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Container(color: Colors.black.withValues(alpha: 0.85)),
-          ),
-          Center(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final maxWidth = constraints.maxWidth * 0.95;
-                final maxHeight = constraints.maxHeight * 0.85;
-                return ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: maxWidth,
-                    maxHeight: maxHeight,
-                  ),
-                  child: AspectRatio(
-                    aspectRatio: 1516 / 1010,
-                    child: _buildViewfinder(),
-                  ),
-                );
-              },
+    return Focus(
+      autofocus: true,
+      onKeyEvent: (_, event) {
+        if (event is! KeyDownEvent) {
+          return KeyEventResult.ignored;
+        }
+
+        if (event.logicalKey == LogicalKeyboardKey.keyC ||
+            event.logicalKey == LogicalKeyboardKey.escape) {
+          _closeCamera();
+          return KeyEventResult.handled;
+        }
+
+        return KeyEventResult.ignored;
+      },
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: _isCameraEquipped ? _takePhoto : null,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Container(color: Colors.black.withValues(alpha: 0.85)),
             ),
-          ),
-          FadeTransition(
-            opacity: _shutterAnimation,
-            child: Container(color: Colors.white),
-          ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  IconButton(
-                    onPressed: widget.game.toggleCameraMode,
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 32,
+            Center(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: constraints.maxWidth,
+                      maxHeight: constraints.maxHeight,
                     ),
-                    style: IconButton.styleFrom(
-                      backgroundColor: Colors.black26,
+                    child: AspectRatio(
+                      aspectRatio: _cameraFrameSize.aspectRatio,
+                      child: _buildViewfinder(),
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
-          ),
-        ],
+            FadeTransition(
+              opacity: _shutterAnimation,
+              child: Container(color: Colors.white),
+            ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      onPressed: _isClosing ? null : _closeCamera,
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.black26,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -205,39 +298,51 @@ class _CameraOverlayState extends State<CameraOverlay>
       builder: (context, boxConstraints) {
         final w = boxConstraints.maxWidth;
         final h = boxConstraints.maxHeight;
+        final previewLeft = w * 0.232;
+        final previewTop = h * 0.35;
+        final previewWidth = w * (0.388);
+        final previewHeight = h * (0.5);
+
+        final showPreview =
+            _isInitialized && _controller != null && _previewOpacity > 0.999;
 
         return Stack(
           children: [
-            if (_isInitialized && _controller != null)
+            if (showPreview)
               Positioned(
-                left: w * (443 / 1516),
-                top: h * (309 / 1010),
-                width: w * (561 / 1516),
-                height: h * (394 / 1010),
-                child: ClipRect(
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: SizedBox(
-                      width: w * (561 / 1516),
-                      height:
-                          (w * (561 / 1516)) / _controller!.value.aspectRatio,
-                      child: CameraPreview(_controller!),
+                left: previewLeft,
+                top: previewTop,
+                width: previewWidth,
+                height: previewHeight,
+                child: Opacity(
+                  opacity: _previewOpacity,
+                  child: ClipRect(
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: SizedBox(
+                        width: previewWidth,
+                        height: previewWidth / _controller!.value.aspectRatio,
+                        child: CameraPreview(_controller!),
+                      ),
                     ),
                   ),
                 ),
               )
+            else if (_useBlankPreviewOnWindows && _previewOpacity > 0.999)
+              Positioned(
+                left: previewLeft,
+                top: previewTop,
+                width: previewWidth,
+                height: previewHeight,
+                child: ColoredBox(color: Colors.red.withValues(alpha: 0.92)),
+              )
             else if (_error != null)
               Center(
                 child: Text(_error!, style: const TextStyle(color: Colors.red)),
-              )
-            else
-              const Center(child: CircularProgressIndicator()),
+              ),
             Positioned.fill(
               child: IgnorePointer(
-                child: Image.asset(
-                  'assets/images/misc/camera-overlay.png',
-                  fit: BoxFit.fill,
-                ),
+                child: Image.asset(_currentCameraFrameAsset, fit: BoxFit.fill),
               ),
             ),
           ],
