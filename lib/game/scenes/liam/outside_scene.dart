@@ -36,10 +36,6 @@ class LiamOutsideScene extends GameScene {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    if (game.player.parent != game.worldRoot) {
-      await game.worldRoot.add(game.player);
-    }
-    game.player.opacity = 1;
     layoutToWorld();
   }
 
@@ -69,5 +65,5 @@ class LiamOutsideScene extends GameScene {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(worldSize.x * 0.1, worldSize.y * 0.68);
+      Vector2(worldSize.x * 0.8, worldSize.y * 0.68);
 }

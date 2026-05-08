@@ -68,100 +68,96 @@ class DialogOverlay extends StatelessWidget {
         ),
         child: Material(
           type: MaterialType.transparency,
-          child: Localizations.override(
-            context: context,
-            locale: const Locale('uk'),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: isSmall ? 600 : 800),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (node.choices != null && node.choices!.isNotEmpty)
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isSmall ? 8 : 16,
-                        vertical: isSmall ? 4 : 8,
-                      ),
-                      child: Wrap(
-                        spacing: isSmall ? 8 : 12,
-                        runSpacing: isSmall ? 8 : 12,
-                        alignment: WrapAlignment.center,
-                        children: node.choices!.map((choice) {
-                          return _buildChoiceButton(
-                            context,
-                            choice,
-                            loc,
-                            isSmall,
-                            theme,
-                          );
-                        }).toList(),
-                      ),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isSmall ? 600 : 800),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (node.choices != null && node.choices!.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isSmall ? 8 : 16,
+                      vertical: isSmall ? 4 : 8,
                     ),
-                  GestureDetector(
-                    onTap: () => game.nextDialog(),
-                    child: GlassPanel(
-                      borderRadius: BorderRadius.circular(isSmall ? 24 : 32),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isSmall ? 16 : 24,
-                        vertical: isSmall ? 14 : 20,
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (!isVerySmall) ...[
-                            Container(
-                              width: isSmall ? 44 : 56,
-                              height: isSmall ? 44 : 56,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.face_retouching_natural_rounded,
-                                color: Colors.white,
-                                size: isSmall ? 24 : 32,
-                              ),
-                            ),
-                            SizedBox(width: isSmall ? 12 : 20),
-                          ],
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (node.speakerName != null)
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 4),
-                                    child: Text(
-                                      node.speakerName!(loc),
-                                      style: GoogleFonts.baloo2(
-                                        color: Colors.white,
-                                        fontSize: isSmall ? 15 : 17,
-                                        fontWeight: FontWeight.w800,
-                                        height: 1.2,
-                                      ),
-                                    ),
-                                  ),
-                                Text(
-                                  node.text(loc),
-                                  softWrap: true,
-                                  textWidthBasis: TextWidthBasis.longestLine,
-                                  style: GoogleFonts.baloo2(
-                                    color: Colors.white,
-                                    fontSize: isSmall ? 16 : 18.5,
-                                    fontWeight: FontWeight.w600,
-                                    height: 1.38,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                    child: Wrap(
+                      spacing: isSmall ? 8 : 12,
+                      runSpacing: isSmall ? 8 : 12,
+                      alignment: WrapAlignment.center,
+                      children: node.choices!.map((choice) {
+                        return _buildChoiceButton(
+                          context,
+                          choice,
+                          loc,
+                          isSmall,
+                          theme,
+                        );
+                      }).toList(),
                     ),
                   ),
-                ],
-              ),
+                GestureDetector(
+                  onTap: () => game.nextDialog(),
+                  child: GlassPanel(
+                    borderRadius: BorderRadius.circular(isSmall ? 24 : 32),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isSmall ? 16 : 24,
+                      vertical: isSmall ? 14 : 20,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (!isVerySmall) ...[
+                          Container(
+                            width: isSmall ? 44 : 56,
+                            height: isSmall ? 44 : 56,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.face_retouching_natural_rounded,
+                              color: Colors.white,
+                              size: isSmall ? 24 : 32,
+                            ),
+                          ),
+                          SizedBox(width: isSmall ? 12 : 20),
+                        ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (node.speakerName != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 4),
+                                  child: Text(
+                                    node.speakerName!(loc),
+                                    style: GoogleFonts.baloo2(
+                                      color: Colors.white,
+                                      fontSize: isSmall ? 15 : 17,
+                                      fontWeight: FontWeight.w800,
+                                      height: 1.2,
+                                    ),
+                                  ),
+                                ),
+                              Text(
+                                node.text(loc),
+                                softWrap: true,
+                                textWidthBasis: TextWidthBasis.longestLine,
+                                style: GoogleFonts.baloo2(
+                                  color: Colors.white,
+                                  fontSize: isSmall ? 16 : 18.5,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.38,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

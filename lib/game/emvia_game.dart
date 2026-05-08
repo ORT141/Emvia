@@ -10,6 +10,7 @@ import 'utils/survey_service.dart';
 import 'components/fade_overlay.dart';
 import 'characters/base_player.dart';
 import 'characters/character_factory.dart';
+import 'characters/liam/liam_journey.dart';
 import 'scenes/game_scene.dart';
 import 'scenes/olya/stage_scene.dart';
 import 'scenes/survey_scene.dart';
@@ -452,6 +453,11 @@ extension EmviaGameUI on EmviaGame {
     if (selectedCharacter != PlayableCharacter.liam) return;
     final state = liamState;
     if (state == null) return;
+
+    if (state.isJourneyComplete) {
+      LiamJourney.maybeShowCurrentNarrative(this);
+      return;
+    }
 
     if (state.isCameraMode) {
       state.isCameraMode = false;

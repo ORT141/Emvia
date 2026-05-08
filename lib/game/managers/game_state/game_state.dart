@@ -8,6 +8,8 @@ abstract class GameState {
   void reset() {}
 }
 
+enum LiamBoundaryResponse { explain, joke, respondSharply }
+
 class OlyaGameState extends GameState {
   bool hasTriggeredStressScene = false;
   bool hasShownCorridorStressIntro = false;
@@ -31,10 +33,33 @@ class LiamGameState extends GameState {
   static const int maxPhotos = 6;
 
   final List<CapturedPhoto> capturedPhotos = [];
+  final Set<int> shownBriefings = <int>{};
 
-  bool get canCaptureMore => capturedPhotos.length < maxPhotos;
+  bool hasShownSilentIntro = false;
+  bool hasShownCompletionDialog = false;
+  LiamBoundaryResponse? boundaryResponse;
 
-  void addPhoto(CapturedPhoto photo) {
-    if (canCaptureMore) capturedPhotos.add(photo);
+  int get currentMissionIndex => capturedPhotos.length.clamp(0, maxPhotos);
+
+  bool get isJourneyComplete => currentMissionIndex >= maxPhotos;
+
+  bool get canCaptureMore => !isJourneyComplete;
+
+  bool addPhoto(CapturedPhoto photo) {
+    if (!canCaptureMore) return false;
+    capturedPhotos.add(photo);
+    return true;
+  }
+
+  bool markCurrentBriefingShown() => shownBriefings.add(currentMissionIndex);
+
+  @override
+  void reset() {
+    isCameraMode = false;
+    capturedPhotos.clear();
+    shownBriefings.clear();
+    hasShownSilentIntro = false;
+    hasShownCompletionDialog = false;
+    boundaryResponse = null;
   }
 }

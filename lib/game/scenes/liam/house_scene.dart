@@ -18,14 +18,6 @@ class HouseScene extends GameScene {
   void onPlayerReachedLeftEdge() => game.navigationManager.goToLiamOutside();
 
   @override
-  void onRemove() {
-    if (game.player.parent == game.worldRoot) {
-      game.player.removeFromParent();
-    }
-    super.onRemove();
-  }
-
-  @override
   Future<void> onLoad() async {
     await super.onLoad();
 

@@ -701,6 +701,161 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
       'Натисніть C, щоб увімкнути камеру. Натисніть на спуск, щоб зробити фото.';
 
   @override
+  String camera_liam_progress(int current, int total) {
+    return 'Фото $current з $total';
+  }
+
+  @override
+  String get liam_scene_intro_silent =>
+      'Є дні, коли місто здається відкритим. А є дні, коли воно нагадує, що не для всіх. Я міг би залишитися в цій кімнаті, але сьогодні мені потрібно вийти у місто.';
+
+  @override
+  String get liam_route_briefing =>
+      'Рух починається з планування. Сфотографуй свій шлях попереду - не ідеальний, а такий, який він є.';
+
+  @override
+  String get liam_route_title => 'Маршрут';
+
+  @override
+  String get liam_route_prompt =>
+      'Сфотографуй шлях попереду - не ідеальний, а саме такий, яким він є.';
+
+  @override
+  String get liam_route_tag_prompt =>
+      'Що ти помітив? Обери тег, який сформує історію цього простору.';
+
+  @override
+  String get liam_route_education =>
+      'Доступність - це коли не треба продумувати кожен крок.';
+
+  @override
+  String get liam_obstacle_briefing =>
+      'Для когось це просто дрібниця. Для мене - перешкода. Знайди й сфотографуй те, що перекриває шлях.';
+
+  @override
+  String get liam_obstacle_title => 'Перешкода';
+
+  @override
+  String get liam_obstacle_prompt =>
+      'Знайди й сфотографуй те, що перекриває шлях.';
+
+  @override
+  String get liam_obstacle_tag_prompt =>
+      'Обери тег, що покаже вплив бар\'єра на людину на візку.';
+
+  @override
+  String get liam_obstacle_education =>
+      'Бар\'єри часто непомітні тим, хто їх не відчуває.';
+
+  @override
+  String get liam_boundary_npc => 'О, давай допоможу.';
+
+  @override
+  String get liam_boundary_stop => 'СТОП.';
+
+  @override
+  String get liam_boundary_choice_prompt => 'Обери реакцію Ліама.';
+
+  @override
+  String get liam_boundary_choice_explain => 'Пояснити';
+
+  @override
+  String get liam_boundary_choice_joke => 'Пожартувати';
+
+  @override
+  String get liam_boundary_choice_sharp => 'Різко відповісти';
+
+  @override
+  String get liam_boundary_response_explain =>
+      'Дякую, але спершу запитай. Візок - це мій особистий простір.';
+
+  @override
+  String get liam_boundary_response_joke =>
+      'Обережно, ручне управління. За водіння без дозволу - штраф.';
+
+  @override
+  String get liam_boundary_response_sharp =>
+      'Прибери руки. Я сам вирішую, коли і куди мені рухатись.';
+
+  @override
+  String get liam_boundary_title => 'Контроль і кордони';
+
+  @override
+  String get liam_boundary_prompt =>
+      'Я не проти допомоги - я проти того, коли вирішують за мене. Сфотографуй простір або ситуацію, де у тебе забирають вибір.';
+
+  @override
+  String get liam_boundary_tag_prompt => 'Обери тег для кадру.';
+
+  @override
+  String get liam_boundary_education =>
+      'Допомога без згоди - це порушення меж. Спершу запитай, а вже потім допомагай.';
+
+  @override
+  String get liam_comments_intro =>
+      'Під дописом Ліама починають з\'являтися коментарі:\n\n\"Як ти сюди взагалі потрапив?\"\n\"Ого, а хіба туди можна на візку?\"\n\"Тобі хтось допоміг дістатися?\"\n\"Ти такий молодець, що взагалі кудись виходиш.\"\n\"Справжній герой. Я б на твоєму місці не зміг.\"\n\"Чесно, я спочатку дивився не на фото, а на візок.\"\n\"Обережно, там же незручна плитка. Не застрягни.\"\n\"Навіть не знаю, що більше вражає - місце чи те, що ти там.\"\n\"Тобі, мабуть, дуже важко знімати такий контент.\"\n\"Круто, що ти не сидиш удома.\"';
+
+  @override
+  String get liam_self_briefing =>
+      'Особистість завжди більша за обмеження. Зроби селфі \'Я - більше\'. Покажи свій стиль та характер без жодних стереотипів.';
+
+  @override
+  String get liam_self_title => 'Самовираження';
+
+  @override
+  String get liam_self_prompt =>
+      'Зроби селфі \'Я - більше\'. Покажи свій стиль та характер без жодних стереотипів.';
+
+  @override
+  String get liam_self_tag_prompt => 'Обери тег для кадру.';
+
+  @override
+  String get liam_self_education =>
+      'Обмеження існують у просторі та чужих стереотипах, але не у твоїй особистості.';
+
+  @override
+  String get liam_almost_briefing =>
+      'Ось це знайоме відчуття: місце ніби поруч, але дістатися до нього ти не можеш - і справа зовсім не в тобі. Зроби фото \'Майже поруч\' і зафіксуй те, що лишається недосяжним.';
+
+  @override
+  String get liam_almost_title => 'Майже поруч';
+
+  @override
+  String get liam_almost_prompt => 'Зафіксуй те, що лишається недосяжним.';
+
+  @override
+  String get liam_almost_tag_prompt => 'Обери тег для кадру.';
+
+  @override
+  String get liam_almost_education =>
+      'Більшість бар\'єрів виникає через помилки в проєктуванні, а не через необхідність.';
+
+  @override
+  String get liam_space_briefing =>
+      'Іноді, щоб простір став доступнішим, достатньо простої дії. Прибери те, що перекриває шлях, і зроби фінальне фото \'Простір на рівні\'.';
+
+  @override
+  String get liam_space_title => 'Простір на рівні';
+
+  @override
+  String get liam_space_prompt => 'Зроби фінальне фото \'Простір на рівні\'.';
+
+  @override
+  String get liam_space_tag_prompt => 'Обери тег для кадру.';
+
+  @override
+  String get liam_space_education =>
+      'Інклюзія - це не надзусилля, а свідомий крок до комфорту для кожного.';
+
+  @override
+  String get liam_final_dialog =>
+      'Ти це бачиш тепер. Те, що більшість не помічає. І це вже змінює більше, ніж здається.';
+
+  @override
+  String get liam_final_education =>
+      'Не зводьте людину на кріслі колісному лише до її візка. Це не символ обмеження, а частина щоденного життя. Передусім це людина - зі своїм характером, смаками, мріями та правом почуватися природно в будь-якому просторі.';
+
+  @override
   String get tag_freely => 'вільно';
 
   @override
@@ -728,6 +883,21 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get tag_help => 'допомога';
 
   @override
+  String get tag_no_choice => 'без вибору';
+
+  @override
+  String get tag_loss_of_control => 'втрата контролю';
+
+  @override
+  String get tag_intrusive_help => 'нав\'язана допомога';
+
+  @override
+  String get tag_boundary_violation => 'порушення меж';
+
+  @override
+  String get tag_deciding_for_me => 'вирішують за мене';
+
+  @override
   String get tag_strength => 'сила';
 
   @override
@@ -740,10 +910,16 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get tag_unreachable => 'недосяжно';
 
   @override
+  String get tag_out_of_reach => 'недосяжно';
+
+  @override
   String get tag_barrier => 'бар\'єр';
 
   @override
   String get tag_injustice => 'несправедливість';
+
+  @override
+  String get tag_unfairness => 'несправедливість';
 
   @override
   String get tag_accessibility => 'доступність';

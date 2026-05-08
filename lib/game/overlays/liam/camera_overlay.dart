@@ -8,18 +8,10 @@ import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../l10n/app_localizations_gen.dart';
+import '../../characters/liam/liam_journey.dart';
 import '../glass_ui.dart';
 import '../../emvia_game.dart';
 import '../../models/captured_photo.dart';
-
-const Map<int, List<String>> _sceneTags = {
-  2: ['tag_freely', 'tag_impossible', 'tag_difficult'],
-  3: ['tag_obstacle', 'tag_danger', 'tag_uncomfortable'],
-  4: ['tag_control', 'tag_dependency', 'tag_help'],
-  5: ['tag_strength', 'tag_style', 'tag_personality'],
-  6: ['tag_unreachable', 'tag_barrier', 'tag_injustice'],
-  7: ['tag_accessibility', 'tag_solution', 'tag_freedom'],
-};
 
 final List<String> _cameraEquipFrames = List.unmodifiable(
   List.generate(
@@ -185,7 +177,11 @@ class _CameraOverlayState extends State<CameraOverlay>
       final file = await controller.takePicture();
       if (!mounted) return;
 
-      await _openTagEditorModal(file);
+      final savedMissionIndex = await _openTagEditorModal(file);
+      if (!mounted || savedMissionIndex == null) return;
+
+      _dismissCameraOverlay();
+      LiamJourney.onPhotoSaved(widget.game, savedMissionIndex);
     } catch (e) {
       debugPrint('Camera capture failed: $e');
     } finally {
@@ -193,6 +189,12 @@ class _CameraOverlayState extends State<CameraOverlay>
         setState(() => _isTakingPhoto = false);
       }
     }
+  }
+
+  void _dismissCameraOverlay() {
+    widget.game.liamState?.isCameraMode = false;
+    widget.game.overlays.remove('Camera');
+    widget.game.gameState.isFrozen = false;
   }
 
   Future<void> _closeCamera() async {
@@ -211,8 +213,8 @@ class _CameraOverlayState extends State<CameraOverlay>
     }
   }
 
-  Future<void> _openTagEditorModal(XFile file) async {
-    await showDialog<void>(
+  Future<int?> _openTagEditorModal(XFile file) async {
+    return showDialog<int>(
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) {
@@ -223,6 +225,12 @@ class _CameraOverlayState extends State<CameraOverlay>
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizationsGen.of(context);
+    final liamState = widget.game.liamState;
+    final quote = l != null && liamState != null
+        ? LiamJourney.currentQuote(l, liamState)
+        : null;
+
     return Focus(
       autofocus: true,
       onKeyEvent: (_, event) {
@@ -267,24 +275,136 @@ class _CameraOverlayState extends State<CameraOverlay>
               child: Container(color: Colors.white),
             ),
             SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      onPressed: _isClosing ? null : _closeCamera,
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                        size: 32,
-                      ),
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.black26,
-                      ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final isSmall = constraints.maxWidth < 600;
+                  final outerPad = isSmall ? 8.0 : 16.0;
+                  final panelH = isSmall ? 10.0 : 14.0;
+                  final panelV = isSmall ? 8.0 : 10.0;
+                  final sizeLabel = isSmall ? 9.0 : 10.0;
+                  final sizeTitle = isSmall ? 13.0 : 16.0;
+                  final sizePrompt = isSmall ? 11.0 : 12.0;
+                  final sizeQuote = isSmall ? 10.0 : 11.0;
+                  final sizeTag = isSmall ? 9.0 : 10.0;
+                  final gap1 = isSmall ? 2.0 : 4.0;
+                  final gap2 = isSmall ? 4.0 : 6.0;
+                  final gapHeader = isSmall ? 6.0 : 10.0;
+
+                  return Padding(
+                    padding: EdgeInsets.all(outerPad),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          onPressed: _isClosing ? null : _closeCamera,
+                          icon: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: isSmall ? 20 : 26,
+                          ),
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.black26,
+                          ),
+                        ),
+                        Spacer(),
+                        if (l != null && liamState != null)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(height: gapHeader),
+                              GlassPanel(
+                                borderRadius: BorderRadius.circular(16),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: panelH,
+                                  vertical: panelV,
+                                ),
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: 360,
+                                    maxHeight: constraints.maxHeight * 0.38,
+                                  ),
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          LiamJourney.progressLabel(
+                                            l,
+                                            liamState,
+                                          ),
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: sizeLabel,
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing: 1.1,
+                                          ),
+                                        ),
+                                        SizedBox(height: gap1),
+                                        Text(
+                                          LiamJourney.currentTitle(
+                                            l,
+                                            liamState,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: sizeTitle,
+                                            fontWeight: FontWeight.w800,
+                                          ),
+                                        ),
+                                        SizedBox(height: gap2),
+                                        Text(
+                                          LiamJourney.currentPrompt(
+                                            l,
+                                            liamState,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: sizePrompt,
+                                            height: 1.35,
+                                          ),
+                                        ),
+                                        if (quote != null) ...[
+                                          SizedBox(height: gap2),
+                                          Text(
+                                            quote,
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: sizeQuote,
+                                              fontStyle: FontStyle.italic,
+                                              height: 1.3,
+                                            ),
+                                          ),
+                                        ],
+                                        SizedBox(height: gap2),
+                                        Text(
+                                          LiamJourney.currentTagPrompt(
+                                            l,
+                                            liamState,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: sizeTag,
+                                            height: 1.35,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
             ),
           ],
@@ -379,6 +499,16 @@ String _resolveTag(AppLocalizationsGen l, String key) {
       return l.tag_dependency;
     case 'tag_help':
       return l.tag_help;
+    case 'tag_no_choice':
+      return l.tag_no_choice;
+    case 'tag_loss_of_control':
+      return l.tag_loss_of_control;
+    case 'tag_intrusive_help':
+      return l.tag_intrusive_help;
+    case 'tag_boundary_violation':
+      return l.tag_boundary_violation;
+    case 'tag_deciding_for_me':
+      return l.tag_deciding_for_me;
     case 'tag_strength':
       return l.tag_strength;
     case 'tag_style':
@@ -387,10 +517,14 @@ String _resolveTag(AppLocalizationsGen l, String key) {
       return l.tag_personality;
     case 'tag_unreachable':
       return l.tag_unreachable;
+    case 'tag_out_of_reach':
+      return l.tag_out_of_reach;
     case 'tag_barrier':
       return l.tag_barrier;
     case 'tag_injustice':
       return l.tag_injustice;
+    case 'tag_unfairness':
+      return l.tag_unfairness;
     case 'tag_accessibility':
       return l.tag_accessibility;
     case 'tag_solution':
@@ -418,8 +552,20 @@ class _TagEditorDialogState extends State<_TagEditorDialog> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizationsGen.of(context);
-    final sceneIndex = widget.game.sceneIndex;
-    final tagKeys = _sceneTags[sceneIndex] ?? _sceneTags[2]!;
+    final liamState = widget.game.liamState;
+    final tagKeys = liamState == null
+        ? const <String>[]
+        : LiamJourney.currentTags(liamState);
+    final missionIndex = liamState?.currentMissionIndex ?? 0;
+    final missionTitle = l != null && liamState != null
+        ? LiamJourney.currentTitle(l, liamState)
+        : 'Tag editor';
+    final missionPrompt = l != null && liamState != null
+        ? LiamJourney.currentPrompt(l, liamState)
+        : null;
+    final tagPrompt = l != null && liamState != null
+        ? LiamJourney.currentTagPrompt(l, liamState)
+        : null;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -484,7 +630,7 @@ class _TagEditorDialogState extends State<_TagEditorDialog> {
                     ),
                     SizedBox(height: isCompact ? 16 : 24),
                     Text(
-                      l?.camera_liam_title ?? 'Tag editor',
+                      missionTitle,
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w800,
@@ -492,6 +638,30 @@ class _TagEditorDialogState extends State<_TagEditorDialog> {
                       ),
                       textAlign: TextAlign.center,
                     ),
+                    if (missionPrompt != null) ...[
+                      SizedBox(height: isCompact ? 10 : 14),
+                      Text(
+                        missionPrompt,
+                        style: TextStyle(
+                          fontSize: isCompact ? 14 : 16,
+                          height: 1.35,
+                          color: Colors.white.withValues(alpha: 0.86),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                    if (tagPrompt != null) ...[
+                      SizedBox(height: isCompact ? 10 : 14),
+                      Text(
+                        tagPrompt,
+                        style: TextStyle(
+                          fontSize: isCompact ? 13 : 14,
+                          height: 1.3,
+                          color: Colors.white.withValues(alpha: 0.72),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                     SizedBox(height: isCompact ? 12 : 16),
                     Wrap(
                       alignment: WrapAlignment.center,
@@ -527,14 +697,25 @@ class _TagEditorDialogState extends State<_TagEditorDialog> {
                           onPressed: _selectedTag == null
                               ? null
                               : () {
-                                  widget.game.liamState?.addPhoto(
+                                  final liamState = widget.game.liamState;
+                                  if (liamState == null) {
+                                    Navigator.of(context).pop();
+                                    return;
+                                  }
+
+                                  final saved = liamState.addPhoto(
                                     CapturedPhoto(
                                       path: widget.file.path,
                                       tagKey: _selectedTag!,
-                                      sceneIndex: widget.game.sceneIndex,
+                                      sceneIndex:
+                                          LiamJourney.currentSceneNumber(
+                                            liamState,
+                                          ),
                                     ),
                                   );
-                                  Navigator.of(context).pop();
+                                  Navigator.of(
+                                    context,
+                                  ).pop(saved ? missionIndex : null);
                                 },
                         ),
                       ],

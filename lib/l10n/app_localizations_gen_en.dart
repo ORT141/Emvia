@@ -700,6 +700,161 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
       'Press C to toggle camera. Tap shutter to take photo.';
 
   @override
+  String camera_liam_progress(int current, int total) {
+    return 'Photo $current of $total';
+  }
+
+  @override
+  String get liam_scene_intro_silent =>
+      'There are days when the city feels open. And there are days when it reminds you that it is not for everyone. I could stay in this room, but today I need to go out into the city.';
+
+  @override
+  String get liam_route_briefing =>
+      'Movement begins with planning. Take a photo of the path ahead of you - not as it should be, but as it really is.';
+
+  @override
+  String get liam_route_title => 'Route';
+
+  @override
+  String get liam_route_prompt =>
+      'Take a photo of the path ahead of you - not idealized, but exactly as it is.';
+
+  @override
+  String get liam_route_tag_prompt =>
+      'What did you notice? Choose a tag that will shape the story of this space.';
+
+  @override
+  String get liam_route_education =>
+      'Accessibility is when you do not have to think through every step.';
+
+  @override
+  String get liam_obstacle_briefing =>
+      'For some, it is just a small thing. For me, it is an obstacle. Find and photograph what blocks the way.';
+
+  @override
+  String get liam_obstacle_title => 'Obstacle';
+
+  @override
+  String get liam_obstacle_prompt => 'Find and photograph what blocks the way.';
+
+  @override
+  String get liam_obstacle_tag_prompt =>
+      'Choose a tag that shows the impact of the barrier on a wheelchair user.';
+
+  @override
+  String get liam_obstacle_education =>
+      'Barriers are often invisible to those who do not experience them.';
+
+  @override
+  String get liam_boundary_npc => 'Oh, let me help.';
+
+  @override
+  String get liam_boundary_stop => 'Stop.';
+
+  @override
+  String get liam_boundary_choice_prompt => 'Choose Liam\'s response.';
+
+  @override
+  String get liam_boundary_choice_explain => 'Explain';
+
+  @override
+  String get liam_boundary_choice_joke => 'Joke';
+
+  @override
+  String get liam_boundary_choice_sharp => 'Respond sharply';
+
+  @override
+  String get liam_boundary_response_explain =>
+      'Thanks, but ask first. My wheelchair is my personal space.';
+
+  @override
+  String get liam_boundary_response_joke =>
+      'Careful, this is manual control. Driving without permission comes with a fine.';
+
+  @override
+  String get liam_boundary_response_sharp =>
+      'Hands off. I decide when and where I move.';
+
+  @override
+  String get liam_boundary_title => 'Control and Boundaries';
+
+  @override
+  String get liam_boundary_prompt =>
+      'I\'m not against help - I\'m against people deciding for me. Photograph a space or situation where your choice is taken away.';
+
+  @override
+  String get liam_boundary_tag_prompt => 'Choose a tag for the shot.';
+
+  @override
+  String get liam_boundary_education =>
+      'Help without consent is a boundary violation. Ask first, then help.';
+
+  @override
+  String get liam_comments_intro =>
+      'Comments begin to scroll under Liam\'s post:\n\n\"How did you even get here?\"\n\"Wow, can you actually get there in a wheelchair?\"\n\"Did someone help you get there?\"\n\"You\'re so brave for going out at all.\"\n\"A real hero. I wouldn\'t be able to do that in your place.\"\n\"Honestly, I was looking at the wheelchair before the photo.\"\n\"Careful, the pavement there is uneven. Don\'t get stuck.\"\n\"I don\'t know what is more impressive - the place or the fact that you\'re there.\"\n\"It must be really hard for you to create this kind of content.\"\n\"It\'s great that you\'re not just staying at home.\"';
+
+  @override
+  String get liam_self_briefing =>
+      'Personality is always greater than limitation. Take a selfie, \'I Am More.\' Show your style and character without any stereotypes.';
+
+  @override
+  String get liam_self_title => 'Self-Expression';
+
+  @override
+  String get liam_self_prompt =>
+      'Take a selfie, \'I Am More.\' Show your style and character without any stereotypes.';
+
+  @override
+  String get liam_self_tag_prompt => 'Choose a tag for the shot.';
+
+  @override
+  String get liam_self_education =>
+      'Limitations exist in spaces and in other people\'s stereotypes, but not in your personality.';
+
+  @override
+  String get liam_almost_briefing =>
+      'Here is that familiar feeling: a place seems so close, yet you still cannot reach it - and it is not your fault. Take a photo called \'Almost There\' and capture what remains out of reach.';
+
+  @override
+  String get liam_almost_title => 'Almost There';
+
+  @override
+  String get liam_almost_prompt => 'Capture what remains out of reach.';
+
+  @override
+  String get liam_almost_tag_prompt => 'Choose a tag for the shot.';
+
+  @override
+  String get liam_almost_education =>
+      'Most barriers arise from design mistakes, not necessity.';
+
+  @override
+  String get liam_space_briefing =>
+      'Sometimes, making a space more accessible takes just one simple action. Remove what blocks the way and take the final photo, \'Space at Eye Level.\'';
+
+  @override
+  String get liam_space_title => 'Space at Eye Level';
+
+  @override
+  String get liam_space_prompt =>
+      'Take the final photo, \'Space at Eye Level.\'';
+
+  @override
+  String get liam_space_tag_prompt => 'Choose a tag for the shot.';
+
+  @override
+  String get liam_space_education =>
+      'Inclusion is not an extraordinary effort, but a conscious step toward comfort for everyone.';
+
+  @override
+  String get liam_final_dialog =>
+      'You can see it now - the things most people never notice. And that already changes more than it seems.';
+
+  @override
+  String get liam_final_education =>
+      'Do not reduce a wheelchair user to their wheelchair alone. It is not a symbol of limitation, but part of everyday life. First and foremost, this is a person with their own character, tastes, dreams, and the right to feel natural in any space.';
+
+  @override
   String get tag_freely => 'freely';
 
   @override
@@ -727,6 +882,21 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get tag_help => 'help';
 
   @override
+  String get tag_no_choice => 'no choice';
+
+  @override
+  String get tag_loss_of_control => 'loss of control';
+
+  @override
+  String get tag_intrusive_help => 'intrusive help';
+
+  @override
+  String get tag_boundary_violation => 'boundary violation';
+
+  @override
+  String get tag_deciding_for_me => 'deciding for me';
+
+  @override
   String get tag_strength => 'strength';
 
   @override
@@ -739,10 +909,16 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get tag_unreachable => 'unreachable';
 
   @override
+  String get tag_out_of_reach => 'out of reach';
+
+  @override
   String get tag_barrier => 'barrier';
 
   @override
   String get tag_injustice => 'injustice';
+
+  @override
+  String get tag_unfairness => 'unfairness';
 
   @override
   String get tag_accessibility => 'accessibility';

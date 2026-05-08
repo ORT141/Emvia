@@ -35,11 +35,7 @@ class TransitionManager {
       await game.worldRoot.add(game.player);
     }
 
-    if (scene.showPlayer) {
-      game.player.opacity = 1.0;
-    } else {
-      game.player.opacity = 0.0;
-    }
+    game.player.opacity = scene.showPlayer ? 1.0 : 0.0;
 
     game.player.position = game.sceneSpawnPoint(
       scene,
@@ -51,9 +47,6 @@ class TransitionManager {
       onFullOpacity();
     }
 
-    game.cameraManager.snapToPlayer(force: true);
-
-    scene.onGameResize(game.size);
     game.cameraManager.snapToPlayer(force: true);
 
     await game.fadeOverlay.fadeOut(0.4);

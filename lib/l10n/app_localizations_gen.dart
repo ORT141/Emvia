@@ -1352,6 +1352,264 @@ abstract class AppLocalizationsGen {
   /// **'Press C to toggle camera. Tap shutter to take photo.'**
   String get camera_liam_instructions;
 
+  /// Progress label for Liam's camera story.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo {current} of {total}'**
+  String camera_liam_progress(int current, int total);
+
+  /// No description provided for @liam_scene_intro_silent.
+  ///
+  /// In en, this message translates to:
+  /// **'There are days when the city feels open. And there are days when it reminds you that it is not for everyone. I could stay in this room, but today I need to go out into the city.'**
+  String get liam_scene_intro_silent;
+
+  /// No description provided for @liam_route_briefing.
+  ///
+  /// In en, this message translates to:
+  /// **'Movement begins with planning. Take a photo of the path ahead of you - not as it should be, but as it really is.'**
+  String get liam_route_briefing;
+
+  /// No description provided for @liam_route_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Route'**
+  String get liam_route_title;
+
+  /// No description provided for @liam_route_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo of the path ahead of you - not idealized, but exactly as it is.'**
+  String get liam_route_prompt;
+
+  /// No description provided for @liam_route_tag_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'What did you notice? Choose a tag that will shape the story of this space.'**
+  String get liam_route_tag_prompt;
+
+  /// No description provided for @liam_route_education.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessibility is when you do not have to think through every step.'**
+  String get liam_route_education;
+
+  /// No description provided for @liam_obstacle_briefing.
+  ///
+  /// In en, this message translates to:
+  /// **'For some, it is just a small thing. For me, it is an obstacle. Find and photograph what blocks the way.'**
+  String get liam_obstacle_briefing;
+
+  /// No description provided for @liam_obstacle_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Obstacle'**
+  String get liam_obstacle_title;
+
+  /// No description provided for @liam_obstacle_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Find and photograph what blocks the way.'**
+  String get liam_obstacle_prompt;
+
+  /// No description provided for @liam_obstacle_tag_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a tag that shows the impact of the barrier on a wheelchair user.'**
+  String get liam_obstacle_tag_prompt;
+
+  /// No description provided for @liam_obstacle_education.
+  ///
+  /// In en, this message translates to:
+  /// **'Barriers are often invisible to those who do not experience them.'**
+  String get liam_obstacle_education;
+
+  /// No description provided for @liam_boundary_npc.
+  ///
+  /// In en, this message translates to:
+  /// **'Oh, let me help.'**
+  String get liam_boundary_npc;
+
+  /// No description provided for @liam_boundary_stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop.'**
+  String get liam_boundary_stop;
+
+  /// No description provided for @liam_boundary_choice_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Liam\'s response.'**
+  String get liam_boundary_choice_prompt;
+
+  /// No description provided for @liam_boundary_choice_explain.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain'**
+  String get liam_boundary_choice_explain;
+
+  /// No description provided for @liam_boundary_choice_joke.
+  ///
+  /// In en, this message translates to:
+  /// **'Joke'**
+  String get liam_boundary_choice_joke;
+
+  /// No description provided for @liam_boundary_choice_sharp.
+  ///
+  /// In en, this message translates to:
+  /// **'Respond sharply'**
+  String get liam_boundary_choice_sharp;
+
+  /// No description provided for @liam_boundary_response_explain.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks, but ask first. My wheelchair is my personal space.'**
+  String get liam_boundary_response_explain;
+
+  /// No description provided for @liam_boundary_response_joke.
+  ///
+  /// In en, this message translates to:
+  /// **'Careful, this is manual control. Driving without permission comes with a fine.'**
+  String get liam_boundary_response_joke;
+
+  /// No description provided for @liam_boundary_response_sharp.
+  ///
+  /// In en, this message translates to:
+  /// **'Hands off. I decide when and where I move.'**
+  String get liam_boundary_response_sharp;
+
+  /// No description provided for @liam_boundary_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Control and Boundaries'**
+  String get liam_boundary_title;
+
+  /// No description provided for @liam_boundary_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m not against help - I\'m against people deciding for me. Photograph a space or situation where your choice is taken away.'**
+  String get liam_boundary_prompt;
+
+  /// No description provided for @liam_boundary_tag_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a tag for the shot.'**
+  String get liam_boundary_tag_prompt;
+
+  /// No description provided for @liam_boundary_education.
+  ///
+  /// In en, this message translates to:
+  /// **'Help without consent is a boundary violation. Ask first, then help.'**
+  String get liam_boundary_education;
+
+  /// No description provided for @liam_comments_intro.
+  ///
+  /// In en, this message translates to:
+  /// **'Comments begin to scroll under Liam\'s post:\n\n\"How did you even get here?\"\n\"Wow, can you actually get there in a wheelchair?\"\n\"Did someone help you get there?\"\n\"You\'re so brave for going out at all.\"\n\"A real hero. I wouldn\'t be able to do that in your place.\"\n\"Honestly, I was looking at the wheelchair before the photo.\"\n\"Careful, the pavement there is uneven. Don\'t get stuck.\"\n\"I don\'t know what is more impressive - the place or the fact that you\'re there.\"\n\"It must be really hard for you to create this kind of content.\"\n\"It\'s great that you\'re not just staying at home.\"'**
+  String get liam_comments_intro;
+
+  /// No description provided for @liam_self_briefing.
+  ///
+  /// In en, this message translates to:
+  /// **'Personality is always greater than limitation. Take a selfie, \'I Am More.\' Show your style and character without any stereotypes.'**
+  String get liam_self_briefing;
+
+  /// No description provided for @liam_self_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-Expression'**
+  String get liam_self_title;
+
+  /// No description provided for @liam_self_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a selfie, \'I Am More.\' Show your style and character without any stereotypes.'**
+  String get liam_self_prompt;
+
+  /// No description provided for @liam_self_tag_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a tag for the shot.'**
+  String get liam_self_tag_prompt;
+
+  /// No description provided for @liam_self_education.
+  ///
+  /// In en, this message translates to:
+  /// **'Limitations exist in spaces and in other people\'s stereotypes, but not in your personality.'**
+  String get liam_self_education;
+
+  /// No description provided for @liam_almost_briefing.
+  ///
+  /// In en, this message translates to:
+  /// **'Here is that familiar feeling: a place seems so close, yet you still cannot reach it - and it is not your fault. Take a photo called \'Almost There\' and capture what remains out of reach.'**
+  String get liam_almost_briefing;
+
+  /// No description provided for @liam_almost_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost There'**
+  String get liam_almost_title;
+
+  /// No description provided for @liam_almost_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture what remains out of reach.'**
+  String get liam_almost_prompt;
+
+  /// No description provided for @liam_almost_tag_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a tag for the shot.'**
+  String get liam_almost_tag_prompt;
+
+  /// No description provided for @liam_almost_education.
+  ///
+  /// In en, this message translates to:
+  /// **'Most barriers arise from design mistakes, not necessity.'**
+  String get liam_almost_education;
+
+  /// No description provided for @liam_space_briefing.
+  ///
+  /// In en, this message translates to:
+  /// **'Sometimes, making a space more accessible takes just one simple action. Remove what blocks the way and take the final photo, \'Space at Eye Level.\''**
+  String get liam_space_briefing;
+
+  /// No description provided for @liam_space_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Space at Eye Level'**
+  String get liam_space_title;
+
+  /// No description provided for @liam_space_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the final photo, \'Space at Eye Level.\''**
+  String get liam_space_prompt;
+
+  /// No description provided for @liam_space_tag_prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a tag for the shot.'**
+  String get liam_space_tag_prompt;
+
+  /// No description provided for @liam_space_education.
+  ///
+  /// In en, this message translates to:
+  /// **'Inclusion is not an extraordinary effort, but a conscious step toward comfort for everyone.'**
+  String get liam_space_education;
+
+  /// No description provided for @liam_final_dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'You can see it now - the things most people never notice. And that already changes more than it seems.'**
+  String get liam_final_dialog;
+
+  /// No description provided for @liam_final_education.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not reduce a wheelchair user to their wheelchair alone. It is not a symbol of limitation, but part of everyday life. First and foremost, this is a person with their own character, tastes, dreams, and the right to feel natural in any space.'**
+  String get liam_final_education;
+
   /// Scene 2 tag
   ///
   /// In en, this message translates to:
@@ -1406,6 +1664,36 @@ abstract class AppLocalizationsGen {
   /// **'help'**
   String get tag_help;
 
+  /// Scene 4 tag from Liam boundary choice scene
+  ///
+  /// In en, this message translates to:
+  /// **'no choice'**
+  String get tag_no_choice;
+
+  /// Scene 4 tag from Liam boundary choice scene
+  ///
+  /// In en, this message translates to:
+  /// **'loss of control'**
+  String get tag_loss_of_control;
+
+  /// Scene 4 tag from Liam boundary choice scene
+  ///
+  /// In en, this message translates to:
+  /// **'intrusive help'**
+  String get tag_intrusive_help;
+
+  /// Scene 4 tag from Liam boundary choice scene
+  ///
+  /// In en, this message translates to:
+  /// **'boundary violation'**
+  String get tag_boundary_violation;
+
+  /// Scene 4 tag from Liam boundary choice scene
+  ///
+  /// In en, this message translates to:
+  /// **'deciding for me'**
+  String get tag_deciding_for_me;
+
   /// Scene 5 tag
   ///
   /// In en, this message translates to:
@@ -1430,6 +1718,12 @@ abstract class AppLocalizationsGen {
   /// **'unreachable'**
   String get tag_unreachable;
 
+  /// Scene 6 tag from Liam culmination scene
+  ///
+  /// In en, this message translates to:
+  /// **'out of reach'**
+  String get tag_out_of_reach;
+
   /// Scene 6 tag
   ///
   /// In en, this message translates to:
@@ -1441,6 +1735,12 @@ abstract class AppLocalizationsGen {
   /// In en, this message translates to:
   /// **'injustice'**
   String get tag_injustice;
+
+  /// Scene 6 tag from Liam culmination scene
+  ///
+  /// In en, this message translates to:
+  /// **'unfairness'**
+  String get tag_unfairness;
 
   /// Scene 7 tag
   ///

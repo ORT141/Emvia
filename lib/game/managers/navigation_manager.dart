@@ -8,6 +8,7 @@ import '../scenes/olya/path/path_choice_scene.dart';
 import '../scenes/olya/second_corridor_scene.dart';
 import '../scenes/olya/outside_scene.dart';
 import '../scenes/olya/scene_scene.dart';
+import '../characters/liam/liam_journey.dart';
 import '../scenes/liam/house_scene.dart';
 import '../scenes/liam/outside_scene.dart';
 import '../emvia_types.dart';
@@ -91,6 +92,7 @@ class NavigationManager {
         if (sceneIndex != null) game.sceneIndex = sceneIndex;
         if (resetPlayerOpacity) game.player.opacity = 1;
         if (showMobileControls) {
+          game.unfreezePlayer();
           game.overlayManager.showMobileControls();
         }
         onFullOpacity?.call();
@@ -124,12 +126,24 @@ class NavigationManager {
 
   Future<void> goToLiamHouse() async {
     if (game.transitionManager.isTransitioning) return;
-    await _loadSceneWithDefaults(HouseScene(), sceneIndex: 7);
+    await _loadSceneWithDefaults(
+      HouseScene(),
+      sceneIndex: 7,
+      onFullOpacity: () {
+        LiamJourney.maybeShowCurrentNarrative(game);
+      },
+    );
   }
 
   Future<void> goToLiamOutside() async {
     if (game.transitionManager.isTransitioning) return;
-    await _loadSceneWithDefaults(LiamOutsideScene(), sceneIndex: 8);
+    await _loadSceneWithDefaults(
+      LiamOutsideScene(),
+      sceneIndex: 8,
+      onFullOpacity: () {
+        LiamJourney.maybeShowCurrentNarrative(game);
+      },
+    );
   }
 
   Future<void> startGameFlow() async {
