@@ -1,3 +1,4 @@
+import 'package:emvia/game/characters/liam/liam_journey.dart';
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/game/scenes/olya/path/path_detail_component.dart';
 import 'package:emvia/game/overlays/olya/calm_map_overlay.dart';
@@ -13,6 +14,7 @@ import 'package:emvia/game/overlays/survey_overlay.dart';
 import 'package:emvia/game/overlays/olya/stage_item_card_overlay.dart';
 import 'package:emvia/game/overlays/debug_overlay.dart';
 import 'package:emvia/game/overlays/liam/camera_overlay.dart';
+import 'package:emvia/game/overlays/liam/cafe_scene_overlay.dart';
 import 'package:emvia/game/scenes/olya/stress/stress_overlay.dart';
 import 'package:emvia/game/overlays/olya/tap_game_overlay.dart';
 import 'package:emvia/game/overlays/olya/pattern_progress_overlay.dart';
@@ -145,6 +147,24 @@ class _MyAppState extends State<MyApp> {
           ),
           'Stress': (_, game) => StressOverlay(game: game),
           'Camera': (_, game) => CameraOverlay(game: game),
+          'LiamCafeNear': (_, game) => CafeSceneOverlay(
+            game: game,
+            imagePath: 'assets/images/misc/liam-cafe-entrance/near.png',
+            onDismiss: () {
+              game.overlays.remove('LiamCafeNear');
+              game.overlays.add('LiamCafeGrab');
+            },
+          ),
+          'LiamCafeGrab': (_, game) => CafeSceneOverlay(
+            game: game,
+            imagePath:
+                'assets/images/misc/liam-cafe-entrance/someone-holding-wheelchair.png',
+            onDismiss: () {
+              game.overlays.remove('LiamCafeGrab');
+              // After the grab cinematic, let LiamJourney decide the dialog flow.
+              LiamJourney.maybeShowCurrentNarrative(game);
+            },
+          ),
           'TapGame': (_, game) => TapGameOverlay(game: game),
           'BreathingExercise': (_, game) =>
               BreathingExerciseOverlay(game: game),

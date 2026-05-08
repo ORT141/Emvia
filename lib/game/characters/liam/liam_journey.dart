@@ -184,7 +184,7 @@ class LiamJourney {
         );
         return true;
       case 2:
-        _startDialog(game, _buildBoundaryDialog(game, l, state));
+        _startBoundarySequence(game, l, state);
         return true;
       case 3:
         _startDialog(game, _buildSelfExpressionDialog(game, l));
@@ -204,6 +204,16 @@ class LiamJourney {
       default:
         return false;
     }
+  }
+
+  static void _startBoundarySequence(
+    EmviaGame game,
+    AppLocalizationsGen l,
+    LiamGameState state,
+  ) {
+    game.freezePlayer();
+    game.pendingCafeDialog = _buildBoundaryDialog(game, l, state);
+    game.overlays.add('LiamCafeNear');
   }
 
   static void _startDialog(EmviaGame game, DialogTree tree) {
@@ -279,6 +289,15 @@ class LiamJourney {
         ),
       },
     );
+  }
+
+  // Public wrapper so other libraries can construct the boundary dialog.
+  static DialogTree buildBoundaryDialog(
+    EmviaGame game,
+    AppLocalizationsGen l,
+    LiamGameState state,
+  ) {
+    return _buildBoundaryDialog(game, l, state);
   }
 
   static DialogTree _buildSelfExpressionDialog(

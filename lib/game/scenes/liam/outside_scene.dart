@@ -1,11 +1,18 @@
+import 'package:emvia/game/characters/liam/liam_journey.dart';
 import 'package:emvia/game/scenes/game_scene.dart';
 import 'package:emvia/game/utils/pos_util.dart';
 import 'package:flame/components.dart';
+import 'package:emvia/l10n/app_localizations_gen.dart';
+import '../../models/captured_photo.dart';
 
 class LiamOutsideScene extends GameScene {
   static const double _bumpStartUvX = 0.3462;
   static const double _bumpEndUvX = 0.3961;
   static const double _bumpHeightRatio = 0.035;
+
+  static const double _cafeTriggerUvX = 0.6379;
+
+  bool _cafeTriggered = false;
 
   LiamOutsideScene()
     : super(
@@ -40,6 +47,65 @@ class LiamOutsideScene extends GameScene {
   }
 
   @override
+  void update(double dt) {
+    super.update(dt);
+
+    if (_cafeTriggered) return;
+    if (game.transitionManager.isTransitioning) return;
+    if (background.size.x <= 0) return;
+
+    final playerX = game.player.position.x;
+    final triggerX = Vector2(
+      _cafeTriggerUvX,
+      0,
+    ).toWorldPos(background.position, background.size).x;
+
+    if (playerX >= triggerX) {
+      _cafeTriggered = true;
+
+      final liamState = game.liamState;
+
+      if (liamState != null) {
+        while (liamState.currentMissionIndex < 2) {
+          liamState.addPhoto(
+            CapturedPhoto(
+              path: '',
+              tagKey: 'tag_placeholder',
+              sceneIndex: game.sceneIndex,
+            ),
+          );
+        }
+
+        final ctx = game.buildContext;
+        final loc = ctx != null ? AppLocalizationsGen.of(ctx) : null;
+        if (loc != null) {
+          try {
+            game.pendingCafeDialog = LiamJourney.buildBoundaryDialog(
+              game,
+              loc,
+              liamState,
+            );
+          } catch (e) {
+            game.pendingCafeDialog = null;
+          }
+        }
+
+        game.overlays.add('LiamCafeNear');
+        return;
+      }
+
+      game.pendingCafeDialog = null;
+      game.overlays.add('LiamCafeNear');
+    }
+  }
+
+  @override
+  void redrawScene() {
+    _cafeTriggered = false;
+    super.redrawScene();
+  }
+
+  @override
   double playerYOffsetForX(double playerX) {
     if (background.size.x <= 0) return 0;
 
@@ -65,5 +131,5 @@ class LiamOutsideScene extends GameScene {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(worldSize.x * 0.8, worldSize.y * 0.68);
+      Vector2(worldSize.x * 0.1, worldSize.y * 0.68);
 }

@@ -100,6 +100,10 @@
     "@breathing_tap_to_advance": {
         "description": "Instruction shown on the breathing overlay to tap the screen."
     },
+    "overlay_tap_to_continue": "▼  торкніться, щоб продовжити",
+    "@overlay_tap_to_continue": {
+        "description": "Small hint shown on scene overlays to indicate tapping advances the scene."
+    },
     "breathing_done": "Чудово!",
     "@breathing_done": {
         "description": "Text shown when the breathing exercise is complete."

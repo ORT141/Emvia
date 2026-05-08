@@ -65,6 +65,9 @@ class EmviaGame extends FlameGame
 
   DialogTree? currentTree;
 
+  /// Holds the dialog tree that should start after a cafe cinematic overlay is dismissed.
+  DialogTree? pendingCafeDialog;
+
   String educationalCardText = '';
 
   VoidCallback? educationalCardOnDismiss;

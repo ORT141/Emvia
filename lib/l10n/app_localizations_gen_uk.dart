@@ -85,6 +85,9 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
       'Торкніться, щоб перейти до наступного кроку';
 
   @override
+  String get overlay_tap_to_continue => '▼  торкніться, щоб продовжити';
+
+  @override
   String get breathing_done => 'Чудово!';
 
   @override

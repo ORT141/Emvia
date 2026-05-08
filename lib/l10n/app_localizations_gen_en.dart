@@ -84,6 +84,9 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get breathing_tap_to_advance => 'Tap to advance to the next step';
 
   @override
+  String get overlay_tap_to_continue => '▼  tap to continue';
+
+  @override
   String get breathing_done => 'Well done!';
 
   @override

@@ -248,6 +248,12 @@ abstract class AppLocalizationsGen {
   /// **'Tap to advance to the next step'**
   String get breathing_tap_to_advance;
 
+  /// Small hint shown on scene overlays to indicate tapping advances the scene.
+  ///
+  /// In en, this message translates to:
+  /// **'▼  tap to continue'**
+  String get overlay_tap_to_continue;
+
   /// Text shown when the breathing exercise is complete.
   ///
   /// In en, this message translates to:
