@@ -101,7 +101,7 @@ class _CafeSceneOverlayState extends State<CafeSceneOverlay>
                       letterSpacing: 1.2,
                     ),
                     child: Text(
-                      AppLocalizations.of(context)!.overlayTapToContinue,
+                      AppLocalizations.of(context)!.overlay_tap_to_continue,
                     ),
                   ),
                 ),
