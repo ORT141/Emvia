@@ -858,6 +858,160 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
       'Do not reduce a wheelchair user to their wheelchair alone. It is not a symbol of limitation, but part of everyday life. First and foremost, this is a person with their own character, tastes, dreams, and the right to feel natural in any space.';
 
   @override
+  String get liam_graffiti_survey_title => 'Before we go out...';
+
+  @override
+  String get liam_graffiti_survey_subtitle =>
+      'Your answers shape Liam\'s journey.';
+
+  @override
+  String get liam_graffiti_q1_title =>
+      'What photography style feels closest to you?';
+
+  @override
+  String get liam_graffiti_q1_street => 'Street';
+
+  @override
+  String get liam_graffiti_q1_minimalism => 'Minimalism';
+
+  @override
+  String get liam_graffiti_q1_light_shadow => 'Light & Shadow';
+
+  @override
+  String get liam_graffiti_q1_portrait => 'Portrait';
+
+  @override
+  String get liam_graffiti_q2_title =>
+      'What color best describes your current state / navigation color?';
+
+  @override
+  String get liam_graffiti_q2_cyan => 'Cyber Cyan';
+
+  @override
+  String get liam_graffiti_q2_orange => 'Action Orange';
+
+  @override
+  String get liam_graffiti_q2_red => 'Red';
+
+  @override
+  String get liam_graffiti_q2_green => 'Green';
+
+  @override
+  String get liam_graffiti_q3_title =>
+      'What will be your support symbol in difficult moments?';
+
+  @override
+  String get liam_graffiti_q3_heart => 'Heart';
+
+  @override
+  String get liam_graffiti_q3_cat => 'Cat';
+
+  @override
+  String get liam_graffiti_q3_star => 'Star';
+
+  @override
+  String get liam_graffiti_q3_wings => 'Wings';
+
+  @override
+  String get liam_graffiti_q4_title => 'What irritates you most in a space?';
+
+  @override
+  String get liam_graffiti_q4_blocks => 'When something blocks the way';
+
+  @override
+  String get liam_graffiti_q4_intrusive => 'Intrusive help';
+
+  @override
+  String get liam_graffiti_q4_inconvenient => 'Inconvenient layout';
+
+  @override
+  String get liam_graffiti_q4_others_decide => 'When others decide for you';
+
+  @override
+  String get liam_graffiti_q5_title =>
+      'How do you usually act in difficult situations?';
+
+  @override
+  String get liam_graffiti_q5_find_way => 'Look for another way';
+
+  @override
+  String get liam_graffiti_q5_ask_help => 'Ask for help';
+
+  @override
+  String get liam_graffiti_q5_try_myself => 'Try it myself';
+
+  @override
+  String get liam_graffiti_q5_avoid => 'Avoid';
+
+  @override
+  String get liam_graffiti_briefing =>
+      'Every city has hidden stories. This wall is where you begin yours.';
+
+  @override
+  String get liam_obstacle_phrase_blocks_1 =>
+      'For some people, it\'s just an abandoned scooter or a high curb. For me, it means stopping, rerouting, and extra effort. Barriers are often invisible to those who never have to face them.';
+
+  @override
+  String get liam_obstacle_phrase_blocks_2 =>
+      'This again. It\'s like the city is testing my endurance. But I\'m not stopping just because someone else was careless.';
+
+  @override
+  String get liam_obstacle_phrase_blocks_3 =>
+      'This barrier didn\'t appear out of nowhere. It\'s the result of someone not thinking about others. Time to find another way.';
+
+  @override
+  String get liam_obstacle_phrase_intrusive_1 =>
+      'My wheelchair is my legs and my personal space. You wouldn\'t grab someone on the street to \'help\' them walk, would you?';
+
+  @override
+  String get liam_obstacle_phrase_intrusive_2 =>
+      'Stop. I\'m not against help — I\'m against people acting without permission. Respect starts with asking, not pulling.';
+
+  @override
+  String get liam_obstacle_phrase_intrusive_3 =>
+      'Help isn\'t something you impose. It starts with a question. Ask if I need help, and I\'ll answer.';
+
+  @override
+  String get liam_obstacle_phrase_inconvenient_1 =>
+      'Here it is again — that familiar feeling. A place I\'m supposed to have access to, but can\'t actually use. This space feels like it was designed for only one kind of person.';
+
+  @override
+  String get liam_obstacle_phrase_inconvenient_2 =>
+      'Everything is so close, yet completely out of reach. Most of these barriers aren\'t necessary — they\'re just the result of poor planning.';
+
+  @override
+  String get liam_obstacle_phrase_inconvenient_3 =>
+      'Sometimes architecture speaks for itself. This space is practically saying, \'you don\'t belong here.\' But I\'ll find my way through.';
+
+  @override
+  String get liam_obstacle_phrase_others_1 =>
+      'I\'m right here. Talk to me, not about me. My wheelchair affects how I move, not how I think or decide.';
+
+  @override
+  String get liam_obstacle_phrase_others_2 =>
+      'I\'m not against help. I\'m against people deciding for me. Don\'t plan my path for me — I know my own limits.';
+
+  @override
+  String get liam_obstacle_phrase_others_3 =>
+      'When people decide in advance what I can and can\'t do, that becomes the biggest barrier of all. My choices are mine.';
+
+  @override
+  String get liam_poster_phrase_find_way =>
+      'Barriers don\'t stop me — they just force me to find new routes.';
+
+  @override
+  String get liam_poster_phrase_ask_help =>
+      'True strength isn\'t doing everything alone — it\'s knowing when to ask and how to begin a dialogue.';
+
+  @override
+  String get liam_poster_phrase_try_myself =>
+      'The city tests my endurance, but only I define my limits.';
+
+  @override
+  String get liam_poster_phrase_avoid =>
+      'Sometimes the wisest choice is to save my strength for spaces where I\'m truly welcome.';
+
+  @override
   String get tag_freely => 'freely';
 
   @override

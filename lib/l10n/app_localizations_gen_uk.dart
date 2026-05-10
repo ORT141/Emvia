@@ -859,6 +859,159 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
       'Не зводьте людину на кріслі колісному лише до її візка. Це не символ обмеження, а частина щоденного життя. Передусім це людина - зі своїм характером, смаками, мріями та правом почуватися природно в будь-якому просторі.';
 
   @override
+  String get liam_graffiti_survey_title => 'Перед тим як вийти...';
+
+  @override
+  String get liam_graffiti_survey_subtitle =>
+      'Твої відповіді визначають шлях Ліама.';
+
+  @override
+  String get liam_graffiti_q1_title => 'Який стиль фото тобі найближчий?';
+
+  @override
+  String get liam_graffiti_q1_street => 'Стріт';
+
+  @override
+  String get liam_graffiti_q1_minimalism => 'Мінімалізм';
+
+  @override
+  String get liam_graffiti_q1_light_shadow => 'Світло-тінь';
+
+  @override
+  String get liam_graffiti_q1_portrait => 'Портрет';
+
+  @override
+  String get liam_graffiti_q2_title =>
+      'Який колір найкраще описує твій стан зараз / колір навігації?';
+
+  @override
+  String get liam_graffiti_q2_cyan => 'Блакитний / Cyber Cyan';
+
+  @override
+  String get liam_graffiti_q2_orange => 'Жовтий / Action Orange';
+
+  @override
+  String get liam_graffiti_q2_red => 'Червоний';
+
+  @override
+  String get liam_graffiti_q2_green => 'Зелений / Green';
+
+  @override
+  String get liam_graffiti_q3_title =>
+      'Що буде твоїм символом підтримки у складні моменти?';
+
+  @override
+  String get liam_graffiti_q3_heart => 'Серце';
+
+  @override
+  String get liam_graffiti_q3_cat => 'Котик';
+
+  @override
+  String get liam_graffiti_q3_star => 'Зірка';
+
+  @override
+  String get liam_graffiti_q3_wings => 'Крила';
+
+  @override
+  String get liam_graffiti_q4_title => 'Що найбільше дратує тебе у просторі?';
+
+  @override
+  String get liam_graffiti_q4_blocks => 'Коли щось заважає руху';
+
+  @override
+  String get liam_graffiti_q4_intrusive => 'Нав\'язлива допомога';
+
+  @override
+  String get liam_graffiti_q4_inconvenient => 'Незручне розташування';
+
+  @override
+  String get liam_graffiti_q4_others_decide => 'Коли вирішують за тебе';
+
+  @override
+  String get liam_graffiti_q5_title =>
+      'Як ти зазвичай дієш у складних ситуаціях?';
+
+  @override
+  String get liam_graffiti_q5_find_way => 'Шукаю інший шлях';
+
+  @override
+  String get liam_graffiti_q5_ask_help => 'Прошу допомогу';
+
+  @override
+  String get liam_graffiti_q5_try_myself => 'Пробую сам';
+
+  @override
+  String get liam_graffiti_q5_avoid => 'Уникаю';
+
+  @override
+  String get liam_graffiti_briefing =>
+      'У кожному місті є приховані історії. Ця стіна — місце, де починається твоя.';
+
+  @override
+  String get liam_obstacle_phrase_blocks_1 =>
+      'Для когось це просто покинутий самокат чи високий бордюр. Для мене це означає зупинку, пошук об\'їзду і зайві зусилля. Бар\'єри часто невидимі для тих, кому ніколи не доводилося з ними стикатися.';
+
+  @override
+  String get liam_obstacle_phrase_blocks_2 =>
+      'Знову це. Наче місто випробовує мою витривалість. Але я не зупинюся лише тому, що хтось був недбалим.';
+
+  @override
+  String get liam_obstacle_phrase_blocks_3 =>
+      'Ця перешкода не виникла нізвідки. Це результат того, що хтось не подумав про інших. Час шукати інший шлях.';
+
+  @override
+  String get liam_obstacle_phrase_intrusive_1 =>
+      'Мій візок — це мої ноги і мій особистий простір. Ви ж не хапаєте людей на вулиці, щоб \"допомогти\" їм іти, правда?';
+
+  @override
+  String get liam_obstacle_phrase_intrusive_2 =>
+      'Стійте. Я не проти допомоги — я проти того, щоб діяли без дозволу. Повага починається із запитання, а не з того, щоб тягнути.';
+
+  @override
+  String get liam_obstacle_phrase_intrusive_3 =>
+      'Допомога — це не те, що можна нав\'язати. Вона починається із запитання. Запитайте, чи потрібна вона мені, і я відповім.';
+
+  @override
+  String get liam_obstacle_phrase_inconvenient_1 =>
+      'Ось воно знову — це знайоме відчуття. Місце, до якого я начебто маю доступ, але фактично не можу ним скористатися. Ніби цей простір створювали лише для одного типу людей.';
+
+  @override
+  String get liam_obstacle_phrase_inconvenient_2 =>
+      'Усе так близько, але водночас абсолютно недосяжне. Більшість цих бар\'єрів не є необхідними — це лише наслідок поганого планування.';
+
+  @override
+  String get liam_obstacle_phrase_inconvenient_3 =>
+      'Іноді архітектура говорить сама за себе. Цей простір буквально промовляє: \"тут тобі не місце\". Але я все одно знайду свій шлях.';
+
+  @override
+  String get liam_obstacle_phrase_others_1 =>
+      'Я тут. Говоріть зі мною, а не про мене. Мій візок впливає на те, як я рухаюся, а не на те, як я думаю чи ухвалюю рішення.';
+
+  @override
+  String get liam_obstacle_phrase_others_2 =>
+      'Я не проти допомоги. Я проти того, щоб за мене вирішували. Не прокладайте мій маршрут замість мене — я знаю свої межі.';
+
+  @override
+  String get liam_obstacle_phrase_others_3 =>
+      'Коли люди заздалегідь вирішують, що я можу, а чого не можу, — це і є найбільший бар\'єр. Мої рішення належать мені.';
+
+  @override
+  String get liam_poster_phrase_find_way =>
+      'Бар\'єри не зупиняють мене — вони лише змушують шукати нові маршрути.';
+
+  @override
+  String get liam_poster_phrase_ask_help =>
+      'Справжня сила — не в тому, щоб долати все наодинці, а в тому, щоб знати, коли попросити й як почати діалог.';
+
+  @override
+  String get liam_poster_phrase_try_myself =>
+      'Місто випробовує мою витривалість, але лише я сам визначаю свої межі.';
+
+  @override
+  String get liam_poster_phrase_avoid =>
+      'Іноді наймудріший вибір — зберегти сили для тих просторів, де мені справді раді.';
+
+  @override
   String get tag_freely => 'вільно';
 
   @override

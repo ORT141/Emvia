@@ -15,6 +15,7 @@ import 'package:emvia/game/overlays/olya/stage_item_card_overlay.dart';
 import 'package:emvia/game/overlays/debug_overlay.dart';
 import 'package:emvia/game/overlays/liam/camera_overlay.dart';
 import 'package:emvia/game/overlays/liam/cafe_scene_overlay.dart';
+import 'package:emvia/game/overlays/liam_graffiti_survey_overlay.dart';
 import 'package:emvia/game/scenes/olya/stress/stress_overlay.dart';
 import 'package:emvia/game/overlays/olya/tap_game_overlay.dart';
 import 'package:emvia/game/overlays/olya/pattern_progress_overlay.dart';
@@ -134,6 +135,8 @@ class _MyAppState extends State<MyApp> {
             isDarkMode: _themeMode == ThemeMode.dark,
           ),
           'Survey': (_, game) => SurveyOverlay(game: game),
+          'LiamGraffitiSurvey': (_, game) =>
+              LiamGraffitiSurveyOverlay(game: game),
           'Backpack': (_, game) => BackpackOverlay(game: game),
           'StageItemCard': (_, game) => StageItemCardOverlay(game: game),
           'CalmingItemPrompt': (_, game) =>
@@ -161,7 +164,6 @@ class _MyAppState extends State<MyApp> {
                 'assets/images/misc/liam-cafe-entrance/someone-holding-wheelchair.png',
             onDismiss: () {
               game.overlays.remove('LiamCafeGrab');
-              // After the grab cinematic, let LiamJourney decide the dialog flow.
               LiamJourney.maybeShowCurrentNarrative(game);
             },
           ),

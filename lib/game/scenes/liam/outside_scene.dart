@@ -30,6 +30,9 @@ class LiamOutsideScene extends GameScene {
   void onPlayerReachedRightEdge() => game.navigationManager.goToLiamHouse();
 
   @override
+  void onPlayerReachedLeftEdge() => game.navigationManager.goToLiamGraffiti();
+
+  @override
   double worldWidthForViewport(Vector2 viewportSize) {
     if (background.sprite?.srcSize != null &&
         background.sprite!.srcSize.y > 0) {

@@ -11,6 +11,7 @@ import '../scenes/olya/scene_scene.dart';
 import '../characters/liam/liam_journey.dart';
 import '../scenes/liam/house_scene.dart';
 import '../scenes/liam/outside_scene.dart';
+import '../scenes/liam/graffiti_scene.dart';
 import '../emvia_types.dart';
 import 'package:emvia/l10n/app_localizations.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';
@@ -144,6 +145,11 @@ class NavigationManager {
         LiamJourney.maybeShowCurrentNarrative(game);
       },
     );
+  }
+
+  Future<void> goToLiamGraffiti() async {
+    if (game.transitionManager.isTransitioning) return;
+    await _loadSceneWithDefaults(GraffitiScene(), sceneIndex: 9);
   }
 
   Future<void> startGameFlow() async {

@@ -34,8 +34,7 @@ class _CafeSceneOverlayState extends State<CafeSceneOverlay>
       duration: const Duration(milliseconds: 500),
     );
     _fadeAnim = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-    _controller.value =
-        1.0; // make overlay fully visible immediately to avoid game peek-through
+    _controller.value = 1.0;
     _dismissController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),

@@ -10,6 +10,16 @@ abstract class GameState {
 
 enum LiamBoundaryResponse { explain, joke, respondSharply }
 
+enum LiamPhotoStyle { street, minimalism, lightShadow, portrait }
+
+enum LiamNavColor { cyan, orange, red, green }
+
+enum LiamSupportSymbol { heart, cat, star, wings }
+
+enum LiamIrritation { blocksPath, intrusiveHelp, inconvenientLayout, othersDecide }
+
+enum LiamCopingStyle { findWay, askHelp, tryMyself, avoid }
+
 class OlyaGameState extends GameState {
   bool hasTriggeredStressScene = false;
   bool hasShownCorridorStressIntro = false;
@@ -39,6 +49,14 @@ class LiamGameState extends GameState {
   bool hasShownCompletionDialog = false;
   LiamBoundaryResponse? boundaryResponse;
 
+  // Graffiti scene survey answers
+  bool hasCompletedGraffitiSurvey = false;
+  LiamPhotoStyle? photoStyle;
+  LiamNavColor? navColor;
+  LiamSupportSymbol? supportSymbol;
+  LiamIrritation? irritation;
+  LiamCopingStyle? copingStyle;
+
   int get currentMissionIndex => capturedPhotos.length.clamp(0, maxPhotos);
 
   bool get isJourneyComplete => currentMissionIndex >= maxPhotos;
@@ -61,5 +79,11 @@ class LiamGameState extends GameState {
     hasShownSilentIntro = false;
     hasShownCompletionDialog = false;
     boundaryResponse = null;
+    hasCompletedGraffitiSurvey = false;
+    photoStyle = null;
+    navColor = null;
+    supportSymbol = null;
+    irritation = null;
+    copingStyle = null;
   }
 }

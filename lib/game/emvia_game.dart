@@ -65,7 +65,6 @@ class EmviaGame extends FlameGame
 
   DialogTree? currentTree;
 
-  /// Holds the dialog tree that should start after a cafe cinematic overlay is dismissed.
   DialogTree? pendingCafeDialog;
 
   String educationalCardText = '';
@@ -408,16 +407,26 @@ extension EmviaGameFlow on EmviaGame {
   }
 
   void startNewGameSurveyFlow() async {
-    await surveyService.clearAiResults();
     session.markStartGameAfterSurvey();
     closeMainMenu();
     _reinitializePlayer();
-    await loadScene(
-      SurveyScene(),
-      onFullOpacity: () {
-        overlays.add('Survey');
-      },
-    );
+
+    if (selectedCharacter == PlayableCharacter.liam) {
+      await loadScene(
+        SurveyScene(),
+        onFullOpacity: () {
+          overlays.add('LiamGraffitiSurvey');
+        },
+      );
+    } else {
+      await surveyService.clearAiResults();
+      await loadScene(
+        SurveyScene(),
+        onFullOpacity: () {
+          overlays.add('Survey');
+        },
+      );
+    }
   }
 
   Future<void> returnToMainMenu() async {

@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:emvia/game/dialog/dialog_model.dart';
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/game/managers/game_state/game_state.dart';
@@ -291,7 +292,6 @@ class LiamJourney {
     );
   }
 
-  // Public wrapper so other libraries can construct the boundary dialog.
   static DialogTree buildBoundaryDialog(
     EmviaGame game,
     AppLocalizationsGen l,
@@ -374,6 +374,90 @@ class LiamJourney {
         return l.liam_space_education;
       default:
         return l.liam_final_education;
+    }
+  }
+
+  static String getObstaclePhrase(AppLocalizationsGen l, LiamGameState state) {
+    final rng = math.Random();
+    switch (state.irritation) {
+      case LiamIrritation.blocksPath:
+        final phrases = [
+          l.liam_obstacle_phrase_blocks_1,
+          l.liam_obstacle_phrase_blocks_2,
+          l.liam_obstacle_phrase_blocks_3,
+        ];
+        return phrases[rng.nextInt(phrases.length)];
+      case LiamIrritation.intrusiveHelp:
+        final phrases = [
+          l.liam_obstacle_phrase_intrusive_1,
+          l.liam_obstacle_phrase_intrusive_2,
+          l.liam_obstacle_phrase_intrusive_3,
+        ];
+        return phrases[rng.nextInt(phrases.length)];
+      case LiamIrritation.inconvenientLayout:
+        final phrases = [
+          l.liam_obstacle_phrase_inconvenient_1,
+          l.liam_obstacle_phrase_inconvenient_2,
+          l.liam_obstacle_phrase_inconvenient_3,
+        ];
+        return phrases[rng.nextInt(phrases.length)];
+      case LiamIrritation.othersDecide:
+        final phrases = [
+          l.liam_obstacle_phrase_others_1,
+          l.liam_obstacle_phrase_others_2,
+          l.liam_obstacle_phrase_others_3,
+        ];
+        return phrases[rng.nextInt(phrases.length)];
+      case null:
+        return l.liam_obstacle_phrase_blocks_1;
+    }
+  }
+
+  static String getFinalPosterPhrase(
+    AppLocalizationsGen l,
+    LiamGameState state,
+  ) {
+    switch (state.copingStyle) {
+      case LiamCopingStyle.findWay:
+        return l.liam_poster_phrase_find_way;
+      case LiamCopingStyle.askHelp:
+        return l.liam_poster_phrase_ask_help;
+      case LiamCopingStyle.tryMyself:
+        return l.liam_poster_phrase_try_myself;
+      case LiamCopingStyle.avoid:
+        return l.liam_poster_phrase_avoid;
+      case null:
+        return l.liam_poster_phrase_find_way;
+    }
+  }
+
+  static int getNavColorValue(LiamGameState state) {
+    switch (state.navColor) {
+      case LiamNavColor.cyan:
+        return 0xFF00E5FF;
+      case LiamNavColor.orange:
+        return 0xFFFF6D00;
+      case LiamNavColor.red:
+        return 0xFFE53935;
+      case LiamNavColor.green:
+        return 0xFF43A047;
+      case null:
+        return 0xFF00E5FF;
+    }
+  }
+
+  static String getSupportSymbolEmoji(LiamGameState state) {
+    switch (state.supportSymbol) {
+      case LiamSupportSymbol.heart:
+        return '❤️';
+      case LiamSupportSymbol.cat:
+        return '🐱';
+      case LiamSupportSymbol.star:
+        return '⭐';
+      case LiamSupportSymbol.wings:
+        return '🪽';
+      case null:
+        return '❤️';
     }
   }
 }

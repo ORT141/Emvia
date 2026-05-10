@@ -1616,6 +1616,270 @@ abstract class AppLocalizationsGen {
   /// **'Do not reduce a wheelchair user to their wheelchair alone. It is not a symbol of limitation, but part of everyday life. First and foremost, this is a person with their own character, tastes, dreams, and the right to feel natural in any space.'**
   String get liam_final_education;
 
+  /// No description provided for @liam_graffiti_survey_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Before we go out...'**
+  String get liam_graffiti_survey_title;
+
+  /// No description provided for @liam_graffiti_survey_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your answers shape Liam\'s journey.'**
+  String get liam_graffiti_survey_subtitle;
+
+  /// No description provided for @liam_graffiti_q1_title.
+  ///
+  /// In en, this message translates to:
+  /// **'What photography style feels closest to you?'**
+  String get liam_graffiti_q1_title;
+
+  /// No description provided for @liam_graffiti_q1_street.
+  ///
+  /// In en, this message translates to:
+  /// **'Street'**
+  String get liam_graffiti_q1_street;
+
+  /// No description provided for @liam_graffiti_q1_minimalism.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimalism'**
+  String get liam_graffiti_q1_minimalism;
+
+  /// No description provided for @liam_graffiti_q1_light_shadow.
+  ///
+  /// In en, this message translates to:
+  /// **'Light & Shadow'**
+  String get liam_graffiti_q1_light_shadow;
+
+  /// No description provided for @liam_graffiti_q1_portrait.
+  ///
+  /// In en, this message translates to:
+  /// **'Portrait'**
+  String get liam_graffiti_q1_portrait;
+
+  /// No description provided for @liam_graffiti_q2_title.
+  ///
+  /// In en, this message translates to:
+  /// **'What color best describes your current state / navigation color?'**
+  String get liam_graffiti_q2_title;
+
+  /// No description provided for @liam_graffiti_q2_cyan.
+  ///
+  /// In en, this message translates to:
+  /// **'Cyber Cyan'**
+  String get liam_graffiti_q2_cyan;
+
+  /// No description provided for @liam_graffiti_q2_orange.
+  ///
+  /// In en, this message translates to:
+  /// **'Action Orange'**
+  String get liam_graffiti_q2_orange;
+
+  /// No description provided for @liam_graffiti_q2_red.
+  ///
+  /// In en, this message translates to:
+  /// **'Red'**
+  String get liam_graffiti_q2_red;
+
+  /// No description provided for @liam_graffiti_q2_green.
+  ///
+  /// In en, this message translates to:
+  /// **'Green'**
+  String get liam_graffiti_q2_green;
+
+  /// No description provided for @liam_graffiti_q3_title.
+  ///
+  /// In en, this message translates to:
+  /// **'What will be your support symbol in difficult moments?'**
+  String get liam_graffiti_q3_title;
+
+  /// No description provided for @liam_graffiti_q3_heart.
+  ///
+  /// In en, this message translates to:
+  /// **'Heart'**
+  String get liam_graffiti_q3_heart;
+
+  /// No description provided for @liam_graffiti_q3_cat.
+  ///
+  /// In en, this message translates to:
+  /// **'Cat'**
+  String get liam_graffiti_q3_cat;
+
+  /// No description provided for @liam_graffiti_q3_star.
+  ///
+  /// In en, this message translates to:
+  /// **'Star'**
+  String get liam_graffiti_q3_star;
+
+  /// No description provided for @liam_graffiti_q3_wings.
+  ///
+  /// In en, this message translates to:
+  /// **'Wings'**
+  String get liam_graffiti_q3_wings;
+
+  /// No description provided for @liam_graffiti_q4_title.
+  ///
+  /// In en, this message translates to:
+  /// **'What irritates you most in a space?'**
+  String get liam_graffiti_q4_title;
+
+  /// No description provided for @liam_graffiti_q4_blocks.
+  ///
+  /// In en, this message translates to:
+  /// **'When something blocks the way'**
+  String get liam_graffiti_q4_blocks;
+
+  /// No description provided for @liam_graffiti_q4_intrusive.
+  ///
+  /// In en, this message translates to:
+  /// **'Intrusive help'**
+  String get liam_graffiti_q4_intrusive;
+
+  /// No description provided for @liam_graffiti_q4_inconvenient.
+  ///
+  /// In en, this message translates to:
+  /// **'Inconvenient layout'**
+  String get liam_graffiti_q4_inconvenient;
+
+  /// No description provided for @liam_graffiti_q4_others_decide.
+  ///
+  /// In en, this message translates to:
+  /// **'When others decide for you'**
+  String get liam_graffiti_q4_others_decide;
+
+  /// No description provided for @liam_graffiti_q5_title.
+  ///
+  /// In en, this message translates to:
+  /// **'How do you usually act in difficult situations?'**
+  String get liam_graffiti_q5_title;
+
+  /// No description provided for @liam_graffiti_q5_find_way.
+  ///
+  /// In en, this message translates to:
+  /// **'Look for another way'**
+  String get liam_graffiti_q5_find_way;
+
+  /// No description provided for @liam_graffiti_q5_ask_help.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for help'**
+  String get liam_graffiti_q5_ask_help;
+
+  /// No description provided for @liam_graffiti_q5_try_myself.
+  ///
+  /// In en, this message translates to:
+  /// **'Try it myself'**
+  String get liam_graffiti_q5_try_myself;
+
+  /// No description provided for @liam_graffiti_q5_avoid.
+  ///
+  /// In en, this message translates to:
+  /// **'Avoid'**
+  String get liam_graffiti_q5_avoid;
+
+  /// No description provided for @liam_graffiti_briefing.
+  ///
+  /// In en, this message translates to:
+  /// **'Every city has hidden stories. This wall is where you begin yours.'**
+  String get liam_graffiti_briefing;
+
+  /// No description provided for @liam_obstacle_phrase_blocks_1.
+  ///
+  /// In en, this message translates to:
+  /// **'For some people, it\'s just an abandoned scooter or a high curb. For me, it means stopping, rerouting, and extra effort. Barriers are often invisible to those who never have to face them.'**
+  String get liam_obstacle_phrase_blocks_1;
+
+  /// No description provided for @liam_obstacle_phrase_blocks_2.
+  ///
+  /// In en, this message translates to:
+  /// **'This again. It\'s like the city is testing my endurance. But I\'m not stopping just because someone else was careless.'**
+  String get liam_obstacle_phrase_blocks_2;
+
+  /// No description provided for @liam_obstacle_phrase_blocks_3.
+  ///
+  /// In en, this message translates to:
+  /// **'This barrier didn\'t appear out of nowhere. It\'s the result of someone not thinking about others. Time to find another way.'**
+  String get liam_obstacle_phrase_blocks_3;
+
+  /// No description provided for @liam_obstacle_phrase_intrusive_1.
+  ///
+  /// In en, this message translates to:
+  /// **'My wheelchair is my legs and my personal space. You wouldn\'t grab someone on the street to \'help\' them walk, would you?'**
+  String get liam_obstacle_phrase_intrusive_1;
+
+  /// No description provided for @liam_obstacle_phrase_intrusive_2.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop. I\'m not against help — I\'m against people acting without permission. Respect starts with asking, not pulling.'**
+  String get liam_obstacle_phrase_intrusive_2;
+
+  /// No description provided for @liam_obstacle_phrase_intrusive_3.
+  ///
+  /// In en, this message translates to:
+  /// **'Help isn\'t something you impose. It starts with a question. Ask if I need help, and I\'ll answer.'**
+  String get liam_obstacle_phrase_intrusive_3;
+
+  /// No description provided for @liam_obstacle_phrase_inconvenient_1.
+  ///
+  /// In en, this message translates to:
+  /// **'Here it is again — that familiar feeling. A place I\'m supposed to have access to, but can\'t actually use. This space feels like it was designed for only one kind of person.'**
+  String get liam_obstacle_phrase_inconvenient_1;
+
+  /// No description provided for @liam_obstacle_phrase_inconvenient_2.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything is so close, yet completely out of reach. Most of these barriers aren\'t necessary — they\'re just the result of poor planning.'**
+  String get liam_obstacle_phrase_inconvenient_2;
+
+  /// No description provided for @liam_obstacle_phrase_inconvenient_3.
+  ///
+  /// In en, this message translates to:
+  /// **'Sometimes architecture speaks for itself. This space is practically saying, \'you don\'t belong here.\' But I\'ll find my way through.'**
+  String get liam_obstacle_phrase_inconvenient_3;
+
+  /// No description provided for @liam_obstacle_phrase_others_1.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m right here. Talk to me, not about me. My wheelchair affects how I move, not how I think or decide.'**
+  String get liam_obstacle_phrase_others_1;
+
+  /// No description provided for @liam_obstacle_phrase_others_2.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m not against help. I\'m against people deciding for me. Don\'t plan my path for me — I know my own limits.'**
+  String get liam_obstacle_phrase_others_2;
+
+  /// No description provided for @liam_obstacle_phrase_others_3.
+  ///
+  /// In en, this message translates to:
+  /// **'When people decide in advance what I can and can\'t do, that becomes the biggest barrier of all. My choices are mine.'**
+  String get liam_obstacle_phrase_others_3;
+
+  /// No description provided for @liam_poster_phrase_find_way.
+  ///
+  /// In en, this message translates to:
+  /// **'Barriers don\'t stop me — they just force me to find new routes.'**
+  String get liam_poster_phrase_find_way;
+
+  /// No description provided for @liam_poster_phrase_ask_help.
+  ///
+  /// In en, this message translates to:
+  /// **'True strength isn\'t doing everything alone — it\'s knowing when to ask and how to begin a dialogue.'**
+  String get liam_poster_phrase_ask_help;
+
+  /// No description provided for @liam_poster_phrase_try_myself.
+  ///
+  /// In en, this message translates to:
+  /// **'The city tests my endurance, but only I define my limits.'**
+  String get liam_poster_phrase_try_myself;
+
+  /// No description provided for @liam_poster_phrase_avoid.
+  ///
+  /// In en, this message translates to:
+  /// **'Sometimes the wisest choice is to save my strength for spaces where I\'m truly welcome.'**
+  String get liam_poster_phrase_avoid;
+
   /// Scene 2 tag
   ///
   /// In en, this message translates to:
