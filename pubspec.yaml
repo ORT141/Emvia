@@ -73,8 +73,10 @@ flutter:
         - assets/images/scenes/liam/house/
         - assets/images/scenes/liam/outside/
         - assets/images/scenes/liam/graffiti/
+        - assets/images/scenes/liam/elevator/
         - assets/images/wall-patterns/
         - assets/images/misc/liam-cafe-entrance/
+        - assets/sounds/liam/
 
         # ------------------
 

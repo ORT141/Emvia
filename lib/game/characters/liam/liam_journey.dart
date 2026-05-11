@@ -3,9 +3,94 @@ import 'package:emvia/game/dialog/dialog_model.dart';
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/game/managers/game_state/game_state.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';
+import 'package:flame_audio/flame_audio.dart';
+import 'package:flutter/widgets.dart';
 
 class LiamJourney {
   static const int totalPhotos = LiamGameState.maxPhotos;
+
+  static const _dialogSoundsEn = <String>[
+    'movement.mp3',
+    'for someone its just a small thing.mp3',
+    'im not against help.mp3',
+    'personality is always greater.mp3',
+    'familiar feeling.mp3',
+    'sometimes make space more accesseble.mp3',
+    'you can see it now.mp3',
+  ];
+
+  static const _dialogSoundsUk = <String>[
+    'рух починається з планування.mp3',
+    'для когось це просто дрібниця.mp3',
+    'я не проти допомоги.mp3',
+    'особистість завжди більша за обмеження.mp3',
+    'oss це знайоме відчуття.mp3',
+    'іноді щоб простір став доступнішим.mp3',
+    'тепер ти це бачив.mp3',
+  ];
+
+  static const _educationalSoundsEn = <String>[
+    'access ability.mp3',
+    'barriors arre often invisible.mp3',
+    'help without consent.mp3',
+    'lemitations.mp3',
+    'most barriors.mp3',
+    'inclution.mp3',
+    'do not reduce a wheelchair user.mp3',
+  ];
+
+  static const _educationalSoundsUk = <String>[
+    'доступність це коли не потрібно продумувати кожен крок.mp3',
+    'барєри часто непомітні.mp3',
+    'допомога без дозволу.mp3',
+    'обмеження існують у просторі.mp3',
+    'більшість барєрів виникають.mp3',
+    'інкюзія це не надзусилля.mp3',
+    'не звоьте людини на колісному кріслі.mp3',
+  ];
+
+  static const _boundaryResponseSoundsEn = <LiamBoundaryResponse, String>{
+    LiamBoundaryResponse.explain: 'thanks but ask first.mp3',
+    LiamBoundaryResponse.joke: 'careful thats a manual control.mp3',
+    LiamBoundaryResponse.respondSharply: 'hands off.mp3',
+  };
+
+  static const _boundaryResponseSoundsUk = <LiamBoundaryResponse, String>{
+    LiamBoundaryResponse.explain: 'дякую але спершу запитай.mp3',
+    LiamBoundaryResponse.joke: 'обережно ручне управління.mp3',
+    LiamBoundaryResponse.respondSharply: 'прибери руки.mp3',
+  };
+
+  static void _playSound(EmviaGame game, String enFile, String ukFile) {
+    if (!game.soundEnabled) return;
+    final context = game.buildContext;
+    if (context == null) return;
+    final lang = Localizations.localeOf(context).languageCode;
+    FlameAudio.play(
+      'liam/${lang == 'uk' ? ukFile : enFile}',
+      volume: game.volume,
+    );
+  }
+
+  static void _playDialogSound(EmviaGame game, int index) {
+    if (index < 0 || index >= _dialogSoundsEn.length) return;
+    final ukFile = index < _dialogSoundsUk.length
+        ? _dialogSoundsUk[index]
+        : _dialogSoundsEn[index];
+    _playSound(game, _dialogSoundsEn[index], ukFile);
+  }
+
+  static String _educationalSoundFile(EmviaGame game, int missionIndex) {
+    final context = game.buildContext;
+    final lang = context != null
+        ? Localizations.localeOf(context).languageCode
+        : 'en';
+    final idx = missionIndex.clamp(0, _educationalSoundsEn.length - 1);
+    final file = lang == 'uk'
+        ? _educationalSoundsUk[idx]
+        : _educationalSoundsEn[idx];
+    return 'liam/$file';
+  }
 
   static int currentSceneNumber(LiamGameState state) =>
       state.currentMissionIndex + 2;
@@ -121,6 +206,7 @@ class LiamJourney {
 
     game.showEducationalCard(
       _educationalCardForMission(l, completedMissionIndex),
+      soundFile: _educationalSoundFile(game, completedMissionIndex),
       onDismiss: () {
         game.unfreezePlayer();
         maybeShowCurrentNarrative(game);
@@ -163,7 +249,7 @@ class LiamJourney {
     if (state.isJourneyComplete) {
       if (state.hasShownCompletionDialog) return false;
       state.hasShownCompletionDialog = true;
-      _startDialog(game, _buildCompletionDialog(game, l));
+      _startDialog(game, _buildCompletionDialog(game, l), soundIndex: 6);
       return true;
     }
 
@@ -176,30 +262,34 @@ class LiamJourney {
         _startDialog(
           game,
           _buildBriefingDialog(game, l, l.liam_route_briefing),
+          soundIndex: 0,
         );
         return true;
       case 1:
         _startDialog(
           game,
           _buildBriefingDialog(game, l, l.liam_obstacle_briefing),
+          soundIndex: 1,
         );
         return true;
       case 2:
         _startBoundarySequence(game, l, state);
         return true;
       case 3:
-        _startDialog(game, _buildSelfExpressionDialog(game, l));
+        _startDialog(game, _buildSelfExpressionDialog(game, l), soundIndex: 3);
         return true;
       case 4:
         _startDialog(
           game,
           _buildBriefingDialog(game, l, l.liam_almost_briefing),
+          soundIndex: 4,
         );
         return true;
       case 5:
         _startDialog(
           game,
           _buildBriefingDialog(game, l, l.liam_space_briefing),
+          soundIndex: 5,
         );
         return true;
       default:
@@ -217,8 +307,9 @@ class LiamJourney {
     game.overlays.add('LiamCafeNear');
   }
 
-  static void _startDialog(EmviaGame game, DialogTree tree) {
+  static void _startDialog(EmviaGame game, DialogTree tree, {int? soundIndex}) {
     game.freezePlayer();
+    if (soundIndex != null) _playDialogSound(game, soundIndex);
     game.startDialog(tree);
   }
 
@@ -263,6 +354,11 @@ class LiamJourney {
               nextNodeId: 'result',
               onSelect: (_) {
                 state.boundaryResponse = LiamBoundaryResponse.explain;
+                _playSound(
+                  game,
+                  _boundaryResponseSoundsEn[LiamBoundaryResponse.explain]!,
+                  _boundaryResponseSoundsUk[LiamBoundaryResponse.explain]!,
+                );
               },
             ),
             DialogChoice(
@@ -270,6 +366,11 @@ class LiamJourney {
               nextNodeId: 'result',
               onSelect: (_) {
                 state.boundaryResponse = LiamBoundaryResponse.joke;
+                _playSound(
+                  game,
+                  _boundaryResponseSoundsEn[LiamBoundaryResponse.joke]!,
+                  _boundaryResponseSoundsUk[LiamBoundaryResponse.joke]!,
+                );
               },
             ),
             DialogChoice(
@@ -277,6 +378,13 @@ class LiamJourney {
               nextNodeId: 'result',
               onSelect: (_) {
                 state.boundaryResponse = LiamBoundaryResponse.respondSharply;
+                _playSound(
+                  game,
+                  _boundaryResponseSoundsEn[LiamBoundaryResponse
+                      .respondSharply]!,
+                  _boundaryResponseSoundsUk[LiamBoundaryResponse
+                      .respondSharply]!,
+                );
               },
             ),
           ],
@@ -337,7 +445,10 @@ class LiamJourney {
             DialogChoice(
               label: (_) => l.continueLabel,
               onSelect: (_) {
-                game.showEducationalCard(l.liam_final_education);
+                game.showEducationalCard(
+                  l.liam_final_education,
+                  soundFile: _educationalSoundFile(game, 6),
+                );
               },
             ),
           ],

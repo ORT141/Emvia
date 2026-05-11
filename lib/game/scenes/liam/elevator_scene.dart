@@ -2,24 +2,24 @@ import 'package:emvia/game/characters/liam/liam_journey.dart';
 import 'package:emvia/game/scenes/game_scene.dart';
 import 'package:flame/components.dart';
 
-class GraffitiScene extends GameScene {
-  GraffitiScene()
+class ElevatorScene extends GameScene {
+  ElevatorScene()
     : super(
-        backgroundPath: 'scenes/liam/graffiti/background.png',
+        backgroundPath: 'scenes/liam/elevator/background.png',
         showControls: true,
         showPlayer: true,
       ) {
-    GameScene.register(() => GraffitiScene());
+    GameScene.register(() => ElevatorScene());
   }
 
   @override
-  int get sceneIndex => 9;
+  int get sceneIndex => 10;
 
   @override
-  void onPlayerReachedRightEdge() => game.navigationManager.goToLiamOutside();
+  void onPlayerReachedRightEdge() => game.navigationManager.goToLiamGraffiti();
 
   @override
-  void onPlayerReachedLeftEdge() => game.navigationManager.goToLiamElevator();
+  void onPlayerReachedLeftEdge() => game.navigationManager.goToLiamHouse();
 
   @override
   Future<void> onLoad() async {
@@ -46,5 +46,5 @@ class GraffitiScene extends GameScene {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(worldSize.x * 0.1, worldSize.y * 0.68);
+      Vector2(worldSize.x * 0.8, worldSize.y * 0.68);
 }

@@ -1,4 +1,5 @@
 import 'package:emvia/game/emvia_game.dart';
+import 'package:emvia/game/emvia_types.dart';
 import 'package:emvia/game/overlays/glass_ui.dart';
 import 'package:emvia/game/utils/survey_service.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -68,6 +69,25 @@ class _SurveyOverlayState extends State<SurveyOverlay>
     ],
   };
 
+  static const _liamSoundFiles = {
+    'en': [
+      'what color.mp3',
+      'which photography style.mp3',
+      'what does support means to you.mp3',
+      'what anoise you the most .mp3',
+      'how do you usually act.mp3',
+      'symbol of support.mp3',
+    ],
+    'uk': [
+      'який колір найкраще описує твій стан зараз.mp3',
+      'який стиль фото тобі найближчий.mp3',
+      'що для тебе означає підтримка.mp3',
+      'що найбільше дратує тебе у просторі.mp3',
+      'як ти зазвичай дієш у складних ситуаціях.mp3',
+      'що буде твоїм символом підтримки.mp3',
+    ],
+  };
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -78,11 +98,16 @@ class _SurveyOverlayState extends State<SurveyOverlay>
     if (index < 0) return;
     final locale = Localizations.localeOf(context);
     final lang = locale.languageCode == 'uk' ? 'uk' : 'en';
-    final files = _soundFiles[lang]!;
+
+    final isLiam =
+        widget.game.selectedCharacter == PlayableCharacter.liam;
+    final files = isLiam ? _liamSoundFiles[lang]! : _soundFiles[lang]!;
     if (index >= files.length) return;
+
     await _stopQuestionAudio?.call();
+    final folder = isLiam ? 'liam' : 'survey';
     final player = await FlameAudio.play(
-      'survey/${files[index]}',
+      '$folder/${files[index]}',
       volume: widget.game.volume,
     );
     _stopQuestionAudio = player.stop;

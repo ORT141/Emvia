@@ -710,7 +710,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get liam_scene_intro_silent =>
-      'Є дні, коли місто здається відкритим. А є дні, коли воно нагадує, що не для всіх. Я міг би залишитися в цій кімнаті, але сьогодні мені потрібно вийти у місто.';
+      'Є дні, коли місто здається відкритим. А є - коли воно нагадує, що не для всіх... Я б міг залишитися у цій кімнаті, але сьогодні мені потрібно вийти у місто.';
 
   @override
   String get liam_route_briefing =>
@@ -721,11 +721,11 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get liam_route_prompt =>
-      'Сфотографуй шлях попереду - не ідеальний, а саме такий, яким він є.';
+      'Рух починається з планування. Сфотографуй свій шлях попереду - не ідеальний, а такий, який він є.';
 
   @override
   String get liam_route_tag_prompt =>
-      'Що ти помітив? Обери тег, який сформує історію цього простору.';
+      'Що ви помітили? Оберіть тег, який сформує історію цього простору.';
 
   @override
   String get liam_route_education =>
@@ -754,10 +754,10 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get liam_boundary_npc => 'О, давай допоможу.';
 
   @override
-  String get liam_boundary_stop => 'СТОП.';
+  String get liam_boundary_stop => 'СТОП!';
 
   @override
-  String get liam_boundary_choice_prompt => 'Обери реакцію Ліама.';
+  String get liam_boundary_choice_prompt => 'Оберіть реакцію.';
 
   @override
   String get liam_boundary_choice_explain => 'Пояснити';
@@ -774,7 +774,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get liam_boundary_response_joke =>
-      'Обережно, ручне управління. За водіння без дозволу - штраф.';
+      'Обережно, ручне управління! За водіння без дозволу - штраф.';
 
   @override
   String get liam_boundary_response_sharp =>
@@ -824,7 +824,8 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get liam_almost_title => 'Майже поруч';
 
   @override
-  String get liam_almost_prompt => 'Зафіксуй те, що лишається недосяжним.';
+  String get liam_almost_prompt =>
+      'Зроби фото \'Майже поруч\' і зафіксуй те, що лишається недосяжним.';
 
   @override
   String get liam_almost_tag_prompt => 'Обери тег для кадру.';
@@ -841,7 +842,8 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
   String get liam_space_title => 'Простір на рівні';
 
   @override
-  String get liam_space_prompt => 'Зроби фінальне фото \'Простір на рівні\'.';
+  String get liam_space_prompt =>
+      'Прибери те, що перекриває шлях, і зроби фінальне фото \'Простір на рівні\'.';
 
   @override
   String get liam_space_tag_prompt => 'Обери тег для кадру.';
@@ -856,7 +858,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get liam_final_education =>
-      'Не зводьте людину на кріслі колісному лише до її візка. Це не символ обмеження, а частина щоденного життя. Передусім це людина - зі своїм характером, смаками, мріями та правом почуватися природно в будь-якому просторі.';
+      'Не зводьте людину на кріслі колісному лише до її візка. Це не \'символ обмеження\', а частина щоденного життя. Передусім це людина - зі своїм характером, смаками, мріями та правом почуватися природно в будь-якому просторі.';
 
   @override
   String get liam_graffiti_survey_title => 'Перед тим як вийти...';

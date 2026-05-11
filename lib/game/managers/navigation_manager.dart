@@ -12,6 +12,7 @@ import '../characters/liam/liam_journey.dart';
 import '../scenes/liam/house_scene.dart';
 import '../scenes/liam/outside_scene.dart';
 import '../scenes/liam/graffiti_scene.dart';
+import '../scenes/liam/elevator_scene.dart';
 import '../emvia_types.dart';
 import 'package:emvia/l10n/app_localizations.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';
@@ -152,6 +153,17 @@ class NavigationManager {
     await _loadSceneWithDefaults(GraffitiScene(), sceneIndex: 9);
   }
 
+  Future<void> goToLiamElevator() async {
+    if (game.transitionManager.isTransitioning) return;
+    await _loadSceneWithDefaults(
+      ElevatorScene(),
+      sceneIndex: 10,
+      onFullOpacity: () {
+        LiamJourney.maybeShowCurrentNarrative(game);
+      },
+    );
+  }
+
   Future<void> startGameFlow() async {
     final token = game.session.beginSession();
     final profile = await game.surveyService.getProfile();
@@ -248,9 +260,14 @@ class NavigationManager {
     game.overlays.add('BreathingExercise');
   }
 
-  void showEducationalCard(String text, {VoidCallback? onDismiss}) {
+  void showEducationalCard(
+    String text, {
+    VoidCallback? onDismiss,
+    String? soundFile,
+  }) {
     game.educationalCardText = text;
     game.educationalCardOnDismiss = onDismiss;
+    game.educationalCardSoundFile = soundFile;
     game.freezePlayer();
     game.overlays.add('EducationalCard');
   }

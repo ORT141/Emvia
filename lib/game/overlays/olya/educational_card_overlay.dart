@@ -1,5 +1,6 @@
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import '../glass_ui.dart';
 
@@ -17,6 +18,7 @@ class _EducationalCardOverlayState extends State<EducationalCardOverlay>
   late AnimationController _animController;
   late Animation<double> _fadeAnim;
   late Animation<Offset> _slideAnim;
+  Future<void> Function()? _stopSound;
 
   @override
   void initState() {
@@ -31,10 +33,20 @@ class _EducationalCardOverlayState extends State<EducationalCardOverlay>
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _animController, curve: Curves.easeOut));
     _animController.forward();
+    _playCardSound();
+  }
+
+  void _playCardSound() async {
+    final soundFile = widget.game.educationalCardSoundFile;
+    widget.game.educationalCardSoundFile = null;
+    if (soundFile == null || !widget.game.soundEnabled) return;
+    final player = await FlameAudio.play(soundFile, volume: widget.game.volume);
+    _stopSound = player.stop;
   }
 
   @override
   void dispose() {
+    _stopSound?.call();
     _animController.dispose();
     super.dispose();
   }

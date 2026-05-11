@@ -16,7 +16,12 @@ enum LiamNavColor { cyan, orange, red, green }
 
 enum LiamSupportSymbol { heart, cat, star, wings }
 
-enum LiamIrritation { blocksPath, intrusiveHelp, inconvenientLayout, othersDecide }
+enum LiamIrritation {
+  blocksPath,
+  intrusiveHelp,
+  inconvenientLayout,
+  othersDecide,
+}
 
 enum LiamCopingStyle { findWay, askHelp, tryMyself, avoid }
 
@@ -49,7 +54,6 @@ class LiamGameState extends GameState {
   bool hasShownCompletionDialog = false;
   LiamBoundaryResponse? boundaryResponse;
 
-  // Graffiti scene survey answers
   bool hasCompletedGraffitiSurvey = false;
   LiamPhotoStyle? photoStyle;
   LiamNavColor? navColor;

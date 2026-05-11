@@ -71,6 +71,8 @@ class EmviaGame extends FlameGame
 
   VoidCallback? educationalCardOnDismiss;
 
+  String? educationalCardSoundFile;
+
   EmviaGame() {
     cameraManager = CameraManager(this);
     transitionManager = TransitionManager(this);
@@ -390,8 +392,15 @@ extension EmviaGameFlow on EmviaGame {
 
   Future<void> finishBreathingExercise() =>
       navigationManager.finishBreathingExercise();
-  void showEducationalCard(String text, {VoidCallback? onDismiss}) =>
-      navigationManager.showEducationalCard(text, onDismiss: onDismiss);
+  void showEducationalCard(
+    String text, {
+    VoidCallback? onDismiss,
+    String? soundFile,
+  }) => navigationManager.showEducationalCard(
+    text,
+    onDismiss: onDismiss,
+    soundFile: soundFile,
+  );
   void dismissEducationalCard() => navigationManager.dismissEducationalCard();
   Future<void> transitionToStressScene() =>
       navigationManager.transitionToStressScene();

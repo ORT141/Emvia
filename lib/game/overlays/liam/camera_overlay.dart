@@ -2,6 +2,7 @@ import 'dart:io' show File, Platform;
 import 'dart:math' as math;
 
 import 'package:camera/camera.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -230,6 +231,9 @@ class _CameraOverlayState extends State<CameraOverlay>
     final quote = l != null && liamState != null
         ? LiamJourney.currentQuote(l, liamState)
         : null;
+    final supportSymbol = liamState != null
+      ? LiamJourney.getSupportSymbolEmoji(liamState)
+      : null;
 
     return Focus(
       autofocus: true,
@@ -342,6 +346,30 @@ class _CameraOverlayState extends State<CameraOverlay>
                                             letterSpacing: 1.1,
                                           ),
                                         ),
+                                        if (supportSymbol != null) ...[
+                                          SizedBox(height: gap2),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: GlassPanel(
+                                              borderRadius:
+                                                  BorderRadius.circular(999),
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: panelH,
+                                                vertical: panelV - 2,
+                                              ),
+                                              alphaValue: 0.14,
+                                              child: Text(
+                                                supportSymbol,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: sizeTitle,
+                                                  fontWeight: FontWeight.w700,
+                                                  letterSpacing: 0.4,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                         SizedBox(height: gap1),
                                         Text(
                                           LiamJourney.currentTitle(
@@ -548,6 +576,35 @@ class _TagEditorDialog extends StatefulWidget {
 
 class _TagEditorDialogState extends State<_TagEditorDialog> {
   String? _selectedTag;
+  bool _soundPlayed = false;
+  Future<void> Function()? _stopSound;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_soundPlayed) {
+      _soundPlayed = true;
+      _playTagPromptSound();
+    }
+  }
+
+  void _playTagPromptSound() async {
+    if (!widget.game.soundEnabled) return;
+    final locale = Localizations.localeOf(context);
+    final missionIndex = widget.game.liamState?.currentMissionIndex ?? 0;
+    final isUk = locale.languageCode == 'uk';
+    final file = missionIndex == 0
+        ? (isUk ? 'що ви помітили.mp3' : 'what did you note this.mp3')
+        : (isUk ? 'оберіть тег для кадру.mp3' : 'choose a tag.mp3');
+    final player = await FlameAudio.play('liam/$file', volume: widget.game.volume);
+    _stopSound = player.stop;
+  }
+
+  @override
+  void dispose() {
+    _stopSound?.call();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

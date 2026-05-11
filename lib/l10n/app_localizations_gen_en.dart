@@ -709,7 +709,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get liam_scene_intro_silent =>
-      'There are days when the city feels open. And there are days when it reminds you that it is not for everyone. I could stay in this room, but today I need to go out into the city.';
+      'There are days when the city feels open. And there are days when it reminds you that it is not for everyone... I could stay in this room, but today I need to go out into the city.';
 
   @override
   String get liam_route_briefing =>
@@ -720,7 +720,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get liam_route_prompt =>
-      'Take a photo of the path ahead of you - not idealized, but exactly as it is.';
+      'Movement begins with planning. Take a photo of the path ahead of you - not as it should be, but as it really is.';
 
   @override
   String get liam_route_tag_prompt =>
@@ -752,10 +752,10 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
   String get liam_boundary_npc => 'Oh, let me help.';
 
   @override
-  String get liam_boundary_stop => 'Stop.';
+  String get liam_boundary_stop => 'STOP!';
 
   @override
-  String get liam_boundary_choice_prompt => 'Choose Liam\'s response.';
+  String get liam_boundary_choice_prompt => 'Choose a response.';
 
   @override
   String get liam_boundary_choice_explain => 'Explain';
@@ -772,11 +772,11 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get liam_boundary_response_joke =>
-      'Careful, this is manual control. Driving without permission comes with a fine.';
+      'Careful, this is manual control! Driving without permission comes with a fine.';
 
   @override
   String get liam_boundary_response_sharp =>
-      'Hands off. I decide when and where I move.';
+      'Hands off! I decide when and where I move.';
 
   @override
   String get liam_boundary_title => 'Control and Boundaries';
@@ -794,7 +794,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get liam_comments_intro =>
-      'Comments begin to scroll under Liam\'s post:\n\n\"How did you even get here?\"\n\"Wow, can you actually get there in a wheelchair?\"\n\"Did someone help you get there?\"\n\"You\'re so brave for going out at all.\"\n\"A real hero. I wouldn\'t be able to do that in your place.\"\n\"Honestly, I was looking at the wheelchair before the photo.\"\n\"Careful, the pavement there is uneven. Don\'t get stuck.\"\n\"I don\'t know what is more impressive - the place or the fact that you\'re there.\"\n\"It must be really hard for you to create this kind of content.\"\n\"It\'s great that you\'re not just staying at home.\"';
+      'Comments begin to scroll under Liam\'s post:\n\n\"How did you even get here?\"\n\"Wow, can you actually get there in a wheelchair?\"\n\"Did someone help you get there?\"\n\"You\'re so brave for going out at all.\"\n\"A real hero. I wouldn\'t be able to do that in your place.\"\n\"Honestly, at first I wasn\'t even looking at the photo - I was looking at the wheelchair.\"\n\"Careful, the pavement there is uneven. Don\'t get stuck.\"\n\"I don\'t even know what\'s more impressive - the place or the fact that you\'re there.\"\n\"It must be really hard for you to create this kind of content.\"\n\"It\'s great that you\'re not just staying at home.\"';
 
   @override
   String get liam_self_briefing =>
@@ -816,13 +816,14 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get liam_almost_briefing =>
-      'Here is that familiar feeling: a place seems so close, yet you still cannot reach it - and it is not your fault. Take a photo called \'Almost There\' and capture what remains out of reach.';
+      'Here\'s that familiar feeling: a place seems so close, yet you still can\'t reach it - and it\'s not your fault. Take a photo called \'Almost There\' and capture what remains out of reach.';
 
   @override
   String get liam_almost_title => 'Almost There';
 
   @override
-  String get liam_almost_prompt => 'Capture what remains out of reach.';
+  String get liam_almost_prompt =>
+      'Take a photo called \'Almost There\' and capture what remains out of reach.';
 
   @override
   String get liam_almost_tag_prompt => 'Choose a tag for the shot.';
@@ -840,7 +841,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get liam_space_prompt =>
-      'Take the final photo, \'Space at Eye Level.\'';
+      'Remove what blocks the way and take the final photo, \'Space at Eye Level.\'';
 
   @override
   String get liam_space_tag_prompt => 'Choose a tag for the shot.';
@@ -855,7 +856,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get liam_final_education =>
-      'Do not reduce a wheelchair user to their wheelchair alone. It is not a symbol of limitation, but part of everyday life. First and foremost, this is a person with their own character, tastes, dreams, and the right to feel natural in any space.';
+      'Do not reduce a wheelchair user to their wheelchair alone. It is not a \'symbol of limitation,\' but part of everyday life. First and foremost, this is a person - with their own character, tastes, dreams, and the right to feel natural in any space.';
 
   @override
   String get liam_graffiti_survey_title => 'Before we go out...';

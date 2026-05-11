@@ -1367,7 +1367,7 @@ abstract class AppLocalizationsGen {
   /// No description provided for @liam_scene_intro_silent.
   ///
   /// In en, this message translates to:
-  /// **'There are days when the city feels open. And there are days when it reminds you that it is not for everyone. I could stay in this room, but today I need to go out into the city.'**
+  /// **'There are days when the city feels open. And there are days when it reminds you that it is not for everyone... I could stay in this room, but today I need to go out into the city.'**
   String get liam_scene_intro_silent;
 
   /// No description provided for @liam_route_briefing.
@@ -1385,7 +1385,7 @@ abstract class AppLocalizationsGen {
   /// No description provided for @liam_route_prompt.
   ///
   /// In en, this message translates to:
-  /// **'Take a photo of the path ahead of you - not idealized, but exactly as it is.'**
+  /// **'Movement begins with planning. Take a photo of the path ahead of you - not as it should be, but as it really is.'**
   String get liam_route_prompt;
 
   /// No description provided for @liam_route_tag_prompt.
@@ -1439,13 +1439,13 @@ abstract class AppLocalizationsGen {
   /// No description provided for @liam_boundary_stop.
   ///
   /// In en, this message translates to:
-  /// **'Stop.'**
+  /// **'STOP!'**
   String get liam_boundary_stop;
 
   /// No description provided for @liam_boundary_choice_prompt.
   ///
   /// In en, this message translates to:
-  /// **'Choose Liam\'s response.'**
+  /// **'Choose a response.'**
   String get liam_boundary_choice_prompt;
 
   /// No description provided for @liam_boundary_choice_explain.
@@ -1475,13 +1475,13 @@ abstract class AppLocalizationsGen {
   /// No description provided for @liam_boundary_response_joke.
   ///
   /// In en, this message translates to:
-  /// **'Careful, this is manual control. Driving without permission comes with a fine.'**
+  /// **'Careful, this is manual control! Driving without permission comes with a fine.'**
   String get liam_boundary_response_joke;
 
   /// No description provided for @liam_boundary_response_sharp.
   ///
   /// In en, this message translates to:
-  /// **'Hands off. I decide when and where I move.'**
+  /// **'Hands off! I decide when and where I move.'**
   String get liam_boundary_response_sharp;
 
   /// No description provided for @liam_boundary_title.
@@ -1511,7 +1511,7 @@ abstract class AppLocalizationsGen {
   /// No description provided for @liam_comments_intro.
   ///
   /// In en, this message translates to:
-  /// **'Comments begin to scroll under Liam\'s post:\n\n\"How did you even get here?\"\n\"Wow, can you actually get there in a wheelchair?\"\n\"Did someone help you get there?\"\n\"You\'re so brave for going out at all.\"\n\"A real hero. I wouldn\'t be able to do that in your place.\"\n\"Honestly, I was looking at the wheelchair before the photo.\"\n\"Careful, the pavement there is uneven. Don\'t get stuck.\"\n\"I don\'t know what is more impressive - the place or the fact that you\'re there.\"\n\"It must be really hard for you to create this kind of content.\"\n\"It\'s great that you\'re not just staying at home.\"'**
+  /// **'Comments begin to scroll under Liam\'s post:\n\n\"How did you even get here?\"\n\"Wow, can you actually get there in a wheelchair?\"\n\"Did someone help you get there?\"\n\"You\'re so brave for going out at all.\"\n\"A real hero. I wouldn\'t be able to do that in your place.\"\n\"Honestly, at first I wasn\'t even looking at the photo - I was looking at the wheelchair.\"\n\"Careful, the pavement there is uneven. Don\'t get stuck.\"\n\"I don\'t even know what\'s more impressive - the place or the fact that you\'re there.\"\n\"It must be really hard for you to create this kind of content.\"\n\"It\'s great that you\'re not just staying at home.\"'**
   String get liam_comments_intro;
 
   /// No description provided for @liam_self_briefing.
@@ -1547,7 +1547,7 @@ abstract class AppLocalizationsGen {
   /// No description provided for @liam_almost_briefing.
   ///
   /// In en, this message translates to:
-  /// **'Here is that familiar feeling: a place seems so close, yet you still cannot reach it - and it is not your fault. Take a photo called \'Almost There\' and capture what remains out of reach.'**
+  /// **'Here\'s that familiar feeling: a place seems so close, yet you still can\'t reach it - and it\'s not your fault. Take a photo called \'Almost There\' and capture what remains out of reach.'**
   String get liam_almost_briefing;
 
   /// No description provided for @liam_almost_title.
@@ -1559,7 +1559,7 @@ abstract class AppLocalizationsGen {
   /// No description provided for @liam_almost_prompt.
   ///
   /// In en, this message translates to:
-  /// **'Capture what remains out of reach.'**
+  /// **'Take a photo called \'Almost There\' and capture what remains out of reach.'**
   String get liam_almost_prompt;
 
   /// No description provided for @liam_almost_tag_prompt.
@@ -1589,7 +1589,7 @@ abstract class AppLocalizationsGen {
   /// No description provided for @liam_space_prompt.
   ///
   /// In en, this message translates to:
-  /// **'Take the final photo, \'Space at Eye Level.\''**
+  /// **'Remove what blocks the way and take the final photo, \'Space at Eye Level.\''**
   String get liam_space_prompt;
 
   /// No description provided for @liam_space_tag_prompt.
@@ -1613,7 +1613,7 @@ abstract class AppLocalizationsGen {
   /// No description provided for @liam_final_education.
   ///
   /// In en, this message translates to:
-  /// **'Do not reduce a wheelchair user to their wheelchair alone. It is not a symbol of limitation, but part of everyday life. First and foremost, this is a person with their own character, tastes, dreams, and the right to feel natural in any space.'**
+  /// **'Do not reduce a wheelchair user to their wheelchair alone. It is not a \'symbol of limitation,\' but part of everyday life. First and foremost, this is a person - with their own character, tastes, dreams, and the right to feel natural in any space.'**
   String get liam_final_education;
 
   /// No description provided for @liam_graffiti_survey_title.
