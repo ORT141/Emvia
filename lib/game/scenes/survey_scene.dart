@@ -18,6 +18,9 @@ class SurveyScene extends GameScene {
   double worldWidthForViewport(Vector2 viewportSize) => viewportSize.x;
 
   @override
+  String? get ambientSoundPath => 'other/пиано.mp3';
+
+  @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
       Vector2(worldSize.x / 2, worldSize.y / 2);
 

@@ -16,6 +16,9 @@ class GraffitiScene extends GameScene {
   int get sceneIndex => 9;
 
   @override
+  String get ambientSoundPath => 'other/легкий біт.mp3';
+
+  @override
   void onPlayerReachedRightEdge() => game.navigationManager.goToLiamOutside();
 
   @override

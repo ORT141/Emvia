@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:flame_audio/flame_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';
@@ -28,6 +30,7 @@ class _BreathingExerciseOverlayState extends State<BreathingExerciseOverlay>
   _BreathingPhase _phase = _BreathingPhase.inhale;
   int _countdown = _phaseDurations[_BreathingPhase.inhale]!;
   Timer? _timer;
+  AudioPlayer? _breathingAudio;
 
   late AnimationController _scaleController;
   late Animation<double> _scaleAnim;
@@ -56,11 +59,25 @@ class _BreathingExerciseOverlayState extends State<BreathingExerciseOverlay>
     _fadeController.forward();
 
     _startTimer();
+    _startBreathingAudio();
+  }
+
+  Future<void> _startBreathingAudio() async {
+    if (!widget.game.soundEnabled) return;
+    try {
+      _breathingAudio = await FlameAudio.loop(
+        'other/супровід на дихання.mp3',
+        volume: widget.game.volume * 0.7,
+      );
+    } catch (_) {}
   }
 
   @override
   void dispose() {
     _timer?.cancel();
+    _breathingAudio?.stop();
+    _breathingAudio?.dispose();
+    _breathingAudio = null;
     _scaleController.dispose();
     _fadeController.dispose();
     super.dispose();

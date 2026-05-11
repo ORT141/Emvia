@@ -67,6 +67,9 @@ class CorridorScene extends GameScene with PeopleOverlayMixin {
   int get sceneIndex => 4;
 
   @override
+  String get ambientSoundPath => 'other/шум коридору.mp3';
+
+  @override
   double worldWidthForViewport(Vector2 viewportSize) {
     if (background.sprite?.srcSize != null &&
         background.sprite!.srcSize.y > 0) {

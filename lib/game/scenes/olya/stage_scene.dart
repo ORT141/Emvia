@@ -35,6 +35,9 @@ class StageScene extends GameScene {
   @override
   int get sceneIndex => 6;
 
+  @override
+  String get ambientSoundPath => 'other/шум зали.mp3';
+
   static const double _rockingChairHeightFactor = 0.8;
   static const double _booksHeightFactor = 0.1;
   static const double _bagOfRocksHeightFactor = 0.07;

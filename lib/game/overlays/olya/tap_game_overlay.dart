@@ -89,9 +89,16 @@ class _TapGameOverlayState extends State<TapGameOverlay>
   }
 
   Future<void> _startVoiceLoop() async {
+    final trigger = widget.game.surveyProfile.soundTrigger;
+    final soundFile = switch (trigger) {
+      'mechanical' => 'other/механічні звуки.mp3',
+      'high_pitch' => 'other/високий писк.mp3',
+      'chaotic_music' => 'other/хаотична музика.mp3',
+      _ => 'other/натовп.mp3', // 'crowd' default
+    };
     try {
       final player = await FlameAudio.loop(
-        'other/people-talking.mp3',
+        soundFile,
         volume: 0.0,
       );
       player.setReleaseMode(ReleaseMode.loop);

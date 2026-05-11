@@ -175,6 +175,10 @@ class _CameraOverlayState extends State<CameraOverlay>
       await _shutterController.forward();
       await _shutterController.reverse();
 
+      if (widget.game.soundEnabled) {
+        FlameAudio.play('other/клацання камери.mp3', volume: widget.game.volume);
+      }
+
       final file = await controller.takePicture();
       if (!mounted) return;
 

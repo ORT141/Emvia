@@ -1,5 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame_audio/flame_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:ui' show FilterQuality, Paint;
 import 'dart:math' as math;
@@ -196,6 +198,8 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
     }
 
     game.gameState.isFrozen = frozenPlayer;
+
+    await _startAmbient();
   }
 
   @mustCallSuper
@@ -203,8 +207,32 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
     layoutToWorld();
   }
 
+  // ── Ambient audio ─────────────────────────────────────────────────────────
+
+  /// Override to return a path (relative to sounds/) to loop as scene ambient.
+  String? get ambientSoundPath => null;
+
+  AudioPlayer? _ambientPlayer;
+
+  Future<void> _startAmbient() async {
+    final path = ambientSoundPath;
+    if (path == null || !game.soundEnabled) return;
+    try {
+      _ambientPlayer = await FlameAudio.loop(path, volume: game.volume * 0.55);
+    } catch (_) {}
+  }
+
+  void _stopAmbient() {
+    _ambientPlayer?.stop();
+    _ambientPlayer?.dispose();
+    _ambientPlayer = null;
+  }
+
+  // ──────────────────────────────────────────────────────────────────────────
+
   @override
   void onRemove() {
+    _stopAmbient();
     for (final foreground in foregrounds) {
       foreground.removeFromParent();
     }

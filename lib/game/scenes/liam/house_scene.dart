@@ -15,6 +15,9 @@ class HouseScene extends GameScene {
   int get sceneIndex => 7;
 
   @override
+  String get ambientSoundPath => 'other/легке піано.mp3';
+
+  @override
   void onPlayerReachedLeftEdge() => game.navigationManager.goToLiamOutside();
 
   @override

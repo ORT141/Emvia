@@ -445,6 +445,12 @@ class LiamJourney {
             DialogChoice(
               label: (_) => l.continueLabel,
               onSelect: (_) {
+                if (game.soundEnabled) {
+                  FlameAudio.play(
+                    'other/звук паперу на фінал.mp3',
+                    volume: game.volume,
+                  );
+                }
                 game.showEducationalCard(
                   l.liam_final_education,
                   soundFile: _educationalSoundFile(game, 6),

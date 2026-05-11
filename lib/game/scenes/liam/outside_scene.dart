@@ -27,6 +27,9 @@ class LiamOutsideScene extends GameScene {
   int get sceneIndex => 8;
 
   @override
+  String get ambientSoundPath => 'other/шум міста.mp3';
+
+  @override
   void onPlayerReachedRightEdge() => game.navigationManager.goToLiamHouse();
 
   @override

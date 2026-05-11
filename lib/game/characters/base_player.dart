@@ -1,5 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame_audio/flame_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import '../utils/game_config.dart';
 import '../emvia_game.dart';
@@ -112,6 +114,9 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
   final Vector2 keyboardVelocity = Vector2.zero();
   final Vector2 mobileVelocity = Vector2.zero();
 
+  AudioPlayer? _footstepPlayer;
+  bool _wasWalking = false;
+
   double get speed => game.size.y * (300.0 / 1080.0);
 
   void updatePlayerSize() {
@@ -155,11 +160,21 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
 
     if (velocity.isZero()) {
       current = PlayerState.standing;
+      if (_wasWalking) {
+        _wasWalking = false;
+        _footstepPlayer?.stop();
+        _footstepPlayer?.dispose();
+        _footstepPlayer = null;
+      }
       if (characterData.resetScaleOnIdle) {
         scale.x = 1;
       }
     } else {
       current = PlayerState.walking;
+      if (!_wasWalking) {
+        _wasWalking = true;
+        _startFootsteps();
+      }
       if (velocity.x < 0) {
         scale.x = -1;
       } else if (velocity.x > 0) {
@@ -180,6 +195,23 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
       final yOffset = scene?.playerYOffsetForX(position.x) ?? 0;
       position.y = baseY - yOffset;
     }
+  }
+
+  void onRemove() {
+    _footstepPlayer?.stop();
+    _footstepPlayer?.dispose();
+    _footstepPlayer = null;
+    super.onRemove();
+  }
+
+  Future<void> _startFootsteps() async {
+    if (!game.soundEnabled) return;
+    try {
+      _footstepPlayer = await FlameAudio.loop(
+        'other/кроки.mp3',
+        volume: game.volume * 0.45,
+      );
+    } catch (_) {}
   }
 
   @override

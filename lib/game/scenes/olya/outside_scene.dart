@@ -17,6 +17,9 @@ class OutsideScene extends GameScene with PeopleOverlayMixin {
 
   bool _stressTriggered = false;
 
+  @override
+  String get ambientSoundPath => 'other/атмосферний ембіент.mp3';
+
   static const _stressTriggerUVx = 0.7;
 
   @override
