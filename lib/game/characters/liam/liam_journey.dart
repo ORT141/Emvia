@@ -11,54 +11,54 @@ class LiamJourney {
 
   static const _dialogSoundsEn = <String>[
     'movement.mp3',
-    'for someone its just a small thing.mp3',
-    'im not against help.mp3',
-    'personality is always greater.mp3',
-    'familiar feeling.mp3',
-    'sometimes make space more accesseble.mp3',
-    'you can see it now.mp3',
+    'for_someone_its_just_a_small_thing.mp3',
+    'im_not_against_help.mp3',
+    'personality_is_always_greater.mp3',
+    'familiar_feeling.mp3',
+    'sometimes_make_space_more_accesseble.mp3',
+    'you_can_see_it_now.mp3',
   ];
 
   static const _dialogSoundsUk = <String>[
-    'рух починається з планування.mp3',
-    'для когось це просто дрібниця.mp3',
-    'я не проти допомоги.mp3',
-    'особистість завжди більша за обмеження.mp3',
+    'rukh_pochinaiet_sia_z_planuvannia.mp3',
+    'dlia_kogos_tse_prosto_dribnitsia.mp3',
+    'ia_ne_proti_dopomogi.mp3',
+    'osobistist_zavzhdi_bil_sha_za_obmezhennia.mp3',
     'oss це знайоме відчуття.mp3',
-    'іноді щоб простір став доступнішим.mp3',
-    'тепер ти це бачив.mp3',
+    'inodi_shchob_prostir_stav_dostupnishim.mp3',
+    'teper_ti_tse_bachiv.mp3',
   ];
 
   static const _educationalSoundsEn = <String>[
-    'access ability.mp3',
-    'barriors arre often invisible.mp3',
-    'help without consent.mp3',
+    'access_ability.mp3',
+    'barriors_arre_often_invisible.mp3',
+    'help_without_consent.mp3',
     'lemitations.mp3',
-    'most barriors.mp3',
+    'most_barriors.mp3',
     'inclution.mp3',
-    'do not reduce a wheelchair user.mp3',
+    'do_not_reduce_a_wheelchair_user.mp3',
   ];
 
   static const _educationalSoundsUk = <String>[
-    'доступність це коли не потрібно продумувати кожен крок.mp3',
-    'барєри часто непомітні.mp3',
-    'допомога без дозволу.mp3',
-    'обмеження існують у просторі.mp3',
-    'більшість барєрів виникають.mp3',
-    'інкюзія це не надзусилля.mp3',
-    'не звоьте людини на колісному кріслі.mp3',
+    'dostupnist_tse_koli_ne_potribno_produmuvati_kozhen.mp3',
+    'barieri_chasto_nepomitni.mp3',
+    'dopomoga_bez_dozvolu.mp3',
+    'obmezhennia_isnuiut_u_prostori.mp3',
+    'bil_shist_barieriv_vinikaiut.mp3',
+    'inkiuziia_tse_ne_nadzusillia.mp3',
+    'ne_zvo_te_liudini_na_kolisnomu_krisli.mp3',
   ];
 
   static const _boundaryResponseSoundsEn = <LiamBoundaryResponse, String>{
-    LiamBoundaryResponse.explain: 'thanks but ask first.mp3',
-    LiamBoundaryResponse.joke: 'careful thats a manual control.mp3',
-    LiamBoundaryResponse.respondSharply: 'hands off.mp3',
+    LiamBoundaryResponse.explain: 'thanks_but_ask_first.mp3',
+    LiamBoundaryResponse.joke: 'careful_thats_a_manual_control.mp3',
+    LiamBoundaryResponse.respondSharply: 'hands_off.mp3',
   };
 
   static const _boundaryResponseSoundsUk = <LiamBoundaryResponse, String>{
     LiamBoundaryResponse.explain: 'дякую але спершу запитай.mp3',
-    LiamBoundaryResponse.joke: 'обережно ручне управління.mp3',
-    LiamBoundaryResponse.respondSharply: 'прибери руки.mp3',
+    LiamBoundaryResponse.joke: 'oberezhno_ruchne_upravlinnia.mp3',
+    LiamBoundaryResponse.respondSharply: 'priberi_ruki.mp3',
   };
 
   static void _playSound(EmviaGame game, String enFile, String ukFile) {

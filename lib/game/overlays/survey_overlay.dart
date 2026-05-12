@@ -50,7 +50,7 @@ class _SurveyOverlayState extends State<SurveyOverlay>
 
   static const _soundFiles = {
     'en': [
-      'what color.mp3',
+      'what_color.mp3',
       'what pattern.mp3',
       'which object.mp3',
       'what sounds.mp3',
@@ -71,17 +71,17 @@ class _SurveyOverlayState extends State<SurveyOverlay>
 
   static const _liamSoundFiles = {
     'en': [
-      'what color.mp3',
-      'which photography style.mp3',
-      'what does support means to you.mp3',
-      'what anoise you the most .mp3',
-      'how do you usually act.mp3',
-      'symbol of support.mp3',
+      'what_color.mp3',
+      'which_photography_style.mp3',
+      'what_does_support_means_to_you.mp3',
+      'what_anoise_you_the_most.mp3',
+      'how_do_you_usually_act.mp3',
+      'symbol_of_support.mp3',
     ],
     'uk': [
       'який колір найкраще описує твій стан зараз.mp3',
       'який стиль фото тобі найближчий.mp3',
-      'що для тебе означає підтримка.mp3',
+      'shcho_dlia_tebe_oznachaie_pidtrimka.mp3',
       'що найбільше дратує тебе у просторі.mp3',
       'як ти зазвичай дієш у складних ситуаціях.mp3',
       'що буде твоїм символом підтримки.mp3',

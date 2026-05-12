@@ -598,8 +598,8 @@ class _TagEditorDialogState extends State<_TagEditorDialog> {
     final missionIndex = widget.game.liamState?.currentMissionIndex ?? 0;
     final isUk = locale.languageCode == 'uk';
     final file = missionIndex == 0
-        ? (isUk ? 'що ви помітили.mp3' : 'what did you note this.mp3')
-        : (isUk ? 'оберіть тег для кадру.mp3' : 'choose a tag.mp3');
+        ? (isUk ? 'shcho_vi_pomitili.mp3' : 'what_did_you_note_this.mp3')
+        : (isUk ? 'oberit_teg_dlia_kadru.mp3' : 'choose_a_tag.mp3');
     final player = await FlameAudio.play('liam/$file', volume: widget.game.volume);
     _stopSound = player.stop;
   }

@@ -197,6 +197,7 @@ abstract class BasePlayer extends SpriteAnimationGroupComponent<PlayerState>
     }
   }
 
+  @override
   void onRemove() {
     _footstepPlayer?.stop();
     _footstepPlayer?.dispose();
