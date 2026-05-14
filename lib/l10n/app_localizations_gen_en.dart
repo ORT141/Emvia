@@ -794,7 +794,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get liam_comments_intro =>
-      'Comments begin to scroll under Liam\'s post:\n\n\"How did you even get here?\"\n\"Wow, can you actually get there in a wheelchair?\"\n\"Did someone help you get there?\"\n\"You\'re so brave for going out at all.\"\n\"A real hero. I wouldn\'t be able to do that in your place.\"\n\"Honestly, at first I wasn\'t even looking at the photo - I was looking at the wheelchair.\"\n\"Careful, the pavement there is uneven. Don\'t get stuck.\"\n\"I don\'t even know what\'s more impressive - the place or the fact that you\'re there.\"\n\"It must be really hard for you to create this kind of content.\"\n\"It\'s great that you\'re not just staying at home.\"';
+      'You see the city differently now. \nYou notice things that most people never see.\nBut what do you do with this new vision? Do you share it, or keep it to yourself?';
 
   @override
   String get liam_self_briefing =>
