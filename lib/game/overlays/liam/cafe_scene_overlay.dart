@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:emvia/l10n/app_localizations.dart';
+import 'package:emvia/l10n/app_localizations_gen.dart';
 
 import '../../emvia_game.dart';
+import '../../managers/game_state/game_state.dart';
 
 class CafeSceneOverlay extends StatefulWidget {
   final EmviaGame game;
@@ -29,6 +30,7 @@ class _CafeSceneOverlayState extends State<CafeSceneOverlay>
   late final Animation<double> _fadeAnim;
   late final AnimationController _dismissController;
   late final Animation<double> _blackAnim;
+  LiamBoundaryResponse? _selectedResponse;
   bool _isDismissing = false;
 
   @override
@@ -57,18 +59,51 @@ class _CafeSceneOverlayState extends State<CafeSceneOverlay>
     super.dispose();
   }
 
+  bool get _isBoundaryChoiceScene => widget.speakerName != null;
+
+  Future<void> _handleDismissTap() async {
+    if (_isDismissing) return;
+    if (_isBoundaryChoiceScene && _selectedResponse == null) return;
+
+    _isDismissing = true;
+    try {
+      await _dismissController.forward(from: 0);
+      if (!mounted) return;
+      widget.onDismiss();
+    } finally {
+      if (mounted) {
+        _isDismissing = false;
+      }
+    }
+  }
+
+  void _selectResponse(LiamBoundaryResponse response) {
+    if (_selectedResponse != null || _isDismissing) return;
+
+    setState(() {
+      _selectedResponse = response;
+    });
+
+    widget.game.liamState?.boundaryResponse = response;
+  }
+
+  String _responseText(AppLocalizationsGen loc, LiamBoundaryResponse response) {
+    switch (response) {
+      case LiamBoundaryResponse.explain:
+        return loc.liam_boundary_response_explain;
+      case LiamBoundaryResponse.joke:
+        return loc.liam_boundary_response_joke;
+      case LiamBoundaryResponse.respondSharply:
+        return loc.liam_boundary_response_sharp;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizationsGen.of(context)!;
     return GestureDetector(
-      onTap: () {
-        if (_isDismissing) return;
-        _isDismissing = true;
-        _dismissController.forward().then((_) => widget.onDismiss()).whenComplete(
-          () {
-            _isDismissing = false;
-          },
-        );
-      },
+      behavior: HitTestBehavior.opaque,
+      onTap: _handleDismissTap,
       child: FadeTransition(
         opacity: _fadeAnim,
         child: Stack(
@@ -102,73 +137,123 @@ class _CafeSceneOverlayState extends State<CafeSceneOverlay>
                   top: false,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 16,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.72),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.18),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 220),
+                      switchInCurve: Curves.easeOut,
+                      switchOutCurve: Curves.easeIn,
+                      child: Container(
+                        key: ValueKey<String>(
+                          _isBoundaryChoiceScene
+                              ? (_selectedResponse?.name ?? 'choices')
+                              : 'text',
                         ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (widget.speakerName != null)
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 6),
-                              child: Text(
-                                widget.speakerName!,
-                                style: const TextStyle(
-                                  color: Color(0xFFFFD54F),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 1.1,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 16,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.72),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.18),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (widget.speakerName != null)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 6),
+                                child: Text(
+                                  widget.speakerName!,
+                                  style: const TextStyle(
+                                    color: Color(0xFFFFD54F),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 1.1,
+                                    decoration: TextDecoration.none,
+                                  ),
+                                ),
+                              ),
+                            Text(
+                              _isBoundaryChoiceScene && _selectedResponse != null
+                                  ? _responseText(loc, _selectedResponse!)
+                                  : widget.text!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                height: 1.4,
+                                decoration: TextDecoration.none,
+                              ),
+                            ),
+                            if (_isBoundaryChoiceScene &&
+                                _selectedResponse == null) ...[
+                              const SizedBox(height: 14),
+                              Text(
+                                loc.liam_boundary_choice_prompt,
+                                style: TextStyle(
+                                  color: Colors.white.withValues(alpha: 0.86),
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.5,
                                   decoration: TextDecoration.none,
                                 ),
                               ),
-                            ),
-                          Text(
-                            widget.text!,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              height: 1.4,
-                              decoration: TextDecoration.none,
-                            ),
-                          ),
-                        ],
+                              const SizedBox(height: 12),
+                              Wrap(
+                                spacing: 10,
+                                runSpacing: 10,
+                                children: [
+                                  _buildChoiceButton(
+                                    label: loc.liam_boundary_choice_explain,
+                                    onPressed: () => _selectResponse(
+                                      LiamBoundaryResponse.explain,
+                                    ),
+                                  ),
+                                  _buildChoiceButton(
+                                    label: loc.liam_boundary_choice_joke,
+                                    onPressed: () => _selectResponse(
+                                      LiamBoundaryResponse.joke,
+                                    ),
+                                  ),
+                                  _buildChoiceButton(
+                                    label: loc.liam_boundary_choice_sharp,
+                                    onPressed: () => _selectResponse(
+                                      LiamBoundaryResponse.respondSharply,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            Positioned(
-              bottom: MediaQuery.of(context).padding.bottom + 28,
-              left: 0,
-              right: 0,
-              child: SafeArea(
-                top: false,
-                child: Center(
-                  child: DefaultTextStyle(
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.9),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.2,
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.overlay_tap_to_continue,
+            if (!_isBoundaryChoiceScene || _selectedResponse != null)
+              Positioned(
+                bottom: MediaQuery.of(context).padding.bottom + 28,
+                left: 0,
+                right: 0,
+                child: SafeArea(
+                  top: false,
+                  child: Center(
+                    child: DefaultTextStyle(
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.9),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 1.2,
+                      ),
+                      child: Text(loc.overlay_tap_to_continue),
                     ),
                   ),
                 ),
               ),
-            ),
             IgnorePointer(
               ignoring: true,
               child: AnimatedBuilder(
@@ -181,6 +266,33 @@ class _CafeSceneOverlayState extends State<CafeSceneOverlay>
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChoiceButton({
+    required String label,
+    required VoidCallback onPressed,
+  }) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: OutlinedButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.white.withValues(alpha: 0.08),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.24)),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+        ),
+      ),
+      child: Text(
+        label,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          decoration: TextDecoration.none,
         ),
       ),
     );
