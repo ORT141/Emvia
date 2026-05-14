@@ -176,7 +176,10 @@ class _CameraOverlayState extends State<CameraOverlay>
       await _shutterController.reverse();
 
       if (widget.game.soundEnabled) {
-        FlameAudio.play('other/клацання камери.mp3', volume: widget.game.volume);
+        FlameAudio.play(
+          'other/клацання камери.mp3',
+          volume: widget.game.volume,
+        );
       }
 
       final file = await controller.takePicture();
@@ -236,8 +239,8 @@ class _CameraOverlayState extends State<CameraOverlay>
         ? LiamJourney.currentQuote(l, liamState)
         : null;
     final supportSymbol = liamState != null
-      ? LiamJourney.getSupportSymbolEmoji(liamState)
-      : null;
+        ? LiamJourney.getSupportSymbolEmoji(liamState)
+        : null;
 
     return Focus(
       autofocus: true,
@@ -600,7 +603,10 @@ class _TagEditorDialogState extends State<_TagEditorDialog> {
     final file = missionIndex == 0
         ? (isUk ? 'shcho_vi_pomitili.mp3' : 'what_did_you_note_this.mp3')
         : (isUk ? 'oberit_teg_dlia_kadru.mp3' : 'choose_a_tag.mp3');
-    final player = await FlameAudio.play('liam/$file', volume: widget.game.volume);
+    final player = await FlameAudio.play(
+      'liam/$file',
+      volume: widget.game.volume,
+    );
     _stopSound = player.stop;
   }
 

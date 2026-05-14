@@ -16,12 +16,6 @@ class ElevatorScene extends GameScene {
   int get sceneIndex => 10;
 
   @override
-  void onPlayerReachedRightEdge() => game.navigationManager.goToLiamGraffiti();
-
-  @override
-  void onPlayerReachedLeftEdge() => game.navigationManager.goToLiamHouse();
-
-  @override
   Future<void> onLoad() async {
     await super.onLoad();
     layoutToWorld();
@@ -46,5 +40,5 @@ class ElevatorScene extends GameScene {
 
   @override
   Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(worldSize.x * 0.8, worldSize.y * 0.68);
+      Vector2(worldSize.x * 0.1, worldSize.y * 0.68);
 }

@@ -153,9 +153,14 @@ class _LiamGraffitiSurveyOverlayState extends State<LiamGraffitiSurveyOverlay>
                     const SizedBox(height: 24),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: GlassButton(
-                        label: _currentIndex < 4 ? l.continueLabel : l.play,
-                        onPressed: _canProceed ? _nextQuestion : null,
+                      child: GestureDetector(
+                        onLongPressStart: (_) {
+                          if (_canProceed) _finish();
+                        },
+                        child: GlassButton(
+                          label: _currentIndex < 4 ? l.continueLabel : l.play,
+                          onPressed: _canProceed ? _nextQuestion : null,
+                        ),
                       ),
                     ),
                   ],

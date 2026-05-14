@@ -7,12 +7,16 @@ class CafeSceneOverlay extends StatefulWidget {
   final EmviaGame game;
   final String imagePath;
   final VoidCallback onDismiss;
+  final String? text;
+  final String? speakerName;
 
   const CafeSceneOverlay({
     super.key,
     required this.game,
     required this.imagePath,
     required this.onDismiss,
+    this.text,
+    this.speakerName,
   });
 
   @override
@@ -25,6 +29,7 @@ class _CafeSceneOverlayState extends State<CafeSceneOverlay>
   late final Animation<double> _fadeAnim;
   late final AnimationController _dismissController;
   late final Animation<double> _blackAnim;
+  bool _isDismissing = false;
 
   @override
   void initState() {
@@ -56,10 +61,13 @@ class _CafeSceneOverlayState extends State<CafeSceneOverlay>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        try {
-          widget.game.pauseEngine();
-        } catch (_) {}
-        _dismissController.forward().then((_) => widget.onDismiss());
+        if (_isDismissing) return;
+        _isDismissing = true;
+        _dismissController.forward().then((_) => widget.onDismiss()).whenComplete(
+          () {
+            _isDismissing = false;
+          },
+        );
       },
       child: FadeTransition(
         opacity: _fadeAnim,
@@ -85,6 +93,61 @@ class _CafeSceneOverlayState extends State<CafeSceneOverlay>
                 ),
               ),
             ),
+            if (widget.text != null)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: MediaQuery.of(context).padding.bottom + 72,
+                child: SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.72),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.18),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (widget.speakerName != null)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 6),
+                              child: Text(
+                                widget.speakerName!,
+                                style: const TextStyle(
+                                  color: Color(0xFFFFD54F),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 1.1,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
+                            ),
+                          Text(
+                            widget.text!,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              height: 1.4,
+                              decoration: TextDecoration.none,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             Positioned(
               bottom: MediaQuery.of(context).padding.bottom + 28,
               left: 0,

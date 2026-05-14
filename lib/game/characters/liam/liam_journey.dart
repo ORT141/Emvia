@@ -304,7 +304,10 @@ class LiamJourney {
   ) {
     game.freezePlayer();
     game.pendingCafeDialog = _buildBoundaryDialog(game, l, state);
-    game.overlays.add('LiamCafeNear');
+    if (!game.overlays.isActive('LiamCafeNear') &&
+        !game.overlays.isActive('LiamCafeGrab')) {
+      game.overlays.add('LiamCafeNear');
+    }
   }
 
   static void _startDialog(EmviaGame game, DialogTree tree, {int? soundIndex}) {

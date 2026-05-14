@@ -99,8 +99,7 @@ class _SurveyOverlayState extends State<SurveyOverlay>
     final locale = Localizations.localeOf(context);
     final lang = locale.languageCode == 'uk' ? 'uk' : 'en';
 
-    final isLiam =
-        widget.game.selectedCharacter == PlayableCharacter.liam;
+    final isLiam = widget.game.selectedCharacter == PlayableCharacter.liam;
     final files = isLiam ? _liamSoundFiles[lang]! : _soundFiles[lang]!;
     if (index >= files.length) return;
 

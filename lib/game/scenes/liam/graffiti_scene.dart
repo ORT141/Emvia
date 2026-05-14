@@ -19,10 +19,7 @@ class GraffitiScene extends GameScene {
   String get ambientSoundPath => 'other/легкий біт.mp3';
 
   @override
-  void onPlayerReachedRightEdge() => game.navigationManager.goToLiamOutside();
-
-  @override
-  void onPlayerReachedLeftEdge() => game.navigationManager.goToLiamElevator();
+  void onPlayerReachedRightEdge() => game.navigationManager.goToLiamElevator();
 
   @override
   Future<void> onLoad() async {

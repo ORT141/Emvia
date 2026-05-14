@@ -30,10 +30,7 @@ class LiamOutsideScene extends GameScene {
   String get ambientSoundPath => 'other/шум міста.mp3';
 
   @override
-  void onPlayerReachedRightEdge() => game.navigationManager.goToLiamHouse();
-
-  @override
-  void onPlayerReachedLeftEdge() => game.navigationManager.goToLiamGraffiti();
+  void onPlayerReachedRightEdge() => game.navigationManager.goToLiamGraffiti();
 
   @override
   double worldWidthForViewport(Vector2 viewportSize) {

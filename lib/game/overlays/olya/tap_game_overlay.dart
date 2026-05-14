@@ -97,10 +97,7 @@ class _TapGameOverlayState extends State<TapGameOverlay>
       _ => 'other/натовп.mp3', // 'crowd' default
     };
     try {
-      final player = await FlameAudio.loop(
-        soundFile,
-        volume: 0.0,
-      );
+      final player = await FlameAudio.loop(soundFile, volume: 0.0);
       player.setReleaseMode(ReleaseMode.loop);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
