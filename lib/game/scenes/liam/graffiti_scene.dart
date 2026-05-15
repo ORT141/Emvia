@@ -64,6 +64,8 @@ class GraffitiScene extends GameScene {
         },
       );
 
+      game.unfreezePlayer();
+
       if (!context.mounted) return;
 
       await showDialog<void>(
@@ -121,26 +123,7 @@ class GraffitiScene extends GameScene {
                           decoration: TextDecoration.none,
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: FilledButton(
-                          onPressed: () {
-                            Navigator.of(dialogContext).pop();
-                            game.unfreezePlayer();
-                          },
-                          style: FilledButton.styleFrom(
-                            backgroundColor: const Color(0xFFFFD54F),
-                            foregroundColor: const Color(0xFF111111),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 12,
-                            ),
-                          ),
-                          child: Text(loc.continueLabel),
-                        ),
-                      ),
-                    ],
+                     ],
                   ),
                 ),
               ),
@@ -382,8 +365,6 @@ class _CommentsDialogState extends State<_CommentsDialog>
                                     ),
                                   ),
                                   const SizedBox(height: 12),
-                                  _ActionRow(continueLabel: widget.continueLabel),
-                                  const SizedBox(height: 12),
                                   Expanded(
                                     flex: 4,
                                     child: Container(
@@ -616,6 +597,7 @@ class _ChromeCloseButton extends StatelessWidget {
   }
 }
 
+// ignore: unused_element
 class _ActionRow extends StatelessWidget {
   final String continueLabel;
 
@@ -643,14 +625,24 @@ class _ActionRow extends StatelessWidget {
         const SizedBox(width: 8),
         iconButton(Icons.send_outlined),
         const Spacer(),
-        Text(
-          continueLabel,
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.75),
-            fontSize: 12,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.2,
-            decoration: TextDecoration.none,
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => Navigator.of(context).pop(),
+            borderRadius: BorderRadius.circular(6),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              child: Text(
+                continueLabel,
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.95),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.2,
+                  decoration: TextDecoration.none,
+                ),
+              ),
+            ),
           ),
         ),
       ],

@@ -61,6 +61,10 @@ class LiamGameState extends GameState {
   LiamIrritation? irritation;
   LiamCopingStyle? copingStyle;
 
+  bool cafeBoundaryCompleted = false;
+
+  double? savedOutsidePlayerX;
+
   int get currentMissionIndex => capturedPhotos.length.clamp(0, maxPhotos);
 
   bool get isJourneyComplete => currentMissionIndex >= maxPhotos;
@@ -83,6 +87,8 @@ class LiamGameState extends GameState {
     hasShownSilentIntro = false;
     hasShownCompletionDialog = false;
     boundaryResponse = null;
+    cafeBoundaryCompleted = false;
+    savedOutsidePlayerX = null;
     hasCompletedGraffitiSurvey = false;
     photoStyle = null;
     navColor = null;

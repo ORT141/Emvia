@@ -1,7 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:ui' show FilterQuality, Paint;
 import 'dart:math' as math;
@@ -38,6 +37,8 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
        ];
 
   final bool showPlayer;
+
+  bool get isPhotoCaptureAllowed => true;
 
   final SpriteComponent background = SpriteComponent()
     ..anchor = Anchor.topLeft
@@ -207,9 +208,7 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
     layoutToWorld();
   }
 
-  // ── Ambient audio ─────────────────────────────────────────────────────────
 
-  /// Override to return a path (relative to sounds/) to loop as scene ambient.
   String? get ambientSoundPath => null;
 
   AudioPlayer? _ambientPlayer;
@@ -228,7 +227,6 @@ abstract class GameScene extends Component with HasGameReference<EmviaGame> {
     _ambientPlayer = null;
   }
 
-  // ──────────────────────────────────────────────────────────────────────────
 
   @override
   void onRemove() {

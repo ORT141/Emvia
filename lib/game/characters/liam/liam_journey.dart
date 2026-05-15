@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'package:emvia/game/dialog/dialog_model.dart';
 import 'package:emvia/game/emvia_game.dart';
@@ -24,7 +25,7 @@ class LiamJourney {
     'dlia_kogos_tse_prosto_dribnitsia.mp3',
     'ia_ne_proti_dopomogi.mp3',
     'osobistist_zavzhdi_bil_sha_za_obmezhennia.mp3',
-    'oss це знайоме відчуття.mp3',
+    'os_tse_znaiome_vidchuttia.mp3',
     'inodi_shchob_prostir_stav_dostupnishim.mp3',
     'teper_ti_tse_bachiv.mp3',
   ];
@@ -208,8 +209,12 @@ class LiamJourney {
       _educationalCardForMission(l, completedMissionIndex),
       soundFile: _educationalSoundFile(game, completedMissionIndex),
       onDismiss: () {
-        game.unfreezePlayer();
-        maybeShowCurrentNarrative(game);
+        if (completedMissionIndex == 4) {
+          unawaited(game.navigationManager.goToLiamHouse());
+        } else {
+          game.unfreezePlayer();
+          maybeShowCurrentNarrative(game);
+        }
       },
     );
   }
@@ -220,7 +225,8 @@ class LiamJourney {
     if (context == null || !context.mounted || state == null) return false;
     if (game.overlays.isActive('Camera') ||
         game.overlays.isActive('EducationalCard') ||
-        game.overlays.isActive('Dialog')) {
+        game.overlays.isActive('Dialog') ||
+        game.overlays.isActive('LiamCommentsFeed')) {
       return false;
     }
 
@@ -276,7 +282,7 @@ class LiamJourney {
         _startBoundarySequence(game, l, state);
         return true;
       case 3:
-        _startDialog(game, _buildSelfExpressionDialog(game, l), soundIndex: 3);
+        _startCommentsSequence(game);
         return true;
       case 4:
         _startDialog(
@@ -295,6 +301,23 @@ class LiamJourney {
       default:
         return false;
     }
+  }
+
+  static void _startCommentsSequence(EmviaGame game) {
+    game.freezePlayer();
+    if (!game.overlays.isActive('LiamCommentsFeed')) {
+      game.overlays.add('LiamCommentsFeed');
+    }
+  }
+
+  static void showSelfExpressionPrompt(EmviaGame game) {
+    final context = game.buildContext;
+    if (context == null || !context.mounted) return;
+
+    final l = AppLocalizationsGen.of(context);
+    if (l == null) return;
+
+    _startDialog(game, _buildSelfExpressionDialog(game, l), soundIndex: 3);
   }
 
   static void _startBoundarySequence(
@@ -457,6 +480,7 @@ class LiamJourney {
                 game.showEducationalCard(
                   l.liam_final_education,
                   soundFile: _educationalSoundFile(game, 6),
+                  onDismiss: game.finishJourney,
                 );
               },
             ),

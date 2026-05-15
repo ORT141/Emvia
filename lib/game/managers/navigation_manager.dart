@@ -9,6 +9,7 @@ import '../scenes/olya/second_corridor_scene.dart';
 import '../scenes/olya/outside_scene.dart';
 import '../scenes/olya/scene_scene.dart';
 import '../characters/liam/liam_journey.dart';
+import '../scenes/liam/cafe_scene.dart';
 import '../scenes/liam/house_scene.dart';
 import '../scenes/liam/outside_scene.dart';
 import '../scenes/liam/graffiti_scene.dart';
@@ -137,24 +138,49 @@ class NavigationManager {
     );
   }
 
-  Future<void> goToLiamOutside() async {
+  Future<void> goToLiamOutside({bool returnFromCafe = false}) async {
     if (game.transitionManager.isTransitioning) return;
+    final returnX = returnFromCafe
+        ? game.liamState?.savedOutsidePlayerX
+        : null;
     await _loadSceneWithDefaults(
-      LiamOutsideScene(),
+      LiamOutsideScene(returnPlayerX: returnX),
       sceneIndex: 8,
       onFullOpacity: () {
-        LiamJourney.maybeShowCurrentNarrative(game);
+        if (!returnFromCafe) {
+          LiamJourney.maybeShowCurrentNarrative(game);
+        }
+      },
+    );
+  }
+
+  Future<void> goToLiamCafe() async {
+    if (game.transitionManager.isTransitioning) return;
+    await _loadSceneWithDefaults(
+      CafeScene(),
+      sceneIndex: 11,
+      showMobileControls: false,
+      resetPlayerOpacity: false,
+      onFullOpacity: () {
+        game.freezePlayer();
+        game.overlays.add('LiamCafeNear');
       },
     );
   }
 
   Future<void> goToLiamGraffiti() async {
     if (game.transitionManager.isTransitioning) return;
+    game.pendingCafeDialog = null;
+    game.overlays.remove('LiamCafeNear');
+    game.overlays.remove('LiamCafeGrab');
     await _loadSceneWithDefaults(GraffitiScene(), sceneIndex: 9);
   }
 
   Future<void> goToLiamElevator() async {
     if (game.transitionManager.isTransitioning) return;
+    game.pendingCafeDialog = null;
+    game.overlays.remove('LiamCafeNear');
+    game.overlays.remove('LiamCafeGrab');
     await _loadSceneWithDefaults(
       ElevatorScene(),
       sceneIndex: 10,

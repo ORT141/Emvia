@@ -166,6 +166,11 @@ class _CameraOverlayState extends State<CameraOverlay>
     final liamState = widget.game.liamState;
     if (liamState == null || !liamState.canCaptureMore) return;
 
+    final currentScene = widget.game.currentScene;
+    if (currentScene != null && !currentScene.isPhotoCaptureAllowed) {
+      return;
+    }
+
     final controller = _controller;
     if (controller == null || !controller.value.isInitialized) return;
 

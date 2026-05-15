@@ -94,7 +94,7 @@ class _TapGameOverlayState extends State<TapGameOverlay>
       'mechanical' => 'other/механічні звуки.mp3',
       'high_pitch' => 'other/високий писк.mp3',
       'chaotic_music' => 'other/хаотична музика.mp3',
-      _ => 'other/натовп.mp3', // 'crowd' default
+      _ => 'other/натовп.mp3', 
     };
     try {
       final player = await FlameAudio.loop(soundFile, volume: 0.0);

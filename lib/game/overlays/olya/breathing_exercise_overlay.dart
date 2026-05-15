@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:emvia/game/emvia_game.dart';
 import 'package:emvia/l10n/app_localizations_gen.dart';

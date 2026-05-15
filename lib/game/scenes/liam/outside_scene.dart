@@ -12,9 +12,11 @@ class LiamOutsideScene extends GameScene {
 
   static const double _cafeTriggerUvX = 0.6379;
 
+  final double? returnPlayerX;
+
   bool _cafeTriggered = false;
 
-  LiamOutsideScene()
+  LiamOutsideScene({this.returnPlayerX})
     : super(
         backgroundPath: 'scenes/liam/outside/background.png',
         showControls: true,
@@ -47,6 +49,15 @@ class LiamOutsideScene extends GameScene {
   Future<void> onLoad() async {
     await super.onLoad();
     layoutToWorld();
+  }
+
+  @override
+  Future<void> onMount() async {
+    super.onMount();
+
+    if (game.liamState?.cafeBoundaryCompleted == true) {
+      _cafeTriggered = true;
+    }
   }
 
   @override
@@ -88,23 +99,23 @@ class LiamOutsideScene extends GameScene {
               loc,
               liamState,
             );
-          } catch (e) {
+          } catch (_) {
             game.pendingCafeDialog = null;
           }
         }
 
-        game.overlays.add('LiamCafeNear');
-        return;
+        liamState.savedOutsidePlayerX = game.player.position.x;
       }
 
-      game.pendingCafeDialog = null;
-      game.overlays.add('LiamCafeNear');
+      game.navigationManager.goToLiamCafe();
     }
   }
 
   @override
   void redrawScene() {
-    _cafeTriggered = false;
+    if (game.liamState?.cafeBoundaryCompleted != true) {
+      _cafeTriggered = false;
+    }
     super.redrawScene();
   }
 
@@ -133,6 +144,10 @@ class LiamOutsideScene extends GameScene {
   }
 
   @override
-  Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) =>
-      Vector2(worldSize.x * 0.1, worldSize.y * 0.68);
+  Vector2 spawnPoint(Vector2 viewportSize, Vector2 worldSize) {
+    if (returnPlayerX != null) {
+      return Vector2(returnPlayerX!, worldSize.y * 0.68);
+    }
+    return Vector2(worldSize.x * 0.1, worldSize.y * 0.68);
+  }
 }

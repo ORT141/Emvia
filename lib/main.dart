@@ -1,4 +1,5 @@
 import 'package:emvia/game/emvia_game.dart';
+import 'package:emvia/game/characters/liam/liam_journey.dart';
 import 'package:emvia/game/scenes/olya/path/path_detail_component.dart';
 import 'package:emvia/game/overlays/olya/calm_map_overlay.dart';
 import 'package:emvia/game/overlays/olya/calm_effect_overlay.dart';
@@ -14,6 +15,8 @@ import 'package:emvia/game/overlays/olya/stage_item_card_overlay.dart';
 import 'package:emvia/game/overlays/debug_overlay.dart';
 import 'package:emvia/game/overlays/liam/camera_overlay.dart';
 import 'package:emvia/game/overlays/liam/cafe_scene_overlay.dart';
+import 'package:emvia/game/overlays/liam_comments_overlay.dart';
+import 'package:emvia/game/overlays/liam_house_objective_overlay.dart';
 import 'package:emvia/game/overlays/liam_graffiti_survey_overlay.dart';
 import 'package:emvia/game/scenes/olya/stress/stress_overlay.dart';
 import 'package:emvia/game/overlays/olya/tap_game_overlay.dart';
@@ -136,6 +139,12 @@ class _MyAppState extends State<MyApp> {
           'Survey': (_, game) => SurveyOverlay(game: game),
           'LiamGraffitiSurvey': (_, game) =>
               LiamGraffitiSurveyOverlay(game: game),
+          'LiamCommentsFeed': (_, game) => LiamCommentsOverlay(
+            game: game,
+            onContinue: () => LiamJourney.showSelfExpressionPrompt(game),
+          ),
+          'LiamHouseObjective': (_, game) =>
+              LiamHouseObjectiveOverlay(game: game),
           'Backpack': (_, game) => BackpackOverlay(game: game),
           'StageItemCard': (_, game) => StageItemCardOverlay(game: game),
           'CalmingItemPrompt': (_, game) =>
@@ -166,10 +175,10 @@ class _MyAppState extends State<MyApp> {
             text: AppLocalizationsGen.of(context)!.liam_boundary_stop,
             speakerName: AppLocalizationsGen.of(context)!.character_liam,
             onDismiss: () {
-              // Do not start the pending dialog here — overlay provides the text.
               game.overlays.remove('LiamCafeGrab');
               game.pendingCafeDialog = null;
-              game.unfreezePlayer();
+              game.liamState?.cafeBoundaryCompleted = true;
+              game.navigationManager.goToLiamOutside(returnFromCafe: true);
             },
           ),
           'TapGame': (_, game) => TapGameOverlay(game: game),
