@@ -852,7 +852,7 @@ class AppLocalizationsGenEn extends AppLocalizationsGen {
 
   @override
   String get liam_final_dialog =>
-      'You can see it now - the things most people never notice. And that already changes more than it seems.';
+      'The world doesn\'t become accessible on its own. It is made that way by people who begin to see.';
 
   @override
   String get liam_final_education =>

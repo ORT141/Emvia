@@ -1607,7 +1607,7 @@ abstract class AppLocalizationsGen {
   /// No description provided for @liam_final_dialog.
   ///
   /// In en, this message translates to:
-  /// **'You can see it now - the things most people never notice. And that already changes more than it seems.'**
+  /// **'The world doesn\'t become accessible on its own. It is made that way by people who begin to see.'**
   String get liam_final_dialog;
 
   /// No description provided for @liam_final_education.

@@ -16,6 +16,7 @@ import 'package:emvia/game/overlays/debug_overlay.dart';
 import 'package:emvia/game/overlays/liam/camera_overlay.dart';
 import 'package:emvia/game/overlays/liam/cafe_scene_overlay.dart';
 import 'package:emvia/game/overlays/liam_comments_overlay.dart';
+import 'package:emvia/game/overlays/liam/liam_exhibition_overlay.dart';
 import 'package:emvia/game/overlays/liam_house_objective_overlay.dart';
 import 'package:emvia/game/overlays/liam_graffiti_survey_overlay.dart';
 import 'package:emvia/game/scenes/olya/stress/stress_overlay.dart';
@@ -186,6 +187,7 @@ class _MyAppState extends State<MyApp> {
               BreathingExerciseOverlay(game: game),
           'EducationalCard': (_, game) => EducationalCardOverlay(game: game),
           'CalmMap': (_, game) => CalmMapOverlay(game: game),
+          'LiamExhibition': (_, game) => LiamExhibitionOverlay(game: game),
           'PatternProgress': (_, game) {
             final scene = game.currentScene;
             if (scene is CorridorScene) {

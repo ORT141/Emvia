@@ -458,7 +458,7 @@ extension EmviaGameFlow on EmviaGame {
     session.journeyCompleted = true;
     overlayManager.hideMobileControls();
     pauseEngine();
-    overlays.add('CalmMap');
+    overlays.add('LiamExhibition');
   }
 }
 

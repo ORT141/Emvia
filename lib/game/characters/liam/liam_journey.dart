@@ -279,7 +279,9 @@ class LiamJourney {
         );
         return true;
       case 2:
-        _startBoundarySequence(game, l, state);
+        if (game.sceneIndex == 8) {
+          _startBoundarySequence(game, l, state);
+        }
         return true;
       case 3:
         _startCommentsSequence(game);

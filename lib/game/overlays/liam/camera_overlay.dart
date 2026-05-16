@@ -1,11 +1,13 @@
 import 'dart:io' show File, Platform;
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../l10n/app_localizations_gen.dart';
@@ -161,7 +163,7 @@ class _CameraOverlayState extends State<CameraOverlay>
   }
 
   Future<void> _takePhoto() async {
-    if (!_isCameraEquipped || !_isInitialized || _isTakingPhoto) return;
+    if (!_isCameraEquipped || _isTakingPhoto) return;
 
     final liamState = widget.game.liamState;
     if (liamState == null || !liamState.canCaptureMore) return;
@@ -170,9 +172,6 @@ class _CameraOverlayState extends State<CameraOverlay>
     if (currentScene != null && !currentScene.isPhotoCaptureAllowed) {
       return;
     }
-
-    final controller = _controller;
-    if (controller == null || !controller.value.isInitialized) return;
 
     setState(() => _isTakingPhoto = true);
 
@@ -187,7 +186,7 @@ class _CameraOverlayState extends State<CameraOverlay>
         );
       }
 
-      final file = await controller.takePicture();
+      final file = await _capturePhotoFile();
       if (!mounted) return;
 
       final savedMissionIndex = await _openTagEditorModal(file);
@@ -202,6 +201,42 @@ class _CameraOverlayState extends State<CameraOverlay>
         setState(() => _isTakingPhoto = false);
       }
     }
+  }
+
+  Future<XFile> _capturePhotoFile() async {
+    final controller = _controller;
+    if (controller != null && controller.value.isInitialized) {
+      return await controller.takePicture();
+    }
+
+    return await _createFallbackPhoto();
+  }
+
+  Future<XFile> _createFallbackPhoto() async {
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder);
+    final size = const ui.Size(1024, 1024);
+    final paint = Paint()..color = Colors.black;
+    canvas.drawRect(Offset.zero & size, paint);
+    final picture = recorder.endRecording();
+    final image = await picture.toImage(
+      size.width.toInt(),
+      size.height.toInt(),
+    );
+    final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    image.dispose();
+
+    if (byteData == null) {
+      throw StateError('Failed to generate fallback photo');
+    }
+
+    final bytes = byteData.buffer.asUint8List();
+    final directory = await getTemporaryDirectory();
+    final file = File(
+      '${directory.path}/liam_fallback_photo_${DateTime.now().millisecondsSinceEpoch}.png',
+    );
+    await file.writeAsBytes(bytes, flush: true);
+    return XFile(file.path);
   }
 
   void _dismissCameraOverlay() {
@@ -488,13 +523,14 @@ class _CameraOverlayState extends State<CameraOverlay>
                   ),
                 ),
               )
-            else if (_useBlankPreviewOnWindows && _previewOpacity > 0.999)
+            else if ((_useBlankPreviewOnWindows || _error != null) &&
+                _previewOpacity > 0.999)
               Positioned(
                 left: previewLeft,
                 top: previewTop,
                 width: previewWidth,
                 height: previewHeight,
-                child: ColoredBox(color: Colors.red.withValues(alpha: 0.92)),
+                child: ColoredBox(color: Colors.black),
               )
             else if (_error != null)
               Center(
@@ -710,6 +746,25 @@ class _TagEditorDialogState extends State<_TagEditorDialog> {
                       ),
                       textAlign: TextAlign.center,
                     ),
+                    if (liamState != null) ...[
+                      const SizedBox(height: 10),
+                      GlassPanel(
+                        borderRadius: BorderRadius.circular(999),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        alphaValue: 0.14,
+                        child: Text(
+                          LiamJourney.getSupportSymbolEmoji(liamState),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ],
                     if (missionPrompt != null) ...[
                       SizedBox(height: isCompact ? 10 : 14),
                       Text(

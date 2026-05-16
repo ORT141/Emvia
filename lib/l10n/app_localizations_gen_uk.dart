@@ -818,7 +818,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get liam_almost_briefing =>
-      'Ось це знайоме відчуття: місце ніби поруч, але дістатися до нього ти не можеш - і справа зовсім не в тобі. Зроби фото \'Майже поруч\' і зафіксуй те, що лишається недосяжним.';
+      'Ось це знайоме відчуття: місце ніби поруч, але дістатися до нього ти не можеш — і справа зовсім не в тобі. Зроби фото \'Майже поруч\' і зафіксуй те, що лишається недосяжним.';
 
   @override
   String get liam_almost_title => 'Майже поруч';
@@ -854,7 +854,7 @@ class AppLocalizationsGenUk extends AppLocalizationsGen {
 
   @override
   String get liam_final_dialog =>
-      'Ти це бачиш тепер. Те, що більшість не помічає. І це вже змінює більше, ніж здається.';
+      'Світ не стає доступнішим сам. Його роблять таким люди, які починають бачити.';
 
   @override
   String get liam_final_education =>

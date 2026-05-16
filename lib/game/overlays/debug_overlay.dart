@@ -8,6 +8,7 @@ import '../scenes/olya/stage_scene.dart';
 import '../scenes/olya/second_corridor_scene.dart';
 import '../scenes/olya/outside_scene.dart';
 import '../scenes/survey_scene.dart';
+import '../scenes/liam/graffiti_scene.dart';
 
 class DebugOverlay extends StatefulWidget {
   final EmviaGame game;
@@ -207,6 +208,14 @@ class _DebugOverlayState extends State<DebugOverlay> {
                                           widget.game.skipToScene(StageScene()),
                                       Icons.fast_forward,
                                       color: Colors.purpleAccent,
+                                    ),
+                                    _buildActionButton(
+                                      'Skip => Graffiti',
+                                      () => widget.game.skipToScene(
+                                        GraffitiScene(),
+                                      ),
+                                      Icons.fast_forward,
+                                      color: Colors.greenAccent,
                                     ),
                                     if (widget.onThemeToggled != null)
                                       _buildActionButton(

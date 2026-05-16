@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../characters/liam/liam_journey.dart';
 import '../../l10n/app_localizations_gen.dart';
 import '../emvia_game.dart';
 import '../scenes/liam/house_scene.dart';
@@ -14,6 +15,9 @@ class LiamHouseObjectiveOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizationsGen.of(context)!;
     final scene = game.currentScene;
+    final supportSymbol = game.liamState != null
+        ? LiamJourney.getSupportSymbolEmoji(game.liamState!)
+        : null;
     if (scene is! HouseScene) return const SizedBox.shrink();
 
     return IgnorePointer(
@@ -53,6 +57,25 @@ class LiamHouseObjectiveOverlay extends StatelessWidget {
                           height: 1.3,
                         ),
                       ),
+                      if (supportSymbol != null) ...[
+                        const SizedBox(height: 8),
+                        GlassPanel(
+                          borderRadius: BorderRadius.circular(999),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          alphaValue: 0.14,
+                          child: Text(
+                            supportSymbol,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 );
