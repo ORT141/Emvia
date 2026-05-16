@@ -1,5 +1,7 @@
 # Emvia
 
+### [Download Game](https://github.com/ORT141/Emvia/releases/tag/nightly) / [Завантажити гру](https://github.com/ORT141/Emvia/releases/tag/nightly)
+
 A competitive Flutter & Flame game project focusing on narrative exploration and emotional resilience.
 
 ## Overview
